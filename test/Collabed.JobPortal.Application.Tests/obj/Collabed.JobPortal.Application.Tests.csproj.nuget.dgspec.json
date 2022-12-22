@@ -1,0 +1,811 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Application.Tests\\Collabed.JobPortal.Application.Tests.csproj": {}
+  },
+  "projects": {
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application.Contracts\\Collabed.JobPortal.Application.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application.Contracts\\Collabed.JobPortal.Application.Contracts.csproj",
+        "projectName": "Collabed.JobPortal.Application.Contracts",
+        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application.Contracts\\Collabed.JobPortal.Application.Contracts.csproj",
+        "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application.Contracts\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Volo.Abp.Account.Application.Contracts": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.FeatureManagement.Application.Contracts": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.Identity.Application.Contracts": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.ObjectExtending": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.PermissionManagement.Application.Contracts": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.SettingManagement.Application.Contracts": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application\\Collabed.JobPortal.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application\\Collabed.JobPortal.Application.csproj",
+        "projectName": "Collabed.JobPortal.Application",
+        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application\\Collabed.JobPortal.Application.csproj",
+        "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application.Contracts\\Collabed.JobPortal.Application.Contracts.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application.Contracts\\Collabed.JobPortal.Application.Contracts.csproj"
+              },
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Volo.Abp.Account.Application": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.FeatureManagement.Application": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.Identity.Application": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.PermissionManagement.Application": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.SettingManagement.Application": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj",
+        "projectName": "Collabed.JobPortal.Domain.Shared",
+        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj",
+        "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "Microsoft.Extensions.FileProviders.Embedded": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Volo.Abp.AuditLogging.Domain.Shared": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.BackgroundJobs.Domain.Shared": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.FeatureManagement.Domain.Shared": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.Identity.Domain.Shared": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.OpenIddict.Domain.Shared": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.PermissionManagement.Domain.Shared": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.SettingManagement.Domain.Shared": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj",
+        "projectName": "Collabed.JobPortal.Domain",
+        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj",
+        "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Volo.Abp.AuditLogging.Domain": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.BackgroundJobs.Domain": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.Emailing": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.FeatureManagement.Domain": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.Identity.Domain": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.OpenIddict.Domain": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.PermissionManagement.Domain.Identity": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.PermissionManagement.Domain.OpenIddict": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.SettingManagement.Domain": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.EntityFrameworkCore\\Collabed.JobPortal.EntityFrameworkCore.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.EntityFrameworkCore\\Collabed.JobPortal.EntityFrameworkCore.csproj",
+        "projectName": "Collabed.JobPortal.EntityFrameworkCore",
+        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.EntityFrameworkCore\\Collabed.JobPortal.EntityFrameworkCore.csproj",
+        "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.EntityFrameworkCore\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers",
+              "suppressParent": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Volo.Abp.AuditLogging.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.BackgroundJobs.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.FeatureManagement.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.OpenIddict.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.PermissionManagement.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.SettingManagement.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Application.Tests\\Collabed.JobPortal.Application.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Application.Tests\\Collabed.JobPortal.Application.Tests.csproj",
+        "projectName": "Collabed.JobPortal.Application.Tests",
+        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Application.Tests\\Collabed.JobPortal.Application.Tests.csproj",
+        "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Application.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application\\Collabed.JobPortal.Application.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Application\\Collabed.JobPortal.Application.csproj"
+              },
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Domain.Tests\\Collabed.JobPortal.Domain.Tests.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Domain.Tests\\Collabed.JobPortal.Domain.Tests.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Domain.Tests\\Collabed.JobPortal.Domain.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Domain.Tests\\Collabed.JobPortal.Domain.Tests.csproj",
+        "projectName": "Collabed.JobPortal.Domain.Tests",
+        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Domain.Tests\\Collabed.JobPortal.Domain.Tests.csproj",
+        "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Domain.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\Collabed.JobPortal.EntityFrameworkCore.Tests.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\Collabed.JobPortal.EntityFrameworkCore.Tests.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\Collabed.JobPortal.EntityFrameworkCore.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\Collabed.JobPortal.EntityFrameworkCore.Tests.csproj",
+        "projectName": "Collabed.JobPortal.EntityFrameworkCore.Tests",
+        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\Collabed.JobPortal.EntityFrameworkCore.Tests.csproj",
+        "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.EntityFrameworkCore\\Collabed.JobPortal.EntityFrameworkCore.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.EntityFrameworkCore\\Collabed.JobPortal.EntityFrameworkCore.csproj"
+              },
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.2.0, )"
+            },
+            "Volo.Abp.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
+        "projectName": "Collabed.JobPortal.TestBase",
+        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
+        "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/blazorise/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.2.0, )"
+            },
+            "NSubstitute": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            },
+            "Shouldly": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "Volo.Abp.Authorization": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.Autofac": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Volo.Abp.TestBase": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.extensibility.execution": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.4.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

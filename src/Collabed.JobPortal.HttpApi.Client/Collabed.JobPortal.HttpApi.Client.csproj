@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Collabed.JobPortal</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Collabed.JobPortal.Application.Contracts\Collabed.JobPortal.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Account.HttpApi.Client" Version="6.0.1" />
+    <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="6.0.1" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="6.0.1" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi.Client" Version="6.0.1" />
+    <PackageReference Include="Volo.Abp.SettingManagement.HttpApi.Client" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="**\*generate-proxy.json" />
+    <Content Remove="**\*generate-proxy.json" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\Collabed.JobPortal.Web.props" />
+</Project>
