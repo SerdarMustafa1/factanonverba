@@ -14655,17 +14655,17 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\Collabed.JobPortal.EntityFrameworkCore.Tests.csproj",
+      "projectUniqueName": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\Collabed.JobPortal.EntityFrameworkCore.Tests.csproj",
       "projectName": "Collabed.JobPortal.EntityFrameworkCore.Tests",
-      "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\Collabed.JobPortal.EntityFrameworkCore.Tests.csproj",
+      "projectPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\Collabed.JobPortal.EntityFrameworkCore.Tests.csproj",
       "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
-      "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\obj\\",
+      "outputPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.EntityFrameworkCore.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+        "D:\\CollabedRepo\\CollabedWeb\\NuGet.Config",
         "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -14681,11 +14681,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.EntityFrameworkCore\\Collabed.JobPortal.EntityFrameworkCore.csproj": {
-              "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.EntityFrameworkCore\\Collabed.JobPortal.EntityFrameworkCore.csproj"
+            "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.EntityFrameworkCore\\Collabed.JobPortal.EntityFrameworkCore.csproj": {
+              "projectPath": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.EntityFrameworkCore\\Collabed.JobPortal.EntityFrameworkCore.csproj"
             },
-            "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj": {
-              "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj"
+            "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj": {
+              "projectPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj"
             }
           }
         }

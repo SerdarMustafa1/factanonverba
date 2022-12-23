@@ -18057,17 +18057,17 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Web.Tests\\Collabed.JobPortal.Web.Tests.csproj",
+      "projectUniqueName": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.Web.Tests\\Collabed.JobPortal.Web.Tests.csproj",
       "projectName": "Collabed.JobPortal.Web.Tests",
-      "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Web.Tests\\Collabed.JobPortal.Web.Tests.csproj",
+      "projectPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.Web.Tests\\Collabed.JobPortal.Web.Tests.csproj",
       "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
-      "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Web.Tests\\obj\\",
+      "outputPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.Web.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+        "D:\\CollabedRepo\\CollabedWeb\\NuGet.Config",
         "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -18083,11 +18083,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Web\\Collabed.JobPortal.Web.csproj": {
-              "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Web\\Collabed.JobPortal.Web.csproj"
+            "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Web\\Collabed.JobPortal.Web.csproj": {
+              "projectPath": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Web\\Collabed.JobPortal.Web.csproj"
             },
-            "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Application.Tests\\Collabed.JobPortal.Application.Tests.csproj": {
-              "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.Application.Tests\\Collabed.JobPortal.Application.Tests.csproj"
+            "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.Application.Tests\\Collabed.JobPortal.Application.Tests.csproj": {
+              "projectPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.Application.Tests\\Collabed.JobPortal.Application.Tests.csproj"
             }
           }
         }

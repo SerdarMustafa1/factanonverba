@@ -13292,17 +13292,17 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
+      "projectUniqueName": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
       "projectName": "Collabed.JobPortal.TestBase",
-      "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
+      "projectPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
       "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
-      "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\obj\\",
+      "outputPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+        "D:\\CollabedRepo\\CollabedWeb\\NuGet.Config",
         "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -13318,8 +13318,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
-              "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj"
+            "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
+              "projectPath": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj"
             }
           }
         }

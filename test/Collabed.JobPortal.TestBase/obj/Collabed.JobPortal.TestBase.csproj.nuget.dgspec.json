@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj": {}
+    "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj": {}
   },
   "projects": {
-    "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj": {
+    "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj",
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj",
         "projectName": "Collabed.JobPortal.Domain.Shared",
-        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj",
+        "projectPath": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj",
         "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
-        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\obj\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "D:\\CollabedRepo\\CollabedWeb\\NuGet.Config",
           "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -99,20 +99,20 @@
         }
       }
     },
-    "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
+    "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj",
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj",
         "projectName": "Collabed.JobPortal.Domain",
-        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj",
+        "projectPath": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj",
         "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
-        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\obj\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "D:\\CollabedRepo\\CollabedWeb\\NuGet.Config",
           "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -128,8 +128,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj": {
-                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj"
+              "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain.Shared\\Collabed.JobPortal.Domain.Shared.csproj"
               }
             }
           }
@@ -201,20 +201,20 @@
         }
       }
     },
-    "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj": {
+    "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
+        "projectUniqueName": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
         "projectName": "Collabed.JobPortal.TestBase",
-        "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
+        "projectPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\Collabed.JobPortal.TestBase.csproj",
         "packagesPath": "C:\\Users\\TomaszPC\\.nuget\\packages\\",
-        "outputPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\test\\Collabed.JobPortal.TestBase\\obj\\",
+        "outputPath": "D:\\CollabedRepo\\CollabedWeb\\test\\Collabed.JobPortal.TestBase\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "D:\\CollabedRepo\\CollabedWebDevelopment\\NuGet.Config",
+          "D:\\CollabedRepo\\CollabedWeb\\NuGet.Config",
           "C:\\Users\\TomaszPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -230,8 +230,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
-                "projectPath": "D:\\CollabedRepo\\CollabedWebDevelopment\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj"
+              "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj": {
+                "projectPath": "D:\\CollabedRepo\\CollabedWeb\\src\\Collabed.JobPortal.Domain\\Collabed.JobPortal.Domain.csproj"
               }
             }
           }
