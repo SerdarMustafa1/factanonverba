@@ -1,0 +1,76 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  BuildConfiguration: release
+  LocalPublishWebAppFolder: WebApp
+  LocalPublishDbMigratorFolder: DbMigrator
+
+steps:
+
+- task: DotNetCoreCLI@2
+  displayName: Restore NuGet packages
+  inputs:
+    command: restore
+    verbosityRestore: minimal
+
+- task: DotNetCoreCLI@2
+  displayName: Build solution
+  inputs:
+    command: build
+    arguments: --configuration $(BuildConfiguration) --no-restore
+    configuration: $(BuildConfiguration)
+
+- task: DotNetCoreCLI@2
+  displayName: Run tests
+  inputs:
+    command: test
+    projects: '**/*.Tests.csproj'
+    publishTestResults: true
+    arguments: --configuration $(BuildConfiguration) --collect "Code coverage"
+    nobuild: true
+
+- task: DotNetCoreCLI@2
+  displayName: Gather web app binaries for publication
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: '**/*.Web.csproj'
+    modifyOutputPath: false
+    configuration: $(BuildConfiguration)
+    arguments: --configuration $(BuildConfiguration) --no-restore --no-build --output $(Build.ArtifactStagingDirectory)/$(LocalPublishWebAppFolder)
+    nobuild: true
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+- task: DotNetCoreCLI@2
+  displayName: Gather migration app binaries for publication
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: '**/*.DbMigrator.csproj'
+    configuration: $(BuildConfiguration)
+    arguments: --configuration $(BuildConfiguration) --no-restore --no-build --output $(Build.ArtifactStagingDirectory)/$(LocalPublishDbMigratorFolder)
+    nobuild: true
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+- task: PublishBuildArtifacts@1
+  displayName: Upload web app publication files to artifact
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)/$(LocalPublishWebAppFolder)
+    ArtifactName: WebApp
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+- task: PublishBuildArtifacts@1
+  displayName: Upload migration app publication files to artifact
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)/$(LocalPublishDbMigratorFolder)
+    ArtifactName: DbMigrator
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
