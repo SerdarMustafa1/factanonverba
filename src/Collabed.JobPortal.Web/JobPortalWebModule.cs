@@ -65,7 +65,11 @@ public class JobPortalWebModule : AbpModule
                 typeof(JobPortalWebModule).Assembly
             );
         });
-        
+
+        // TODO For production create self-signed certificates and store them in the X.509 certificates store  
+        ConfigureOpenIdDict(context);
+        // END
+
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
@@ -84,7 +88,9 @@ public class JobPortalWebModule : AbpModule
 
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
-        ConfigureOpenIdDict(context);
+
+
+
         ConfigureBundles();
         ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
