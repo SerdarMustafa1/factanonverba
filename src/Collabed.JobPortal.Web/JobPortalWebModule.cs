@@ -34,6 +34,7 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Autofac.Core;
 
 namespace Collabed.JobPortal.Web;
 
@@ -83,6 +84,7 @@ public class JobPortalWebModule : AbpModule
 
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
+        ConfigureOpenIdDict(context);
         ConfigureBundles();
         ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
@@ -95,6 +97,16 @@ public class JobPortalWebModule : AbpModule
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
         context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+    }
+
+    private void ConfigureOpenIdDict(ServiceConfigurationContext context)
+    {
+        context.Services.AddOpenIddict()
+            .AddServer(options =>
+            {
+                options.AddEphemeralEncryptionKey()
+                       .AddEphemeralSigningKey();
+            });
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -187,12 +199,6 @@ public class JobPortalWebModule : AbpModule
 
     private void ConfigureSwaggerServices(IServiceCollection services)
     {
-        services.AddOpenIddict()
-            .AddServer(options =>
-            {
-                options.AddDevelopmentEncryptionCertificate()
-                       .AddDevelopmentSigningCertificate();
-            });
         services.AddAbpSwaggerGen(
             options =>
             {
