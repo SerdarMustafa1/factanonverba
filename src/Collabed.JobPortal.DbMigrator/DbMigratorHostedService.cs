@@ -46,4 +46,20 @@ public class DbMigratorHostedService : IHostedService
     {
         return Task.CompletedTask;
     }
+
+    private static IConfiguration BuildConfiguration()
+    {
+        var configurationBuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+
+        // Extra code block to make it possible to read from appsettings.Staging.json
+        var environmentName = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        if (environmentName == "Staging")
+        {
+            configurationBuilder.AddJsonFile($"appsettings.{environmentName}.json", true);
+        }
+
+        return configurationBuilder
+            .AddEnvironmentVariables()
+            .Build();
+    }
 }

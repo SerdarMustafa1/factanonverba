@@ -187,6 +187,12 @@ public class JobPortalWebModule : AbpModule
 
     private void ConfigureSwaggerServices(IServiceCollection services)
     {
+        services.AddOpenIddict()
+            .AddServer(options =>
+            {
+                options.AddDevelopmentEncryptionCertificate()
+                       .AddDevelopmentSigningCertificate();
+            });
         services.AddAbpSwaggerGen(
             options =>
             {

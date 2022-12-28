@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Collabed.JobPortal.DbMigrator
+namespace Collabed.JobPortal.Migrations
 {
-    public partial class CollabedJobPortal : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
