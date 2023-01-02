@@ -88,9 +88,6 @@ public class JobPortalWebModule : AbpModule
 
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
-
-
-
         ConfigureBundles();
         ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
