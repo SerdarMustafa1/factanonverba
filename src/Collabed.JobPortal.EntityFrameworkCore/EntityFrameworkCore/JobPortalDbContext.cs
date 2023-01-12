@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Collabed.JobPortal.Candidates;
+using Collabed.JobPortal.Jobs;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -42,6 +45,12 @@ public class JobPortalDbContext :
     public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }
 
+    //Job board
+    public DbSet<Jobs.Job> Jobs { get; set; }
+    public DbSet<Clients.Client> Clients { get; set; }
+    public DbSet<Candidate> Candidates { get; set; }
+
+
     #endregion
 
     public JobPortalDbContext(DbContextOptions<JobPortalDbContext> options)
@@ -66,11 +75,39 @@ public class JobPortalDbContext :
 
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(JobPortalConsts.DbTablePrefix + "YourEntities", JobPortalConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.Entity<Candidate>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "Candidates", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            //many-to-many relationship with Jobs table => CandidateJobs
+            b.HasMany(a => a.AppliedJobs).WithOne().HasForeignKey(x => x.CandidateId);
+        });
+
+        builder.Entity<CandidateJobs>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "CandidateJobs", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            //define composite key
+            b.HasKey(x => new { x.CandidateId, x.JobId });
+            //many-to-many configuration
+            b.HasOne<Candidate>().WithMany(x => x.AppliedJobs).HasForeignKey(x => x.CandidateId).IsRequired();
+            b.HasOne<Jobs.Job>().WithMany().HasForeignKey(x => x.JobId).IsRequired();
+            b.HasIndex(x => new { x.CandidateId, x.JobId });
+        });
+
+        builder.Entity<Clients.Client>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "Clients", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.HasMany(a => a.PostedJobs).WithOne(b => b.Client);
+        });
+
+        builder.Entity<Jobs.Job>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "Jobs", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.HasOne(a => a.Client).WithMany(b => b.PostedJobs);
+            b.Property(e => e.Type).HasConversion<int>();
+        });
     }
 }

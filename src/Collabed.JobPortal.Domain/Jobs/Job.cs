@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Collabed.JobPortal.Clients;
 using Collabed.JobPortal.ErrorCodes;
 using Collabed.JobPortal.Job;
 using Volo.Abp;
@@ -6,13 +9,34 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Collabed.JobPortal.Jobs
 {
-    internal class Job : AuditedAggregateRoot<Guid>
+    public class Job : AuditedAggregateRoot<Guid>
     {
+        public string ContactEmail { get; private set; }
+        public string ContactPhone { get; private set; }
+        public string ContactUrl { get; private set; }
+        public string Reference { get; private set; }
+        public string Title { get; private set; }
+        public JobType? Type { get; private set; }
+        public string Duration { get; private set; }
+        public string StartDate { get; private set; }
+        public string Skills { get; private set; }
+        public string Description { get; private set; }
+        public LocationType? Location { get; private set; }
+        public IndustryType? Industry { get; private set; }
+        public CurrencyType? SalaryCurrency { get; private set; }
+        public float? SalaryFrom { get; private set; }
+        public float? SalaryTo { get; private set; }
+        public SalaryPeriodType? SalaryPeriod { get; private set; }
+        public string SalaryBenefits { get; private set; }
+        public string Salary { get; private set; }
+        public bool IsExternal { get; private set; }
+        public Client Client { get; set; }
+
         private Job()
         {
         }
 
-        public Job(string contactEmail, string contactUrl, string reference, string title, JobType type, string duration, string startDate, string skills, string description, LocationType location, IndustryType industry, CurrencyType salaryCurrency, float salaryFrom, float salaryTo, SalaryPeriodType salaryPeriod, string salaryBenefits, string salary)
+        internal Job(string contactEmail, string contactUrl, string reference, string title, JobType type, string duration, string startDate, string skills, string description, LocationType location, IndustryType industry, CurrencyType salaryCurrency, float salaryFrom, float salaryTo, SalaryPeriodType salaryPeriod, string salaryBenefits, string salary, bool isExternal, Client client)
         {
             SetContactEmail(contactEmail);
             SetContactUrl(contactUrl);
@@ -30,26 +54,9 @@ namespace Collabed.JobPortal.Jobs
             SetSalaryPeriod(salaryPeriod);
             SetSalaryBenefits(salaryBenefits);
             SetSalary(salary);
+            SetIsExternal(isExternal);
+            SetClient(client);
         }
-
-        public string ContactEmail { get; private set; }
-        public string ContactPhone { get; private set; }
-        public string ContactUrl { get; private set; }
-        public string Reference { get; private set; }
-        public string Title { get; private set; }
-        public JobType Type { get; private set; }
-        public string Duration { get; private set; }
-        public string StartDate { get; private set; }
-        public string Skills { get; private set; }
-        public string Description { get; private set; }
-        public LocationType Location { get; private set; }
-        public IndustryType Industry { get; private set; }
-        public CurrencyType SalaryCurrency { get; private set; }
-        public float SalaryFrom { get; private set; }
-        public float SalaryTo { get; private set; }
-        public SalaryPeriodType SalaryPeriod { get; private set; }
-        public string SalaryBenefits { get; private set; }
-        public string Salary { get; private set; }
 
         #region Public setters
         public Job SetContactEmail(string contactEmail)
@@ -145,7 +152,16 @@ namespace Collabed.JobPortal.Jobs
 
             return this;
         }
-
+        public Job SetIsExternal(bool isExternal)
+        {
+            IsExternal = isExternal;
+            return this;
+        }
+        public Job SetClient(Client client)
+        {
+            Client = client;
+            return this;
+        }
         #endregion
     }
 }
