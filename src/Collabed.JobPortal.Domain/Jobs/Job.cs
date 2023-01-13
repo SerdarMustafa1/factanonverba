@@ -11,125 +11,38 @@ namespace Collabed.JobPortal.Jobs
 {
     public class Job : AuditedAggregateRoot<Guid>
     {
-        public string ContactEmail { get; private set; }
-        public string ContactPhone { get; private set; }
-        public string ContactUrl { get; private set; }
-        public string Reference { get; private set; }
-        public string Title { get; private set; }
-        public JobType? Type { get; private set; }
-        public string Duration { get; private set; }
-        public string StartDate { get; private set; }
-        public string Skills { get; private set; }
-        public string Description { get; private set; }
-        public LocationType? Location { get; private set; }
-        public IndustryType? Industry { get; private set; }
-        public CurrencyType? SalaryCurrency { get; private set; }
-        public float? SalaryFrom { get; private set; }
-        public float? SalaryTo { get; private set; }
-        public SalaryPeriodType? SalaryPeriod { get; private set; }
-        public string SalaryBenefits { get; private set; }
-        public string Salary { get; private set; }
-        public bool IsExternal { get; private set; }
+        public string ContactEmail { get; set; }
+        public string ContactPhone { get; set; }
+        public string ContactUrl { get; set; }
+        public string Reference { get; set; }
+        public string Title { get; set; }
+        public JobType? Type { get; set; }
+        public string Duration { get; set; }
+        public string StartDate { get; set; }
+        public string Skills { get; set; }
+        public string Description { get; set; }
+        public LocationType? Location { get; set; }
+        public IndustryType? Industry { get; set; }
+        public CurrencyType? SalaryCurrency { get; set; }
+        public float? SalaryFrom { get; set; }
+        public float? SalaryTo { get; set; }
+        public SalaryPeriodType? SalaryPeriod { get; set; }
+        public string SalaryBenefits { get; set; }
+        public string Salary { get; set; }
+        public bool IsExternal { get; set; }
         public Client Client { get; set; }
 
         private Job()
         {
         }
 
-        internal Job(string contactEmail, string contactUrl, string reference, string title, JobType type, string duration, string startDate, string skills, string description, LocationType location, IndustryType industry, CurrencyType salaryCurrency, float salaryFrom, float salaryTo, SalaryPeriodType salaryPeriod, string salaryBenefits, string salary, bool isExternal, Client client)
+        internal Job(string title, Client client)
         {
-            SetContactEmail(contactEmail);
-            SetContactUrl(contactUrl);
-            SetReference(reference);
             SetTitle(title);
-            SetType(type);
-            SetDuration(duration);
-            SetStartDate(startDate);
-            SetSkills(skills);
-            SetDescription(description);
-            SetLocation(location);
-            SetIndustry(industry);
-            SetSalaryCurrency(salaryCurrency);
-            SetSalaryRange(salaryFrom, salaryTo);
-            SetSalaryPeriod(salaryPeriod);
-            SetSalaryBenefits(salaryBenefits);
-            SetSalary(salary);
-            SetIsExternal(isExternal);
-            SetClient(client);
+            Client = client;
         }
 
         #region Public setters
-        public Job SetContactEmail(string contactEmail)
-        {
-            ContactEmail = contactEmail;
-            return this;
-        }
-        public Job SetContactPhone(string contactPhone)
-        {
-            ContactPhone = contactPhone;
-            return this;
-        }
-        public Job SetContactUrl(string contactUrl)
-        {
-            ContactUrl = contactUrl;
-            return this;
-        }
-        public Job SetType(JobType type)
-        {
-            Type = type;
-            return this;
-        }
-        public Job SetDuration(string duration)
-        {
-            Duration = duration;
-            return this;
-        }
-        public Job SetStartDate(string startDate)
-        {
-            StartDate = startDate;
-            return this;
-        }
-        public Job SetSkills(string skills)
-        {
-            Skills = skills;
-            return this;
-        }
-        public Job SetDescription(string description)
-        {
-            Description = description;
-            return this;
-        }
-        public Job SetLocation(LocationType location)
-        {
-            Location = location;
-            return this;
-        }
-        public Job SetIndustry(IndustryType industry)
-        {
-            Industry = industry;
-            return this;
-        }
-        public Job SetSalaryCurrency(CurrencyType salaryCurrency)
-        {
-            SalaryCurrency = salaryCurrency;
-            return this;
-        }
-        public Job SetSalaryPeriod(SalaryPeriodType salaryPeriod)
-        {
-            SalaryPeriod = salaryPeriod;
-            return this;
-        }
-        public Job SetSalaryBenefits(string salaryBenefits)
-        {
-            SalaryBenefits = salaryBenefits;
-            return this;
-        }
-
-        public Job SetSalary(string salary)
-        {
-            Salary = salary;
-            return this;
-        }
         public Job SetTitle(string title)
         {
             Title = Check.NotNullOrWhiteSpace(title, nameof(title), JobConsts.MaxTitleLength);
@@ -150,16 +63,6 @@ namespace Collabed.JobPortal.Jobs
             SalaryFrom = salaryFrom; 
             SalaryTo = salaryTo;
 
-            return this;
-        }
-        public Job SetIsExternal(bool isExternal)
-        {
-            IsExternal = isExternal;
-            return this;
-        }
-        public Job SetClient(Client client)
-        {
-            Client = client;
             return this;
         }
         #endregion
