@@ -19,7 +19,7 @@ namespace Collabed.JobPortal.Candidates
         {
         }
 
-        internal Candidate(Guid id, Guid userId) : base(id)
+        public Candidate(Guid id, Guid userId) : base(id)
         {
             SetUserId(userId);
             AppliedJobs = new Collection<CandidateJobs>();

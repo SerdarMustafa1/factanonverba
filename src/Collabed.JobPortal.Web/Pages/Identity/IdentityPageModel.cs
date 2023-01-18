@@ -1,6 +1,7 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Identity.Web;
 
-namespace Volo.Abp.Identity.Web.Pages.Identity;
+namespace Collabed.JobPortal.Web.Pages.Identity;
 
 public abstract class IdentityPageModel : AbpPageModel
 {

@@ -18,7 +18,7 @@ namespace Collabed.JobPortal.Clients
         {
         }
 
-        internal Client(Guid id, Guid userId) : base(id)
+        public Client(Guid id, Guid userId) : base(id)
         {
             SetUserId(userId);
             PostedJobs = new Collection<Jobs.Job>();

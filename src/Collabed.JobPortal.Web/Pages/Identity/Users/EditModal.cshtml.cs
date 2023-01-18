@@ -5,12 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
+using Volo.Abp.Identity;
+using Collabed.JobPortal.User;
 
-namespace Volo.Abp.Identity.Web.Pages.Identity.Users;
+namespace Collabed.JobPortal.Web.Pages.Identity.Users;
 
 public class EditModalModel : IdentityPageModel
 {
@@ -29,7 +30,8 @@ public class EditModalModel : IdentityPageModel
 
     public virtual async Task<IActionResult> OnGetAsync(Guid id)
     {
-        UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await IdentityUserAppService.GetAsync(id));
+        var user = await IdentityUserAppService.GetAsync(id);
+        UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(user);
 
         Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityUserAppService.GetAssignableRolesAsync()).Items);
 
@@ -90,6 +92,8 @@ public class EditModalModel : IdentityPageModel
         public bool IsActive { get; set; }
 
         public bool LockoutEnabled { get; set; }
+        [Required]
+        public UserType UserType { get; set; }
     }
 
     public class AssignedRoleViewModel

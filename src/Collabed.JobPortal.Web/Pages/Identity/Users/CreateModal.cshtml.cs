@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
+using Collabed.JobPortal.Users;
+using Collabed.JobPortal.User;
+using Volo.Abp.Identity;
 
-namespace Volo.Abp.Identity.Web.Pages.Identity.Users;
+namespace Collabed.JobPortal.Web.Pages.Identity.Users;
 
 public class CreateModalModel : IdentityPageModel
 {
@@ -19,10 +21,12 @@ public class CreateModalModel : IdentityPageModel
     public AssignedRoleViewModel[] Roles { get; set; }
 
     protected IIdentityUserAppService IdentityUserAppService { get; }
+    protected IUserAppService UserAppService { get; }
 
-    public CreateModalModel(IIdentityUserAppService identityUserAppService)
+    public CreateModalModel(IIdentityUserAppService identityUserAppService, IUserAppService userAppService)
     {
         IdentityUserAppService = identityUserAppService;
+        UserAppService = userAppService;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
@@ -46,9 +50,13 @@ public class CreateModalModel : IdentityPageModel
         ValidateModel();
 
         var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserCreateDto>(UserInfo);
+        UserInfo.MapExtraPropertiesTo(input, MappingPropertyDefinitionChecks.Destination);
         input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
 
-        await IdentityUserAppService.CreateAsync(input);
+        var createdUser = await IdentityUserAppService.CreateAsync(input);
+        //var userType = 
+            //createdUser.GetProperty<UserType>("UserType");
+        await UserAppService.CreateAsync(createdUser.Id, UserInfo.UserType);
 
         return NoContent();
     }
@@ -82,6 +90,9 @@ public class CreateModalModel : IdentityPageModel
         public bool IsActive { get; set; } = true;
 
         public bool LockoutEnabled { get; set; } = true;
+
+        [Required]
+        public UserType UserType { get; set; }
     }
 
     public class AssignedRoleViewModel
