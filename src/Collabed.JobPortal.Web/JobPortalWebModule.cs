@@ -35,6 +35,10 @@ using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Autofac.Core;
+using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Volo.Abp.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Collabed.JobPortal.Web;
 
@@ -50,7 +54,8 @@ namespace Collabed.JobPortal.Web;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
     )]
-public class JobPortalWebModule : AbpModule
+[DependsOn(typeof(AbpIdentityApplicationModule))]
+    public class JobPortalWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -66,9 +71,9 @@ public class JobPortalWebModule : AbpModule
             );
         });
 
-        // TODO For production create self-signed certificates and store them in the X.509 certificates store  
-        ConfigureOpenIdDict(context);
-        // END
+
+            ConfigureOpenIdDict(context);
+
 
         PreConfigure<OpenIddictBuilder>(builder =>
         {
@@ -104,13 +109,33 @@ public class JobPortalWebModule : AbpModule
 
     private void ConfigureOpenIdDict(ServiceConfigurationContext context)
     {
-        context.Services.AddOpenIddict()
+        context.Services
+            .AddOpenIddict()
             .AddServer(options =>
             {
-                options.AddEphemeralEncryptionKey()
+                // TODO For production create self-signed certificates and store them in the X.509 certificates store  
+
+                if (context.Services.GetHostingEnvironment().IsDevelopment())
+                {
+                    options.AddEphemeralEncryptionKey()
                        .AddEphemeralSigningKey();
+                }
+                else
+                {
+                    throw new NotImplementedException("You've got to resolve the X.509 certs store matter!");
+                }
+            });
+        context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddLinkedIn(options =>
+            { // below data added just for POC uses POC organization in LinkedIn
+                options.ClientId = "77440x05k7wowf";
+                options.ClientSecret = "IqcQKs6TrSEk3S8e";
+                options.Scope.Add("r_emailaddress");
+                options.Scope.Add("r_liteprofile");
+                options.SignInScheme = "Identity.External";
             });
     }
+
 
     private void ConfigureUrls(IConfiguration configuration)
     {
