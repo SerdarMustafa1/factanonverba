@@ -114,16 +114,17 @@ namespace Collabed.JobPortal.Web;
             .AddServer(options =>
             {
                 // TODO For production create self-signed certificates and store them in the X.509 certificates store  
-
-                if (context.Services.GetHostingEnvironment().IsDevelopment())
-                {
-                    options.AddEphemeralEncryptionKey()
-                       .AddEphemeralSigningKey();
-                }
-                else
-                {
-                    throw new NotImplementedException("You've got to resolve the X.509 certs store matter!");
-                }
+                options.AddEphemeralEncryptionKey()
+                    .AddEphemeralSigningKey();
+                //if (context.Services.GetHostingEnvironment().IsDevelopment())
+                //{
+                //    options.AddEphemeralEncryptionKey()
+                //       .AddEphemeralSigningKey();
+                //}
+                //else
+                //{
+                //    throw new NotImplementedException("You've got to resolve the X.509 certs store matter!");
+                //}
             });
         context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddLinkedIn(options =>
