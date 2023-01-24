@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Collabed.JobPortal.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,9 +20,11 @@ namespace Collabed.JobPortal.Web.Pages.Account;
 
 public class BMTRegisterModel : RegisterModel
 {
-    public BMTRegisterModel(IAccountAppService accountAppService) : base(accountAppService)
+    private readonly EmailService _emailService;
+    public BMTRegisterModel(IAccountAppService accountAppService, EmailService emailService) : base(accountAppService)
     {
         AccountAppService = accountAppService;
+        _emailService = emailService;
     }
     protected override async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
     {
@@ -48,5 +51,11 @@ public class BMTRegisterModel : RegisterModel
         }
 
         await SignInManager.SignInAsync(user, isPersistent: true);
+    }
+
+    protected override async Task RegisterLocalUserAsync()
+    {
+        await _emailService.SendEmailAsync(Input.EmailAddress, EmailTemplates.RegistrationSubjectTemplate, EmailTemplates.RegistrationBodyTemplate);
+        await base.RegisterLocalUserAsync();
     }
 }
