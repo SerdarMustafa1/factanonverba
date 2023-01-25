@@ -39,6 +39,16 @@ using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Castle.Core.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Linq;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using BuildMyTalentOAuthExtensions;
 
 namespace Collabed.JobPortal.Web;
 
@@ -127,18 +137,44 @@ namespace Collabed.JobPortal.Web;
                 //}
             });
         context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddLinkedIn(options =>
-            { // below data added just for POC uses POC organization in LinkedIn
-                options.ClientId = "77440x05k7wowf";
-                options.ClientSecret = "IqcQKs6TrSEk3S8e";
-                options.Scope.Add("r_emailaddress");
-                options.Scope.Add("r_liteprofile");
-                options.SignInScheme = "Identity.External";
+
+            .AddOAuth<OAuthOptions, BuildMyTalentOAuthLinkedInHandler>("LinkedIn", "LinkedIn", configuration =>
+            {
+
+                configuration.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+                configuration.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                configuration.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                configuration.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                configuration.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                configuration.ClientId = "77440x05k7wowf";
+                configuration.ClientSecret = "IqcQKs6TrSEk3S8e";
+                configuration.ReturnUrlParameter = "https://localhost:44362/";
+                configuration.ClaimsIssuer = "LinkedIn";
+                configuration.CallbackPath = "/signin-linkedin";
+                configuration.Scope.Add("openid");
+                configuration.Scope.Add("profile");
+                configuration.Scope.Add("email");
+                configuration.AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization";
+                configuration.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
+                configuration.UserInformationEndpoint = "https://api.linkedin.com/v2/userinfo";
+                configuration.SaveTokens = true;
+                
+            })
+            .AddOAuth<OAuthOptions, BuildMyTalentOAuthIndeedHandler>("Indeed", "Indeed", configuration =>
+            {
+                configuration.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+                configuration.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                configuration.ClientId = "264e3594a4e9112f57b2d3fa616261a5ac54080dd1fffc3d04dc93f873195e2b";
+                configuration.ClientSecret = "9rKb98k2cDbHBPFRb2fSOAGNVR1oUfwUS2Aiwa92Ex8vCMZVu0pmPWPi5x760HcT";
+                configuration.Scope.Add("email+offline_access"); 
+                configuration.CallbackPath = "/signin-indeed";
+                configuration.AuthorizationEndpoint = "https://secure.indeed.com/oauth/v2/authorize";
+                configuration.TokenEndpoint = "https://apis.indeed.com/oauth/v2/tokens";
+                configuration.UserInformationEndpoint = "https://secure.indeed.com/v2/api/userinfo";
+                configuration.SaveTokens = true;
             });
     }
-
-
-    private void ConfigureUrls(IConfiguration configuration)
+    private void ConfigureUrls(Microsoft.Extensions.Configuration.IConfiguration configuration)
     {
         Configure<AppUrlOptions>(options =>
         {

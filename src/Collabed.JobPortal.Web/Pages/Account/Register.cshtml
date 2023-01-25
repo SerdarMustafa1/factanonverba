@@ -7,7 +7,7 @@
 
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
-        <h4>@L["Register"] - My Custom Register page!</h4>
+        <h4>@L["Register"]</h4>
         <strong>
             @L["AlreadyRegistered"]
             <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
@@ -19,6 +19,10 @@
             }
 
             <abp-input asp-for="Input.EmailAddress"/>
+
+            <abp-input asp-for="Input.FullName" />
+            
+            @*If it is an external login, simply submit the form right after loading the page.*@
 
             @if (!Model.IsExternalLogin)
             {

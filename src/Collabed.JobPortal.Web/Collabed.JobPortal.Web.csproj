@@ -41,8 +41,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNet.Security.OAuth.LinkedIn" Version="6.0.14" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.13" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
@@ -53,6 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildMyTalentOAuthExtensions\BuildMyTalentOAuthExtensions.csproj" />
     <ProjectReference Include="..\Collabed.JobPortal.Application\Collabed.JobPortal.Application.csproj" />
     <ProjectReference Include="..\Collabed.JobPortal.HttpApi\Collabed.JobPortal.HttpApi.csproj" />
     <ProjectReference Include="..\Collabed.JobPortal.EntityFrameworkCore\Collabed.JobPortal.EntityFrameworkCore.csproj" />
