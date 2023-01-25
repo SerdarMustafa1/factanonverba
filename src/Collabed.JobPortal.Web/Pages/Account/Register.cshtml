@@ -15,18 +15,18 @@
         <form method="post" class="mt-4">
             @if (!Model.IsExternalLogin)
             {
-                <abp-input asp-for="Input.UserName" auto-focus="true"/>
+                <abp-input asp-for="RegisterPostInput.UserName" auto-focus="true"/>
             }
 
-            <abp-input asp-for="Input.EmailAddress"/>
+            <abp-input asp-for="RegisterPostInput.EmailAddress" />
 
-            <abp-input asp-for="Input.FullName" />
+            <abp-input asp-for="RegisterPostInput.FullName" />
             
             @*If it is an external login, simply submit the form right after loading the page.*@
 
             @if (!Model.IsExternalLogin)
             {
-                <abp-input asp-for="Input.Password"/>
+                <abp-input asp-for="RegisterPostInput.Password" />
             }
             <div class="d-grid gap-2">
                 <abp-button button-type="Primary" type="submit" class="btn-lg mt-4">@L["Register"]</abp-button>

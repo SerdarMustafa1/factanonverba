@@ -24,7 +24,7 @@ public class BMTRegisterModel : RegisterModel
     private readonly EmailService _emailService;
 
     [BindProperty]
-    public new BMTPostInput Input { get; set; }
+    public BMTPostInput RegisterPostInput { get; set; }
     public BMTRegisterModel(IAccountAppService accountAppService, EmailService emailService) : base(accountAppService)
     {
         AccountAppService = accountAppService;
@@ -62,7 +62,7 @@ public class BMTRegisterModel : RegisterModel
                 return; // HACK This comes from Volo.ABP, it should be re-done to give any info about the bug.
             }
 
-            Input = new BMTPostInput { EmailAddress = emailClaim?.Value, FullName = nameClaim?.Value };
+            RegisterPostInput = new BMTPostInput { EmailAddress = emailClaim?.Value, FullName = nameClaim?.Value };
         }
     }
 
@@ -81,7 +81,7 @@ public class BMTRegisterModel : RegisterModel
                     return RedirectToPage("./Login");
                 }
 
-                await RegisterExternalUserAsync(externalLoginInfo, Input.EmailAddress);
+                await RegisterExternalUserAsync(externalLoginInfo, RegisterPostInput.EmailAddress);
             }
             else
             {
@@ -100,19 +100,19 @@ public class BMTRegisterModel : RegisterModel
     protected override async Task RegisterLocalUserAsync()
     {
         ValidateModel();
-
         var userDto = await AccountAppService.RegisterAsync(
             new RegisterDto
             {
                 AppName = "MVC",
-                EmailAddress = Input.EmailAddress,
-                Password = Input.Password,
-                UserName = Input.UserName
+                EmailAddress = RegisterPostInput.EmailAddress,
+                Password = RegisterPostInput.Password,
+                UserName = RegisterPostInput.UserName
             }
         );
 
         var user = await UserManager.GetByIdAsync(userDto.Id);
         await SignInManager.SignInAsync(user, isPersistent: true);
+        await _emailService.SendEmailAsync(RegisterPostInput.EmailAddress, EmailTemplates.RegistrationSubjectTemplate, EmailTemplates.RegistrationBodyTemplate);
     }
 
     protected override async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
@@ -122,7 +122,7 @@ public class BMTRegisterModel : RegisterModel
         var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
         user.IsExternal = true;
 
-        user.Name = Input.FullName;
+        user.Name = RegisterPostInput.FullName;
         System.Console.WriteLine(user.Tokens);
         (await UserManager.CreateAsync(user)).CheckErrors();
         (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
