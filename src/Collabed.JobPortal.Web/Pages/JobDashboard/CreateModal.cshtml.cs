@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web.Pages.JobDashboard
 {
-    public class CreateModal : JobPortalPageModel
+    public class CreateModalModel : JobPortalPageModel
     {
         [BindProperty]
         public CreateJobDto Job { get; set; }
 
         private readonly IJobAppService _jobAppService;
 
-        public CreateModal(IJobAppService jobAppService)
+        public CreateModalModel(IJobAppService jobAppService)
         {
             _jobAppService = jobAppService;
         }
 
-        public async Task OnGetAsync()
+        public void OnGet()
         {
             Job = new CreateJobDto();
         }
