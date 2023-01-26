@@ -49,6 +49,7 @@ using System.Text.Json;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using BuildMyTalentOAuthExtensions;
+using Collabed.JobPortal.Settings;
 
 namespace Collabed.JobPortal.Web;
 
@@ -81,10 +82,7 @@ namespace Collabed.JobPortal.Web;
             );
         });
 
-
-            ConfigureOpenIdDict(context);
-
-
+        ConfigureOpenIdDict(context);
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
@@ -119,6 +117,10 @@ namespace Collabed.JobPortal.Web;
 
     private void ConfigureOpenIdDict(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
+        var linkedInOptions = configuration.GetSection(ProvidersConsts.LinkedInOptionsSectionName).Get<ProviderOptions>();
+        var indeedOptions = configuration.GetSection(ProvidersConsts.IndeedOptionsSectionName).Get<ProviderOptions>();
+
         context.Services
             .AddOpenIddict()
             .AddServer(options =>
@@ -136,9 +138,10 @@ namespace Collabed.JobPortal.Web;
                 //    throw new NotImplementedException("You've got to resolve the X.509 certs store matter!");
                 //}
             });
+
         context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
-            .AddOAuth<OAuthOptions, BuildMyTalentOAuthLinkedInHandler>("LinkedIn", "LinkedIn", configuration =>
+            .AddOAuth<OAuthOptions, BuildMyTalentOAuthLinkedInHandler>(ProvidersConsts.LinkedInProviderName, ProvidersConsts.LinkedInProviderName, configuration =>
             {
 
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
@@ -146,11 +149,11 @@ namespace Collabed.JobPortal.Web;
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                configuration.ClientId = "77440x05k7wowf";
-                configuration.ClientSecret = "IqcQKs6TrSEk3S8e";
-                configuration.ReturnUrlParameter = "https://localhost:44362/";
-                configuration.ClaimsIssuer = "LinkedIn";
-                configuration.CallbackPath = "/signin-linkedin";
+                configuration.ClientId = linkedInOptions.ClientId;
+                configuration.ClientSecret = linkedInOptions.ClientSecret;
+                configuration.ReturnUrlParameter = linkedInOptions.ReturnUrl;
+                configuration.ClaimsIssuer = linkedInOptions.ClaimsIssuer;
+                configuration.CallbackPath = linkedInOptions.CallbackPath;
                 configuration.Scope.Add("openid");
                 configuration.Scope.Add("profile");
                 configuration.Scope.Add("email");
@@ -160,14 +163,14 @@ namespace Collabed.JobPortal.Web;
                 configuration.SaveTokens = true;
                 
             })
-            .AddOAuth<OAuthOptions, BuildMyTalentOAuthIndeedHandler>("Indeed", "Indeed", configuration =>
+            .AddOAuth<OAuthOptions, BuildMyTalentOAuthIndeedHandler>(ProvidersConsts.IndeedProviderName, ProvidersConsts.IndeedProviderName, configuration =>
             {
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                configuration.ClientId = "264e3594a4e9112f57b2d3fa616261a5ac54080dd1fffc3d04dc93f873195e2b";
-                configuration.ClientSecret = "9rKb98k2cDbHBPFRb2fSOAGNVR1oUfwUS2Aiwa92Ex8vCMZVu0pmPWPi5x760HcT";
+                configuration.ClientId = indeedOptions.ClientId;
+                configuration.ClientSecret = indeedOptions.ClientSecret;
                 configuration.Scope.Add("email+offline_access"); 
-                configuration.CallbackPath = "/signin-indeed";
+                configuration.CallbackPath = indeedOptions.CallbackPath;
                 configuration.AuthorizationEndpoint = "https://secure.indeed.com/oauth/v2/authorize";
                 configuration.TokenEndpoint = "https://apis.indeed.com/oauth/v2/tokens";
                 configuration.UserInformationEndpoint = "https://secure.indeed.com/v2/api/userinfo";
