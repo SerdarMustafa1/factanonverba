@@ -1,9 +1,10 @@
 ﻿@page
+@using Collabed.JobPortal.Localization;
 @using Collabed.JobPortal.Web.Pages.Account;
 @using Microsoft.AspNetCore.Mvc.Localization;
 @using Volo.Abp.Account.Localization;
 @using Volo.Abp.Account.Web.Pages.Account;
-@inject IHtmlLocalizer<AccountResource> L;
+@inject IHtmlLocalizer<JobPortalResource> L
 @model BMTLoginModel
 
 
@@ -55,11 +56,9 @@
         {
             <div class="mt-2">
                 <h5>@L["OrLoginWith"]</h5>
-                @Model.ReturnUrl
                 @foreach (var provider in Model.ExternalProviders)
                 {
-                    var redirectUri = provider.DisplayName.Contains("Indeed") ? "https://localhost:44362/signin-indeed" : "https://localhost:44362/signin-linkedin";
-                    <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-redirect_uri="@redirectUri" method="post">
+                    <form asp-page="./Login" asp-page-handler="ExternalLogin" method="post">
                         <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
                     </form>
                 }

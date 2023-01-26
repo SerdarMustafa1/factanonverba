@@ -1,9 +1,10 @@
 ﻿@page
+@using Collabed.JobPortal.Localization;
 @using Collabed.JobPortal.Web.Pages.Account;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
 @model BMTRegisterModel
-@inject IHtmlLocalizer<AccountResource> L
+@inject IHtmlLocalizer<JobPortalResource> L
 
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
@@ -32,5 +33,18 @@
                 <abp-button button-type="Primary" type="submit" class="btn-lg mt-4">@L["Register"]</abp-button>
             </div>
         </form>
+
+        @if (Model.ExternalProviders.Any())
+        {
+                <div class="mt-2">
+                <h4>@L["RegisterWith"]</h4>
+                @foreach (var provider in Model.ExternalProviders)
+                {
+                            <form asp-page="./Login" asp-page-handler="ExternalLogin" method="post">
+                                <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["RegisterUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                            </form>
+                }
+                </div>
+        }
     </div>
 </div>

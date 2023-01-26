@@ -15,6 +15,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
+using static Volo.Abp.Account.Web.Pages.Account.LoginModel;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Collabed.JobPortal.Web.Pages.Account;
@@ -22,6 +23,7 @@ namespace Collabed.JobPortal.Web.Pages.Account;
 public class BMTRegisterModel : RegisterModel
 {
     private readonly EmailService _emailService;
+    public new ExternalProviderModel[] ExternalProviders { get; private protected set; }
 
     [BindProperty]
     public BMTPostInput RegisterPostInput { get; set; }
@@ -29,6 +31,10 @@ public class BMTRegisterModel : RegisterModel
     {
         AccountAppService = accountAppService;
         _emailService = emailService;
+        var liProvider = new ExternalProviderModel() { DisplayName = "LinkedIn", AuthenticationScheme = "LinkedIn" };
+        var indeedProvider = new ExternalProviderModel() { DisplayName = "Indeed", AuthenticationScheme = "Indeed" };
+        var externalProviders = new ExternalProviderModel[] { liProvider, indeedProvider };
+        this.ExternalProviders = externalProviders;
     }
 
 

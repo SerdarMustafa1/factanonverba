@@ -9,9 +9,11 @@
     "Register": "Register",
     "ForgotPassword": "Forgot Password",
     "Cancel": "Cancel",
-    "OrLoginWith": "Or login with",
+    "OrLoginWith": "Or login with:",
+    "RegisterWith": "Or register with:",
     "LogInUsingYourProviderAccount": "Log in with your provider account",
+    "RegisterUsingYourProviderAccount": "Register with your provider account",
     "InvalidLoginRequest": "Invalid login request",
-    "ThereAreNoLoginSchemesConfiguredForThisClient": "There are no login schemes configured for this client"
+    "ThereAreNoLoginSchemesConfiguredForThisClient": "There are no login schemes configured for this client",
   }
 }
