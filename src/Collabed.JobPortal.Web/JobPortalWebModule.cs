@@ -118,8 +118,8 @@ namespace Collabed.JobPortal.Web;
     private void ConfigureOpenIdDict(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
-        var linkedInOptions = configuration.GetSection(ProvidersConsts.LinkedInOptionsSectionName).Get<ProviderOptions>();
-        var indeedOptions = configuration.GetSection(ProvidersConsts.IndeedOptionsSectionName).Get<ProviderOptions>();
+        var linkedInOptions = configuration.GetSection(SettingsConsts.LinkedInOptionsSectionName).Get<ProviderOptions>();
+        var indeedOptions = configuration.GetSection(SettingsConsts.IndeedOptionsSectionName).Get<ProviderOptions>();
 
         context.Services
             .AddOpenIddict()
@@ -141,7 +141,7 @@ namespace Collabed.JobPortal.Web;
 
         context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
-            .AddOAuth<OAuthOptions, BuildMyTalentOAuthLinkedInHandler>(ProvidersConsts.LinkedInProviderName, ProvidersConsts.LinkedInProviderName, configuration =>
+            .AddOAuth<OAuthOptions, BuildMyTalentOAuthLinkedInHandler>(SettingsConsts.LinkedInProviderName, SettingsConsts.LinkedInProviderName, configuration =>
             {
 
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
@@ -163,7 +163,7 @@ namespace Collabed.JobPortal.Web;
                 configuration.SaveTokens = true;
                 
             })
-            .AddOAuth<OAuthOptions, BuildMyTalentOAuthIndeedHandler>(ProvidersConsts.IndeedProviderName, ProvidersConsts.IndeedProviderName, configuration =>
+            .AddOAuth<OAuthOptions, BuildMyTalentOAuthIndeedHandler>(SettingsConsts.IndeedProviderName, SettingsConsts.IndeedProviderName, configuration =>
             {
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
