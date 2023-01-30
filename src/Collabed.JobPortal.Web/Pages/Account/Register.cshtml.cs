@@ -70,13 +70,14 @@ public class BMTRegisterModel : AccountPageModel
 
             var identity = externalLoginInfo.Principal.Identities.First();
             var emailClaim = identity.FindFirst(ClaimTypes.Email);
-            var nameClaim = identity.FindFirst(ClaimTypes.Name);
-            if (emailClaim == null && nameClaim == null)
+            var givenName = identity.FindFirst(ClaimTypes.GivenName);
+            var surname = identity.FindFirst(ClaimTypes.Surname);
+            if (emailClaim == null && givenName == null)
             {
                 return; // HACK This comes from Volo.ABP, it should be re-done to give any info about the bug.
             }
 
-            RegisterPostInput = new BMTPostInput { EmailAddress = emailClaim?.Value, FullName = nameClaim?.Value };
+            RegisterPostInput = new BMTPostInput { EmailAddress = emailClaim?.Value, FirstName = givenName?.Value, LastName = surname?.Value };
         }
     }
 
@@ -136,8 +137,9 @@ public class BMTRegisterModel : AccountPageModel
         var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
         user.IsExternal = true;
 
-        user.Name = RegisterPostInput.FullName;
-        System.Console.WriteLine(user.Tokens);
+        user.Name = RegisterPostInput.FirstName;
+        user.Surname = RegisterPostInput.LastName;
+        System.Console.WriteLine(user.Tokens); 
         (await UserManager.CreateAsync(user)).CheckErrors();
         (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
@@ -170,7 +172,10 @@ public class BMTRegisterModel : AccountPageModel
     public class BMTPostInput
     {
         [Required]
-        public string FullName { get; set; }
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
 
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
