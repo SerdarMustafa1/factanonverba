@@ -20,14 +20,22 @@ using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Collabed.JobPortal.Web.Pages.Account;
 
-public class BMTRegisterModel : RegisterModel
+public class BMTRegisterModel : AccountPageModel
 {
     private readonly EmailService _emailService;
-    public new ExternalProviderModel[] ExternalProviders { get; private protected set; }
-
+    public ExternalProviderModel[] ExternalProviders { get; private protected set; }
+    [BindProperty(SupportsGet = true)]
+    public string ReturnUrl { get; set; }
+    [BindProperty(SupportsGet = true)]
+    public string ReturnUrlHash { get; set; }
+    [BindProperty(SupportsGet = true)]
+    public bool IsExternalLogin { get; set; }
+    [BindProperty(SupportsGet = true)]
+    public string ExternalLoginAuthSchema { get; set; }
     [BindProperty]
     public BMTPostInput RegisterPostInput { get; set; }
-    public BMTRegisterModel(IAccountAppService accountAppService, EmailService emailService) : base(accountAppService)
+
+    public BMTRegisterModel(IAccountAppService accountAppService, EmailService emailService)
     {
         AccountAppService = accountAppService;
         _emailService = emailService;
@@ -38,7 +46,7 @@ public class BMTRegisterModel : RegisterModel
     }
 
 
-    public override async Task<IActionResult> OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
         await CheckSelfRegistrationAsync();
         await TrySetEmailAndName();
@@ -72,7 +80,7 @@ public class BMTRegisterModel : RegisterModel
         }
     }
 
-    public override async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync()
     {
         try
         {
@@ -103,7 +111,7 @@ public class BMTRegisterModel : RegisterModel
         }
     }
 
-    protected override async Task RegisterLocalUserAsync()
+    protected async Task RegisterLocalUserAsync()
     {
         ValidateModel();
         var userDto = await AccountAppService.RegisterAsync(
@@ -121,7 +129,7 @@ public class BMTRegisterModel : RegisterModel
         await _emailService.SendEmailAsync(RegisterPostInput.EmailAddress, EmailTemplates.RegistrationSubjectTemplate, EmailTemplates.RegistrationBodyTemplate);
     }
 
-    protected override async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
+    protected async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
     {
         await IdentityOptions.SetAsync();
         // HACK: Below new IdentityUser is being created, second argument stands for the UserName
@@ -150,7 +158,7 @@ public class BMTRegisterModel : RegisterModel
         await SignInManager.SignInAsync(user, isPersistent: true);
     }
 
-    protected override async Task CheckSelfRegistrationAsync()
+    protected async Task CheckSelfRegistrationAsync()
     {
         if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled) ||
             !await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
@@ -159,9 +167,24 @@ public class BMTRegisterModel : RegisterModel
         }
     }
 
-    public class BMTPostInput : PostInput
+    public class BMTPostInput
     {
         [Required]
         public string FullName { get; set; }
+
+        [Required]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
+        public string UserName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
+        public string EmailAddress { get; set; }
+
+        [Required]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+        [DataType(DataType.Password)]
+        [DisableAuditing]
+        public string Password { get; set; }
     }
 }
