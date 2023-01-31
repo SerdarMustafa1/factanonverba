@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NUglify.JavaScript.Syntax;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Settings;
@@ -110,6 +112,11 @@ public class BMTRegisterModel : AccountPageModel
             Alerts.Danger(GetLocalizeExceptionMessage(e));
             return Page();
         }
+        catch (AbpValidationException validationException)
+        {
+            // renders error message wroted below the email address.
+            return Page();
+        }
     }
 
     protected async Task RegisterLocalUserAsync()
@@ -181,8 +188,8 @@ public class BMTRegisterModel : AccountPageModel
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
         public string UserName { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Please type your email address")]
+        [ExtendedEmailAddress("Please use a valid email address")]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
         public string EmailAddress { get; set; }
 
