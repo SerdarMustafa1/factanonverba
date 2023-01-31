@@ -40,7 +40,7 @@ namespace Collabed.JobPortal.Web
             var emailParts = valueAsString.Split('@');
             if (emailParts.Length != 2 || // more than one @
                 emailParts[1].LastIndexOf('.') == -1 || // there is lack of '.' sign in domain
-                emailParts[1].LastIndexOf('.') == 0 || // . is the first char in domain
+                emailParts[1].IndexOf('.') == 0 || // . is the first char in domain
                 (emailParts[1].Length -1) == emailParts[1].LastIndexOf('.') || // '.' char is the last one in domain
                 emailParts[0].Length > 64 ||
                 emailParts[1].Length > 253) 
