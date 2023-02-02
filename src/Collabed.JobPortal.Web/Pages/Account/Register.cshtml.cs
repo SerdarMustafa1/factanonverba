@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NUglify.Helpers;
 using NUglify.JavaScript.Syntax;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -114,7 +116,10 @@ public class BMTRegisterModel : AccountPageModel
         }
         catch (AbpValidationException validationException)
         {
-            // renders error message wroted below the email address.
+            Logger.LogException(validationException);
+            if (validationException != null && validationException.ValidationErrors.Count > 0)
+                validationException.ValidationErrors.ForEach(ex =>
+                    Logger.LogError($"{ex.ErrorMessage}"));
             return Page();
         }
     }
@@ -189,14 +194,23 @@ public class BMTRegisterModel : AccountPageModel
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Please type your email address")]
-        [ExtendedEmailAddress("Please use a valid email address")]
+        [ExtendedEmailAddress("Please type valid email address")]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
+        [RegularExpression(@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$", ErrorMessage = "Please type valid email address")]
         public string EmailAddress { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " ")]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
         [DataType(DataType.Password)]
         [DisableAuditing]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])(?=.*\d).{8,}$", ErrorMessage = " ")]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "Your passwords don't match")]
+        [DisplayName("Confirm Password")]
+        [DataType(DataType.Password)]
+        [Compare(nameof(Password), ErrorMessage = "Passwords don't match each other")]
+        [DisableAuditing]
+        public string ConfirmPassword { get; set; }
     }
 }

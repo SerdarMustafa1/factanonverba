@@ -196,6 +196,14 @@ namespace Collabed.JobPortal.Web;
                     bundle.AddFiles("/global-styles.css");
                 }
             );
+            options.ScriptBundles.Configure(
+                "jQuery", 
+                bundle =>
+                {
+                    bundle.AddFiles("/libs/jquery/jquery.js");
+                }
+            );
+
         });
     }
     

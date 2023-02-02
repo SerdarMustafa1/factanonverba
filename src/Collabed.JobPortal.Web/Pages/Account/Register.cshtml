@@ -6,6 +6,8 @@
 @model BMTRegisterModel
 @inject IHtmlLocalizer<JobPortalResource> L
 
+<abp-script src="/Pages/Account/Register.js" />
+
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
         <h4>@L["Register"]</h4>
@@ -25,11 +27,17 @@
 
             <abp-input asp-for="RegisterPostInput.LastName" />
             
-            @*If it is an external login, simply submit the form right after loading the page.*@
-
             @if (!Model.IsExternalLogin)
             {
-                <abp-input asp-for="RegisterPostInput.Password" />
+                <abp-input asp-for="RegisterPostInput.Password" id="registerPasswordInputField" onkeyup="validatePassword()" />
+                <div>
+                    <p id="hintParagraph">Your password must contain:</p>
+                    <br />
+                    <p><i class="bi bi-dot" id="caseIcon"></i><span id="caseHint">Uppercase and lowercase letters</span></p>
+                    <p><i class="bi bi-dot" id="lengthIcon"></i><span id="lengthHint">At least 8 characters</span></p>
+                    <p><i class="bi bi-dot" id="nonAlphanumericIcon"></i><span id="nonAlphanumericParagraph">A number and a symbol</span></p>
+                </div>
+                <abp-input asp-for="RegisterPostInput.ConfirmPassword" />
             }
             <div class="d-grid gap-2">
                 <abp-button button-type="Primary" type="submit" class="btn-lg mt-4">@L["Register"]</abp-button>
@@ -38,15 +46,15 @@
 
         @if (Model.ExternalProviders.Any())
         {
-                <div class="mt-2">
+            <div class="mt-2">
                 <h4>@L["RegisterWith"]</h4>
                 @foreach (var provider in Model.ExternalProviders)
                 {
-                            <form asp-page="./Login" asp-page-handler="ExternalLogin" method="post">
-                                <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["RegisterUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
-                            </form>
+                    <form asp-page="./Login" asp-page-handler="ExternalLogin" method="post">
+                        <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["RegisterUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                    </form>
                 }
-                </div>
+            </div>
         }
     </div>
 </div>
