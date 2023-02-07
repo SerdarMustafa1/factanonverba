@@ -1,16 +1,16 @@
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Collabed.JobPortal.Email;
+using Collabed.JobPortal.Extensions;
+using Collabed.JobPortal.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUglify.Helpers;
-using NUglify.JavaScript.Syntax;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Settings;
@@ -127,18 +127,27 @@ public class BMTRegisterModel : AccountPageModel
     protected async Task RegisterLocalUserAsync()
     {
         ValidateModel();
-        var userDto = await AccountAppService.RegisterAsync(
-            new RegisterDto
-            {
-                AppName = "MVC",
-                EmailAddress = RegisterPostInput.EmailAddress,
-                Password = RegisterPostInput.Password,
-                UserName = RegisterPostInput.UserName
-            }
-        );
+
+        var registerDto = new RegisterDto
+        {
+            AppName = "MVC",
+            EmailAddress = RegisterPostInput.EmailAddress,
+            Password = RegisterPostInput.Password,
+            UserName = RegisterPostInput.UserName
+        };
+        //TODO: Check user type and set extra properties
+        registerDto.SetFirstName(RegisterPostInput.FirstName);
+        registerDto.SetLastName(RegisterPostInput.LastName);
+        //TODO: Get Organisation details from ViewModel
+        registerDto.SetUserType(UserType.Candidate);
+        registerDto.SetOrganisationName("Organisation XYZ");
+
+        var userDto = await AccountAppService.RegisterAsync(registerDto);
 
         var user = await UserManager.GetByIdAsync(userDto.Id);
         await SignInManager.SignInAsync(user, isPersistent: true);
+
+        //TODO: Different email templates for different user type
         await _emailService.SendEmailAsync(RegisterPostInput.EmailAddress, EmailTemplates.RegistrationSubjectTemplate, EmailTemplates.RegistrationBodyTemplate);
     }
 
@@ -151,7 +160,7 @@ public class BMTRegisterModel : AccountPageModel
 
         user.Name = RegisterPostInput.FirstName;
         user.Surname = RegisterPostInput.LastName;
-        System.Console.WriteLine(user.Tokens); 
+        System.Console.WriteLine(user.Tokens);
         (await UserManager.CreateAsync(user)).CheckErrors();
         (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 

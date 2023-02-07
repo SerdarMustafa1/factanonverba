@@ -13,7 +13,7 @@ namespace Collabed.JobPortal.Web
         private static bool EnableFullDomainLiterals { get; } =
             AppContext.TryGetSwitch("System.Net.AllowFullDomainLiterals", out bool enable) ? enable : false;
 
-        public override bool IsValid(object? value)
+        public override bool IsValid(object value)
         {
             if (value == null)
             {
@@ -30,7 +30,7 @@ namespace Collabed.JobPortal.Web
                 return false;
             }
 
-            if(valueAsString.IndexOf('@') == 0)
+            if (valueAsString.IndexOf('@') == 0)
             {
                 return false;
             }
@@ -43,7 +43,7 @@ namespace Collabed.JobPortal.Web
                 emailParts[1].IndexOf('.') == 0 || // . is the first char in domain
                 (emailParts[1].Length -1) == emailParts[1].LastIndexOf('.') || // '.' char is the last one in domain
                 emailParts[0].Length > 64 ||
-                emailParts[1].Length > 253) 
+                emailParts[1].Length > 253)
             {
                 return false;
             }

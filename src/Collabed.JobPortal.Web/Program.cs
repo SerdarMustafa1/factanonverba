@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Autofac.Core;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web;
 
@@ -29,7 +28,7 @@ public class Program
 
             return 0;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return 1;
         }

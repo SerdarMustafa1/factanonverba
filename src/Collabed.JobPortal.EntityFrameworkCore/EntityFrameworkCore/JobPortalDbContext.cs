@@ -1,5 +1,5 @@
-﻿using Collabed.JobPortal.Candidates;
-using Collabed.JobPortal.Jobs;
+﻿using Collabed.JobPortal.Jobs;
+using Collabed.JobPortal.Organisations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -22,7 +22,6 @@ public class JobPortalDbContext :
     AbpDbContext<JobPortalDbContext>,
     IIdentityDbContext
 {
-    /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
     #region Entities from the modules
 
@@ -44,14 +43,13 @@ public class JobPortalDbContext :
     public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
     public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }
+    #endregion
 
     //Job board
     public DbSet<Jobs.Job> Jobs { get; set; }
-    public DbSet<Clients.Client> Clients { get; set; }
-    public DbSet<Candidate> Candidates { get; set; }
-
-
-    #endregion
+    public DbSet<JobApplicant> JobApplicants { get; set; }
+    public DbSet<Organisations.Organisation> Organisations { get; set; }
+    public DbSet<OrganisationMember> OrganisationMembers { get; set; }
 
     public JobPortalDbContext(DbContextOptions<JobPortalDbContext> options)
         : base(options)
@@ -75,39 +73,45 @@ public class JobPortalDbContext :
 
         /* Configure your own tables/entities inside here */
 
-        builder.Entity<Candidate>(b =>
-        {
-            b.ToTable(JobPortalConsts.DbTablePrefix + "Candidates", JobPortalConsts.DbSchema);
-            b.ConfigureByConvention(); //auto configure for the base class props
-            //many-to-many relationship with Jobs table => CandidateJobs
-            b.HasMany(a => a.AppliedJobs).WithOne().HasForeignKey(x => x.CandidateId);
-        });
-
-        builder.Entity<CandidateJobs>(b =>
-        {
-            b.ToTable(JobPortalConsts.DbTablePrefix + "CandidateJobs", JobPortalConsts.DbSchema);
-            b.ConfigureByConvention();
-            //define composite key
-            b.HasKey(x => new { x.CandidateId, x.JobId });
-            //many-to-many configuration
-            b.HasOne<Candidate>().WithMany(x => x.AppliedJobs).HasForeignKey(x => x.CandidateId).IsRequired();
-            b.HasOne<Jobs.Job>().WithMany().HasForeignKey(x => x.JobId).IsRequired();
-            b.HasIndex(x => new { x.CandidateId, x.JobId });
-        });
-
-        builder.Entity<Clients.Client>(b =>
-        {
-            b.ToTable(JobPortalConsts.DbTablePrefix + "Clients", JobPortalConsts.DbSchema);
-            b.ConfigureByConvention(); //auto configure for the base class props
-            b.HasMany(a => a.PostedJobs).WithOne(b => b.Client);
-        });
-
         builder.Entity<Jobs.Job>(b =>
         {
             b.ToTable(JobPortalConsts.DbTablePrefix + "Jobs", JobPortalConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.HasOne(a => a.Client).WithMany(b => b.PostedJobs);
+            b.HasMany(x => x.Applicants).WithOne().HasForeignKey(x => x.JobId).IsRequired();
+            b.HasOne<Organisations.Organisation>().WithMany().HasForeignKey(x => x.OrganisationId).IsRequired();
             b.Property(e => e.Type).HasConversion<int>();
+        });
+
+        builder.Entity<JobApplicant>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "JobApplicants", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            //define composite key
+            b.HasKey(x => new { x.JobId, x.UserId });
+            //many-to-many configuration
+            b.HasOne<Jobs.Job>().WithMany(x => x.Applicants).HasForeignKey(x => x.UserId).IsRequired();
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
+            b.HasIndex(x => new { x.JobId, x.UserId });
+        });
+
+        builder.Entity<Organisations.Organisation>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "Organisations", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.HasMany(a => a.Members).WithOne().HasForeignKey(x => x.UserId);
+            b.HasMany(a => a.PostedJobs).WithOne().HasForeignKey(b => b.OrganisationId);
+        });
+
+        builder.Entity<OrganisationMember>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "OrganisationMembers", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            //define composite key
+            b.HasKey(x => new { x.OrganisationId, x.UserId });
+            //many-to-many configuration
+            b.HasOne<Organisations.Organisation>().WithMany(x => x.Members).HasForeignKey(x => x.UserId).IsRequired();
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
+            b.HasIndex(x => new { x.OrganisationId, x.UserId });
         });
     }
 }

@@ -1,32 +1,27 @@
-﻿using Collabed.JobPortal.Clients;
-using Collabed.JobPortal.Jobs;
+﻿using Collabed.JobPortal.Jobs;
+using Collabed.JobPortal.Organisations;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity;
-using Volo.Abp.ObjectMapping;
 
 namespace JobPortal.Jobs
 {
     public class JobAppService : ApplicationService, IJobAppService
     {
         private readonly IJobRepository _jobRepository;
-        private readonly IRepository<Client, Guid> _clientRepository;
+        private readonly IOrganisationRepository _organisationRepository;
         private readonly JobManager _jobManager;
 
-        public JobAppService(IJobRepository jobRepository, JobManager jobManager, IRepository<Client, Guid> clientRepository)
+        public JobAppService(IJobRepository jobRepository, JobManager jobManager, IOrganisationRepository organisationRepository)
         {
             _jobRepository = jobRepository;
             _jobManager = jobManager;
-            _clientRepository = clientRepository;
+            _organisationRepository = organisationRepository;
         }
 
         public async Task<JobDto> GetAsync(Guid id)
@@ -47,7 +42,14 @@ namespace JobPortal.Jobs
         [Authorize]
         public async Task<JobDto> CreateAsync(CreateJobDto input)
         {
-            var job = await _jobManager.CreateAsync(CurrentUser.Id.Value, input.Title);
+            // For now, get the organisation id user belongs to. Post MVP: different flow
+            var organisationId = await _organisationRepository.GetOrganisationIdByUserId(CurrentUser.Id.Value);
+            if (organisationId == null)
+            {
+                throw new BusinessException("User is not allowed to post jobs. User is not a member of any organisation.");
+            }
+
+            var job = await _jobManager.CreateAsync(input.Title, organisationId.Value);
             job.Description = input.Description;
 
             var newJob = await _jobRepository.InsertAsync(job);

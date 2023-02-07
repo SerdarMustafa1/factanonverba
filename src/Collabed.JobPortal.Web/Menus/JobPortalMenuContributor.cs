@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Collabed.JobPortal.Localization;
+﻿using Collabed.JobPortal.Localization;
+using System.Threading.Tasks;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.SettingManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;

@@ -1,14 +1,14 @@
+using Collabed.JobPortal.User;
+using Collabed.JobPortal.Users;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
+using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
-using Collabed.JobPortal.Users;
-using Collabed.JobPortal.User;
-using Volo.Abp.Identity;
 
 namespace Collabed.JobPortal.Web.Pages.Identity.Users;
 
@@ -53,10 +53,8 @@ public class CreateModalModel : IdentityPageModel
         UserInfo.MapExtraPropertiesTo(input, MappingPropertyDefinitionChecks.Destination);
         input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
 
+        // TODO: Set extra properties (first name, last name, user type)
         var createdUser = await IdentityUserAppService.CreateAsync(input);
-        //var userType = 
-            //createdUser.GetProperty<UserType>("UserType");
-        await UserAppService.CreateAsync(createdUser.Id, UserInfo.UserType);
 
         return NoContent();
     }

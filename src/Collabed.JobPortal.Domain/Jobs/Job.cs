@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Collabed.JobPortal.Clients;
-using Collabed.JobPortal.ErrorCodes;
+﻿using Collabed.JobPortal.ErrorCodes;
 using Collabed.JobPortal.Job;
+using System;
+using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -30,16 +28,17 @@ namespace Collabed.JobPortal.Jobs
         public string SalaryBenefits { get; set; }
         public string Salary { get; set; }
         public bool IsExternal { get; set; }
-        public Client Client { get; set; }
+        public Guid OrganisationId { get; set; }
+        public ICollection<JobApplicant> Applicants { get; set; }
 
         private Job()
         {
         }
 
-        internal Job(string title, Client client)
+        internal Job(string title, Guid organisationId)
         {
             SetTitle(title);
-            Client = client;
+            OrganisationId = organisationId;
         }
 
         #region Public setters
@@ -60,7 +59,7 @@ namespace Collabed.JobPortal.Jobs
                 throw new BusinessException(JobErrorCodes.SalaryFromCantBeGreaterThanSalaryTo);
             }
 
-            SalaryFrom = salaryFrom; 
+            SalaryFrom = salaryFrom;
             SalaryTo = salaryTo;
 
             return this;

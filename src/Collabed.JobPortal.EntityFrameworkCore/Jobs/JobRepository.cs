@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -32,8 +31,7 @@ namespace Collabed.JobPortal.Jobs
         {
             var dbContext = await GetDbContextAsync();
 
-            return (await GetDbSetAsync())
-                .Include(x => x.Client);
+            return (await GetDbSetAsync());
         }
     }
 }
