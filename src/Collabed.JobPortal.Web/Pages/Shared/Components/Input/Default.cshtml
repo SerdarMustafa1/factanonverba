@@ -1,0 +1,30 @@
+﻿@using Collabed.JobPortal.Localization;
+@using Collabed.JobPortal.Web.Pages.Account;
+@using Collabed.JobPortal.Web.Pages.Shared.Components.Input;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@model InputViewModel
+
+@{
+    var isFormControl = true;
+    var labelClass = isFormControl ? "form-label" : "";
+    var inputFieldClass = isFormControl ? "form-control" : "";
+}
+
+<div class="mb-3">
+    <label id="@(Model.PropertyName + "_label")" class="@labelClass"></label>
+    <div class="input-group" id=@(Model.PropertyName + "_input-group")>
+        @if (!Model.PrependIcon.IsNullOrWhiteSpace())
+        {
+            <div class="input-group-prepend"><i class="@Model.PrependIcon" aria-hidden="true"></i></div>
+        }
+        <input class="@inputFieldClass" id="@(Model.PropertyName + "_input")" 
+            name="@Model.PropertyName" type="@Model.InputType" placeholder="@Model.Placeholder" 
+            title="@Model.HtmlTitle" onkeyup="@Model.OnKeyUp" />
+        @if (!Model.AppendIcon.IsNullOrWhiteSpace())
+        {
+            <div class="input-group-append"><i class="@Model.AppendIcon" id=@(Model.PropertyName + "_append-icon") aria-hidden="true" ></i></div>
+        }
+    </div>
+    <span id="@(Model.PropertyName + "_validation-message")" class="text-validation-error" ></span>
+</div>

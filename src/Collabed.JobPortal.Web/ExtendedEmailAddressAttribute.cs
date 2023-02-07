@@ -15,7 +15,7 @@ namespace Collabed.JobPortal.Web
 
         public override bool IsValid(object value)
         {
-            if (value == null)
+            if (value == null) // maybe edit null to be an empty string?
             {
                 return true;
             }

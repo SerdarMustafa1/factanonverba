@@ -5,6 +5,61 @@
     --lpx-logo-icon: url('/images/logo/leptonx/logo-light-thumbnail.png');
 }
 
-.input-validation-error {
-    border-color: red;
+.input-group-error {
+    border: 1px solid red;
+    height: 30px;
+    border-radius: 10px;
+    color: red;
+}
+
+.text-validation-error {
+    color: red;
+}
+
+.input-group {
+    height: 30px;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+.form-control {
+    height: 100%;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    color: dimgray;
+    background-color: white;
+    background-clip: padding-box;
+    border: 0px;
+    appearance: none;
+}
+
+.form-control:focus {
+    background-color: white;
+}
+
+.form-control:is(:hover) {
+    background-color: white;
+}
+
+.input-group-prepend {
+    width: 30px;
+    border-right: 0px;
+    border-left: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+    display: flex;
+    place-content: center;
+    place-items: center;
+}
+
+.input-group-append {
+    width: 30px;
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+    display: flex;
+    place-content: center;
+    place-items: center;
 }

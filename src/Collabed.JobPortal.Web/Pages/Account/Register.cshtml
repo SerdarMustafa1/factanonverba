@@ -1,6 +1,7 @@
 ﻿@page
 @using Collabed.JobPortal.Localization;
 @using Collabed.JobPortal.Web.Pages.Account;
+@using Collabed.JobPortal.Web.Pages.Shared.Components.Input;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
 @model BMTRegisterModel
@@ -9,27 +10,29 @@
 <abp-script src="/Pages/Account/Register.js" />
 
 <div class="card mt-3 shadow-sm rounded">
-    <div class="card-body p-5">
+    <div class="card-body">
         <h4>@L["Register"]</h4>
         <strong>
             @L["AlreadyRegistered"]
             <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
         </strong>
-        <form method="post" class="mt-4">
+        <form method="post">
             @if (!Model.IsExternalLogin)
             {
-                <abp-input asp-for="RegisterPostInput.UserName" auto-focus="true"/>
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.UserName), HtmlTitle=Model.UserName, Placeholder = "..."})
             }
+            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.EmailAddress), HtmlTitle=Model.EmailAddress, OnKeyUp = "validateEmail()",
+                PrependIcon = "bi bi-envelope", AppendIcon = "bi bi-question-circle"})
 
-            <abp-input asp-for="RegisterPostInput.EmailAddress" />
+            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.FirstName), HtmlTitle=Model.FirstName, OnKeyUp = "validateRequiredField('FirstName', 'Please type your first name')",
+                AppendIcon = "bi bi-question-circle"})
 
-            <abp-input asp-for="RegisterPostInput.FirstName" />
+            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.LastName), HtmlTitle=Model.LastName, OnKeyUp = "validateRequiredField('LastName', 'Please type your last name')",
+                AppendIcon = "bi bi-question-circle"})
 
-            <abp-input asp-for="RegisterPostInput.LastName" />
-            
             @if (!Model.IsExternalLogin)
             {
-                <abp-input asp-for="RegisterPostInput.Password" id="registerPasswordInputField" onkeyup="validatePassword()" />
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", OnKeyUp="validatePassword()", PropertyName = nameof(Model.Password), HtmlTitle=Model.Password })
                 <div>
                     <p id="hintParagraph">Your password must contain:</p>
                     <br />
@@ -37,7 +40,7 @@
                     <p><i class="bi bi-dot" id="lengthIcon"></i><span id="lengthHint">At least 8 characters</span></p>
                     <p><i class="bi bi-dot" id="nonAlphanumericIcon"></i><span id="nonAlphanumericParagraph">A number and a symbol</span></p>
                 </div>
-                <abp-input asp-for="RegisterPostInput.ConfirmPassword" />
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", PropertyName = nameof(Model.ConfirmPassword), HtmlTitle=Model.ConfirmPassword, OnKeyUp = "validateConfirmPassword()"})
             }
             <div class="d-grid gap-2">
                 <abp-button button-type="Primary" type="submit" class="btn-lg mt-4">@L["Register"]</abp-button>

@@ -24,20 +24,20 @@ using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Collabed.JobPortal.Web.Pages.Account;
 
+[BindProperties(SupportsGet = true)]
 public class BMTRegisterModel : AccountPageModel
 {
     private readonly EmailService _emailService;
     public ExternalProviderModel[] ExternalProviders { get; private protected set; }
-    [BindProperty(SupportsGet = true)]
+
     public string ReturnUrl { get; set; }
-    [BindProperty(SupportsGet = true)]
+
     public string ReturnUrlHash { get; set; }
-    [BindProperty(SupportsGet = true)]
+
     public bool IsExternalLogin { get; set; }
-    [BindProperty(SupportsGet = true)]
+
     public string ExternalLoginAuthSchema { get; set; }
-    [BindProperty]
-    public BMTPostInput RegisterPostInput { get; set; }
+    
 
     public BMTRegisterModel(IAccountAppService accountAppService, EmailService emailService)
     {
@@ -81,7 +81,9 @@ public class BMTRegisterModel : AccountPageModel
                 return; // HACK This comes from Volo.ABP, it should be re-done to give any info about the bug.
             }
 
-            RegisterPostInput = new BMTPostInput { EmailAddress = emailClaim?.Value, FirstName = givenName?.Value, LastName = surname?.Value };
+            EmailAddress = emailClaim?.Value;
+            FirstName = givenName?.Value;
+            LastName = surname?.Value ;
         }
     }
 
@@ -89,6 +91,7 @@ public class BMTRegisterModel : AccountPageModel
     {
         try
         {
+            var form = Request.Form;
             await CheckSelfRegistrationAsync();
 
             if (IsExternalLogin)
@@ -100,7 +103,7 @@ public class BMTRegisterModel : AccountPageModel
                     return RedirectToPage("./Login");
                 }
 
-                await RegisterExternalUserAsync(externalLoginInfo, RegisterPostInput.EmailAddress);
+                await RegisterExternalUserAsync(externalLoginInfo, EmailAddress);
             }
             else
             {
@@ -131,13 +134,13 @@ public class BMTRegisterModel : AccountPageModel
         var registerDto = new RegisterDto
         {
             AppName = "MVC",
-            EmailAddress = RegisterPostInput.EmailAddress,
-            Password = RegisterPostInput.Password,
-            UserName = RegisterPostInput.UserName
+            EmailAddress = EmailAddress,
+            Password = Password,
+            UserName = UserName
         };
         //TODO: Check user type and set extra properties
-        registerDto.SetFirstName(RegisterPostInput.FirstName);
-        registerDto.SetLastName(RegisterPostInput.LastName);
+        registerDto.SetFirstName(FirstName);
+        registerDto.SetLastName(LastName);
         //TODO: Get Organisation details from ViewModel
         registerDto.SetUserType(UserType.Candidate);
         registerDto.SetOrganisationName("Organisation XYZ");
@@ -148,7 +151,7 @@ public class BMTRegisterModel : AccountPageModel
         await SignInManager.SignInAsync(user, isPersistent: true);
 
         //TODO: Different email templates for different user type
-        await _emailService.SendEmailAsync(RegisterPostInput.EmailAddress, EmailTemplates.RegistrationSubjectTemplate, EmailTemplates.RegistrationBodyTemplate);
+        await _emailService.SendEmailAsync(EmailAddress, EmailTemplates.RegistrationSubjectTemplate, EmailTemplates.RegistrationBodyTemplate);
     }
 
     protected async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
@@ -158,8 +161,8 @@ public class BMTRegisterModel : AccountPageModel
         var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
         user.IsExternal = true;
 
-        user.Name = RegisterPostInput.FirstName;
-        user.Surname = RegisterPostInput.LastName;
+        user.Name = FirstName;
+        user.Surname = LastName;
         System.Console.WriteLine(user.Tokens);
         (await UserManager.CreateAsync(user)).CheckErrors();
         (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
@@ -190,36 +193,33 @@ public class BMTRegisterModel : AccountPageModel
         }
     }
 
-    public class BMTPostInput
-    {
-        [Required]
-        public string FirstName { get; set; }
+    [Required]
+    public string FirstName { get; set; }
 
-        [Required]
-        public string LastName { get; set; }
+    [Required]
+    public string LastName { get; set; }
 
-        [Required]
-        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
-        public string UserName { get; set; }
+    [Required]
+    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
+    public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Please type your email address")]
-        [ExtendedEmailAddress("Please type valid email address")]
-        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
-        [RegularExpression(@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$", ErrorMessage = "Please type valid email address")]
-        public string EmailAddress { get; set; }
+    [Required(ErrorMessage = "Please type your email address")]
+    [ExtendedEmailAddress("Please type valid email address")]
+    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
+    public string EmailAddress { get; set; }
 
-        [Required(ErrorMessage = " ")]
-        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-        [DataType(DataType.Password)]
-        [DisableAuditing]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])(?=.*\d).{8,}$", ErrorMessage = " ")]
-        public string Password { get; set; }
+    [Required(ErrorMessage = " ")]
+    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+    [DataType(DataType.Password)]
+    [DisableAuditing]
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])(?=.*\d).{8,}$", ErrorMessage = " ")]
+    public string Password { get; set; }
 
-        [Required(ErrorMessage = "Your passwords don't match")]
-        [DisplayName("Confirm Password")]
-        [DataType(DataType.Password)]
-        [Compare(nameof(Password), ErrorMessage = "Passwords don't match each other")]
-        [DisableAuditing]
-        public string ConfirmPassword { get; set; }
-    }
+    [Required(ErrorMessage = "Your passwords don't match")]
+    [DisplayName("Confirm Password")]
+    [DataType(DataType.Password)]
+    [Compare(nameof(Password), ErrorMessage = "Passwords don't match each other")]
+    [DisableAuditing]
+    public string ConfirmPassword { get; set; }
+
 }
