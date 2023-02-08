@@ -6,7 +6,6 @@ using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
@@ -31,8 +30,8 @@ public class JobPortalDomainModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
 
-//#if DEBUG
-//        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
-//#endif
+#if DEBUG
+        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+#endif
     }
 }

@@ -20,7 +20,7 @@ namespace Collabed.JobPortal.Email
         {
             try
             {
-                await _emailSender.SendAsync(recipient, subject, body, isBodyHtml);
+                await _emailSender.SendAsync(EmailTemplates.WelcomeSender, recipient, subject, body, isBodyHtml);
                 _logger.LogInformation($"Email with {subject} successfully sent to {recipient}");
             }
             catch (System.Exception ex)
