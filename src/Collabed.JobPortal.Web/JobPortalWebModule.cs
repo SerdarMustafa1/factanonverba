@@ -1,55 +1,39 @@
-using System.IO;
+using BuildMyTalentOAuthExtensions;
+using Collabed.JobPortal.EntityFrameworkCore;
+using Collabed.JobPortal.Localization;
+using Collabed.JobPortal.Settings;
+using Collabed.JobPortal.Web.Menus;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Collabed.JobPortal.EntityFrameworkCore;
-using Collabed.JobPortal.Localization;
-using Collabed.JobPortal.Web.Menus;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
+using System.IO;
+using System.Security.Claims;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.FeatureManagement;
+using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.UI.Navigation.Urls;
-using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using Autofac.Core;
-using System;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Volo.Abp.Identity;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Castle.Core.Configuration;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Linq;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using BuildMyTalentOAuthExtensions;
-using Collabed.JobPortal.Settings;
 
 namespace Collabed.JobPortal.Web;
 
@@ -61,12 +45,12 @@ namespace Collabed.JobPortal.Web;
     typeof(AbpIdentityWebModule),
     typeof(AbpSettingManagementWebModule),
     typeof(AbpAccountWebOpenIddictModule),
-    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.AbpAspNetCoreMvcUiBasicThemeModule)
     )]
 [DependsOn(typeof(AbpIdentityApplicationModule))]
-    public class JobPortalWebModule : AbpModule
+public class JobPortalWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -109,7 +93,7 @@ namespace Collabed.JobPortal.Web;
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
     }
-    
+
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
         context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
@@ -161,7 +145,7 @@ namespace Collabed.JobPortal.Web;
                 configuration.TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken";
                 configuration.UserInformationEndpoint = "https://api.linkedin.com/v2/userinfo";
                 configuration.SaveTokens = true;
-                
+
             })
             .AddOAuth<OAuthOptions, BuildMyTalentOAuthIndeedHandler>(SettingsConsts.IndeedProviderName, SettingsConsts.IndeedProviderName, configuration =>
             {
@@ -169,7 +153,7 @@ namespace Collabed.JobPortal.Web;
                 configuration.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                 configuration.ClientId = indeedOptions.ClientId;
                 configuration.ClientSecret = indeedOptions.ClientSecret;
-                configuration.Scope.Add("email+offline_access"); 
+                configuration.Scope.Add("email+offline_access");
                 configuration.CallbackPath = indeedOptions.CallbackPath;
                 configuration.AuthorizationEndpoint = "https://secure.indeed.com/oauth/v2/authorize";
                 configuration.TokenEndpoint = "https://apis.indeed.com/oauth/v2/tokens";
@@ -189,15 +173,15 @@ namespace Collabed.JobPortal.Web;
     {
         Configure<AbpBundlingOptions>(options =>
         {
-            options.StyleBundles.Configure(
-                LeptonXLiteThemeBundles.Styles.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/global-styles.css");
-                }
-            );
+            //options.StyleBundles.Configure(
+            //    LeptonXLiteThemeBundles.Styles.Global,
+            //    bundle =>
+            //    {
+            //        bundle.AddFiles("/global-styles.css");
+            //    }
+            //);
             options.ScriptBundles.Configure(
-                "jQuery", 
+                "jQuery",
                 bundle =>
                 {
                     bundle.AddFiles("/libs/jquery/jquery.js");
@@ -206,7 +190,7 @@ namespace Collabed.JobPortal.Web;
 
         });
     }
-    
+
     private void ConfigureAutoMapper()
     {
         Configure<AbpAutoMapperOptions>(options =>
@@ -292,14 +276,14 @@ namespace Collabed.JobPortal.Web;
         // temp
         //if (env.IsDevelopment())
         //{
-            app.UseDeveloperExceptionPage();
+        app.UseDeveloperExceptionPage();
         //}
 
         app.UseAbpRequestLocalization();
         //temp 
         //if (!env.IsDevelopment())
         //{
-            app.UseErrorPage();
+        app.UseErrorPage();
         //}
 
         app.UseCorrelationId();
