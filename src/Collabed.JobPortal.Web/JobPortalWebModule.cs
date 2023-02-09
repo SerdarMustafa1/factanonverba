@@ -178,6 +178,13 @@ public class JobPortalWebModule : AbpModule
                 .StyleBundles
                 .Get(BasicThemeBundles.Styles.Global)
                 .AddFiles("/libs/bootstrap-icons/font/bootstrap-icons.css");
+            options.StyleBundles.Configure(
+                BasicThemeBundles.Styles.Global,
+                bundle =>
+                {
+                    bundle.AddFiles("/global-styles.css");
+                }
+            );
             options.ScriptBundles.Configure(
                 "jQuery",
                 bundle =>

@@ -21,16 +21,17 @@ public class JobPortalMenuContributor : IMenuContributor
         var administration = context.Menu.GetAdministration();
         var l = context.GetLocalizer<JobPortalResource>();
 
-        context.Menu.Items.Insert(
-            0,
-            new ApplicationMenuItem(
-                JobPortalMenus.Home,
-                l["Menu:Home"],
-                "~/",
-                icon: "fas fa-home",
-                order: 0
-            )
-        );
+        //below adds menu items to display in the middle of navigation bar
+        //context.Menu.Items.Insert(
+        //    0,
+        //    new ApplicationMenuItem(
+        //        JobPortalMenus.Home,
+        //        l["Menu:Home"],
+        //        "~/",
+        //        icon: "fas fa-home",
+        //        order: 0
+        //    )
+        //);
 
         administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);

@@ -6,5 +6,6 @@ namespace Collabed.JobPortal.Web;
 [Dependency(ReplaceServices = true)]
 public class JobPortalBrandingProvider : DefaultBrandingProvider
 {
-    public override string AppName => "JobPortal";
+    public override string AppName => "Build my Talent";
+    public override string LogoUrl => "/logo.jpg";
 }

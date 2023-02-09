@@ -3,6 +3,11 @@
     text-decoration: none;
     color: #fff;
 }
+
+.navbar {
+    color: white;
+    border-bottom: 1px groove dimgray;
+}
  
 .navbar .dropdown-submenu {
     position: relative;
@@ -38,7 +43,6 @@
     margin: 0;
 } 
 .container > .card { 
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
 
 @media screen and (min-width: 768px) { 

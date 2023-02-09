@@ -19,20 +19,21 @@
         <form method="post">
             @if (!Model.IsExternalLogin)
             {
-                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.UserName), HtmlTitle=Model.UserName, Placeholder = "..."})
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.UserName), HtmlTitle=Model.UserName, Label = "User name"})
             }
             @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.EmailAddress), HtmlTitle=Model.EmailAddress, OnKeyUp = "validateEmail()",
-                PrependIcon = "bi bi-envelope", AppendIcon = "bi bi-question-circle"})
+                PrependIcon = "bi bi-envelope", AppendIcon = "bi bi-question-circle", Label = "Email address"})
 
             @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.FirstName), HtmlTitle=Model.FirstName, OnKeyUp = "validateRequiredField('FirstName', 'Please type your first name')",
-                AppendIcon = "bi bi-question-circle"})
+                AppendIcon = "bi bi-question-circle", Label = "First name"})
 
             @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.LastName), HtmlTitle=Model.LastName, OnKeyUp = "validateRequiredField('LastName', 'Please type your last name')",
-                AppendIcon = "bi bi-question-circle"})
+                AppendIcon = "bi bi-question-circle", Label = "Last name"})
 
             @if (!Model.IsExternalLogin)
             {
-                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", OnKeyUp="validatePassword()", PropertyName = nameof(Model.Password), HtmlTitle=Model.Password })
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", OnKeyUp="validatePassword()", PropertyName = nameof(Model.Password), HtmlTitle=Model.Password, 
+                    Label = "Password"})
                 <div>
                     <p id="hintParagraph">Your password must contain:</p>
                     <br />
@@ -40,7 +41,8 @@
                     <p><i class="bi bi-dot" id="lengthIcon"></i><span id="lengthHint">At least 8 characters</span></p>
                     <p><i class="bi bi-dot" id="nonAlphanumericIcon"></i><span id="nonAlphanumericParagraph">A number and a symbol</span></p>
                 </div>
-                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", PropertyName = nameof(Model.ConfirmPassword), HtmlTitle=Model.ConfirmPassword, OnKeyUp = "validateConfirmPassword()"})
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", PropertyName = nameof(Model.ConfirmPassword), HtmlTitle=Model.ConfirmPassword, 
+                OnKeyUp = "validateConfirmPassword()", Label = "Confirm password"})
             }
             <div class="d-grid gap-2">
                 <abp-button button-type="Primary" type="submit" class="btn-lg mt-4">@L["Register"]</abp-button>

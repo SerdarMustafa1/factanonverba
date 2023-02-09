@@ -14,5 +14,6 @@ namespace Collabed.JobPortal.Web.Pages.Shared.Components.Input
         public string PrependIcon { get; set; }
         public string AppendIcon { get; set; }
         public string OnKeyUp { get; set; }
+        public string Label { get; set; }
     }
 }

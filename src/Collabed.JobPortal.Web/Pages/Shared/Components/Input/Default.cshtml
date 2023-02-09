@@ -12,7 +12,9 @@
 }
 
 <div class="mb-3">
-    <label id="@(Model.PropertyName + "_label")" class="@labelClass"></label>
+    @if(!string.IsNullOrWhiteSpace(Model.Label)){
+        <label id="@(Model.PropertyName + "_label")" class="@labelClass">@Model.Label</label>
+    }
     <div class="input-group" id=@(Model.PropertyName + "_input-group")>
         @if (!Model.PrependIcon.IsNullOrWhiteSpace())
         {
