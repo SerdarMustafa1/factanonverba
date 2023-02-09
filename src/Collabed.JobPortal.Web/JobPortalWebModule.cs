@@ -21,6 +21,7 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
@@ -173,13 +174,10 @@ public class JobPortalWebModule : AbpModule
     {
         Configure<AbpBundlingOptions>(options =>
         {
-            //options.StyleBundles.Configure(
-            //    LeptonXLiteThemeBundles.Styles.Global,
-            //    bundle =>
-            //    {
-            //        bundle.AddFiles("/global-styles.css");
-            //    }
-            //);
+            options
+                .StyleBundles
+                .Get(BasicThemeBundles.Styles.Global)
+                .AddFiles("/libs/bootstrap-icons/font/bootstrap-icons.css");
             options.ScriptBundles.Configure(
                 "jQuery",
                 bundle =>
