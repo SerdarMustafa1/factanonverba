@@ -8,9 +8,11 @@ public class JobPortalPermissionDefinitionProvider : PermissionDefinitionProvide
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var myGroup = context.AddGroup(JobPortalPermissions.GroupName);
+        var myGroup = context.AddGroup(BmtPermissions.GroupName);
         //Define your own permissions here. Example:
-        //myGroup.AddPermission(JobPortalPermissions.MyPermission1, L("Permission:MyPermission1"));
+        myGroup.AddPermission(BmtPermissions.ManageJobs, L("Permission:ManageJobs"));
+        myGroup.AddPermission(BmtPermissions.ApplyForJobs, L("Permission:ApplyForJobs"));
+        myGroup.AddPermission(BmtPermissions.ViewApplicantDashboard, L("Permission:ViewApplicantDashboard"));
     }
 
     private static LocalizableString L(string name)

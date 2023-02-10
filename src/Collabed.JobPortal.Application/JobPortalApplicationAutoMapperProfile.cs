@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Collabed.JobPortal.Jobs;
+using Collabed.JobPortal.Organisations;
 
 namespace Collabed.JobPortal;
 
@@ -12,5 +13,6 @@ public class JobPortalApplicationAutoMapperProfile : Profile
          * into multiple profile classes for a better organization. */
         CreateMap<Jobs.Job, JobDto>();
         CreateMap<JobDto, CreateUpdateJobDto>();
+        CreateMap<Organisation, OrganisationDto>();
     }
 }

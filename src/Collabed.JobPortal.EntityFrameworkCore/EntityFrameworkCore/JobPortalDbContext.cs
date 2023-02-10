@@ -109,7 +109,7 @@ public class JobPortalDbContext :
             //define composite key
             b.HasKey(x => new { x.OrganisationId, x.UserId });
             //many-to-many configuration
-            b.HasOne<Organisations.Organisation>().WithMany(x => x.Members).HasForeignKey(x => x.UserId).IsRequired();
+            b.HasOne<Organisations.Organisation>().WithMany(x => x.Members).HasForeignKey(x => x.OrganisationId).IsRequired();
             b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
             b.HasIndex(x => new { x.OrganisationId, x.UserId });
         });

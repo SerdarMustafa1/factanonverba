@@ -3,6 +3,20 @@
   "texts": {
     "Menu:Home": "Home",
     "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
+    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+    "Login": "Login",
+    "AreYouANewUser": "Are you a new user",
+    "Register": "Register",
+    "ForgotPassword": "Forgot Password",
+    "Cancel": "Cancel",
+    "OrLoginWith": "Or login with:",
+    "RegisterWith": "Or register with:",
+    "LogInUsingYourProviderAccount": "Log in with your provider account",
+    "RegisterUsingYourProviderAccount": "Register with your provider account",
+    "InvalidLoginRequest": "Invalid login request",
+    "ThereAreNoLoginSchemesConfiguredForThisClient": "There are no login schemes configured for this client",
+    "Permission:ManageJobs": "Manage jobs",
+    "Permission:ApplyForJobs": "Apply for jobs",
+    "Permission:ViewApplicantDashboard": "View applicant's dashboard'"
   }
 }

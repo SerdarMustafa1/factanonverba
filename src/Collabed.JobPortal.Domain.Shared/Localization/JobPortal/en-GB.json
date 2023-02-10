@@ -15,5 +15,8 @@
     "RegisterUsingYourProviderAccount": "Register with your provider account",
     "InvalidLoginRequest": "Invalid login request",
     "ThereAreNoLoginSchemesConfiguredForThisClient": "There are no login schemes configured for this client",
+    "Permission:ManageJobs": "Manage jobs",
+    "Permission:ApplyForJobs": "Apply for jobs",
+    "Permission:ViewApplicantDashboard": "View applicant's dashboard'"
   }
 }

@@ -16,7 +16,7 @@ namespace Collabed.JobPortal.Jobs
 
         public async Task<Job> CreateAsync(string title, Guid organisationId)
         {
-            return new Job("", organisationId);
+            return new Job(title, organisationId);
         }
 
         public async Task<Job> UpdateAsync(Guid userId, Job job, string title, string description)

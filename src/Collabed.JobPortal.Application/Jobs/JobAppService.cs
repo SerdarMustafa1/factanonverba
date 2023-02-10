@@ -1,5 +1,7 @@
 ﻿using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
+using Collabed.JobPortal.Permissions;
+using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -39,24 +41,24 @@ namespace JobPortal.Jobs
             return new PagedResultDto<JobDto>(totalCount, ObjectMapper.Map<List<Job>, List<JobDto>>(jobs));
         }
 
-        [Authorize]
+        [Authorize(BmtPermissions.ManageJobs)]
         public async Task<JobDto> CreateAsync(CreateJobDto input)
         {
-            // For now, get the organisation id user belongs to. Post MVP: different flow
-            var organisationId = await _organisationRepository.GetOrganisationIdByUserId(CurrentUser.Id.Value);
-            if (organisationId == null)
+            var organisationClaim = CurrentUser.FindClaim(ClaimNames.OrganisationClaim);
+            if (organisationClaim == null || string.IsNullOrEmpty(organisationClaim.Value))
             {
                 throw new BusinessException("User is not allowed to post jobs. User is not a member of any organisation.");
             }
+            var organisationId = Guid.Parse(organisationClaim.Value);
 
-            var job = await _jobManager.CreateAsync(input.Title, organisationId.Value);
+            var job = await _jobManager.CreateAsync(input.Title, organisationId);
             job.Description = input.Description;
 
             var newJob = await _jobRepository.InsertAsync(job);
             return ObjectMapper.Map<Job, JobDto>(newJob);
         }
 
-        [Authorize]
+        [Authorize(BmtPermissions.ManageJobs)]
         public async Task UpdateAsync(Guid id, CreateUpdateJobDto input)
         {
             var job = await _jobRepository.GetAsync(id);
@@ -70,7 +72,7 @@ namespace JobPortal.Jobs
             await _jobRepository.UpdateAsync(updatedJob);
         }
 
-        [Authorize]
+        [Authorize(BmtPermissions.ManageJobs)]
         public async Task DeleteAsync(Guid id)
         {
             await _jobRepository.DeleteAsync(id);

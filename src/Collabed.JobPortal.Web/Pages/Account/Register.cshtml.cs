@@ -1,6 +1,9 @@
 using Collabed.JobPortal.Email;
 using Collabed.JobPortal.Extensions;
+using Collabed.JobPortal.Organisations;
+using Collabed.JobPortal.Roles;
 using Collabed.JobPortal.User;
+using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -28,6 +31,7 @@ namespace Collabed.JobPortal.Web.Pages.Account;
 public class BMTRegisterModel : AccountPageModel
 {
     private readonly EmailService _emailService;
+    private readonly IOrganisationAppService _organisationAppService;
     public ExternalProviderModel[] ExternalProviders { get; private protected set; }
 
     public string ReturnUrl { get; set; }
@@ -37,9 +41,8 @@ public class BMTRegisterModel : AccountPageModel
     public bool IsExternalLogin { get; set; }
 
     public string ExternalLoginAuthSchema { get; set; }
-    
 
-    public BMTRegisterModel(IAccountAppService accountAppService, EmailService emailService)
+    public BMTRegisterModel(IAccountAppService accountAppService, EmailService emailService, IOrganisationAppService organisationAppService)
     {
         AccountAppService = accountAppService;
         _emailService = emailService;
@@ -47,6 +50,7 @@ public class BMTRegisterModel : AccountPageModel
         var indeedProvider = new ExternalProviderModel() { DisplayName = "Indeed", AuthenticationScheme = "Indeed" };
         var externalProviders = new ExternalProviderModel[] { liProvider, indeedProvider };
         this.ExternalProviders = externalProviders;
+        _organisationAppService = organisationAppService;
     }
 
 
@@ -83,7 +87,7 @@ public class BMTRegisterModel : AccountPageModel
 
             EmailAddress = emailClaim?.Value;
             FirstName = givenName?.Value;
-            LastName = surname?.Value ;
+            LastName = surname?.Value;
         }
     }
 
@@ -94,6 +98,8 @@ public class BMTRegisterModel : AccountPageModel
             var form = Request.Form;
             await CheckSelfRegistrationAsync();
 
+            // TODO: Get user type from the flow
+            var userType = UserType.Candidate;
             if (IsExternalLogin)
             {
                 var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
@@ -103,11 +109,11 @@ public class BMTRegisterModel : AccountPageModel
                     return RedirectToPage("./Login");
                 }
 
-                await RegisterExternalUserAsync(externalLoginInfo, EmailAddress);
+                await RegisterExternalUserAsync(externalLoginInfo, EmailAddress, userType);
             }
             else
             {
-                await RegisterLocalUserAsync();
+                await RegisterLocalUserAsync(userType);
             }
 
             return Redirect(ReturnUrl ?? "~/");
@@ -127,7 +133,7 @@ public class BMTRegisterModel : AccountPageModel
         }
     }
 
-    protected async Task RegisterLocalUserAsync()
+    protected async Task RegisterLocalUserAsync(UserType userType)
     {
         ValidateModel();
 
@@ -138,23 +144,43 @@ public class BMTRegisterModel : AccountPageModel
             Password = Password,
             UserName = UserName
         };
-        //TODO: Check user type and set extra properties
+
         registerDto.SetFirstName(FirstName);
         registerDto.SetLastName(LastName);
-        //TODO: Get Organisation details from ViewModel
-        registerDto.SetUserType(UserType.Candidate);
-        registerDto.SetOrganisationName("Organisation XYZ");
+        registerDto.SetUserType(userType);
 
         var userDto = await AccountAppService.RegisterAsync(registerDto);
-
         var user = await UserManager.GetByIdAsync(userDto.Id);
+
+        // Post MVP: To be moved to a separate flow
+        if (userType == UserType.Organisation)
+        {
+            //TODO: Get Organisation details from ViewModel
+            var organisationName = "Organisation xyz";
+            await CreateOrganisationAsync(user, organisationName);
+        }
+
+        await AssignDefaultRoles(userType, user);
+
         await SignInManager.SignInAsync(user, isPersistent: true);
 
         //TODO: Different email templates for different user type
         await _emailService.SendEmailAsync(EmailAddress, EmailTemplates.RegistrationSubjectTemplate, EmailTemplates.RegistrationBodyTemplate);
     }
 
-    protected async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
+    private async Task CreateOrganisationAsync(IdentityUser user, string organisationName)
+    {
+        var organisationDto = await _organisationAppService.CreateAsync(new CreateOrganisationDto
+        {
+            Email = user.Email,
+            Name = organisationName,
+            OwnerId = user.Id
+        });
+
+        await UserManager.AddClaimAsync(user, new Claim(ClaimNames.OrganisationClaim, organisationDto.Id.ToString()));
+    }
+
+    protected async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress, UserType userType)
     {
         await IdentityOptions.SetAsync();
         // HACK: Below new IdentityUser is being created, second argument stands for the UserName
@@ -163,8 +189,28 @@ public class BMTRegisterModel : AccountPageModel
 
         user.Name = FirstName;
         user.Surname = LastName;
+
+        user.SetUserType(userType);
+        user.SetFirstName(FirstName);
+        user.SetLastName(LastName);
+
         System.Console.WriteLine(user.Tokens);
         (await UserManager.CreateAsync(user)).CheckErrors();
+
+        // Post MVP: To be moved to a separate flow
+        if (userType == UserType.Organisation)
+        {
+            //TODO: Get Organisation details from ViewModel
+            var organisationName = "Organisation xyz ext";
+            await CreateOrganisationAsync(user, organisationName);
+            await UserManager.AddToRoleAsync(user, RoleNames.OrganisationOwnerRole);
+        }
+        if (userType == UserType.Candidate)
+        {
+            await UserManager.AddToRoleAsync(user, RoleNames.BmtApplicant);
+        }
+        await AssignDefaultRoles(userType, user);
+
         (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
         var userLoginAlreadyExists = user.Logins.Any(x =>
@@ -182,6 +228,18 @@ public class BMTRegisterModel : AccountPageModel
         }
 
         await SignInManager.SignInAsync(user, isPersistent: true);
+    }
+
+    private async Task AssignDefaultRoles(UserType userType, IdentityUser user)
+    {
+        if (userType == UserType.Organisation)
+        {
+            await UserManager.AddToRoleAsync(user, RoleNames.OrganisationOwnerRole);
+        }
+        if (userType == UserType.Candidate)
+        {
+            await UserManager.AddToRoleAsync(user, RoleNames.BmtApplicant);
+        }
     }
 
     protected async Task CheckSelfRegistrationAsync()
