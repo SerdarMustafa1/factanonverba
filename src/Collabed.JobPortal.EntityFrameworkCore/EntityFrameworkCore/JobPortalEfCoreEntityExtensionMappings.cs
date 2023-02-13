@@ -47,20 +47,6 @@ public static class JobPortalEfCoreEntityExtensionMappings
                     propertyBuilder.IsRequired(true);
                     propertyBuilder.HasConversion<int>().IsRequired();
                 }
-            ).MapEfCoreProperty<IdentityUser, string>(
-                "FirstName",
-                (entityBuilder, propertyBuilder) =>
-                {
-                    propertyBuilder.IsRequired(true);
-                    propertyBuilder.HasConversion<string>().IsRequired();
-                }
-            ).MapEfCoreProperty<IdentityUser, string>(
-                "LastName",
-                (entityBuilder, propertyBuilder) =>
-                {
-                    propertyBuilder.IsRequired(true);
-                    propertyBuilder.HasConversion<string>().IsRequired();
-                }
             );
         });
     }

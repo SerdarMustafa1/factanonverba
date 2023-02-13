@@ -25,10 +25,6 @@ public static class JobPortalDtoExtensions
              * https://docs.abp.io/en/abp/latest/Object-Extensions
              */
             ObjectExtensionManager.Instance
-            .AddOrUpdateProperty<RegisterDto, string>(
-                "FirstName")
-            .AddOrUpdateProperty<RegisterDto, string>(
-                "LastName")
             .AddOrUpdateProperty<RegisterDto, UserType>(
                 "UserType")
             .AddOrUpdateProperty<RegisterDto, string>(

@@ -1,0 +1,33 @@
+﻿@using Collabed.JobPortal.Localization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@model Collabed.JobPortal.Web.Models.EmailTemplatesModel
+@inject IHtmlLocalizer<JobPortalResource> L
+
+<h2>Confirm you email to get started!</h2>
+
+<p>
+    Hello,
+    <br>
+    Welcome to <b>BuildMyTalent!</b>
+    <br>
+    You're one step away from completing your <b>BuildMyTalent</b> account.
+    <br>
+    To confirm your email, simply click in the button below.
+    <br>
+</p>
+
+<a href="@Model.CallbackUrl">Confirm my email</a>
+<br>
+
+<p>
+    If you did not created an account, please let us know immediately by sending an email to <a href="mailto:support@buildmytalent.com">support@buildmytalent.com</a>.
+    <br>
+</p>
+
+<p>
+    We are here to help you at any step along the way.
+    <br>
+    Sincerely,
+    <br>
+    The Build My Talent team.
+</p>

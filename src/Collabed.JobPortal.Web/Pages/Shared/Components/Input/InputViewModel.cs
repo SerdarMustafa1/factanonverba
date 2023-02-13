@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Volo.Abp.Identity;
-using Volo.Abp.Validation;
-
-namespace Collabed.JobPortal.Web.Pages.Shared.Components.Input
+﻿namespace Collabed.JobPortal.Web.Pages.Shared.Components.Input
 {
     public class InputViewModel
     {

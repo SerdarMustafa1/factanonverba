@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -92,6 +93,7 @@ public class JobPortalWebModule : AbpModule
         ConfigureLocalizationServices();
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
+        ConfigureIdentityOptions(context);
         ConfigureSwaggerServices(context.Services);
     }
 
@@ -167,6 +169,16 @@ public class JobPortalWebModule : AbpModule
         Configure<AppUrlOptions>(options =>
         {
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+        });
+    }
+
+    private void ConfigureIdentityOptions(ServiceConfigurationContext context)
+    {
+        context.Services.Configure<IdentityOptions>(options =>
+        {
+            //options.SignIn.RequireConfirmedAccount = true;
+            options.SignIn.RequireConfirmedEmail = true;
+            //options.SignIn.RequireConfirmedPhoneNumber = false;
         });
     }
 

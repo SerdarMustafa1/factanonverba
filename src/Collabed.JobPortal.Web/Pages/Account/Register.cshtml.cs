@@ -4,8 +4,10 @@ using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Roles;
 using Collabed.JobPortal.User;
 using Collabed.JobPortal.Users;
+using Collabed.JobPortal.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUglify.Helpers;
@@ -13,6 +15,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -116,6 +119,11 @@ public class BMTRegisterModel : AccountPageModel
                 await RegisterLocalUserAsync(userType);
             }
 
+            if (UserManager.Options.SignIn.RequireConfirmedAccount)
+            {
+                return RedirectToPage("RegisterConfirmation", new { email = EmailAddress, returnUrl = ReturnUrl });
+            }
+
             return Redirect(ReturnUrl ?? "~/");
         }
         catch (BusinessException e)
@@ -145,12 +153,13 @@ public class BMTRegisterModel : AccountPageModel
             UserName = UserName
         };
 
-        registerDto.SetFirstName(FirstName);
-        registerDto.SetLastName(LastName);
         registerDto.SetUserType(userType);
 
         var userDto = await AccountAppService.RegisterAsync(registerDto);
         var user = await UserManager.GetByIdAsync(userDto.Id);
+        user.Name = FirstName;
+        user.Surname = LastName;
+        await UserManager.UpdateAsync(user);
 
         // Post MVP: To be moved to a separate flow
         if (userType == UserType.Organisation)
@@ -164,8 +173,22 @@ public class BMTRegisterModel : AccountPageModel
 
         await SignInManager.SignInAsync(user, isPersistent: true);
 
-        //TODO: Different email templates for different user type
-        await _emailService.SendEmailAsync(EmailAddress, EmailTemplates.RegistrationSubjectTemplate, EmailTemplates.RegistrationBodyTemplate);
+        // Send user an email to confirm email address      
+        await SendEmailToAskForEmailConfirmationAsync(user);
+    }
+
+    private async Task SendEmailToAskForEmailConfirmationAsync(IdentityUser user)
+    {
+        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = Url.Page("/Account/ConfirmEmail", pageHandler: null, values: new { userId = user.Id, code = code }, protocol: Request.Scheme);
+
+        var confirmEmailTemplate = await ViewToStringRenderer.RenderViewToStringAsync(HttpContext.RequestServices,
+            $"~/Views/Emails/ConfirmEmailTemplate.cshtml",
+            new EmailTemplatesModel(callbackUrl));
+
+        await _emailService.SendEmailAsync(EmailAddress, EmailTemplates.ConfirmEmailSubject, confirmEmailTemplate);
+
     }
 
     private async Task CreateOrganisationAsync(IdentityUser user, string organisationName)
@@ -189,6 +212,9 @@ public class BMTRegisterModel : AccountPageModel
 
         user.Name = FirstName;
         user.Surname = LastName;
+
+        // Skip email confirmation for external users
+        user.SetEmailConfirmed(true);
 
         user.SetUserType(userType);
         user.SetFirstName(FirstName);
