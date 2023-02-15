@@ -19,6 +19,9 @@
     "Permission:ApplyForJobs": "Apply for jobs",
     "Permission:ViewApplicantDashboard": "View applicant's dashboard'",
     "RegisterConfirmation": "Register confirmation",
-    "EmailConfirmed": "Email Confirmed"
+    "EmailConfirmed": "Email Confirmed",
+    "TextTemplate:BmtPasswordResetLink": "BmtPasswordResetLink",
+    "TextTemplate:ConfirmEmail": "ConfirmEmail",
+    "ResetYourPassword": "Reset your passsword"
   }
 }

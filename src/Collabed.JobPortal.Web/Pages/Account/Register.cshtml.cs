@@ -1,10 +1,8 @@
-using Collabed.JobPortal.Email;
 using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Roles;
 using Collabed.JobPortal.User;
 using Collabed.JobPortal.Users;
-using Collabed.JobPortal.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -33,8 +31,8 @@ namespace Collabed.JobPortal.Web.Pages.Account;
 [BindProperties(SupportsGet = true)]
 public class BMTRegisterModel : AccountPageModel
 {
-    private readonly EmailService _emailService;
     private readonly IOrganisationAppService _organisationAppService;
+    private readonly IBmtAccountAppService _accountAppService;
     public ExternalProviderModel[] ExternalProviders { get; private protected set; }
 
     public string ReturnUrl { get; set; }
@@ -45,10 +43,9 @@ public class BMTRegisterModel : AccountPageModel
 
     public string ExternalLoginAuthSchema { get; set; }
 
-    public BMTRegisterModel(IAccountAppService accountAppService, EmailService emailService, IOrganisationAppService organisationAppService)
+    public BMTRegisterModel(IBmtAccountAppService accountAppService, IOrganisationAppService organisationAppService)
     {
-        AccountAppService = accountAppService;
-        _emailService = emailService;
+        _accountAppService = accountAppService;
         var liProvider = new ExternalProviderModel() { DisplayName = "LinkedIn", AuthenticationScheme = "LinkedIn" };
         var indeedProvider = new ExternalProviderModel() { DisplayName = "Indeed", AuthenticationScheme = "Indeed" };
         var externalProviders = new ExternalProviderModel[] { liProvider, indeedProvider };
@@ -155,7 +152,7 @@ public class BMTRegisterModel : AccountPageModel
 
         registerDto.SetUserType(userType);
 
-        var userDto = await AccountAppService.RegisterAsync(registerDto);
+        var userDto = await _accountAppService.RegisterAsync(registerDto);
         var user = await UserManager.GetByIdAsync(userDto.Id);
         user.Name = FirstName;
         user.Surname = LastName;
@@ -173,7 +170,7 @@ public class BMTRegisterModel : AccountPageModel
 
         await SignInManager.SignInAsync(user, isPersistent: true);
 
-        // Send user an email to confirm email address      
+        // Send user an email to confirm email address
         await SendEmailToAskForEmailConfirmationAsync(user);
     }
 
@@ -182,13 +179,7 @@ public class BMTRegisterModel : AccountPageModel
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var callbackUrl = Url.Page("/Account/ConfirmEmail", pageHandler: null, values: new { userId = user.Id, code = code }, protocol: Request.Scheme);
-
-        var confirmEmailTemplate = await ViewToStringRenderer.RenderViewToStringAsync(HttpContext.RequestServices,
-            $"~/Views/Emails/ConfirmEmailTemplate.cshtml",
-            new EmailTemplatesModel(callbackUrl));
-
-        await _emailService.SendEmailAsync(EmailAddress, EmailTemplates.ConfirmEmailSubject, confirmEmailTemplate);
-
+        await _accountAppService.SendEmailVerificationRequestAsync(new JobPortal.Account.SendEmailVerificationDto { Email = user.Email, CallbackUrl = callbackUrl });
     }
 
     private async Task CreateOrganisationAsync(IdentityUser user, string organisationName)

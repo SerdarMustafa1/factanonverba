@@ -1,16 +1,18 @@
+using Collabed.JobPortal.BlobStorage;
+using Collabed.JobPortal.Settings;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Azure;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.BlobStoring.Azure;
-using Microsoft.Extensions.DependencyInjection;
-using Collabed.JobPortal.Settings;
-using Volo.Abp.BlobStoring;
-using Microsoft.Extensions.Configuration;
-using Collabed.JobPortal.BlobStorage;
+using Volo.Abp.TextTemplating.Scriban;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Collabed.JobPortal;
 [DependsOn(
@@ -20,16 +22,21 @@ typeof(AbpAccountApplicationModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpFeatureManagementApplicationModule),
-    typeof(AbpSettingManagementApplicationModule)
+    typeof(AbpSettingManagementApplicationModule),
+    typeof(AbpTextTemplatingScribanModule)
     )]
 [DependsOn(typeof(AbpBlobStoringAzureModule))]
-    public class JobPortalApplicationModule : AbpModule
+public class JobPortalApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<JobPortalApplicationModule>();
+        });
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<JobPortalApplicationModule>();
         });
         ConfigureBlobStoringOptions(context);
     }

@@ -21,9 +21,9 @@ public class CreateModalModel : IdentityPageModel
     public AssignedRoleViewModel[] Roles { get; set; }
 
     protected IIdentityUserAppService IdentityUserAppService { get; }
-    protected IUserAppService UserAppService { get; }
+    protected IBmtAccountAppService UserAppService { get; }
 
-    public CreateModalModel(IIdentityUserAppService identityUserAppService, IUserAppService userAppService)
+    public CreateModalModel(IIdentityUserAppService identityUserAppService, IBmtAccountAppService userAppService)
     {
         IdentityUserAppService = identityUserAppService;
         UserAppService = userAppService;
