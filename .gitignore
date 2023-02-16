@@ -481,3 +481,4 @@ $RECYCLE.BIN/
 /test/Collabed.JobPortal.Domain.Tests/obj/Collabed.JobPortal.Domain.Tests.csproj.nuget.dgspec.json
 /test/Collabed.JobPortal.EntityFrameworkCore.Tests/obj/Collabed.JobPortal.EntityFrameworkCore.Tests.csproj.nuget.dgspec.json
 /test/Collabed.JobPortal.Web.Tests/obj/Collabed.JobPortal.Web.Tests.csproj.nuget.dgspec.json
+/src/Collabed.JobPortal.Web/appsettings.secrets.json

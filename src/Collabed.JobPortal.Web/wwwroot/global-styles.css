@@ -1,58 +1,177 @@
 /* Your Global Styles */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('fonts/Montserrat/static/Montserrat-Regular.ttf');
+}
+
+:root {
+    --neutral-white: #FAFAFA;
+    --neutral25: #FCFCFD;
+    --neutral200: #EAECF0;
+    --neutral300: #D0D5DD;
+    --neutral500: #667085;
+    --neutral600: #475467;
+    --neutral700: #344054;
+    --neutral900: #101828;
+    --secondary800: #2F70B6;
+}
+
+::-ms-reveal {
+    display: none;
+}
+
+input {
+    background-color: var(--neutral-white);
+}
+
+input[type=checkbox]:checked {
+    background-color: var(--secondary800);
+}
+
+body {
+    font-family: 'Montserrat';
+    color: var(--neutral600);
+    background-color: var(--neutral-white);
+}
+
+label {
+    color: var(--neutral700);
+    font-size:14px;
+    font-weight: 600;
+}
+
+.input-group-password-icon {
+    width: 20px;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.footer {
+    position: fixed;
+    height: 76px;
+    width: 100%;
+    bottom: 0;
+    background-color: var(--neutral25);
+}
+
+.footer-contents {
+    padding: 24px 0px 24px 5%;
+}
+
+
+
+.spacer {
+    margin-bottom: 90px; 
+    visibility: hidden;
+}
+
+.card {
+    box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+}
+
+.card-header {
+    background-color: white;
+    border: 0px;
+}
 
 .input-group-error {
-    border: 1px solid red;
     height: 30px;
-    color: red;
+    border: 1px solid;
+    border-color: red;
+    background-color: white;
+    border-radius: 6px;
+}
+
+.input-group {
+    height: 30px;
+    background-color: white;
+}
+
+.input-group-correct {
+    border: 1px solid;
+    border-color: var(--neutral300);
+    border-radius: 6px;
 }
 
 .text-validation-error {
     color: red;
 }
 
-.input-group {
-    height: 30px;
-    border: 1px solid;
-    border-radius: 6px;
-}
 .form-control {
     height: 100%;
     display: block;
     width: 100%;
     padding: 10px;
     color: dimgray;
-    background-color: white;
     background-clip: padding-box;
     border: 0px;
     appearance: none;
 }
 
-.form-control:focus {
-    background-color: white;
-}
-
-.form-control:is(:hover) {
-    background-color: white;
-}
 
 .input-group-prepend {
     width: 30px;
-    border-right: 0px;
+    border-right: 1px;
     border-left: 0px;
     border-top: 0px;
     border-bottom: 0px;
+    border-radius: 6px;
     display: flex;
     place-content: center;
     place-items: center;
+    background-color: white;
 }
 
 .input-group-append {
     width: 30px;
     border-left: 0px;
-    border-right: 0px;
+    border-right: 1px;
     border-top: 0px;
     border-bottom: 0px;
+    border-radius: 6px;
     display: flex;
     place-content: center;
     place-items: center;
+    background-color: white;
+}
+
+.hint-14 {
+    font-size: 14px;
+    color: var(--neutral500);
+}
+
+.hint-16 {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--neutral500);
+}
+
+.text-48 {
+    font-size: 48px;
+    font-weight: 600;
+    color: var(--neutral900);
+}
+
+.text-30 {
+    font-size: 30px;
+    color: var(--neutral900);
+}
+
+.text-20 {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--neutral900);
+}
+
+.text-16 {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--neutral600);
+}
+
+.text-14 {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--neutral600);
 }

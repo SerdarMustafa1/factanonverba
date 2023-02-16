@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web.Pages.Shared.Components.Input
@@ -17,11 +18,11 @@ namespace Collabed.JobPortal.Web.Pages.Shared.Components.Input
         /// <param name="appendIcon">Append icon name - if empty string, will not be visible</param>
         /// <param name="onKeyUp">JS Function to perform when onKeyUp event will be fired. Requires the JS function's name visible in the Razor Page's scope.</param>
         /// <returns></returns>
-        public async Task<IViewComponentResult> InvokeAsync(string propertyName, string inputType, string htmlTitle, string placeholder, string propertyValue = "", string prependIcon = "", 
-            string appendIcon = "", string onKeyUp = "", string label = "")
+        public async Task<IViewComponentResult> InvokeAsync(string propertyName, string inputType, string htmlTitle, string placeholder, string propertyValue = "", string prependIcon = "",
+            string appendIcon = "", string onKeyUp = "", string label = "", string hint = "", bool isPassword = false)
         {
             return View(new InputViewModel() { PropertyName = propertyName, PropertyValue = propertyValue, InputType = inputType, HtmlTitle = htmlTitle, Placeholder = placeholder,
-                PrependIcon = prependIcon, AppendIcon = appendIcon, OnKeyUp = onKeyUp, Label = label});
+                PrependIcon = prependIcon, AppendIcon = appendIcon, OnKeyUp = onKeyUp, Label = label, Hint = hint, IsPassword = isPassword});
         }
     }
 }

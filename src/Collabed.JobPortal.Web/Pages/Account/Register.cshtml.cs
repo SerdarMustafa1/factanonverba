@@ -3,6 +3,7 @@ using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Roles;
 using Collabed.JobPortal.User;
 using Collabed.JobPortal.Users;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -57,11 +58,11 @@ public class BMTRegisterModel : AccountPageModel
     public async Task<IActionResult> OnGetAsync()
     {
         await CheckSelfRegistrationAsync();
-        await TrySetEmailAndName();
+        await SetClaimCredentials();
         return Page();
     }
 
-    private async Task TrySetEmailAndName()
+    private async Task SetClaimCredentials()
     {
         if (IsExternalLogin)
         {
@@ -91,11 +92,24 @@ public class BMTRegisterModel : AccountPageModel
         }
     }
 
+    private void SetUserCredentials(IFormCollection form)
+    {
+        EmailAddress = form["EmailAddress"];
+        FirstName = form["FirstName"];
+        LastName = form["LastName"];
+    }
+
     public async Task<IActionResult> OnPostAsync()
     {
         try
         {
-            var form = Request.Form;
+            if (Request.Form["Source"].Equals("AccountTypePage"))
+            {
+                // POST has not been arised from this page, it rather received such a request.
+                SetUserCredentials(Request.Form);
+                return Page();
+            }
+
             await CheckSelfRegistrationAsync();
 
             // TODO: Get user type from the flow
@@ -296,5 +310,11 @@ public class BMTRegisterModel : AccountPageModel
     [Compare(nameof(Password), ErrorMessage = "Passwords don't match each other")]
     [DisableAuditing]
     public string ConfirmPassword { get; set; }
+
+    [Required]
+    public string AccountType { get; set; }
+
+    [Required]
+    public bool GDPRConsent { get; set; }
 
 }

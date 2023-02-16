@@ -5,69 +5,70 @@ let specialCharacterPattern = /[^a-zA-Z0-9]/;
 let hasLowerCasePattern = /[a-z]/;
 let hasUpperCasePattern = /[A-Z]/;
 
-let validateRequiredField = (propertyName, validationMessage) => {
+let styleValidationOfRequiredField = (propertyName, validationMessage) => {
     let inputJQueryIdentifier = 'input#' + propertyName + '_input';
     let divJQueryIdentifier = 'div#' + propertyName + '_input-group';
-    let iconJQueryIdentifier = 'i#' + propertyName + '_append-icon';
     let inputValue = $(inputJQueryIdentifier).val();
     if (inputValue.length == 0) {
+        $(divJQueryIdentifier).removeClass('input-group-correct');
         $(divJQueryIdentifier).addClass('input-group-error');
-        $(iconJQueryIdentifier).removeClass('bi bi-question-circle');
-        $(iconJQueryIdentifier).addClass('bi bi-exclamation-circle');
-        $('span#' + propertyName + '_validation-message').text(validationMessage);
+        $('span#' + propertyName + '_hint').text(validationMessage);
+        $('span#' + propertyName + '_hint').addClass('text-validation-error');
     } else {
         $(divJQueryIdentifier).removeClass('input-group-error');
-        $(iconJQueryIdentifier).removeClass('bi bi-exclamation-circle');
-        $(iconJQueryIdentifier).addClass('bi bi-question-circle');
-        $('span#' + propertyName + '_validation-message').text('');
+        $(divJQueryIdentifier).addClass('input-group-correct');
+        $('span#' + propertyName + '_hint').text('');
+        $('span#' + propertyName + '_hint').removeClass('text-validation-error');
     }
 }
 
-let validateEmail = () => {
+let validateEmail = (showErrors) => {
     let emailInputField = $('input#EmailAddress_input');
     let emailInputFieldVal = emailInputField.val();
     if (emailInputFieldVal.length == 0) {
-        emailError(true);
+        if(showErrors) emailError(true);
         return false;
     }
     else {
         if (emailInputFieldVal.endsWith('@') || emailInputFieldVal.endsWith('.')) {
-            emailError(false);
+            if(showErrors) emailError(false);
             return false;
         }
         let emailParts = emailInputFieldVal.split('@');
         if (emailParts.length != 2) {
-            emailError(false);
+            if(showErrors) emailError(false);
             return false;
         }
         if (emailParts[1].split('.').length === 1) {
-            emailError(false);
+            if(showErrors) emailError(false);
             return false;
         }
     }
 
-    appropriateEmail();
+    if(showErrors) appropriateEmail();
+    return true;
 }
 
 let emailError = (isEmpty) => {
     $('div#EmailAddress_input-group').addClass('input-group-error');
-    $('i#EmailAddress_append-icon').removeClass('bi bi-question-circle');
-    $('i#EmailAddress_append-icon').addClass('bi bi-exclamation-circle');
+    $('div#EmailAddress_input-group').removeClass('input-group-correct');
+    $('span#EmailAddress_hint').addClass('text-validation-error');
     if (isEmpty) {
-        $('span#EmailAddress_validation-message').text('Please type your email address');
+        $('span#EmailAddress_hint').text('Please enter your email address');
     } else {
-        $('span#EmailAddress_validation-message').text('Please type valid email address');
+        $('span#EmailAddress_hint').text('Please enter valid email address');
     }
 }
 
 let appropriateEmail = () => {
     $('div#EmailAddress_input-group').removeClass('input-group-error');
-    $('i#EmailAddress_append-icon').removeClass('bi bi-exclamation-circle');
-    $('i#EmailAddress_append-icon').addClass('bi bi-question-circle');
-    $('span#EmailAddress_validation-message').text('');
+    $('div#EmailAddress_input-group').addClass('input-group-correct');
+    $('span#EmailAddress_hint').removeClass('text-validation-error');
+    $('span#EmailAddress_hint').text('');
 }
 
-let validatePassword = () => {
+let validatePassword = (showErrors) => {
+    let passwordAppendIconIdentifier = "i#Password_append-icon";
     let registerPasswordInputField = $("input#Password_input");
     let typedInPassword = registerPasswordInputField.val();
 
@@ -76,41 +77,89 @@ let validatePassword = () => {
     let containsDigit = digitPattern.test(typedInPassword);
     let containsSpecialChar = specialCharacterPattern.test(typedInPassword);
     let isValid = isCaseOk && isLengthOk && containsDigit && containsSpecialChar;
-    if(!isValid){
-        $('div#Password_input-group').addClass('input-group-error');
+    if (showErrors) {
+        if (registerPasswordInputField.val().length > 0) {
+            styleHintPar(isValid);
+            styleCasePar(isCaseOk);
+            styleLengthPar(isLengthOk);
+            styleNonAlphabeticalPar(containsDigit && containsSpecialChar);
+        }
+        else {
+            styleLengthPar(false);
+            styleNonAlphabeticalPar(false);
+            styleCasePar(false);
+            styleHintPar(false);
+        }
+        if (isValid) {
+            $('div#Password_input-group').removeClass('input-group-error');
+            $('div#Password_input-group').addClass('input-group-correct');
+            $('span#Password_hint').removeClass('text-validation-error');
+            $(passwordAppendIconIdentifier).attr('hidden', true);
+            $(passwordAppendIconIdentifier).removeClass('text-validation-error');
+        }
+        else {
+            $('div#Password_input-group').removeClass('input-group-correct');
+            $('div#Password_input-group').addClass('input-group-error');
+            $('span#Password_hint').addClass('text-validation-error');
+            $(passwordAppendIconIdentifier).attr('hidden', false);
+            $(passwordAppendIconIdentifier).addClass('text-validation-error');
+        }
+    }
+    if (isValid) {
+        return true;
     }
     else{
-        $('div#Password_input-group').removeClass('input-group-error');
-    }
-    if (registerPasswordInputField.val().length > 0) {
-        styleHintPar(isValid);
-        styleCasePar(isCaseOk);
-        styleLengthPar(isLengthOk);
-        styleNonAlphabeticalPar(containsDigit && containsSpecialChar);
-    }
-    else {
-        styleLengthPar(false);
-        styleNonAlphabeticalPar(false);
-        styleCasePar(false);
-        styleHintPar(false);
+        return false;
     }
 }
 
-let validateConfirmPassword = () => {
+let validateConfirmPassword = (showErrors) => {
     let confirmPasswordInputGroupIdentifier = 'div#ConfirmPassword_input-group';
     let confirmPasswordInputFieldIdentifier = 'input#ConfirmPassword_input';
+    let confirmPasswordIconIdentifier = 'i#ConfirmPassword_append-icon';
     let password = $("input#Password_input").val();
     if ($(confirmPasswordInputFieldIdentifier).val() === password) {
-        $(confirmPasswordInputGroupIdentifier).removeClass('input-group-error');
-        $('i#ConfirmPassword_append-icon').removeClass('bi bi-exclamation-circle');
-        $('i#ConfirmPassword_append-icon').addClass('bi bi-question-circle');
-        $('span#ConfirmPassword_validation-message').text('');
+        if (showErrors) {
+            $(confirmPasswordInputGroupIdentifier).removeClass('input-group-error');
+            $(confirmPasswordInputGroupIdentifier).addClass('input-group-correct');
+            $(confirmPasswordIconIdentifier).attr('hidden', true);
+            $(confirmPasswordIconIdentifier).removeClass('text-validation-error');
+            $('span#ConfirmPassword_hint').text('');
+            $('span#ConfirmPassword_hint').removeClass('text-validation-error');
+        }
+        return true;
 
     } else {
-        $(confirmPasswordInputGroupIdentifier).addClass('input-group-error');
-        $('i#ConfirmPassword_append-icon').removeClass('bi bi-question-circle');
-        $('i#ConfirmPassword_append-icon').addClass('bi bi-exclamation-circle');
-        $('span#ConfirmPassword_validation-message').text("Your passwords don't match");
+        if (showErrors) {
+            $(confirmPasswordInputGroupIdentifier).removeClass('input-group-correct');
+            $(confirmPasswordInputGroupIdentifier).addClass('input-group-error');
+            $(confirmPasswordIconIdentifier).attr('hidden', false);
+            $(confirmPasswordIconIdentifier).addClass('text-validation-error');
+            $('span#ConfirmPassword_hint').text("Your passwords don't match");
+            $('span#ConfirmPassword_hint').addClass('text-validation-error');
+        }
+        return false;
+    }
+}
+
+let isInputFieldEmpty = (propertyName) => {
+    let inputFieldJQueryIdentifier = "input#" + propertyName + "_input";
+    if ($(inputFieldJQueryIdentifier).val().length === 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+let validateForm = () => {
+    if (validateConfirmPassword() && validateEmail(false) && validatePassword(false) &&
+        !isInputFieldEmpty('UserName') && !isInputFieldEmpty('FirstName') &&
+        !isInputFieldEmpty('LastName') && $("input#GDPRConsent_input").is(":checked")) {
+        $("button#RegisterButton").attr('disabled', false);
+    }
+    else {
+        $("button#RegisterButton").attr('disabled', true);
     }
 }
 

@@ -9,7 +9,10 @@
         public string HtmlTitle { get; set; }
         public string PrependIcon { get; set; }
         public string AppendIcon { get; set; }
+        public string ErrorAppendIcon { get; set; }
         public string OnKeyUp { get; set; }
         public string Label { get; set; }
+        public string Hint { get; set; }
+        public bool IsPassword { get; set; }
     }
 }

@@ -3,6 +3,8 @@ using Collabed.JobPortal.EntityFrameworkCore;
 using Collabed.JobPortal.Localization;
 using Collabed.JobPortal.Settings;
 using Collabed.JobPortal.Web.Menus;
+using Collabed.JobPortal.Web.Pages.Shared.Components.Footer;
+using Collabed.JobPortal.Web.Pages.Shared.Components.Spacer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -22,6 +24,7 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
@@ -87,6 +90,7 @@ public class JobPortalWebModule : AbpModule
 
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
+        ConfigureHooks(configuration);
         ConfigureBundles();
         ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
@@ -180,6 +184,21 @@ public class JobPortalWebModule : AbpModule
             options.SignIn.RequireConfirmedEmail = true;
             //options.SignIn.RequireConfirmedPhoneNumber = false;
         });
+    }
+
+    private void ConfigureHooks(Microsoft.Extensions.Configuration.IConfiguration configuration)
+    {
+        Configure<AbpLayoutHookOptions>(options =>
+        {
+            options.Add(
+                LayoutHooks.PageContent.Last,
+                typeof(SpacerViewComponent));
+            options.Add(
+                LayoutHooks.Body.Last, 
+                typeof(FooterViewComponent)
+            );
+        });
+
     }
 
     private void ConfigureBundles()

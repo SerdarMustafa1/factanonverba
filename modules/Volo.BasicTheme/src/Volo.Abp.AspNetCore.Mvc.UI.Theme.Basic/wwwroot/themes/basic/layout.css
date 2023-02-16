@@ -6,7 +6,7 @@
 
 .navbar {
     color: white;
-    border-bottom: 1px groove dimgray;
+    border-bottom: 1px solid #F2F4F7;
 }
  
 .navbar .dropdown-submenu {
