@@ -34,7 +34,7 @@ namespace Collabed.JobPortal.Account.Emailing
         public async Task SendEmailVerificationRequestAsync(IdentityUser user, string callbackUrl)
         {
             var emailContent = await TemplateRenderer.RenderAsync(
-                BmtAccountEmailTemplates.EmailVerification, new { callbackUrl });
+                BmtAccountEmailTemplates.EmailVerification, new { callbackUrl = callbackUrl });
 
             await EmailSender.SendAsync(user.Email, EmailTemplates.ConfirmEmailSubject, emailContent);
         }
