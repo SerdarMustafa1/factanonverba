@@ -7,5 +7,7 @@ namespace Collabed.JobPortal.Users
     public interface IBmtAccountAppService : IAccountAppService
     {
         Task SendEmailVerificationRequestAsync(SendEmailVerificationDto input);
+        Task<bool> CheckIfEmailExistsAsync(string emailAddress);
+        Task<bool> CheckIfUsernameExistsAsync(string userName);
     }
 }

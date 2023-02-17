@@ -10,7 +10,7 @@ using Volo.Abp.Identity;
 namespace Collabed.JobPortal.Account
 {
     [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(IAccountAppService), typeof(AccountAppService), typeof(IBmtAccountAppService))]
+    [ExposeServices(typeof(BmtAccountAppService), typeof(IAccountAppService), typeof(AccountAppService), typeof(IBmtAccountAppService))]
     public class BmtAccountAppService : AccountAppService, IBmtAccountAppService
     {
         private readonly IBmtAccountEmailer _accountEmailer;
@@ -36,6 +36,16 @@ namespace Collabed.JobPortal.Account
         {
             var user = await GetUserByEmailAsync(input.Email);
             await _accountEmailer.SendEmailVerificationRequestAsync(user, input.CallbackUrl);
+        }
+
+        public async Task<bool> CheckIfEmailExistsAsync(string emailAddress)
+        {
+            return (await UserManager.FindByEmailAsync(emailAddress) != null);
+        }
+
+        public async Task<bool> CheckIfUsernameExistsAsync(string userName)
+        {
+            return (await UserManager.FindByNameAsync(userName) != null);
         }
     }
 }
