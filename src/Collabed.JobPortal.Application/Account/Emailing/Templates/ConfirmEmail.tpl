@@ -36,8 +36,9 @@
             To confirm your email, simply click in the button below.
             <br>
         </p>
-        <a href="{{model.callbackUrl}}">Confirm my email</a>
+        <a href="{{model.link}}">Confirm my email</a>
         <br>
+        <p>If the link above ain't working propperly, try to copy and paste the url into your browser: {{model.link}}</p>
         <p>
             If you did not created an account, please let us know immediately by sending an email to <a href="mailto:support@buildmytalent.com">support@buildmytalent.com</a>.
             <br>

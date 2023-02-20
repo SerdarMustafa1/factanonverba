@@ -31,10 +31,10 @@ namespace Collabed.JobPortal.Account.Emailing
         {
         }
 
-        public async Task SendEmailVerificationRequestAsync(IdentityUser user, string callbackUrl)
+        public async Task SendEmailVerificationRequestAsync(IdentityUser user, string link)
         {
             var emailContent = await TemplateRenderer.RenderAsync(
-                BmtAccountEmailTemplates.EmailVerification, new { callbackUrl = callbackUrl });
+                BmtAccountEmailTemplates.EmailVerification, new { link = link });
 
             await EmailSender.SendAsync(user.Email, EmailTemplates.ConfirmEmailSubject, emailContent);
         }
