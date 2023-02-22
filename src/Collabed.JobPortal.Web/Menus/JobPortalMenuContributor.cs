@@ -21,6 +21,8 @@ public class JobPortalMenuContributor : IMenuContributor
         var administration = context.Menu.GetAdministration();
         var l = context.GetLocalizer<JobPortalResource>();
 
+        //context.Menu.AddItem(new ApplicationMenuItem(JobPortalMenus.Prefix, displayName: "Payment", "~/Payment", icon: "fa fa-globe"));
+
         //below adds menu items to display in the middle of navigation bar
         //context.Menu.Items.Insert(
         //    0,

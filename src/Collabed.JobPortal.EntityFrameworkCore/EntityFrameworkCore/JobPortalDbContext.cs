@@ -1,5 +1,6 @@
 ﻿using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
+using Collabed.JobPortal.PaymentRequests;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -50,6 +51,7 @@ public class JobPortalDbContext :
     public DbSet<JobApplicant> JobApplicants { get; set; }
     public DbSet<Organisations.Organisation> Organisations { get; set; }
     public DbSet<OrganisationMember> OrganisationMembers { get; set; }
+    public DbSet<PaymentRequest> PaymentRequests { get; set; }
 
     public JobPortalDbContext(DbContextOptions<JobPortalDbContext> options)
         : base(options)
@@ -112,6 +114,18 @@ public class JobPortalDbContext :
             b.HasOne<Organisations.Organisation>().WithMany(x => x.Members).HasForeignKey(x => x.OrganisationId).IsRequired();
             b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
             b.HasIndex(x => new { x.OrganisationId, x.UserId });
+        });
+
+        builder.Entity<PaymentRequest>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "PaymentRequests", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.CustomerId).HasMaxLength(PaymentRequestConsts.MaxCustomerIdLength);
+            b.Property(x => x.ProductId).HasMaxLength(PaymentRequestConsts.MaxProductIdLength);
+            b.Property(x => x.ProductName).IsRequired().HasMaxLength(PaymentRequestConsts.MaxProductNameLength);
+
+            b.HasIndex(x => x.CustomerId);
+            b.HasIndex(x => x.State);
         });
     }
 }

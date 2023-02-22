@@ -10,5 +10,6 @@ public abstract class JobPortalPageModel : AbpPageModel
     protected JobPortalPageModel()
     {
         LocalizationResourceType = typeof(JobPortalResource);
+        ObjectMapperContext = typeof(JobPortalWebModule);
     }
 }

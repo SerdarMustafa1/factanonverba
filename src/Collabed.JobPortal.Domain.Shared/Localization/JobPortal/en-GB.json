@@ -22,6 +22,8 @@
     "EmailConfirmed": "Email Confirmed",
     "TextTemplate:BmtPasswordResetLink": "BmtPasswordResetLink",
     "TextTemplate:ConfirmEmail": "ConfirmEmail",
-    "ResetYourPassword": "Reset your passsword"
+    "ResetYourPassword": "Reset your passsword",
+    "MyAccount": "My account",
+    "SamplePageMessage": "A sample page for the Payment module"
   }
 }
