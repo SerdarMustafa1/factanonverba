@@ -10,54 +10,125 @@
 <abp-script src="/Pages/Account/Register.js" />
 <abp-script src="/Pages/Account/PasswordVisibilityIcon.js" />
 
-<div style=" width: 400px; margin: auto">
-    <div class="text-center">
-        <img src="~/logo.jpg" />
-        <p class="text-30">Register your account</p>
-        <p class="text-16">Great to have you here!<br />Please enter your details.</p>
-        
+<div id="registerStepOne">
+    <div class="container align-items-center">
+
+        <div class="row" style="margin-top:10%;">
+            <div class="col" style="min-width:300px; margin-bottom:2%;">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <i class="bi bi-search" style="color: #2F70B6; font-size:40px;"></i>
+                        <p class="text-48">Looking for a job?</p>
+                        <p class="text-20">Job seeker</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="account-type-hints">
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                        </div>
+                        <br />
+                        <button class="btn btn-primary" type="button" style="width:100%" onclick="selectUserType(0)">Get Started</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="min-width:300px; margin-bottom:2%;">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <i class="bi bi-pencil-square" style="color:#2F70B6; font-size:40px;"></i>
+                        <p class="text-48">Posting a job?</p>
+                        <p class="text-20">Organisation</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="account-type-hints">
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            </div>
+                        </div>
+                        <br />
+                        <button class="btn btn-primary" type="button" style="width:100%" onclick="selectUserType(1)">Get started</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <form method="post">
-        <input type="text" asp-for="@Model.AccountType" hidden>
-        @if (!Model.IsExternalLogin)
-        {
-            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.UserName), HtmlTitle="UserName", PropertyValue = Model.UserName, Label = "User name *", OnKeyUp = "styleValidationOfRequiredField('UserName', 'Please type your user name'); validateForm()"})
-        }
-        @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.EmailAddress), HtmlTitle="EmailAddress", PropertyValue = Model.EmailAddress, OnKeyUp = "validateEmail(true); validateForm()", PrependIcon = "bi bi-envelope", Label = "Email address *"})
+</div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col" style="padding-left: 0">
-                    @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.FirstName), HtmlTitle="FirstName", PropertyValue = Model.FirstName, OnKeyUp = "styleValidationOfRequiredField('FirstName', 'Please type your first name'); validateForm()", Label = "First name *"})
-                </div>
-                <div class="col" style="padding-right: 0">
-                    @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.LastName), HtmlTitle="LastName", PropertyValue = Model.LastName, OnKeyUp = "styleValidationOfRequiredField('LastName', 'Please type your last name'); validateForm()", Label = "Last name *"})
+<div id="registerStepTwo" hidden>
+    <div style=" width: 400px; margin: auto">
+        <div class="text-center">
+            <img src="~/images/logo/BMT_Primary Full_symbol.png" alt="BuildMyTalent" width="40" height="54" />
+            <p class="text-30">Register your account</p>
+            <p class="text-16">Great to have you here!<br />Please enter your details.</p>
+
+        </div>
+        <form method="post" onsubmit="checkIfEmailExists(event)" id="registerForm">
+            <input type="text" id="userTypeHiddenInput" asp-for="@Model.UserType" hidden>
+            @if (!Model.IsExternalLogin)
+            {
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.UserName), HtmlTitle="UserName", PropertyValue = Model.UserName, Label = "User name *", OnKeyUp = "styleValidationOfRequiredField('UserName', 'Please type your user name'); validateForm()"})
+            }
+            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.EmailAddress), HtmlTitle="EmailAddress", PropertyValue = Model.EmailAddress, OnKeyUp = "validateEmail(true); validateForm()", PrependIcon = "bi bi-envelope", Label = "Email address *"})
+
+            <div class="container" id="PersonalNameContainer">
+                <div class="row">
+                    <div class="col" style="padding-left: 0">
+                        @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.FirstName), HtmlTitle="FirstName", PropertyValue = Model.FirstName, OnKeyUp = "styleValidationOfRequiredField('FirstName', 'Please type your first name'); validateForm()", Label = "First name *"})
+                    </div>
+                    <div class="col" style="padding-right: 0">
+                        @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.LastName), HtmlTitle="LastName", PropertyValue = Model.LastName, OnKeyUp = "styleValidationOfRequiredField('LastName', 'Please type your last name'); validateForm()", Label = "Last name *"})
+                    </div>
                 </div>
             </div>
-        </div>
-        @if (!Model.IsExternalLogin)
-        {
-            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", OnKeyUp="validatePassword(true); validateForm()", PropertyName = nameof(Model.Password), HtmlTitle=Model.Password,
-                Label = "Password *", PrependIcon = "bi bi-lock", AppendIcon = "bi bi-exclamation-circle", IsPassword = true})
+            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.OrganisationName), HtmlTitle="OrganisationName", PropertyValue = Model.OrganisationName, OnKeyUp = "styleValidationOfRequiredField('OrganisationName', 'Please type your organisation name'); validateForm()", Label = "Organisation name *"})
+            @if (!Model.IsExternalLogin)
+            {
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", OnKeyUp="validatePassword(true); validateForm()", PropertyName = nameof(Model.Password), HtmlTitle=Model.Password,
+                    Label = "Password *", PrependIcon = "bi bi-lock", AppendIcon = "bi bi-exclamation-circle", IsPassword = true})
+                <div>
+                    <p id="hintParagraph">Your password must contain:</p>
+                    <p>
+                        <i class="bi bi-dot" id="caseIcon"></i><span id="caseHint">Uppercase and lowercase letters</span><br />
+                        <i class="bi bi-dot" id="lengthIcon"></i><span id="lengthHint">At least 8 characters</span><br />
+                        <i class="bi bi-dot" id="nonAlphanumericIcon"></i><span id="nonAlphanumericParagraph">A number and a symbol</span>
+                    </p>
+                </div>
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", PropertyName = nameof(Model.ConfirmPassword), HtmlTitle=Model.ConfirmPassword,
+            OnKeyUp = "validateConfirmPassword(true); validateForm()", Label = "Confirm password *", PrependIcon = "bi bi-lock", AppendIcon = "bi bi-exclamation-circle", IsPassword = true})
+            }
+            <br />
+            <input type="checkbox" id="GDPRConsent_input" name="GDPRConsent" title="GDPRConsent" value="true" class="form-check-input" onclick="validateForm()" />
+            <input type="hidden" name="GDPRConsent" title="GDPRConsent" value="false" class="form-check-input" onclick="validateForm()" />
+
+            <label for="GDPRConsent" class="text-14">I agree with <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+
             <div>
-                <p id="hintParagraph">Your password must contain:</p>
-                <p>
-                    <i class="bi bi-dot" id="caseIcon"></i><span id="caseHint">Uppercase and lowercase letters</span><br />
-                    <i class="bi bi-dot" id="lengthIcon"></i><span id="lengthHint">At least 8 characters</span><br />
-                    <i class="bi bi-dot" id="nonAlphanumericIcon"></i><span id="nonAlphanumericParagraph">A number and a symbol</span>
-                </p>
+                <abp-button button-type="Primary" type="submit" id="RegisterButton" class="btn-lg mt-4" disabled="true">@L["Register"]</abp-button>
             </div>
-            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", PropertyName = nameof(Model.ConfirmPassword), HtmlTitle=Model.ConfirmPassword,
-        OnKeyUp = "validateConfirmPassword(true); validateForm()", Label = "Confirm password *", PrependIcon = "bi bi-lock", AppendIcon = "bi bi-exclamation-circle", IsPassword = true})
-        }
-        <br />
-        <input type="checkbox" id="GDPRConsent_input" name="GDPRConsent" title="GDPRConsent" value="true" class="form-check-input" onclick="validateForm()" />
-        <input type="hidden" name="GDPRConsent" title="GDPRConsent" value="false" class="form-check-input" onclick="validateForm()" />
-
-        <label for="GDPRConsent" class="text-14">I agree with <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
-
-        <div >
-            <abp-button button-type="Primary" type="submit" id="RegisterButton" class="btn-lg mt-4" disabled="true">@L["Register"]</abp-button>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>

@@ -56,7 +56,7 @@ public class BMTRegisterModel : AccountPageModel
 
 
     public async Task<IActionResult> OnGetAsync()
-    {
+    { 
         await CheckSelfRegistrationAsync();
         await SetClaimCredentials();
         return Page();
@@ -103,7 +103,7 @@ public class BMTRegisterModel : AccountPageModel
     {
         try
         {
-            if (Request.Form["Source"].Equals("AccountTypePage"))
+            if (Request.Form["Source"].Equals("SignUp"))
             {
                 // POST has not been arised from this page, it rather received such a request.
                 SetUserCredentials(Request.Form);
@@ -112,8 +112,6 @@ public class BMTRegisterModel : AccountPageModel
 
             await CheckSelfRegistrationAsync();
 
-            // TODO: Get user type from the flow
-            var userType = UserType.Candidate;
             if (IsExternalLogin)
             {
                 var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
@@ -123,11 +121,11 @@ public class BMTRegisterModel : AccountPageModel
                     return RedirectToPage("./Login");
                 }
 
-                await RegisterExternalUserAsync(externalLoginInfo, EmailAddress, userType);
+                await RegisterExternalUserAsync(externalLoginInfo, EmailAddress, UserType);
             }
             else
             {
-                await RegisterLocalUserAsync(userType);
+                await RegisterLocalUserAsync(UserType);
             }
 
             if (UserManager.Options.SignIn.RequireConfirmedAccount)
@@ -172,17 +170,12 @@ public class BMTRegisterModel : AccountPageModel
         user.Surname = LastName;
         await UserManager.UpdateAsync(user);
 
-        // Post MVP: To be moved to a separate flow
         if (userType == UserType.Organisation)
         {
-            //TODO: Get Organisation details from ViewModel
-            var organisationName = "Organisation xyz";
-            await CreateOrganisationAsync(user, organisationName);
+            await CreateOrganisationAsync(user, OrganisationName);
         }
 
         await AssignDefaultRoles(userType, user);
-
-        await SignInManager.SignInAsync(user, isPersistent: true);
 
         // Send user an email to confirm email address
         await SendEmailToAskForEmailConfirmationAsync(user);
@@ -228,12 +221,9 @@ public class BMTRegisterModel : AccountPageModel
         System.Console.WriteLine(user.Tokens);
         (await UserManager.CreateAsync(user)).CheckErrors();
 
-        // Post MVP: To be moved to a separate flow
         if (userType == UserType.Organisation)
         {
-            //TODO: Get Organisation details from ViewModel
-            var organisationName = "Organisation xyz ext";
-            await CreateOrganisationAsync(user, organisationName);
+            await CreateOrganisationAsync(user, OrganisationName);
             await UserManager.AddToRoleAsync(user, RoleNames.OrganisationOwnerRole);
         }
         if (userType == UserType.Candidate)
@@ -282,11 +272,11 @@ public class BMTRegisterModel : AccountPageModel
         }
     }
 
-    [Required]
     public string FirstName { get; set; }
 
-    [Required]
     public string LastName { get; set; }
+
+    public string OrganisationName { get; set; }
 
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
@@ -312,7 +302,7 @@ public class BMTRegisterModel : AccountPageModel
     public string ConfirmPassword { get; set; }
 
     [Required]
-    public string AccountType { get; set; }
+    public UserType UserType { get; set; }
 
     [Required]
     public bool GDPRConsent { get; set; }

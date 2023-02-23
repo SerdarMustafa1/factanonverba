@@ -7,13 +7,19 @@
     ViewData["Title"] = L["RegisterConfirmation"];
 }
 
-<div class="card mt-3 shadow-sm rounded">
-    <div class="card-body p-5">
-        <h4>@ViewData["Title"]</h4>
-        @{
-            <p>
-                Please check your email to confirm your account.
-            </p>
-        }
+<div class="text-center" style="margin-top: 7%">
+    <img src="~/images/logo/logo.jpg" style="margin-bottom:2%"/>
+    <h4>Your account has<br />successfuklly been created</h4>
+    <p>Yout're almost there! We sent an email to<br /><strong>@Model.EmailAddress</strong></p>
+    <div>
+        Just click on the link in the email to complete<br />your sign up. If you don't see it, you may need to<br />check your spam folder.
+    </div>
+    <div style="margin-top: 6%">
+        <form method="post">
+            <input type="hidden" asp-for="@Model.EmailAddress"/>
+            <p class="hint-16" style="margin-bottom: 0.25rem">Still can't find the email?</p>
+            <button class="btn btn-primary" type="submit" id="resendEmailButton" style="width:30%; min-width: 300px;">Resend email</button>
+        </form>
+        <p class="hint-16">Need help? <a type="button" class="btn btn-link-secondary" href="#">Contact us</a></p>
     </div>
 </div>

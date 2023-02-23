@@ -7,5 +7,5 @@ namespace Collabed.JobPortal.Web;
 public class JobPortalBrandingProvider : DefaultBrandingProvider
 {
     public override string AppName => "Build my Talent";
-    public override string LogoUrl => "/logo.jpg";
+    public override string LogoUrl => "/images/logo/BMT_Primary Full_symbol.png";
 }

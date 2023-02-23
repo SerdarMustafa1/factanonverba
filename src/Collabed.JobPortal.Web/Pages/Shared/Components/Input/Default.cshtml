@@ -10,11 +10,11 @@
     var labelClass = isFormControl ? "form-label" : "";
     var inputFieldClass = isFormControl ? "form-control" : "";
 
-    var onClickHandler = "togglePasswordVisibility('" + Model.PropertyName + "')";
-    var onKeyDown = "showOrHideVisibilityButton('" + Model.PropertyName + "')";
+    var passOnClickHandler =  "togglePasswordVisibility('" + Model.PropertyName + "')";
+    var passOnKeyDown = "showOrHideVisibilityButton('" + Model.PropertyName + "')";
 }
 
-<div>
+<div id="@(Model.PropertyName + "_container")">
     @if (!string.IsNullOrWhiteSpace(Model.Label))
     {
         <label id="@(Model.PropertyName + "_label")" class="@labelClass">@Model.Label</label>
@@ -24,12 +24,18 @@
         {
             <div class="input-group-prepend"><i class="@Model.PrependIcon" aria-hidden="true"></i></div>
         }
-        <input class="@inputFieldClass" id="@(Model.PropertyName + "_input")"
-               name="@Model.PropertyName" type="@Model.InputType" placeholder="@Model.Placeholder"
-               title="@Model.HtmlTitle" onkeyup="@Model.OnKeyUp" value="@Model.PropertyValue" onkeydown=@onKeyDown />
         @if (Model.IsPassword)
         {
-            <div class="input-group-password-icon"><i class="bi bi-eye" id=@(Model.PropertyName + "_visibility-icon") onclick=@onClickHandler hidden></i></div>
+            <input class="@inputFieldClass" id="@(Model.PropertyName + "_input")"
+               name="@Model.PropertyName" type="@Model.InputType" placeholder="@Model.Placeholder"
+               title="@Model.HtmlTitle" onkeyup="@Model.OnKeyUp" value="@Model.PropertyValue" onkeydown=@passOnKeyDown />
+            <div class="input-group-password-icon"><i class="bi bi-eye" id=@(Model.PropertyName + "_visibility-icon") onclick=@passOnClickHandler hidden></i></div>
+        }
+        else
+        {
+            <input class="@inputFieldClass" id="@(Model.PropertyName + "_input")"
+               name="@Model.PropertyName" type="@Model.InputType" placeholder="@Model.Placeholder"
+               title="@Model.HtmlTitle" onkeyup="@Model.OnKeyUp" value="@Model.PropertyValue" />
         }
         @if (!Model.AppendIcon.IsNullOrWhiteSpace())
         {

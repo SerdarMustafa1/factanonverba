@@ -180,8 +180,8 @@ public class JobPortalWebModule : AbpModule
     {
         context.Services.Configure<IdentityOptions>(options =>
         {
-            //options.SignIn.RequireConfirmedAccount = true;
-            options.SignIn.RequireConfirmedEmail = true;
+            options.SignIn.RequireConfirmedAccount = true;
+            //options.SignIn.RequireConfirmedEmail = true;
             //options.SignIn.RequireConfirmedPhoneNumber = false;
         });
     }

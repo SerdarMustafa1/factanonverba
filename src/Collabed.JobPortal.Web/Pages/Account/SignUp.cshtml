@@ -6,7 +6,7 @@
 
 <div style="max-width:400px; margin: auto;">
     <div class="text-center">
-        <img src="~/logo.jpg" />
+        <img src="~/images/logo/BMT_Primary Full_symbol.png" alt="BuildMyTalent" width="40" height="54" />
         <p class="text-30">Register your account</p>
         <p class="text-16">Great to have you here!</p>
         <p class="text-16">Please enter your details.</p>
@@ -30,7 +30,8 @@
         </div>
     </div>
     <br />
-    <form asp-page="./AccountType" method="post">
+    <form asp-page="./Register" method="post" id="localUserForm" onsubmit="checkIfEmailExists(event)">
+        <input name="Source" value="SignUp" type="text" hidden />
         @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.EmailAddress), HtmlTitle=Model.EmailAddress, OnKeyUp = "validateEmail()",
         PrependIcon = "bi bi-envelope", Label = "Email", Hint= "Please enter your email address"})
 

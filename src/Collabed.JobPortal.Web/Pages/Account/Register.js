@@ -1,9 +1,22 @@
 ﻿
+let submitted = false;
 let lengthPattern = /^.{8,}$/;
 let digitPattern = /\d/;
 let specialCharacterPattern = /[^a-zA-Z0-9]/;
 let hasLowerCasePattern = /[a-z]/;
 let hasUpperCasePattern = /[A-Z]/;
+
+let selectUserType = (userType) => {
+    $('input#userTypeHiddenInput').val(userType);
+    $('div#registerStepOne').attr('hidden', true);
+    $('div#registerStepTwo').attr('hidden', false);
+
+    if (userType === 0) {
+        $('div#OrganisationName_container').attr('hidden', true);
+    } else {
+        $('div#PersonalNameContainer').attr('hidden', true);
+    }
+}
 
 let styleValidationOfRequiredField = (propertyName, validationMessage) => {
     let inputJQueryIdentifier = 'input#' + propertyName + '_input';
@@ -22,25 +35,27 @@ let styleValidationOfRequiredField = (propertyName, validationMessage) => {
     }
 }
 
-let validateEmail = (showErrors) => {
+// modify styleValidationOfRequiredField() in order to make it usable in Username (validatable, distinct) and others (just not empty)
+
+let validateEmail  = (showErrors) => {
     let emailInputField = $('input#EmailAddress_input');
     let emailInputFieldVal = emailInputField.val();
     if (emailInputFieldVal.length == 0) {
-        if(showErrors) emailError(true);
+        if (showErrors) emailError('Please enter your email address');
         return false;
     }
     else {
         if (emailInputFieldVal.endsWith('@') || emailInputFieldVal.endsWith('.')) {
-            if(showErrors) emailError(false);
+            if (showErrors) emailError('Please enter valid email address');
             return false;
         }
         let emailParts = emailInputFieldVal.split('@');
         if (emailParts.length != 2) {
-            if(showErrors) emailError(false);
+            if (showErrors) emailError('Please enter valid email address');
             return false;
         }
         if (emailParts[1].split('.').length === 1) {
-            if(showErrors) emailError(false);
+            if (showErrors) emailError('Please enter valid email address');
             return false;
         }
     }
@@ -49,15 +64,11 @@ let validateEmail = (showErrors) => {
     return true;
 }
 
-let emailError = (isEmpty) => {
+let emailError = (message) => {
     $('div#EmailAddress_input-group').addClass('input-group-error');
     $('div#EmailAddress_input-group').removeClass('input-group-correct');
     $('span#EmailAddress_hint').addClass('text-validation-error');
-    if (isEmpty) {
-        $('span#EmailAddress_hint').text('Please enter your email address');
-    } else {
-        $('span#EmailAddress_hint').text('Please enter valid email address');
-    }
+    $('span#EmailAddress_hint').text(message);
 }
 
 let appropriateEmail = () => {
@@ -70,6 +81,9 @@ let appropriateEmail = () => {
 let validatePassword = (showErrors) => {
     let passwordAppendIconIdentifier = "i#Password_append-icon";
     let registerPasswordInputField = $("input#Password_input");
+    if (!registerPasswordInputField.is(':visible')) {
+        return true; // invisible treated as valid for the sake of external users
+    }
     let typedInPassword = registerPasswordInputField.val();
 
     let isCaseOk = hasLowerCasePattern.test(typedInPassword) && hasUpperCasePattern.test(typedInPassword);
@@ -117,6 +131,9 @@ let validateConfirmPassword = (showErrors) => {
     let confirmPasswordInputGroupIdentifier = 'div#ConfirmPassword_input-group';
     let confirmPasswordInputFieldIdentifier = 'input#ConfirmPassword_input';
     let confirmPasswordIconIdentifier = 'i#ConfirmPassword_append-icon';
+    if (!$(confirmPasswordInputFieldIdentifier).is(':visible')) {
+        return true;
+    }
     let password = $("input#Password_input").val();
     if ($(confirmPasswordInputFieldIdentifier).val() === password) {
         if (showErrors) {
@@ -144,7 +161,11 @@ let validateConfirmPassword = (showErrors) => {
 
 let isInputFieldEmpty = (propertyName) => {
     let inputFieldJQueryIdentifier = "input#" + propertyName + "_input";
-    if ($(inputFieldJQueryIdentifier).val().length === 0) {
+    if (!$(inputFieldJQueryIdentifier).is(':visible')) {
+        // if field is not visible - will simply treat is as valid
+        return false;
+    }
+    else if ($(inputFieldJQueryIdentifier).val().length === 0) {
         return true;
     }
     else {
@@ -155,7 +176,8 @@ let isInputFieldEmpty = (propertyName) => {
 let validateForm = () => {
     if (validateConfirmPassword() && validateEmail(false) && validatePassword(false) &&
         !isInputFieldEmpty('UserName') && !isInputFieldEmpty('FirstName') &&
-        !isInputFieldEmpty('LastName') && $("input#GDPRConsent_input").is(":checked")) {
+        !isInputFieldEmpty('LastName') && !isInputFieldEmpty('OrganisationName') &&
+        $("input#GDPRConsent_input").is(":checked")) {
         $("button#RegisterButton").attr('disabled', false);
     }
     else {
@@ -214,3 +236,24 @@ let styleNonAlphabeticalPar = (containsNonAlphabeticalCharacters) => {
     }
 }
 
+let checkIfEmailExists = (event) => {
+    if (submitted) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    let emailAddress = $('input#EmailAddress_input').val();
+    collabed.jobPortal.account.bmtAccount.checkIfEmailExists(emailAddress)
+        .then((result) => {
+            if (result === true) {
+                emailError('Email already exists');
+                $('button#RegisterButton').attr('disabled', true);
+            }
+            else { // have to check is this really sugmitting the form or what, - has to be clicked twice to work propperly (maybe its some async or smth?)
+                submitted = true;
+                $('form#registerForm').submit();
+            }
+        }).catch((error) => {
+            // HACK: TODO, add client side errors validation
+            return console.log(error);
+        });
+}
