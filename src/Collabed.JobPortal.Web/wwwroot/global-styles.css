@@ -14,6 +14,7 @@
     --neutral700: #344054;
     --neutral900: #101828;
     --secondary800: #2F70B6;
+    --gray900: #101828;
 }
 
 ::-ms-reveal {
@@ -144,7 +145,7 @@ label {
 .hint-16 {
     font-size: 16px;
     font-weight: 400;
-    color: var(--neutral500);
+    color: var(--neutral600);
 }
 
 .text-48 {
@@ -156,6 +157,12 @@ label {
 .text-30 {
     font-size: 30px;
     color: var(--neutral900);
+}
+
+.heading-gray-30 {
+    font-size:30px;
+    color: var(--gray900);
+    font-weight:600;
 }
 
 .text-20 {

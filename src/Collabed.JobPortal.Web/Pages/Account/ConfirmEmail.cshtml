@@ -4,24 +4,24 @@
 @model Collabed.JobPortal.Web.Pages.Account.CustomConfirmEmailModel
 
 
-
-@*Below stands for how the email should look like:*@
-
-@*<div style="margin-left:20%; margin-right: 28%;">
-    <img src="~/images/logo/logo-sign-dark.jpg" style="margin-bottom: 2%;" />
-    <hr>
-    <p class="text-16" style="margin-bottom:4%;"><strong>Confirm your email to get started</strong></p>
-    <p class="text-16" style="margin: 1%;">Hello,</p>
-    <p class="text-16" style="margin: 1%;">Welcome to <strong>BuildMyTalent!</strong></p>
-    <p class="text-16" style="margin: 1%;">You're one step away from completing your <strong>BuildMyTalent</strong> account.</p>
-    <p class="text-16" style="margin: 1%;">To confirm your email, simply click in the button below.</p>
-    <button type="submit" class="btn btn-secondary-filled" style="width:100%">Confirm my email</button>
-    <div style="margin-top:2%">
-        <p class="hint-16" style="margin: 1%">If you did not created an account, please let us know immediately by sending an<br />
-            email to <a href="mailto:support@BuildMyTalentOAuthExtensions.com" class="btn btn-link-secondary">support@buildmytalent.com</a></p>
-        <p class="hint-16" style="margin: 1%;">We are here to help you at any step along the way.</p>
-        <p class="hint-16" style="margin: 1%;">Sincerely,</p>
-        <p class="hint-16" style="margin: 1%;">The BuildMyTalent team</p>
-
+<div class="text-center" style="margin-top:7%;">
+    <img src="~/images/customIcons/BMT_check-green-background.png" width="56px" height="56px" />
+</div>
+<div class="text-center" style="margin-top: 2%;">
+    @if (Model.IsOrganisation)
+    {
+        <p class="heading-gray-30">Welcome<br />@(Model.DisplayName)!</p>
+    }
+    else
+    {
+        <p class="heading-gray-30">Welcome, @(Model.DisplayName)!</p>
+    }
+    <div>
+        <img src="~/images/logo/BMT_Primary Full.png" style="margin-bottom:2%" width="252px" height="100px" />
     </div>
-</div>*@
+    <div>
+        <p class="hint-16" style="margin-bottom: 0.5rem">You have successfully verified your account.</p>
+        <a type="button" href="../jobdashboard" class="btn btn-primary" style="margin-bottom:0.5rem;margin-top:0.5rem; width:100%;max-width:388px;">View job dashboard</a>
+        <p class="hint-14">Need help? <a type="button" class="btn btn-link-secondary" href="#">Contact us</a></p>
+    </div>
+</div>
