@@ -1,0 +1,31 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Collabed.JobPortal.Localization
+@using Volo.Abp.Users
+@model Collabed.JobPortal.Web.Pages.Job.JobModel
+
+@inject IHtmlLocalizer<JobPortalResource> L
+@inject ICurrentUser CurrentUser
+@section styles {
+@*<abp-style src="/Pages/Index.css" />*@
+}
+@section scripts {
+<abp-script src="/Pages/JobDashboard/Index.js" />
+}
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>Job reference: @Model.Reference</abp-card-title>
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-row>
+            <abp-column>
+                <abp-card-title>@Model.Title</abp-card-title>
+                <abp-card-title>@Model.Description</abp-card-title>
+            </abp-column>
+        </abp-row>
+    </abp-card-body>
+</abp-card>

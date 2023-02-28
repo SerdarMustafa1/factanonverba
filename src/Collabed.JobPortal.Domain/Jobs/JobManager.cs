@@ -19,6 +19,11 @@ namespace Collabed.JobPortal.Jobs
             return new Job(title, organisationId);
         }
 
+        public Job CreateExternal(string reference)
+        {
+            return new Job(reference);
+        }
+
         public async Task<Job> UpdateAsync(Guid userId, Job job, string title, string description)
         {
             job.Title = title;

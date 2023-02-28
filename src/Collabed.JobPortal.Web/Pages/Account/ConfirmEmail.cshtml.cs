@@ -56,7 +56,11 @@ namespace Collabed.JobPortal.Web.Pages.Account
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            await _userManager.ConfirmEmailAsync(user, code);
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (!result.Succeeded)
+            {
+                // Redirect to page to send confirmation email again
+            }
 
             return Page();
         }

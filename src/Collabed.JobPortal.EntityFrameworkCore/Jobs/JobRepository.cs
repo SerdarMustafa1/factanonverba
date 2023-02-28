@@ -27,11 +27,24 @@ namespace Collabed.JobPortal.Jobs
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<Job> GetByReferenceAsync(string reference)
+        {
+            var query = await ApplyFilterAsync();
+            return await query.FirstOrDefaultAsync(x => x.Reference == reference);
+        }
+
+        public async Task DeleteByReferenceAsync(string reference)
+        {
+            var query = await ApplyFilterAsync();
+            var entity = await query.FirstOrDefaultAsync(x => x.Reference == reference);
+            await DeleteAsync(entity);
+        }
+
         private async Task<IQueryable<Job>> ApplyFilterAsync()
         {
             var dbContext = await GetDbContextAsync();
 
-            return (await GetDbSetAsync());
+            return await GetDbSetAsync();
         }
     }
 }

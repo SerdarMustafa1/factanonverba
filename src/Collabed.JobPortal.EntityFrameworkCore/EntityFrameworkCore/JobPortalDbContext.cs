@@ -80,7 +80,7 @@ public class JobPortalDbContext :
             b.ToTable(JobPortalConsts.DbTablePrefix + "Jobs", JobPortalConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasMany(x => x.Applicants).WithOne().HasForeignKey(x => x.JobId).IsRequired();
-            b.HasOne<Organisations.Organisation>().WithMany().HasForeignKey(x => x.OrganisationId).IsRequired();
+            b.HasOne<Organisations.Organisation>().WithMany().HasForeignKey(x => x.OrganisationId);
             b.Property(e => e.Type).HasConversion<int>();
         });
 
@@ -123,7 +123,6 @@ public class JobPortalDbContext :
             b.Property(x => x.CustomerId).HasMaxLength(PaymentRequestConsts.MaxCustomerIdLength);
             b.Property(x => x.ProductId).HasMaxLength(PaymentRequestConsts.MaxProductIdLength);
             b.Property(x => x.ProductName).IsRequired().HasMaxLength(PaymentRequestConsts.MaxProductNameLength);
-
             b.HasIndex(x => x.CustomerId);
             b.HasIndex(x => x.State);
         });

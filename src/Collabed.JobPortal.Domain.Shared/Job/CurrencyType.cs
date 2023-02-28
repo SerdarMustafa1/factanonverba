@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Collabed.JobPortal.Job
+﻿namespace Collabed.JobPortal.Job
 {
-    public enum CurrencyType
-    {
-        GBP
-    }
+	public enum CurrencyType
+	{
+		GBP,
+		EUR
+	}
 }

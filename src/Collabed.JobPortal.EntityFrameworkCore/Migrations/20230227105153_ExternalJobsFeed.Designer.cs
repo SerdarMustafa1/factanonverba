@@ -4,6 +4,7 @@ using Collabed.JobPortal.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Collabed.JobPortal.Migrations
 {
     [DbContext(typeof(JobPortalDbContext))]
-    partial class JobPortalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227105153_ExternalJobsFeed")]
+    partial class ExternalJobsFeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,6 +94,7 @@ namespace Collabed.JobPortal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("OrganisationId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Reference")
@@ -1646,7 +1649,9 @@ namespace Collabed.JobPortal.Migrations
                 {
                     b.HasOne("Collabed.JobPortal.Organisations.Organisation", null)
                         .WithMany("PostedJobs")
-                        .HasForeignKey("OrganisationId");
+                        .HasForeignKey("OrganisationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Collabed.JobPortal.Jobs.JobApplicant", b =>
