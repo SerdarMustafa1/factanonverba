@@ -1,6 +1,7 @@
 ﻿using Collabed.JobPortal.Jobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -23,11 +24,19 @@ namespace Collabed.JobPortal.Controllers
 		{
 			_logger.LogInformation($"Received external job feed. Request: {jobRequest}");
 
-			var result = await _jobAppService.HandleExternalJobFeedAsync(jobRequest);
-			var baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
+			try
+			{
+				var result = await _jobAppService.HandleExternalJobFeedAsync(jobRequest);
+				var baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
 
-			var response = new JobResponse(result.Status, result.Status  == JobResponseCodes.Success ? $"{baseUrl}/Job?jobReference={result.JobReference}" : "", result.Message);
-			return Ok(response);
+				var response = new JobResponse(result.Status, result.Status  == JobResponseCodes.Success ? $"{baseUrl}/Job?jobReference={result.JobReference}" : "", result.Message);
+				return Ok(response);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Unexpected error occured when processing external job feed. {ex.Message}");
+				return UnprocessableEntity(new JobResponse(JobResponseCodes.Failed, "", $"Unexpected error occured: {ex.Message}"));
+			}
 		}
 	}
 }
