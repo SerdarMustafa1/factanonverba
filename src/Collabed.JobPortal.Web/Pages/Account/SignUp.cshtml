@@ -5,11 +5,13 @@
 <abp-script src="/Pages/Account/SignUp.js" />
 
 <div style="max-width:400px; margin: auto;">
-    <div class="text-center">
+    <div style="text-align:center">
         <img src="~/images/logo/BMT_Primary Full_symbol.png" alt="BuildMyTalent" width="40" height="54" />
-        <p class="text-30">Register your account</p>
-        <p class="text-16">Great to have you here!</p>
-        <p class="text-16">Please enter your details.</p>
+    </div>
+    <div class="text-center" style="margin-top:7%">
+        <p class="heading-30">Register your account</p>
+        <p class="text-16">Great to have you here!
+        <br />Please enter your details.</p>
         <br />
         @if (Model.ExternalProviders.Any())
         {
@@ -23,17 +25,13 @@
             </div>
         }
         <br />
-        <div style="width: 100%; height: 15px; border-bottom: 1px solid lightgray; text-align: center">
-            <span style="font-size: 10px; background-color: #FAFAFA; color: lightgray; padding: 0 10px;">
-                OR
-            </span>
-        </div>
+        @await Component.InvokeAsync("DividerOr", null)
     </div>
     <br />
     <form asp-page="./Register" method="post" id="localUserForm" onsubmit="checkIfEmailExists(event)">
         <input name="Source" value="SignUp" type="text" hidden />
         @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.EmailAddress), HtmlTitle=Model.EmailAddress, OnKeyUp = "validateEmail()",
-        PrependIcon = "bi bi-envelope", Label = "Email", Hint= "Please enter your email address"})
+            PrependIcon = "bi bi-envelope", Label = "Email", Hint= "Please enter your email address"})
 
         <br />
         <button type="submit" class="btn btn-outline-secondary" id="getStartedButton" style="width:100%" title="GetStarted" disabled>Get Started</button>

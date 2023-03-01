@@ -47,5 +47,20 @@ namespace Collabed.JobPortal.Account
         {
             return (await UserManager.FindByNameAsync(userName) != null);
         }
+
+        public async Task<bool> CheckPasswordCredentials(string loginInput, string password)
+        {
+            var isEmail = await CheckIfEmailExistsAsync(loginInput);
+            if (isEmail)
+            {
+                var user = await UserManager.FindByEmailAsync(loginInput);
+                return await UserManager.CheckPasswordAsync(user, password);
+            }
+            else
+            {
+                var user = await UserManager.FindByNameAsync(loginInput);
+                return user != null ? await UserManager.CheckPasswordAsync(user, password) : false;
+            }
+        }
     }
 }

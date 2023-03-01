@@ -2,7 +2,7 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Menu
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
 <nav class="navbar navbar-expand-md flex-column flex-md-row mb-4" id="main-navbar">
-    <div class="container">
+    <div class="container"> 
         @(await Component.InvokeAsync<MainNavbarBrandViewComponent>())
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#main-navbar-collapse" aria-controls="main-navbar-collapse"
@@ -12,8 +12,8 @@
         <div class="collapse navbar-collapse" id="main-navbar-collapse">
             <ul class="navbar-nav mx-auto">
                 @(await Component.InvokeAsync<MainNavbarMenuViewComponent>())
-            </ul> 
-            <ul class="navbar-nav"> 
+            </ul>
+            <ul class="navbar-nav">
                 @(await Component.InvokeAsync<MainNavbarToolbarViewComponent>())
             </ul>
         </div>

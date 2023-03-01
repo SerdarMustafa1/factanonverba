@@ -52,6 +52,7 @@ public class BMTRegisterModel : AccountPageModel
         var externalProviders = new ExternalProviderModel[] { liProvider, indeedProvider };
         this.ExternalProviders = externalProviders;
         _organisationAppService = organisationAppService;
+        ReturnUrl = "JobDashboard";
     }
 
 
@@ -128,7 +129,7 @@ public class BMTRegisterModel : AccountPageModel
                 await RegisterLocalUserAsync(UserType);
             }
 
-            if (UserManager.Options.SignIn.RequireConfirmedAccount)
+            if (UserManager.Options.SignIn.RequireConfirmedAccount && !IsExternalLogin)
             {
                 return RedirectToPage("RegisterConfirmation", new { email = EmailAddress, returnUrl = ReturnUrl });
             }

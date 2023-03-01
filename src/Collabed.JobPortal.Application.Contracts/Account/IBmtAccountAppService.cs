@@ -9,5 +9,6 @@ namespace Collabed.JobPortal.Users
         Task SendEmailVerificationRequestAsync(SendEmailVerificationDto input);
         Task<bool> CheckIfEmailExistsAsync(string emailAddress);
         Task<bool> CheckIfUsernameExistsAsync(string userName);
+        Task<bool> CheckPasswordCredentials(string loginInput, string password);
     }
 }

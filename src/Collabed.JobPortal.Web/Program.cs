@@ -16,7 +16,11 @@ public class Program
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddApplicationInsightsTelemetry();
             builder.Services.AddLogging(logBuilder => logBuilder.AddApplicationInsights());
-
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "Collabed_Identity";
+                options.ExpireTimeSpan = TimeSpan.FromDays(30);
+            });
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac();
             await builder.AddApplicationAsync<JobPortalWebModule>();

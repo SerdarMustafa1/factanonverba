@@ -1,6 +1,7 @@
 using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
@@ -20,15 +21,17 @@ namespace Collabed.JobPortal.Web.Pages.Account
     {
         private readonly IdentityUserManager _userManager;
         private readonly IOrganisationRepository _organisationRepository;
+        private readonly SignInManager<Volo.Abp.Identity.IdentityUser> _signInManager;
         public bool IsOrganisation { get; set; } = false;
 
         [BindProperty(SupportsGet = true)]
         public string DisplayName { get; set; }
 
-        public CustomConfirmEmailModel(IdentityUserManager userManager, IOrganisationRepository organisationRepository)
+        public CustomConfirmEmailModel(IdentityUserManager userManager, IOrganisationRepository organisationRepository, SignInManager<Volo.Abp.Identity.IdentityUser> signInManager)
         {
             _userManager = userManager;
             _organisationRepository = organisationRepository;
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
@@ -56,12 +59,8 @@ namespace Collabed.JobPortal.Web.Pages.Account
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            if (!result.Succeeded)
-            {
-                // Redirect to page to send confirmation email again
-            }
-
+            await _userManager.ConfirmEmailAsync(user, code);
+            await _signInManager.SignInAsync(user, isPersistent: false);
             return Page();
         }
     }

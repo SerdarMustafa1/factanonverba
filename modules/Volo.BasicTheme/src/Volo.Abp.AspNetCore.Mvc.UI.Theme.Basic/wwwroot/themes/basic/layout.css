@@ -45,6 +45,10 @@
 .container > .card { 
 }
 
+.navbar > .container {
+    max-width:90% !important;
+}
+
 @media screen and (min-width: 768px) { 
     .navbar .dropdown:hover > .dropdown-menu {
         display: block;

@@ -33,7 +33,7 @@ public class JobPortalDomainModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
 #if DEBUG
-        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+        //context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif
         Configure<PayPalOptions>(configuration.GetSection("Payment:PayPal"));
         Configure<PaymentOptions>(configuration.GetSection("Payment"));

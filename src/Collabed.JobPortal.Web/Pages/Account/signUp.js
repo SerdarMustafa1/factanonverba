@@ -51,7 +51,7 @@ let checkIfEmailExists = (event) => {
     collabed.jobPortal.account.bmtAccount.checkIfEmailExists(emailAddress)
         .then((result) => {
             if (result === true) {
-                emailError('Email already exists');
+                emailError('Email already exists, you should Login instead.');
                 $('button#getStartedButton').attr('disabled', 'true');
             }
             else {

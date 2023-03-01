@@ -1,81 +1,17 @@
 ﻿
-let submitted = false;
 let lengthPattern = /^.{8,}$/;
 let digitPattern = /\d/;
 let specialCharacterPattern = /[^a-zA-Z0-9]/;
 let hasLowerCasePattern = /[a-z]/;
 let hasUpperCasePattern = /[A-Z]/;
 
-let selectUserType = (userType) => {
-    $('input#userTypeHiddenInput').val(userType);
-    $('div#registerStepOne').attr('hidden', true);
-    $('div#registerStepTwo').attr('hidden', false);
-
-    if (userType === 0) {
-        $('div#OrganisationName_container').attr('hidden', true);
-    } else {
-        $('div#PersonalNameContainer').attr('hidden', true);
-    }
-}
-
-let styleValidationOfRequiredField = (propertyName, validationMessage) => {
-    let inputJQueryIdentifier = 'input#' + propertyName + '_input';
-    let divJQueryIdentifier = 'div#' + propertyName + '_input-group';
-    let inputValue = $(inputJQueryIdentifier).val();
-    if (inputValue.length == 0) {
-        $(divJQueryIdentifier).removeClass('input-group-correct');
-        $(divJQueryIdentifier).addClass('input-group-error');
-        $('span#' + propertyName + '_hint').text(validationMessage);
-        $('span#' + propertyName + '_hint').addClass('text-validation-error');
-    } else {
-        $(divJQueryIdentifier).removeClass('input-group-error');
-        $(divJQueryIdentifier).addClass('input-group-correct');
-        $('span#' + propertyName + '_hint').text('');
-        $('span#' + propertyName + '_hint').removeClass('text-validation-error');
-    }
-}
-
-// modify styleValidationOfRequiredField() in order to make it usable in Username (validatable, distinct) and others (just not empty)
-
-let validateEmail  = (showErrors) => {
-    let emailInputField = $('input#EmailAddress_input');
-    let emailInputFieldVal = emailInputField.val();
-    if (emailInputFieldVal.length == 0) {
-        if (showErrors) emailError('Please enter your email address');
-        return false;
+let validateForm = () => {
+    if (validateConfirmPassword(false) && validatePassword(false)) {
+        $("button#RegisterButton").attr('disabled', false);
     }
     else {
-        if (emailInputFieldVal.endsWith('@') || emailInputFieldVal.endsWith('.')) {
-            if (showErrors) emailError('Please enter valid email address');
-            return false;
-        }
-        let emailParts = emailInputFieldVal.split('@');
-        if (emailParts.length != 2) {
-            if (showErrors) emailError('Please enter valid email address');
-            return false;
-        }
-        if (emailParts[1].split('.').length === 1) {
-            if (showErrors) emailError('Please enter valid email address');
-            return false;
-        }
+        $("button#RegisterButton").attr('disabled', true);
     }
-
-    if(showErrors) appropriateEmail();
-    return true;
-}
-
-let emailError = (message) => {
-    $('div#EmailAddress_input-group').addClass('input-group-error');
-    $('div#EmailAddress_input-group').removeClass('input-group-correct');
-    $('span#EmailAddress_hint').addClass('text-validation-error');
-    $('span#EmailAddress_hint').text(message);
-}
-
-let appropriateEmail = () => {
-    $('div#EmailAddress_input-group').removeClass('input-group-error');
-    $('div#EmailAddress_input-group').addClass('input-group-correct');
-    $('span#EmailAddress_hint').removeClass('text-validation-error');
-    $('span#EmailAddress_hint').text('');
 }
 
 let validatePassword = (showErrors) => {
@@ -122,7 +58,7 @@ let validatePassword = (showErrors) => {
     if (isValid) {
         return true;
     }
-    else{
+    else {
         return false;
     }
 }
@@ -159,30 +95,32 @@ let validateConfirmPassword = (showErrors) => {
     }
 }
 
-let isInputFieldEmpty = (propertyName) => {
-    let inputFieldJQueryIdentifier = "input#" + propertyName + "_input";
-    if (!$(inputFieldJQueryIdentifier).is(':visible')) {
-        // if field is not visible - will simply treat is as valid
-        return false;
-    }
-    else if ($(inputFieldJQueryIdentifier).val().length === 0) {
-        return true;
-    }
-    else {
-        return false;
-    }
+let passwordError = (message) => {
+    $('div#Password_input-group').addClass('input-group-error');
+    $('div#Password_input-group').removeClass('input-group-correct');
+    $('span#Password_hint').addClass('text-validation-error');
+    $('span#Password_hint').text(message);
 }
 
-let validateForm = () => {
-    if (validateConfirmPassword() && validateEmail(false) && validatePassword(false) &&
-        !isInputFieldEmpty('UserName') && !isInputFieldEmpty('FirstName') &&
-        !isInputFieldEmpty('LastName') && !isInputFieldEmpty('OrganisationName') &&
-        $("input#GDPRConsent_input").is(":checked")) {
-        $("button#RegisterButton").attr('disabled', false);
-    }
-    else {
-        $("button#RegisterButton").attr('disabled', true);
-    }
+let appropriatePassword = (message) => {
+    $('div#Password_input-group').removeClass('input-group-error');
+    $('div#Password_input-group').addClass('input-group-correct');
+    $('span#Password_hint').removeClass('text-validation-error');
+    $('span#Password_hint').text(message);
+}
+
+let confirmPasswordError = (message) => {
+    $('div#ConfirmPassword_input-group').addClass('input-group-error');
+    $('div#ConfirmPassword_input-group').removeClass('input-group-correct');
+    $('span#ConfirmPassword_hint').addClass('text-validation-error');
+    $('span#ConfirmPassword_hint').text(message);
+}
+
+let appropriateConfirmPassword = (message) => {
+    $('div#ConfirmPassword_input-group').removeClass('input-group-error');
+    $('div#ConfirmPassword_input-group').addClass('input-group-correct');
+    $('span#ConfirmPassword_hint').removeClass('text-validation-error');
+    $('span#ConfirmPassword_hint').text(message);
 }
 
 let styleHintPar = (isPasswordValid) => {
@@ -198,7 +136,7 @@ let styleHintPar = (isPasswordValid) => {
 }
 
 let styleCasePar = (isCaseValid) => {
-    if(isCaseValid) {
+    if (isCaseValid) {
         $("#caseIcon").attr("class", "bi bi-check2-circle");
         $("#caseIcon").attr("style", "color:green;");
         $("#caseHint").attr("style", "color:green;");
@@ -234,26 +172,4 @@ let styleNonAlphabeticalPar = (containsNonAlphabeticalCharacters) => {
         $("#nonAlphanumericIcon").attr("style", "color:red;");
         $("#nonAlphanumericParagraph").attr("style", "color:red;");
     }
-}
-
-let checkIfEmailExists = (event) => {
-    if (submitted) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    let emailAddress = $('input#EmailAddress_input').val();
-    collabed.jobPortal.account.bmtAccount.checkIfEmailExists(emailAddress)
-        .then((result) => {
-            if (result === true) {
-                emailError('Email already exists, you should Login instead.');
-                $('button#RegisterButton').attr('disabled', true);
-            }
-            else { // have to check is this really sugmitting the form or what, - has to be clicked twice to work propperly (maybe its some async or smth?)
-                submitted = true;
-                $('form#registerForm').submit();
-            }
-        }).catch((error) => {
-            // HACK: TODO, add client side errors validation
-            return console.log(error);
-        });
 }

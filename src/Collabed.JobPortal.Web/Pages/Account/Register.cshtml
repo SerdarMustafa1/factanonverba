@@ -80,11 +80,12 @@
 
 <div id="registerStepTwo" hidden>
     <div style=" width: 400px; margin: auto">
-        <div class="text-center">
+        <div style="text-align:center">
             <img src="~/images/logo/BMT_Primary Full_symbol.png" alt="BuildMyTalent" width="40" height="54" />
-            <p class="text-30">Register your account</p>
+        </div>
+        <div class="text-center" style="margin-top:7%;">
+            <p class="heading-30">Register your account</p>
             <p class="text-16">Great to have you here!<br />Please enter your details.</p>
-
         </div>
         <form method="post" onsubmit="checkIfEmailExists(event)" id="registerForm">
             <input type="text" id="userTypeHiddenInput" asp-for="@Model.UserType" hidden>
