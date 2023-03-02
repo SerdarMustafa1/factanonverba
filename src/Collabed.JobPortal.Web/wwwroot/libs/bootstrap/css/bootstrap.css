@@ -2022,7 +2022,7 @@ progress {
   color: #212529;
   background-color: #fff;
   border-color: #86b7fe;
-  outline: 0;
+  outline: 0 none;
 }
 .form-control::-webkit-date-and-time-value {
   height: 1.5em;
