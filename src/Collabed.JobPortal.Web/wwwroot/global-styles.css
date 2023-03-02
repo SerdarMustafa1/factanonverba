@@ -126,12 +126,9 @@ input[type="color"]:focus,
 
 input:focus {
     outline: 0 none !important;
+    box-shadow:none !important;
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
-}
-
-input:focus {
-    outline: 0 none !important;
 }
 
 .form-control {
