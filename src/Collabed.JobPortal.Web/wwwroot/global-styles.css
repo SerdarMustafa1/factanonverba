@@ -122,6 +122,10 @@ input[type="color"]:focus,
     outline: 0 none !important;
 }
 
+input:focus {
+    outline: 0 none !important;
+}
+
 .form-control {
     height: 100%;
     display: block;
