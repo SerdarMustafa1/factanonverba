@@ -1,8 +1,35 @@
-﻿namespace Collabed.JobPortal.Jobs
+﻿using Collabed.JobPortal.Job;
+using Collabed.JobPortal.Types;
+using System;
+using System.Collections.Generic;
+
+namespace Collabed.JobPortal.Jobs
 {
-	public class CreateJobDto
-	{
-		public string Title { get; set; }
-		public string Description { get; set; }
-	}
+    public class CreateJobDto
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string SubDescription { get; set; }
+        public string[] Skills { get; set; }
+        public int? OfficeLocation { get; set; }
+        public DateTime? StartDate { get; set; }
+        public bool? IsLocalLanguageRequired { get; set; }
+        public int? LocalLanguage { get; set; }
+        public bool? OfferVisaSponsorship { get; set; }
+        public float? SalaryMinimum { get; set; }
+        public float? SalaryMaximum { get; set; }
+        public bool? IsSalaryNegotiable { get; set; }
+        public string SalaryOtherBenefits { get; set; }
+        public bool? HiringMultipleCandidates { get; set; }
+        public int? PositionsAvailable { get; set; }
+        public DateTime? ApplicationDeadline { get; set; }
+        public CurrencyType? SalaryCurrency { get; set; }
+        public ContractType? ContractType { get; set; }
+        public EmploymentType? EmploymentType { get; set; }
+        public SalaryPeriod? SalaryPeriod { get; set; }
+        public JobLocation? JobLocation { get; set; }
+        public ExperienceLevel ExperienceLevel { get; set; }
+        public ICollection<int> Categories { get; set; }
+        public ICollection<int> JobSchedules { get; set; }
+    }
 }

@@ -6,4 +6,12 @@
 		Broadbean,
 		Idibu
 	}
+
+	public enum JobStatus
+	{
+		Active,
+		Expired,
+		Closed,
+		Deleted
+	}
 }

@@ -1,4 +1,5 @@
-﻿using Collabed.JobPortal.Jobs;
+﻿using Collabed.JobPortal.DropDowns;
+using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.PaymentRequests;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,17 @@ public class JobPortalDbContext :
     public DbSet<Organisations.Organisation> Organisations { get; set; }
     public DbSet<OrganisationMember> OrganisationMembers { get; set; }
     public DbSet<PaymentRequest> PaymentRequests { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<JobCategory> JobCategories { get; set; }
+    public DbSet<Language> Languages { get; set; }
+    public DbSet<JobLanguage> JobLanguages { get; set; }
+    public DbSet<Location> Locations { get; set; }
+    public DbSet<Schedule> Schedules { get; set; }
+    public DbSet<JobSchedule> JobSchedules { get; set; }
+    public DbSet<SupplementalPay> SupplementalPays { get; set; }
+    public DbSet<JobSupplementalPay> JobSupplementalPays { get; set; }
+    public DbSet<SupportingDocument> SupportingDocuments { get; set; }
+    public DbSet<JobSupportingDocument> JobSupportingDocuments { get; set; }
 
     public JobPortalDbContext(DbContextOptions<JobPortalDbContext> options)
         : base(options)
@@ -80,7 +92,13 @@ public class JobPortalDbContext :
             b.ToTable(JobPortalConsts.DbTablePrefix + "Jobs", JobPortalConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasMany(x => x.Applicants).WithOne().HasForeignKey(x => x.JobId).IsRequired();
+            b.HasMany(x => x.Categories).WithOne().HasForeignKey(x => x.JobId);
+            b.HasMany(x => x.Languages).WithOne().HasForeignKey(x => x.JobId);
+            b.HasMany(x => x.Schedules).WithOne().HasForeignKey(x => x.JobId);
+            b.HasMany(x => x.SupplementalPays).WithOne().HasForeignKey(x => x.JobId);
+            b.HasMany(x => x.SupportingDocuments).WithOne().HasForeignKey(x => x.JobId);
             b.HasOne<Organisations.Organisation>().WithMany().HasForeignKey(x => x.OrganisationId);
+            b.HasOne<Location>().WithMany().HasForeignKey(x => x.LocationId);
             b.Property(e => e.Type).HasConversion<int>();
         });
 
@@ -95,6 +113,106 @@ public class JobPortalDbContext :
             b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
             b.HasIndex(x => new { x.JobId, x.UserId });
         });
+
+        #region Dropdown many-to-many relationships
+        builder.Entity<Category>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "Categories", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Language>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "Languages", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Schedule>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "Schedules", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<SupplementalPay>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "SupplementalPays", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<SupportingDocument>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "SupportingDocuments", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Location>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "Locations", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(e => e.Latitude).HasPrecision(8, 6);
+            b.Property(e => e.Longitude).HasPrecision(9, 6);
+            b.HasIndex(e => e.Name);
+        });
+
+        builder.Entity<JobCategory>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "JobCategories", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            //define composite key
+            b.HasKey(x => new { x.JobId, x.CategoryId });
+            //many-to-many configuration
+            b.HasOne<Jobs.Job>().WithMany(x => x.Categories).HasForeignKey(x => x.JobId);
+            b.HasIndex(x => new { x.JobId, x.CategoryId });
+        });
+
+        builder.Entity<JobLanguage>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "JobLanguages", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            //define composite key
+            b.HasKey(x => new { x.JobId, x.LanguageId });
+            //many-to-many configuration
+            b.HasOne<Jobs.Job>().WithMany(x => x.Languages).HasForeignKey(x => x.JobId);
+            b.HasOne<Language>().WithMany().HasForeignKey(x => x.LanguageId);
+            b.HasIndex(x => new { x.JobId, x.LanguageId });
+        });
+
+        builder.Entity<JobSchedule>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "JobSchedules", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            //define composite key
+            b.HasKey(x => new { x.JobId, x.ScheduleId });
+            //many-to-many configuration
+            b.HasOne<Jobs.Job>().WithMany(x => x.Schedules).HasForeignKey(x => x.JobId);
+            b.HasOne<Schedule>().WithMany().HasForeignKey(x => x.ScheduleId);
+            b.HasIndex(x => new { x.JobId, x.ScheduleId });
+        });
+
+        builder.Entity<JobSupplementalPay>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "JobSupplementalPays", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            //define composite key
+            b.HasKey(x => new { x.JobId, x.SupplementalPayId });
+            //many-to-many configuration
+            b.HasOne<Jobs.Job>().WithMany(x => x.SupplementalPays).HasForeignKey(x => x.JobId);
+            b.HasOne<SupplementalPay>().WithMany().HasForeignKey(x => x.SupplementalPayId);
+            b.HasIndex(x => new { x.JobId, x.SupplementalPayId });
+        });
+
+        builder.Entity<JobSupportingDocument>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "JobSupportingDocuments", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            //define composite key
+            b.HasKey(x => new { x.JobId, x.SupportingDocumentId });
+            //many-to-many configuration
+            b.HasOne<Jobs.Job>().WithMany(x => x.SupportingDocuments).HasForeignKey(x => x.JobId);
+            b.HasOne<SupportingDocument>().WithMany().HasForeignKey(x => x.SupportingDocumentId);
+            b.HasIndex(x => new { x.JobId, x.SupportingDocumentId });
+        });
+        #endregion
 
         builder.Entity<Organisations.Organisation>(b =>
         {
@@ -123,6 +241,7 @@ public class JobPortalDbContext :
             b.Property(x => x.CustomerId).HasMaxLength(PaymentRequestConsts.MaxCustomerIdLength);
             b.Property(x => x.ProductId).HasMaxLength(PaymentRequestConsts.MaxProductIdLength);
             b.Property(x => x.ProductName).IsRequired().HasMaxLength(PaymentRequestConsts.MaxProductNameLength);
+            b.Property(x => x.Price).HasPrecision(10, 2);
             b.HasIndex(x => x.CustomerId);
             b.HasIndex(x => x.State);
         });

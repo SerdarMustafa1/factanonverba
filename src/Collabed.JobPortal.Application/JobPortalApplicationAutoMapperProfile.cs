@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.Job;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
@@ -19,6 +20,7 @@ public class JobPortalApplicationAutoMapperProfile : Profile
 		CreateMap<JobDto, CreateUpdateJobDto>();
 		CreateMap<Organisation, OrganisationDto>();
 		CreateMap<PaymentRequest, PaymentRequestDto>();
+		CreateMap<Category, CategoryDto>();
 		CreateMap<ExternalJobRequest, Jobs.Job>()
 			  .ForMember(d => d.Type,
 						op => op.MapFrom(o => MapJobType(o.Type)))
@@ -29,6 +31,7 @@ public class JobPortalApplicationAutoMapperProfile : Profile
 			  .ForMember(d => d.JobOrigin, op => op.Ignore())
 			  .ForMember(d => d.OrganisationId, op => op.Ignore())
 			  .ForMember(d => d.Applicants, op => op.Ignore())
+			  .ForMember(d => d.Categories, op => op.Ignore())
 			  .ForMember(d => d.Id, op => op.Ignore())
 			  .IgnoreAuditedObjectProperties();
 	}
