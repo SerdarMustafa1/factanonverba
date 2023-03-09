@@ -56,7 +56,6 @@ public class JobPortalDbContext :
     public DbSet<Category> Categories { get; set; }
     public DbSet<JobCategory> JobCategories { get; set; }
     public DbSet<Language> Languages { get; set; }
-    public DbSet<JobLanguage> JobLanguages { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Schedule> Schedules { get; set; }
     public DbSet<JobSchedule> JobSchedules { get; set; }
@@ -93,12 +92,12 @@ public class JobPortalDbContext :
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasMany(x => x.Applicants).WithOne().HasForeignKey(x => x.JobId).IsRequired();
             b.HasMany(x => x.Categories).WithOne().HasForeignKey(x => x.JobId);
-            b.HasMany(x => x.Languages).WithOne().HasForeignKey(x => x.JobId);
             b.HasMany(x => x.Schedules).WithOne().HasForeignKey(x => x.JobId);
             b.HasMany(x => x.SupplementalPays).WithOne().HasForeignKey(x => x.JobId);
             b.HasMany(x => x.SupportingDocuments).WithOne().HasForeignKey(x => x.JobId);
+            b.HasOne<Language>().WithMany().HasForeignKey(x => x.LocalLanguageId);
             b.HasOne<Organisations.Organisation>().WithMany().HasForeignKey(x => x.OrganisationId);
-            b.HasOne<Location>().WithMany().HasForeignKey(x => x.LocationId);
+            b.HasOne<Location>().WithMany().HasForeignKey(x => x.OfficeLocationId);
             b.Property(e => e.Type).HasConversion<int>();
         });
 
@@ -163,18 +162,6 @@ public class JobPortalDbContext :
             //many-to-many configuration
             b.HasOne<Jobs.Job>().WithMany(x => x.Categories).HasForeignKey(x => x.JobId);
             b.HasIndex(x => new { x.JobId, x.CategoryId });
-        });
-
-        builder.Entity<JobLanguage>(b =>
-        {
-            b.ToTable(JobPortalConsts.DbTablePrefix + "JobLanguages", JobPortalConsts.DbSchema);
-            b.ConfigureByConvention();
-            //define composite key
-            b.HasKey(x => new { x.JobId, x.LanguageId });
-            //many-to-many configuration
-            b.HasOne<Jobs.Job>().WithMany(x => x.Languages).HasForeignKey(x => x.JobId);
-            b.HasOne<Language>().WithMany().HasForeignKey(x => x.LanguageId);
-            b.HasIndex(x => new { x.JobId, x.LanguageId });
         });
 
         builder.Entity<JobSchedule>(b =>

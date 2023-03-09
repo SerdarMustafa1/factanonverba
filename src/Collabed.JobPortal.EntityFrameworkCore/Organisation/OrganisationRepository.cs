@@ -14,18 +14,27 @@ namespace Collabed.JobPortal.Organisation
         {
         }
 
-        public async Task<Guid?> GetOrganisationIdByUserId(Guid userId)
+        public async Task<Guid?> GetOrganisationIdByUserIdAsync(Guid userId)
         {
-            var dbContext = await GetDbContextAsync();
             var dbSet = (await GetDbContextAsync()).Set<OrganisationMember>();
 
             return dbSet.FirstOrDefault(x => x.UserId == userId)?.OrganisationId;
         }
 
+        public async Task<Guid?> GetOrganisationByEmailAsync(string contactEmail)
+        {
+            var dbSet = await ApplyFilterAsync();
+            return dbSet.FirstOrDefault(x => x.EmailAddress == contactEmail)?.Id;
+        }
+
+        public async Task<bool> DeductCreditsForJobPosting(Guid organisationId, int credits)
+        {
+            //TODO: Implement once logic is known
+            return true;
+        }
+
         private async Task<IQueryable<Organisations.Organisation>> ApplyFilterAsync()
         {
-            var dbContext = await GetDbContextAsync();
-
             return await GetDbSetAsync();
         }
     }

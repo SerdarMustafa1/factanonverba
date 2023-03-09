@@ -1,8 +1,8 @@
 ﻿using Collabed.JobPortal;
-using Collabed.JobPortal.DropDowns;
-using Collabed.JobPortal.Job;
 using Collabed.JobPortal.Jobs;
+using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Permissions;
+using Collabed.JobPortal.Types;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -22,20 +22,20 @@ namespace JobPortal.Jobs
     public class JobAppService : ApplicationService, IJobAppService
     {
         private readonly IJobRepository _jobRepository;
-        private readonly IRepository<Category> _categoryRepository;
+        private readonly IOrganisationRepository _organisationRepository;
         private readonly JobManager _jobManager;
         private readonly ILogger<JobAppService> _logger;
         private readonly IdibuOptions _idibuOptions;
         private readonly BroadbeanOptions _broadBeanOptions;
 
-        public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger, IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IRepository<Category> categoryRepository)
+        public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger, IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IOrganisationRepository organisationRepository)
         {
             _jobRepository = jobRepository;
             _jobManager = jobManager;
             _logger = logger;
             _idibuOptions = idibuOptions.Value;
             _broadBeanOptions = broadBeanOptions.Value;
-            _categoryRepository = categoryRepository;
+            _organisationRepository = organisationRepository;
         }
 
         public async Task<JobDto> GetAsync(Guid id)
@@ -68,10 +68,15 @@ namespace JobPortal.Jobs
             {
                 throw new BusinessException("User is not allowed to post jobs. User is not a member of any organisation.");
             }
-            var organisationId = Guid.Parse(organisationClaim.Value);
 
-            var job = await _jobManager.CreateAsync(input.Title, organisationId);
-            job.Description = input.Description;
+            var organisationId = Guid.Parse(organisationClaim.Value);
+            var job = await _jobManager.CreateAsync(organisationId);
+
+            ObjectMapper.Map(input, job);
+            job.SetCategories(input.Categories)
+               .SetSchedules(input.JobSchedules)
+               .SetSupplementalPays(input.SupplementalPay)
+               .SetSupportingDocs(input.SupportingDocuments);
 
             var newJob = await _jobRepository.InsertAsync(job);
             return ObjectMapper.Map<Job, JobDto>(newJob);
@@ -97,12 +102,6 @@ namespace JobPortal.Jobs
             await _jobRepository.DeleteAsync(id);
         }
 
-        public async Task<List<CategoryDto>> GetJobCategoriesAsync()
-        {
-            var categories = await _categoryRepository.GetListAsync();
-            return ObjectMapper.Map<List<Category>, List<CategoryDto>>(categories);
-        }
-
         [AllowAnonymous]
         [RemoteService(IsEnabled = false)]
         public async Task<JobResponseDto> HandleExternalJobFeedAsync(ExternalJobRequest externalJobRequest)
@@ -117,16 +116,10 @@ namespace JobPortal.Jobs
                 switch (command)
                 {
                     case CommandType.add:
-                        var newJob = _jobManager.CreateExternal(jobReference);
-                        newJob = ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest);
-                        await _jobRepository.InsertAsync(newJob);
-                        message = $"Posted a new job with reference {jobReference}";
+                        message = await InsertNewJobAsync(externalJobRequest, jobOrigin, message, jobReference);
                         break;
                     case CommandType.update:
-                        var existingJob = await _jobRepository.GetByReferenceAsync(jobReference);
-                        ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, existingJob);
-                        await _jobRepository.UpdateAsync(existingJob);
-                        message = $"Updated a job with reference {jobReference}";
+                        message = await UpdateJobAsync(externalJobRequest, message, jobReference);
                         break;
                     case CommandType.delete:
                         await _jobRepository.DeleteByReferenceAsync(jobReference);
@@ -148,10 +141,73 @@ namespace JobPortal.Jobs
                 _logger.LogError($"External Job Feed validation failed with the message: {ae.Message}", ae.InnerException);
                 return new JobResponseDto(JobResponseCodes.Failed, externalJobRequest.Reference, ae.Message);
             }
+            catch (BusinessException be)
+            {
+                _logger.LogError($"External Job Feed failed with the message: {be.Message}", be.InnerException);
+                return new JobResponseDto(JobResponseCodes.Failed, externalJobRequest.Reference, be.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"Unexpected error has occured when feeding an external job: {ex.Message}", ex.InnerException);
                 return new JobResponseDto(JobResponseCodes.Failed, externalJobRequest.Reference, "Unexpected error has occured");
+            }
+        }
+
+        private async Task<string> UpdateJobAsync(ExternalJobRequest externalJobRequest, string message, string jobReference)
+        {
+            var existingJob = await _jobRepository.GetByReferenceAsync(jobReference);
+            ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, existingJob);
+
+            await _jobRepository.UpdateAsync(existingJob);
+            message = $"Updated a job with reference {jobReference}";
+
+            return message;
+        }
+
+        private async Task<string> InsertNewJobAsync(ExternalJobRequest externalJobRequest, JobOrigin jobOrigin, string message, string jobReference)
+        {
+            await CheckIfJobReferenceExistsAsync(externalJobRequest.Reference);
+            var organisationId = await GetOrganisationAsync(externalJobRequest.ContactEmail);
+            await DeductOrganisationsCredits(organisationId, externalJobRequest.ContactEmail);
+
+            var newJob = _jobManager.CreateExternal(jobReference);
+            ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, newJob);
+            newJob.JobOrigin = jobOrigin;
+            newJob.OrganisationId = organisationId;
+            await _jobRepository.InsertAsync(newJob);
+
+            message = $"Posted a new job with reference {jobReference}";
+
+            return message;
+        }
+
+        private async Task CheckIfJobReferenceExistsAsync(string reference)
+        {
+            if (await _jobRepository.CheckIfJobExistsByReference(reference))
+            {
+                throw new BusinessException("Job with the same reference has already been added.");
+            }
+        }
+
+        private async Task<Guid> GetOrganisationAsync(string contactEmail)
+        {
+            var organisationId = await _organisationRepository.GetOrganisationByEmailAsync(contactEmail);
+            if (organisationId == null)
+            {
+                throw new ArgumentException($"Organisation doesn't exist in BuildMyTalent job board.", contactEmail);
+            }
+
+            return organisationId.Value;
+        }
+
+        private async Task DeductOrganisationsCredits(Guid organisationId, string contactEmail)
+        {
+            // TODO: Specify credits amount 
+            var creditsDeducted = await _organisationRepository.DeductCreditsForJobPosting(organisationId, 1);
+
+            if (!creditsDeducted)
+            {
+                throw new BusinessException($"Insufficient credits to post a job to BuildMyTalent job board");
             }
         }
 
@@ -174,11 +230,12 @@ namespace JobPortal.Jobs
         {
             var validationErrors = new List<string>();
             if (!Enum.TryParse(typeof(CommandType), jobRequest.Command, true, out _))
-                validationErrors.Add("Invalid Command value");
-            if (!Enum.TryParse(typeof(JobType), jobRequest.Type, true, out _))
-                validationErrors.Add("Invalid JobType value");
-            if (!Enum.TryParse(typeof(SalaryPeriodType), jobRequest.SalaryPeriod, true, out _))
-                validationErrors.Add("Invalid SalaryPeriodType value");
+                validationErrors.Add("Invalid command value");
+            if (!Enum.TryParse(typeof(ContractType), jobRequest.Type, true, out _))
+                validationErrors.Add("Invalid job_type value");
+            var salaryPeriods = new string[] { "hour", "day", "week", "month", "annum" };
+            if (!salaryPeriods.Contains(jobRequest.SalaryPeriod))
+                validationErrors.Add("Invalid salary_per value");
 
             if (validationErrors.Any())
                 throw new ArgumentException(string.Join(",", validationErrors));

@@ -5,6 +5,7 @@
         Permanent,
         Temporary,
         Internship,
-        Apprenticeship
+        Apprenticeship,
+        Contract
     }
 }

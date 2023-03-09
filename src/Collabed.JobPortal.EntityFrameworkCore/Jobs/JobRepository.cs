@@ -40,6 +40,12 @@ namespace Collabed.JobPortal.Jobs
             await DeleteAsync(entity);
         }
 
+        public async Task<bool> CheckIfJobExistsByReference(string reference)
+        {
+            var query = await ApplyFilterAsync();
+            return await query.AnyAsync(x => x.Reference == reference);
+        }
+
         private async Task<IQueryable<Job>> ApplyFilterAsync()
         {
             var dbContext = await GetDbContextAsync();

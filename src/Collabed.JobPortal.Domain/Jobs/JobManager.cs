@@ -14,14 +14,14 @@ namespace Collabed.JobPortal.Jobs
             _jobRepository = jobRepository;
         }
 
-        public async Task<Job> CreateAsync(string title, Guid organisationId)
+        public async Task<Job> CreateAsync(Guid organisationId)
         {
-            return new Job(title, organisationId);
+            return new Job(GuidGenerator.Create(), organisationId);
         }
 
         public Job CreateExternal(string reference)
         {
-            return new Job(reference);
+            return new Job(GuidGenerator.Create(), reference);
         }
 
         public async Task<Job> UpdateAsync(Guid userId, Job job, string title, string description)

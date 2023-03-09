@@ -1,4 +1,5 @@
 ﻿using Collabed.JobPortal.Job;
+using Collabed.JobPortal.Types;
 using System;
 
 namespace Collabed.JobPortal.Jobs
@@ -14,7 +15,7 @@ namespace Collabed.JobPortal.Jobs
         public string ApplicationUrl { get; set; }
         public string Reference { get; set; }
         public string Title { get; set; }
-        public JobType? Type { get; set; }
+        public ContractType? Type { get; set; }
         public string Duration { get; set; }
         public string StartDate { get; set; }
         public string Skills { get; set; }
@@ -24,7 +25,7 @@ namespace Collabed.JobPortal.Jobs
         public CurrencyType? SalaryCurrency { get; set; }
         public float? SalaryFrom { get; set; }
         public float? SalaryTo { get; set; }
-        public SalaryPeriodType? SalaryPeriod { get; set; }
+        public SalaryPeriod? SalaryPeriod { get; set; }
         public string SalaryBenefits { get; set; }
         public string Salary { get; set; }
         public JobOrigin JobOrigin { get; set; }
