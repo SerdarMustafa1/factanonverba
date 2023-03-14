@@ -1,18 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Runtime.Serialization;
 
 namespace Collabed.JobPortal.Types
 {
     public enum SalaryPeriod
     {
-        [Display(Name = "hour")]
         Hourly,
-        [Display(Name = "day")]
+        [IgnoreDataMember]
         Daily,
-        [Display(Name = "week")]
+        [IgnoreDataMember]
         Weekly,
-        [Display(Name = "month")]
         Monthly,
-        [Display(Name = "annum")]
         Yearly
     }
 }

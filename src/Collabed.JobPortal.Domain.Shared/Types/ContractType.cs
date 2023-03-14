@@ -1,4 +1,6 @@
-﻿namespace Collabed.JobPortal.Types
+﻿using System.Runtime.Serialization;
+
+namespace Collabed.JobPortal.Types
 {
     public enum ContractType
     {
@@ -6,6 +8,7 @@
         Temporary,
         Internship,
         Apprenticeship,
+        [IgnoreDataMember]
         Contract
     }
 }

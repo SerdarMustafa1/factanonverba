@@ -7,6 +7,10 @@ namespace Collabed.JobPortal.Types
         [Display(Name = "Full-time")]
         Fulltime,
         [Display(Name = "Part-time")]
-        Parttime
+        Parttime,
+        [Display(Name = "Graduate Scheme")]
+        GraduateScheme,
+        [Display(Name = "Work Placement")]
+        WorkPlacement,
     }
 }

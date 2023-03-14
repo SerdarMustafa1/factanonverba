@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using Collabed.JobPortal.Types;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -109,6 +110,70 @@ namespace Collabed.JobPortal.DropDowns
                     AbsoluteExpiration = DateTimeOffset.Now.AddYears(1), // This list will never change
                 }
             );
+        }
+
+        public IEnumerable<DropDownDto> GetExperienceLevel()
+        {
+            var dropDownDto = new List<DropDownDto>();
+            foreach (ExperienceLevel enumType in Enum.GetValues(typeof(ExperienceLevel)))
+            {
+                var enumName = enumType.GetDisplayName();
+                if (string.IsNullOrEmpty(enumName))
+                {
+                    continue;
+                }
+
+                dropDownDto.Add(new DropDownDto((int)enumType, enumName));
+            }
+            return dropDownDto;
+        }
+
+        public IEnumerable<DropDownDto> GetContractTypes()
+        {
+            var dropDownDto = new List<DropDownDto>();
+            foreach (ContractType enumType in Enum.GetValues(typeof(ContractType)))
+            {
+                var enumName = enumType.GetDisplayName();
+                if (string.IsNullOrEmpty(enumName))
+                {
+                    continue;
+                }
+
+                dropDownDto.Add(new DropDownDto((int)enumType, enumName));
+            }
+            return dropDownDto;
+        }
+
+        public IEnumerable<DropDownDto> GetJobLocations()
+        {
+            var dropDownDto = new List<DropDownDto>();
+            foreach (JobLocation enumType in Enum.GetValues(typeof(JobLocation)))
+            {
+                var enumName = enumType.GetDisplayName();
+                if (string.IsNullOrEmpty(enumName))
+                {
+                    continue;
+                }
+
+                dropDownDto.Add(new DropDownDto((int)enumType, enumName));
+            }
+            return dropDownDto;
+        }
+
+        public IEnumerable<DropDownDto> GetSalaryPeriod()
+        {
+            var dropDownDto = new List<DropDownDto>();
+            foreach (SalaryPeriod enumType in Enum.GetValues(typeof(SalaryPeriod)))
+            {
+                var enumName = enumType.GetDisplayName();
+                if (string.IsNullOrEmpty(enumName))
+                {
+                    continue;
+                }
+
+                dropDownDto.Add(new DropDownDto((int)enumType, enumName));
+            }
+            return dropDownDto;
         }
     }
 }
