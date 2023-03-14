@@ -1,4 +1,4 @@
-﻿using Collabed.JobPortal.PayPal;
+using Collabed.JobPortal.PayPal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AuditLogging;
@@ -11,6 +11,7 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.Caching;
 
 namespace Collabed.JobPortal;
 
@@ -26,7 +27,8 @@ namespace Collabed.JobPortal;
     typeof(AbpSettingManagementDomainModule),
     typeof(AbpEmailingModule)
 )]
-public class JobPortalDomainModule : AbpModule
+[DependsOn(typeof(AbpCachingModule))]
+    public class JobPortalDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
