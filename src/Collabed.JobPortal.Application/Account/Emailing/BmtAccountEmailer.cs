@@ -4,6 +4,7 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Mail;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Emailing;
@@ -36,7 +37,16 @@ namespace Collabed.JobPortal.Account.Emailing
             var emailContent = await TemplateRenderer.RenderAsync(
                 BmtAccountEmailTemplates.EmailVerification, new { link = link });
 
-            await EmailSender.SendAsync(user.Email, EmailTemplates.ConfirmEmailSubject, emailContent);
+            var mailMessage = new MailMessage
+            {
+                From= new MailAddress(EmailTemplates.WelcomeSender, EmailTemplates.WelcomeTitle),
+                Body = emailContent,
+                IsBodyHtml = true,
+                Subject = EmailTemplates.ConfirmEmailSubject,
+            };
+            mailMessage.To.Add(user.Email);
+
+            await EmailSender.SendAsync(mailMessage);
         }
 
         public override async Task SendPasswordResetLinkAsync(

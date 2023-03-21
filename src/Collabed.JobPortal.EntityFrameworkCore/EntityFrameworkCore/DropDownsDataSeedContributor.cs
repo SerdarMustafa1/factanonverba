@@ -104,7 +104,7 @@ namespace Collabed.JobPortal.EntityFrameworkCore
 
             var languages = new List<Language>
             {
-                new Language(1, "English"),
+                new Language(1, "English"), // English is pre-selected value. Do not change PK
                 new Language(2, "French"),
                 new Language(3, "German"),
                 new Language(4, "Polish"),

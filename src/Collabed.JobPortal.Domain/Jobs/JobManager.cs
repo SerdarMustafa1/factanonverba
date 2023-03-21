@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Collabed.JobPortal.DropDowns;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
@@ -30,6 +32,18 @@ namespace Collabed.JobPortal.Jobs
             job.Description = description;
 
             return job;
+        }
+
+        public IEnumerable<ScreeningQuestion> CreateScreeningQuestions(IEnumerable<(string, bool)> screeningQuestions, Guid jobId)
+        {
+            var screeningQuestionsCollection = new List<ScreeningQuestion>();
+
+            foreach (var (text, isAutoReject) in screeningQuestions)
+            {
+                screeningQuestionsCollection.Add(new ScreeningQuestion(GuidGenerator.Create(), jobId, text, isAutoReject));
+            }
+
+            return screeningQuestionsCollection;
         }
 
         // Add any other domain service methods

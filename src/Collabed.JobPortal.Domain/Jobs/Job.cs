@@ -1,4 +1,5 @@
-﻿using Collabed.JobPortal.ErrorCodes;
+﻿using Collabed.JobPortal.DropDowns;
+using Collabed.JobPortal.ErrorCodes;
 using Collabed.JobPortal.Job;
 using Collabed.JobPortal.Types;
 using System;
@@ -34,11 +35,13 @@ namespace Collabed.JobPortal.Jobs
         public SalaryPeriod? SalaryPeriod { get; set; }
         public JobLocation? JobLocation { get; set; }
         public ExperienceLevel? ExperienceLevel { get; set; }
-        public ICollection<JobCategory> Categories { get; set; }
+        public int CategoryId { get; set; }
         public ICollection<JobSchedule> Schedules { get; set; }
-        public ICollection<JobSupplementalPay> SupplementalPays { get; set; }
+        public string SupplementalPay { get; set; }
         public ICollection<JobSupportingDocument> SupportingDocuments { get; set; }
+        public IEnumerable<ScreeningQuestion> ScreeningQuestions { get; set; }
         public string OtherDocuments { get; set; }
+        public bool IsAcceptingApplications { get; set; } = true;
         public JobOrigin JobOrigin { get; set; }
         public JobStatus Status { get; set; }
         public Guid? OrganisationId { get; set; }
@@ -63,9 +66,7 @@ namespace Collabed.JobPortal.Jobs
                 OrganisationId = organisationId;
             }
             Reference = GenerateJobReference();
-            Categories = new Collection<JobCategory>();
             Schedules = new Collection<JobSchedule>();
-            SupplementalPays = new Collection<JobSupplementalPay>();
             SupportingDocuments = new Collection<JobSupportingDocument>();
         }
 
@@ -98,29 +99,11 @@ namespace Collabed.JobPortal.Jobs
 
             return this;
         }
-        public Job SetCategories(IEnumerable<int> catogoryIds)
-        {
-            foreach (var category in catogoryIds)
-            {
-                Categories.Add(new JobCategory(Id, category));
-            }
-
-            return this;
-        }
         public Job SetSchedules(IEnumerable<int> scheduleIds)
         {
             foreach (var schedule in scheduleIds)
             {
                 Schedules.Add(new JobSchedule(Id, schedule));
-            }
-
-            return this;
-        }
-        public Job SetSupplementalPays(IEnumerable<int> supplementalPayIds)
-        {
-            foreach (var item in supplementalPayIds)
-            {
-                SupplementalPays.Add(new JobSupplementalPay(Id, item));
             }
 
             return this;

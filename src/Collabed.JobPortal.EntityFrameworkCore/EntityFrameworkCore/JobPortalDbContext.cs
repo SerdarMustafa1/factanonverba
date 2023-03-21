@@ -54,13 +54,12 @@ public class JobPortalDbContext :
     public DbSet<OrganisationMember> OrganisationMembers { get; set; }
     public DbSet<PaymentRequest> PaymentRequests { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<JobCategory> JobCategories { get; set; }
     public DbSet<Language> Languages { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Schedule> Schedules { get; set; }
+    public DbSet<ScreeningQuestion> ScreeningQuestions { get; set; }
     public DbSet<JobSchedule> JobSchedules { get; set; }
     public DbSet<SupplementalPay> SupplementalPays { get; set; }
-    public DbSet<JobSupplementalPay> JobSupplementalPays { get; set; }
     public DbSet<SupportingDocument> SupportingDocuments { get; set; }
     public DbSet<JobSupportingDocument> JobSupportingDocuments { get; set; }
 
@@ -91,13 +90,13 @@ public class JobPortalDbContext :
             b.ToTable(JobPortalConsts.DbTablePrefix + "Jobs", JobPortalConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasMany(x => x.Applicants).WithOne().HasForeignKey(x => x.JobId).IsRequired();
-            b.HasMany(x => x.Categories).WithOne().HasForeignKey(x => x.JobId);
+            b.HasOne<Category>().WithMany().HasForeignKey(x => x.CategoryId);
             b.HasMany(x => x.Schedules).WithOne().HasForeignKey(x => x.JobId);
-            b.HasMany(x => x.SupplementalPays).WithOne().HasForeignKey(x => x.JobId);
             b.HasMany(x => x.SupportingDocuments).WithOne().HasForeignKey(x => x.JobId);
             b.HasOne<Language>().WithMany().HasForeignKey(x => x.LocalLanguageId);
             b.HasOne<Organisations.Organisation>().WithMany().HasForeignKey(x => x.OrganisationId);
             b.HasOne<Location>().WithMany().HasForeignKey(x => x.OfficeLocationId);
+            b.HasMany(x => x.ScreeningQuestions).WithOne().HasForeignKey(x => x.JobId).IsRequired();
             b.Property(e => e.Type).HasConversion<int>();
         });
 
@@ -132,16 +131,17 @@ public class JobPortalDbContext :
             b.ConfigureByConvention();
         });
 
-        builder.Entity<SupplementalPay>(b =>
-        {
-            b.ToTable(JobPortalConsts.DbTablePrefix + "SupplementalPays", JobPortalConsts.DbSchema);
-            b.ConfigureByConvention();
-        });
-
         builder.Entity<SupportingDocument>(b =>
         {
             b.ToTable(JobPortalConsts.DbTablePrefix + "SupportingDocuments", JobPortalConsts.DbSchema);
             b.ConfigureByConvention();
+        });
+
+        builder.Entity<ScreeningQuestion>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "ScreeningQuestions", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasOne<Jobs.Job>().WithMany(x => x.ScreeningQuestions).HasForeignKey(x => x.JobId);
         });
 
         builder.Entity<Location>(b =>
@@ -151,17 +151,6 @@ public class JobPortalDbContext :
             b.Property(e => e.Latitude).HasPrecision(8, 6);
             b.Property(e => e.Longitude).HasPrecision(9, 6);
             b.HasIndex(e => e.Name);
-        });
-
-        builder.Entity<JobCategory>(b =>
-        {
-            b.ToTable(JobPortalConsts.DbTablePrefix + "JobCategories", JobPortalConsts.DbSchema);
-            b.ConfigureByConvention();
-            //define composite key
-            b.HasKey(x => new { x.JobId, x.CategoryId });
-            //many-to-many configuration
-            b.HasOne<Jobs.Job>().WithMany(x => x.Categories).HasForeignKey(x => x.JobId);
-            b.HasIndex(x => new { x.JobId, x.CategoryId });
         });
 
         builder.Entity<JobSchedule>(b =>
@@ -174,18 +163,6 @@ public class JobPortalDbContext :
             b.HasOne<Jobs.Job>().WithMany(x => x.Schedules).HasForeignKey(x => x.JobId);
             b.HasOne<Schedule>().WithMany().HasForeignKey(x => x.ScheduleId);
             b.HasIndex(x => new { x.JobId, x.ScheduleId });
-        });
-
-        builder.Entity<JobSupplementalPay>(b =>
-        {
-            b.ToTable(JobPortalConsts.DbTablePrefix + "JobSupplementalPays", JobPortalConsts.DbSchema);
-            b.ConfigureByConvention();
-            //define composite key
-            b.HasKey(x => new { x.JobId, x.SupplementalPayId });
-            //many-to-many configuration
-            b.HasOne<Jobs.Job>().WithMany(x => x.SupplementalPays).HasForeignKey(x => x.JobId);
-            b.HasOne<SupplementalPay>().WithMany().HasForeignKey(x => x.SupplementalPayId);
-            b.HasIndex(x => new { x.JobId, x.SupplementalPayId });
         });
 
         builder.Entity<JobSupportingDocument>(b =>

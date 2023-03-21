@@ -21,8 +21,6 @@ public class JobPortalApplicationAutoMapperProfile : Profile
         CreateMap<Organisation, OrganisationDto>();
         CreateMap<PaymentRequest, PaymentRequestDto>();
         CreateMap<CreateJobDto, Jobs.Job>()
-            .ForMember(d => d.Skills,
-                        op => op.MapFrom(o => (o.Skills != null && o.Skills.Length > 0) ? string.Join(", ", o.Skills) : string.Empty))
             .ForMember(d => d.SalaryFrom,
                     op => op.MapFrom(o => o.SalaryMinimum))
             .ForMember(d => d.SalaryTo,
@@ -35,11 +33,9 @@ public class JobPortalApplicationAutoMapperProfile : Profile
                     op => op.MapFrom(o => o.PaymentOption))
             .ForMember(d => d.Schedules,
                     op => op.Ignore())
-            .ForMember(d => d.Categories,
-                    op => op.Ignore())
-            .ForMember(d => d.SupplementalPays,
-                    op => op.Ignore())
             .ForMember(d => d.SupportingDocuments,
+                    op => op.Ignore())
+            .ForMember(d => d.ScreeningQuestions,
                     op => op.Ignore())
             .ForMember(d => d.ApplicationDeadline,
                     op => op.MapFrom(o => o.ApplicationDeadline.HasValue ? o.ApplicationDeadline : DateTime.UtcNow.AddDays(JobConsts.DefaultJobDuration)));

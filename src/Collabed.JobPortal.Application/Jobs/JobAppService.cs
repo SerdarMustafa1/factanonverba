@@ -71,12 +71,12 @@ namespace JobPortal.Jobs
 
             var organisationId = Guid.Parse(organisationClaim.Value);
             var job = await _jobManager.CreateAsync(organisationId);
+            var screeningQuestions = _jobManager.CreateScreeningQuestions(input.ScreeningQuestions, job.Id);
 
             ObjectMapper.Map(input, job);
-            job.SetCategories(input.Categories)
-               .SetSchedules(input.JobSchedules)
-               .SetSupplementalPays(input.SupplementalPay)
-               .SetSupportingDocs(input.SupportingDocuments);
+            job.SetSchedules(input.JobSchedules)
+               .SetSupportingDocs(input.SupportingDocuments)
+               .ScreeningQuestions = screeningQuestions;
 
             var newJob = await _jobRepository.InsertAsync(job);
             return ObjectMapper.Map<Job, JobDto>(newJob);

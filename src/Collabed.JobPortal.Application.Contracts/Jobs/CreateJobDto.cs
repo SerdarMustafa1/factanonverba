@@ -10,7 +10,7 @@ namespace Collabed.JobPortal.Jobs
         public string Title { get; set; }
         public string Description { get; set; }
         public string SubDescription { get; set; }
-        public string[] Skills { get; set; }
+        public string Skills { get; set; }
         public int? OfficeLocationId { get; set; }
         public DateTime? StartDate { get; set; }
         public bool? IsLocalLanguageRequired { get; set; }
@@ -29,10 +29,11 @@ namespace Collabed.JobPortal.Jobs
         public SalaryPeriod? PaymentOption { get; set; }
         public JobLocation? JobLocation { get; set; }
         public ExperienceLevel? ExperienceLevel { get; set; }
-        public ICollection<int> Categories { get; set; }
+        public int CategoryId { get; set; }
         public ICollection<int> JobSchedules { get; set; }
-        public ICollection<int> SupplementalPay { get; set; }
+        public string SupplementalPay { get; set; }
         public ICollection<int> SupportingDocuments { get; set; }
+        public IEnumerable<(string, bool)> ScreeningQuestions { get; set; }
         public string OtherDocuments { get; set; }
     }
 }
