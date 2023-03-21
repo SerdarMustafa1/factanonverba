@@ -33,7 +33,7 @@ namespace Collabed.JobPortal.Jobs
         public ICollection<int> JobSchedules { get; set; }
         public string SupplementalPay { get; set; }
         public ICollection<int> SupportingDocuments { get; set; }
-        public IEnumerable<(string, bool)> ScreeningQuestions { get; set; }
+        public IEnumerable<(string, bool?)> ScreeningQuestions { get; set; }
         public string OtherDocuments { get; set; }
     }
 }

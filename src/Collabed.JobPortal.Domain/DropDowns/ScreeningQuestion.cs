@@ -6,7 +6,7 @@ namespace Collabed.JobPortal.DropDowns
     public class ScreeningQuestion : Entity<Guid>
     {
         public string Name { get; private set; }
-        public bool IsAutoRejectQuestion { get; private set; } = false;
+        public bool? AutoRejectAnswer { get; private set; }
         public Guid JobId { get; set; }
 
         /* This constructor is for deserialization / ORM purpose */
@@ -14,11 +14,11 @@ namespace Collabed.JobPortal.DropDowns
         {
         }
 
-        public ScreeningQuestion(Guid id, Guid jobId, string name, bool isAutoRejectQuestion) : base(id)
+        public ScreeningQuestion(Guid id, Guid jobId, string name, bool? isAutoRejectQuestion) : base(id)
         {
             JobId = jobId;
             Name = name;
-            IsAutoRejectQuestion = isAutoRejectQuestion;
+            AutoRejectAnswer = isAutoRejectQuestion;
         }
     }
 }

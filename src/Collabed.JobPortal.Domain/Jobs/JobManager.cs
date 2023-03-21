@@ -34,13 +34,13 @@ namespace Collabed.JobPortal.Jobs
             return job;
         }
 
-        public IEnumerable<ScreeningQuestion> CreateScreeningQuestions(IEnumerable<(string, bool)> screeningQuestions, Guid jobId)
+        public IEnumerable<ScreeningQuestion> CreateScreeningQuestions(IEnumerable<(string, bool?)> screeningQuestions, Guid jobId)
         {
             var screeningQuestionsCollection = new List<ScreeningQuestion>();
 
-            foreach (var (text, isAutoReject) in screeningQuestions)
+            foreach (var (text, autoRejectAnswer) in screeningQuestions)
             {
-                screeningQuestionsCollection.Add(new ScreeningQuestion(GuidGenerator.Create(), jobId, text, isAutoReject));
+                screeningQuestionsCollection.Add(new ScreeningQuestion(GuidGenerator.Create(), jobId, text, autoRejectAnswer));
             }
 
             return screeningQuestionsCollection;
