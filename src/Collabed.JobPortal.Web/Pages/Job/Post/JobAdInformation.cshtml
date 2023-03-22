@@ -407,7 +407,7 @@
                         <div class="row">
                             <div class="col">
                                 <label asp-for="PositionsAvailable">Positions Available</label>
-                                <input type="number" class="form-control" asp-for="PositionsAvailable" placeholder="Type" aria-label="available positions" />
+                                <input type="number" class="form-control" asp-for="PositionsAvailable" min="1" placeholder="Type" aria-label="available positions" />
                                 <span asp-validation-for="PositionsAvailable"></span>
                             </div>
                         </div>
