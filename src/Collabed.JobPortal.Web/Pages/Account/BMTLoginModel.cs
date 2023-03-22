@@ -1,20 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
-using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 
 namespace Collabed.JobPortal.Web.Pages.Account
@@ -34,7 +28,8 @@ namespace Collabed.JobPortal.Web.Pages.Account
         public string Password { get; set; }
 
         [BindProperty]
-        public bool RememberMe { get; set; }
+        public bool RememberMe { get; set; } = true;
+
         public BMTLoginModel(IAuthenticationSchemeProvider schemeProvider, IOptions<AbpAccountOptions> accountOptions, IOptions<IdentityOptions> identityOptions)
             : base(schemeProvider, accountOptions, identityOptions)
         {
