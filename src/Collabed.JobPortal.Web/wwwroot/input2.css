@@ -1,0 +1,36 @@
+﻿
+:root {
+    --neutral-white: #FAFAFA;
+    --neutral25: #FCFCFD;
+    --neutral100: #F2F4F7;
+    --neutral200: #EAECF0;
+    --neutral300: #D0D5DD;
+    --neutral500: #667085;
+    --neutral600: #475467;
+    --neutral700: #344054;
+    --neutral900: #101828;
+    --secondary800: #2F70B6;
+    --gray300: #DEE2E6;
+    --gray400: #CED4DA;
+    --gray600: #6C757D;
+    --gray900: #101828;
+    --primary800: #0C3779;
+}
+
+
+input.form-control {
+    background-color: var(--neutral-white) !important;
+}
+
+textarea.form-control {
+    background-color: var(--neutral-white) !important;
+}
+
+select.form-select {
+    background-color: var(--neutral-white) !important;
+    color: var(--gray600) !important;
+}
+
+hr {
+    border: 1px solid var(--neutral300);
+}

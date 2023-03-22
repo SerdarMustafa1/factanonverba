@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.basic": "^7.0.1",
-    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "~1.0.0",
     "bootstrap-icons": "^1.10.3"
   }
 }

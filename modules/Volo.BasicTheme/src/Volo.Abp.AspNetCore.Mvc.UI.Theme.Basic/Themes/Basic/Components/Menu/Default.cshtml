@@ -1,6 +1,8 @@
 ﻿@using Volo.Abp.UI.Navigation
 @model ApplicationMenu
-@foreach (var menuItem in Model.Items)
+
+@*<div style="color: black">beginning of Components/Menu</div>
+*@@foreach (var menuItem in Model.Items)
 {
     var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
     var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
@@ -48,3 +50,5 @@
         </li>
     }
 }
+
+@*                        <div style="color: black"> end of Components/Menu</div>*@

@@ -4,9 +4,16 @@
     src: url('fonts/Montserrat/static/Montserrat-Regular.ttf');
 }
 
+@media (min-width: 1900px) {
+    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+        max-width: 1832px;
+    }
+}
+
 :root {
     --neutral-white: #FAFAFA;
     --neutral25: #FCFCFD;
+    --neutral100: #F2F4F7;
     --neutral200: #EAECF0;
     --neutral300: #D0D5DD;
     --neutral500: #667085;
@@ -14,19 +21,34 @@
     --neutral700: #344054;
     --neutral900: #101828;
     --secondary800: #2F70B6;
+    --gray300: #DEE2E6;
     --gray900: #101828;
+    --primary800: #0C3779;
+    --theme-primary: #2F70B6;
+    --theme-secondary: #344054;
+    --theme-danger: #DC3545;
 }
 
 ::-ms-reveal {
     display: none;
 }
 
-input {
-    background-color: var(--neutral-white);
-}
+/*.nav-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    width: 155px;
+    height: 39px;
+    padding: 8px 16px 9px;
+    gap: 4px
+}*/
 
-input[type=checkbox]:checked {
-    background-color: var(--secondary800);
+.tab-content {
+    background-color: var(--neutral25);
+    border: 1px solid #DEE2E6;
 }
 
 body {
@@ -45,18 +67,9 @@ label {
     width:400px !important;
 }
 
-.input-group-password-icon {
-    width: 20px;
-    text-align: center;
-    display: table-cell;
-    vertical-align: middle;
-}
-
 .footer {
-    position: fixed;
     height: 76px;
     width: 100%;
-    bottom: 0;
     background-color: var(--neutral25);
 }
 
@@ -64,7 +77,87 @@ label {
     padding: 1.5rem
 }
 
+.btn-primary{
+    background-color: var(--secondary800) !important;
+    border-color: var(--secondary800) !important;
+    border-radius: 4px;
+    gap: 1%;
+}
 
+.btn-primary:disabled {
+    background-color: var(--neutral300) !important;
+    border-color: var(--neutral300) !important;
+}
+
+.btn-primary:active {
+    background-color: var(--primary800) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary800) !important;
+}
+
+.btn-primary:focus {
+    outline: 4px solid var(--neutral300) !important;
+    box-shadow: 0px 0px 0px 4px var(--neutral300);
+}
+
+.btn-primary {
+    background-color: var(--secondary800) !important;
+    border-color: var(--secondary800) !important;
+    border-radius: 4px;
+    gap: 1%;
+}
+
+.btn-secondary:disabled {
+    background-color: transparent !important;
+    border-color: var(--neutral300) !important;
+    color: var(--neutral300) !important;
+}
+
+.btn-secondary:active {
+    background-color: var(--neutral500) !important;
+}
+
+.btn-secondary:hover {
+    background-color: var(--neutral500) !important;
+}
+
+.btn-secondary:focus {
+    outline: 4px solid var(--neutral300) !important;
+    box-shadow: 0px 0px 0px 4px var(--neutral300);
+}
+
+.btn-outline-secondary:disabled {
+    background-color: transparent !important;
+    border-color: #ADB5BD !important;
+    color: #ADB5BD !important;
+}
+
+.btn-outline-secondary:active {
+    background-color: #344054 !important;
+    border-color: #344054 !important;
+    color: var(--neutral-white);
+}
+
+.btn-outline-secondary:hover {
+    background-color: #344054 !important;
+    border-color: #344054 !important;
+    color: var(--neutral-white);
+}
+
+.btn-outline-secondary:focus {
+    outline: 4px solid var(--neutral300) !important;
+    box-shadow: 0px 0px 0px 4px var(--neutral300);
+    background-color: #5C636A !important;
+    border-color: #5C636A !important;
+    color: var(--neutral-white);
+}
+
+.card-header-tabs .nav-link.active {
+    background-color: var(--neutral-white);
+    border-bottom-color: var(--neutral25);
+}
 
 .spacer {
     margin-bottom: 90px; 
@@ -80,102 +173,25 @@ label {
     border: 0px;
 }
 
-.input-group-error {
-    height: 30px;
-    border: 1px solid;
-    border-color: red;
-    background-color: white;
-    border-radius: 6px;
-}
-
-.input-group {
-    height: 30px;
-    background-color: white;
-}
-
-.input-group-correct {
-    border: 1px solid;
-    border-color: var(--neutral300);
-    border-radius: 6px;
-}
-
 .text-validation-error {
-    color: red;
+    color: var(--theme-danger);
 }
 
-textarea:focus,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="date"]:focus,
-input[type="month"]:focus,
-input[type="time"]:focus,
-input[type="week"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="search"]:focus,
-input[type="tel"]:focus,
-input[type="color"]:focus,
-.uneditable-input:focus {
-    outline: 0 none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
+.error-message-span {
+    color: var(--theme-danger);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
 }
 
-input:focus {
-    outline: 0 none !important;
-    box-shadow:none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
+.red-border {
+    border: 1px solid #DC3545;
 }
 
-.form-control {
-    height: 100%;
-    display: block;
-    width: 100%;
-    padding: 10px;
-    color: dimgray;
-    background-clip: padding-box;
-    border: 0px;
-    appearance: none;
-    outline: 0 none !important;
-}
-
-.form-control :focus {
-    outline: 0px !important;
-}
-
-.input-group:focus-within {
-    outline: 3px solid #CED7E4;
-}
-
-
-.input-group-prepend {
-    width: 30px;
-    border-right: 1px;
-    border-left: 0px;
-    border-top: 0px;
-    border-bottom: 0px;
-    border-radius: 6px;
-    display: flex;
-    place-content: center;
-    place-items: center;
-    background-color: white;
-}
-
-.input-group-append {
-    width: 30px;
-    border-left: 0px;
-    border-right: 1px;
-    border-top: 0px;
-    border-bottom: 0px;
-    border-radius: 6px;
-    display: flex;
-    place-content: center;
-    place-items: center;
-    background-color: white;
+.hint-14-bold {
+    font-size: 14px;
+    color: #212529;
+    font-weight:600;
 }
 
 .hint-14 {
@@ -228,6 +244,12 @@ input:focus {
     font-size: 16px;
     font-weight: 400;
     color: var(--neutral600);
+}
+
+.text-16-bold {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--neutral700);
 }
 
 .text-14 {

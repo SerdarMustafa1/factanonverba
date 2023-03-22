@@ -74,8 +74,7 @@ namespace JobPortal.Jobs
             var screeningQuestions = _jobManager.CreateScreeningQuestions(input.ScreeningQuestions, job.Id);
 
             ObjectMapper.Map(input, job);
-            job.SetSchedules(input.JobSchedules)
-               .SetSupportingDocs(input.SupportingDocuments)
+            job.SetSupportingDocs(input.SupportingDocuments)
                .ScreeningQuestions = screeningQuestions;
 
             var newJob = await _jobRepository.InsertAsync(job);

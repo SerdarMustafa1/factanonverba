@@ -1,0 +1,77 @@
+﻿
+:root {
+    --neutral-white: #FAFAFA;
+    --neutral25: #FCFCFD;
+    --neutral100: #F2F4F7;
+    --neutral200: #EAECF0;
+    --neutral300: #D0D5DD;
+    --neutral500: #667085;
+    --neutral600: #475467;
+    --neutral700: #344054;
+    --neutral900: #101828;
+    --secondary800: #2F70B6;
+    --gray300: #DEE2E6;
+    --gray400: #CED4DA;
+    --gray900: #101828;
+    --primary800: #0C3779;
+}
+
+@media (max-width:900px) {
+    .no-display-on-mobile{
+        display:none;
+    }
+
+    .horizontal-line {
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
+}
+
+@media (max-width:900px){
+    .margin-on-mobile {
+        margin-bottom:24px;
+    }
+}
+
+@media(min-width:900px){
+    .display-on-mobile {
+        display:none;
+    }
+}
+
+.horizontal-line {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.nav-link {
+    color:var(--primary800);
+    font-style:normal;
+    font-weight:600;
+    font-size:16px;
+    line-height:21px;
+}
+
+.active {
+    color: var(--neutral900) !important;
+}
+
+.input-validation-error {
+    border: 2px solid #dc3545;
+}
+
+
+
+i {
+    color: var(--neutral600);
+}
+
+.icon-error {
+    color: #dc3545 !important;
+}
+
+.tab-has-error {
+    border-top: 1px solid #dc3545 !important;
+    border-left: 1px solid #dc3545 !important;
+    border-right: 1px solid #dc3545 !important;
+}
