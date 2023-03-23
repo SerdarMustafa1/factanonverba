@@ -46,6 +46,56 @@ namespace Collabed.JobPortal.Jobs
             return screeningQuestionsCollection;
         }
 
+        /// <summary>
+        /// Min and max salary needs to be converted to yearly rate to make the search by salary easier
+        /// </summary>
+        /// <param name="job"></param>
+        /// <returns></returns>
+        public void ConvertSalaryRates(Job job)
+        {
+            const decimal hoursInWeek = 37.5M;
+            const decimal hoursInDay = 7.5M;
+            const decimal workingDaysInMonth = 21;
+            const decimal workingDaysInYear = 251;
+            const decimal weeksInYear = 50.2M;
+            const decimal monthsInYear = 12;
+
+
+            if (!job.SalaryFrom.HasValue || !job.SalaryTo.HasValue)
+                return;
+
+            var salaryFrom = (decimal)job.SalaryFrom;
+            var salaryTo = (decimal)job.SalaryTo;
+
+            switch (job.SalaryPeriod)
+            {
+                case Types.SalaryPeriod.Hourly:
+                    job.MinSalaryConverted = salaryFrom * hoursInDay * workingDaysInYear;
+                    job.MaxSalaryConverted = salaryTo * hoursInDay * workingDaysInYear;
+                    break;
+                case Types.SalaryPeriod.Daily:
+                    job.MinSalaryConverted = salaryFrom * workingDaysInYear;
+                    job.MaxSalaryConverted = salaryTo * workingDaysInYear;
+                    break;
+                case Types.SalaryPeriod.Weekly:
+                    job.MinSalaryConverted = salaryFrom * weeksInYear;
+                    job.MaxSalaryConverted = salaryTo * weeksInYear;
+                    break;
+                case Types.SalaryPeriod.Monthly:
+                    job.MinSalaryConverted = salaryFrom * monthsInYear;
+                    job.MaxSalaryConverted = salaryTo * monthsInYear;
+                    break;
+                case Types.SalaryPeriod.Yearly:
+                    job.MinSalaryConverted = salaryFrom;
+                    job.MaxSalaryConverted = salaryTo;
+                    break;
+                default:
+                    break;
+            }
+
+            return;
+        }
+
         // Add any other domain service methods
         // Note:    Do not create domain service methods simply to change the
         //          entity properties without any business logic.

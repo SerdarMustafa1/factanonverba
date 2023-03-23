@@ -76,6 +76,7 @@ namespace JobPortal.Jobs
             ObjectMapper.Map(input, job);
             job.SetSupportingDocs(input.SupportingDocuments)
                .ScreeningQuestions = screeningQuestions;
+            _jobManager.ConvertSalaryRates(job);
 
             var newJob = await _jobRepository.InsertAsync(job);
             return ObjectMapper.Map<Job, JobDto>(newJob);
@@ -156,6 +157,7 @@ namespace JobPortal.Jobs
         {
             var existingJob = await _jobRepository.GetByReferenceAsync(jobReference);
             ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, existingJob);
+            _jobManager.ConvertSalaryRates(existingJob);
 
             await _jobRepository.UpdateAsync(existingJob);
             message = $"Updated a job with reference {jobReference}";
@@ -173,6 +175,7 @@ namespace JobPortal.Jobs
             ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, newJob);
             newJob.JobOrigin = jobOrigin;
             newJob.OrganisationId = organisationId;
+            _jobManager.ConvertSalaryRates(newJob);
             await _jobRepository.InsertAsync(newJob);
 
             message = $"Posted a new job with reference {jobReference}";

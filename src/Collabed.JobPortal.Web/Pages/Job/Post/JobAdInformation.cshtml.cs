@@ -4,8 +4,6 @@ using Collabed.JobPortal.Types;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NUglify.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,7 +33,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
 
         [BindProperty]
         [Required(ErrorMessage = "Please enter a job description")]
-        public string JobDescription { get; set; } 
+        public string JobDescription { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "Please provide a sub-description")]
@@ -85,7 +83,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public DateTime? StartDate { get; set; }
 
         [BindProperty]
-        public int? CandidateExperienceLevel { get; set; }  
+        public int? CandidateExperienceLevel { get; set; }
 
         [BindProperty]
         public bool? LocalLanguageRequired { get; set; }
@@ -94,22 +92,22 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public int? LanguageId { get; set; } = 1;
 
         [BindProperty]
-        public bool? OfferingVisaSponsorship { get; set; } 
+        public bool? OfferingVisaSponsorship { get; set; }
 
         [BindProperty]
-        public bool? IsNetZeroCompliant { get; set; }  
+        public bool? IsNetZeroCompliant { get; set; }
 
         [BindProperty]
         public int? SalaryPeriodId { get; set; }
 
         [BindProperty]
-        public double? SalaryMinimum { get; set; } 
+        public double? SalaryMinimum { get; set; }
 
         [BindProperty]
-        public double? SalaryMaximum { get; set; } 
+        public double? SalaryMaximum { get; set; }
 
         [BindProperty]
-        public bool? IsSalaryNegotiable { get; set; } 
+        public bool? IsSalaryNegotiable { get; set; }
 
         [BindProperty]
         public int? PositionsAvailable { get; set; }
@@ -167,7 +165,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                 var createdJob = new CreateJobDto()
                 {
                     ApplicationDeadline = ApplicationDeadline,
-                    JobCategory = JobCategoryId,
+                    CategoryId = JobCategoryId,
                     ContractType = (ContractType)ContractTypeId,
                     Description = JobDescription,
                     EmploymentType = (EmploymentType)EmploymentTypeId,
@@ -187,7 +185,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                     Skills = Skills,
                     StartDate = StartDate,
                     SubDescription = SubDescription,
-                    SupplementalPay = SupplementalPay, 
+                    SupplementalPay = SupplementalPay,
                     SupportingDocuments = SelectedSupportedDocuments.Select(int.Parse).ToList(),
                     Title = JobTitle,
                     ScreeningQuestions = GetScreeningQuestions()
@@ -205,7 +203,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         private IEnumerable<(string, bool?)> GetScreeningQuestions()
         {
             var result = new List<(string, bool?)>();
-            if(!string.IsNullOrWhiteSpace(ScreeningQuestion1) && AutoRejectAnswer1 != null)
+            if (!string.IsNullOrWhiteSpace(ScreeningQuestion1) && AutoRejectAnswer1 != null)
             {
                 result.Add((ScreeningQuestion1, AutoRejectAnswer1));
             }

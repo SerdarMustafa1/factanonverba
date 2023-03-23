@@ -43,11 +43,8 @@ namespace Collabed.JobPortal.EntityFrameworkCore
             var supportingDocs = new List<SupportingDocument>
             {
                 new SupportingDocument(1, "CV"),
-                new SupportingDocument(2, "Reference Letter"),
                 new SupportingDocument(3, "Cover Letter"),
-                new SupportingDocument(4, "Certifications"),
-                new SupportingDocument(5, "Portfolio"),
-                new SupportingDocument(6, "Other")
+                new SupportingDocument(5, "Online Portfolio"),
             };
 
             await _supportingDocumentRepository.InsertManyAsync(supportingDocs);
