@@ -67,6 +67,16 @@ label {
     width:400px !important;
 }
 
+.body-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex-grow: 1;
+}
+
 .footer {
     height: 76px;
     width: 100%;

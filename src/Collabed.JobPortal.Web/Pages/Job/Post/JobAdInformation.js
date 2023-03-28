@@ -30,6 +30,8 @@ let quill = undefined;
 let quillOnKeyUp = () => {
     assignQuillToInput();
     isFormValid();
+    $('#quill-editor-form-group').removeClass('red-border');
+    $('#descriptionErrorMessage').text('');
 }
 
 let assignQuillToInput = () => {

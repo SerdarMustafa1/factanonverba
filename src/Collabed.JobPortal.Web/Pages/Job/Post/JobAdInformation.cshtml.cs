@@ -203,17 +203,17 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         private IEnumerable<(string, bool?)> GetScreeningQuestions()
         {
             var result = new List<(string, bool?)>();
-            if (!string.IsNullOrWhiteSpace(ScreeningQuestion1) && AutoRejectAnswer1 != null)
+            if (!string.IsNullOrWhiteSpace(ScreeningQuestion1))
             {
-                result.Add((ScreeningQuestion1, AutoRejectAnswer1));
+                result.Add((ScreeningQuestion1, AutoRejectAnswer1 ?? null));
             }
-            if (!string.IsNullOrWhiteSpace(ScreeningQuestion2) && AutoRejectAnswer2 != null)
+            if (!string.IsNullOrWhiteSpace(ScreeningQuestion2))
             {
-                result.Add((ScreeningQuestion2, AutoRejectAnswer2));
+                result.Add((ScreeningQuestion2, AutoRejectAnswer2 ?? null));
             }
-            if (!string.IsNullOrWhiteSpace(ScreeningQuestion3) && AutoRejectAnswer3 != null)
+            if (!string.IsNullOrWhiteSpace(ScreeningQuestion3))
             {
-                result.Add((ScreeningQuestion3, AutoRejectAnswer3));
+                result.Add((ScreeningQuestion3, AutoRejectAnswer3 ?? null));
             }
 
             return result;
