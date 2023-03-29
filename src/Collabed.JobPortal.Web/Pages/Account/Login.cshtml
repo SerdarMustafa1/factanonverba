@@ -34,7 +34,12 @@
             Label = "Password", Hint= "Please enter your password",PrependIcon = "bi bi-lock", IsPassword = true})
         <abp-row style="margin-top:1rem;">
             <abp-column>
-                <input asp-for="@Model.RememberMe" class="text-14"/> Remember me
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="@Model.RememberMe" type="checkbox" id="rememberMeCheck">
+                    <label for="rememberMeCheck" class="text-14">
+                       Remember me
+                    </label>
+                </div>
             </abp-column>
             <abp-column class="text-end">
                 <a class="link-14" href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">Forgot Password</a>

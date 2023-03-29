@@ -54,6 +54,10 @@ label {
     font-weight: 600;
 }
 
+label.text-14 {
+    font-weight: 400 !important;
+}
+
 .modal-content {
     width:400px !important;
 }
