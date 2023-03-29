@@ -25,6 +25,10 @@ function validateEmail () {
     appropriateEmail();
 }
 
+const focusInputField = (selector) => {
+    $(selector).focus();
+}
+
 
 let emailError = (message) => {
     $('div#EmailAddress_input-group').removeClass('input-group-correct');

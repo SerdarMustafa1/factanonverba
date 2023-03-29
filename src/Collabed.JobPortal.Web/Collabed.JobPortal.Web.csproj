@@ -16,15 +16,19 @@
 
   <ItemGroup>
     <Compile Remove="Logs\**" />
+    <Compile Remove="Models\**" />
     <Compile Remove="Pages\Shared\JQueryRichTextEditor\**" />
     <Compile Remove="wwwroot\libs\bootstrap-icons\icons\**" />
     <Content Remove="Logs\**" />
+    <Content Remove="Models\**" />
     <Content Remove="Pages\Shared\JQueryRichTextEditor\**" />
     <Content Remove="wwwroot\libs\bootstrap-icons\icons\**" />
     <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="Models\**" />
     <EmbeddedResource Remove="Pages\Shared\JQueryRichTextEditor\**" />
     <EmbeddedResource Remove="wwwroot\libs\bootstrap-icons\icons\**" />
     <None Remove="Logs\**" />
+    <None Remove="Models\**" />
     <None Remove="Pages\Shared\JQueryRichTextEditor\**" />
     <None Remove="wwwroot\libs\bootstrap-icons\icons\**" />
   </ItemGroup>
@@ -73,7 +77,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="node_modules\%40abp\" />
     <Folder Include="wwwroot\client-proxies\" />
   </ItemGroup>

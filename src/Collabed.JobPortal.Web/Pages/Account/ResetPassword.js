@@ -14,6 +14,10 @@ let validateForm = () => {
     }
 }
 
+const focusInputField = (selector) => {
+    $(selector).focus();
+}
+
 let validatePassword = (showErrors) => {
     let passwordAppendIconIdentifier = "i#Password_append-icon";
     let registerPasswordInputField = $("input#Password_input");

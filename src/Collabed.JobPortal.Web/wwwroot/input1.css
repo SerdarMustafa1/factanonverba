@@ -19,14 +19,6 @@
     --primary800: #0C3779;
 }
 
-
-.input-group-password-icon {
-    width: 20px;
-    text-align: center;
-    display: table-cell;
-    vertical-align: middle;
-}
-
 .input-group-error {
     height: 30px;
     border: 1px solid;

@@ -10,6 +10,10 @@ let togglePasswordButton = () => {
     }
 }
 
+const focusInputField = (selector) => {
+    $(selector).focus();
+}
+
 let checkIfEmailExists = (event) => {
     if (submitted) return;
     console.log('checkIfEmailExists');

@@ -21,16 +21,17 @@
         <p class="heading-30">Log in to your account</p>
         <p class="hint-16">Welcome back! Please enter your details.</p>
         <form asp-page="./Login" asp-page-handler="ExternalLogin" method="post">
-            <button type="submit" class="btn btn-primary" style="width:100%;" name="provider" value="LinkedIn" title="LinkedIn"><i class="bi bi-linkedin"></i>       Sign up with LinkedIn</button>        </form>
+            <button type="submit" class="btn btn-primary" style="width:100%; background-color:#0A66C2 !important;" name="provider" value="LinkedIn" title="LinkedIn"><i class="bi bi-linkedin"></i>       Login with LinkedIn</button>
+        </form>
         <br />
         @await Component.InvokeAsync("DividerOr", null)
     </div>
 
     <form method="post" onsubmit="checkIfUserExists(event)" id="loginForm" class="mt-4">
         @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.UserNameOrEmailAddress), HtmlTitle=Model.UserNameOrEmailAddress,
-            PrependIcon = "bi bi-envelope", Label = "Email", Hint= "Please enter your email address"})
+            PrependIcon = "bi bi-envelope", Label = "Email", InlineWithPassword = true, Hint= "Please enter your email address"})
         @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", PropertyName = "Password", HtmlTitle="Password",
-            Label = "Password", Hint= "Please enter your password",PrependIcon = "bi bi-lock", AppendIcon = "bi bi-exclamation-circle", IsPassword = true})
+            Label = "Password", Hint= "Please enter your password",PrependIcon = "bi bi-lock", IsPassword = true})
         <abp-row style="margin-top:1rem;">
             <abp-column>
                 <input asp-for="@Model.RememberMe" class="text-14"/> Remember me

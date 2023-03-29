@@ -12,6 +12,7 @@
 
     var passOnClickHandler =  "togglePasswordVisibility('" + Model.PropertyName + "')";
     var passOnKeyDown = "showOrHideVisibilityButton('" + Model.PropertyName + "')";
+    var focusInputField = "focusInputField('#" + Model.PropertyName + "_input')";
 }
 
 <div id="@(Model.PropertyName + "_container")">
@@ -22,14 +23,23 @@
     <div class="input-group input-group-correct" id=@(Model.PropertyName + "_input-group")>
         @if (!Model.PrependIcon.IsNullOrWhiteSpace())
         {
-            <div class="input-group-prepend"><i class="@Model.PrependIcon" aria-hidden="true"></i></div>
+            <div class="input-group-prepend" onclick=@focusInputField><i class="@Model.PrependIcon" onclick=@focusInputField aria-hidden="true"></i></div>
         }
         @if (Model.IsPassword)
         {
             <input class="@inputFieldClass" id="@(Model.PropertyName + "_input")"
                name="@Model.PropertyName" type="@Model.InputType" placeholder="@Model.Placeholder"
                title="@Model.HtmlTitle" onkeyup="@Model.OnKeyUp" value="@Model.PropertyValue" onkeydown=@passOnKeyDown />
-            <div class="input-group-password-icon"><i class="bi bi-eye" id=@(Model.PropertyName + "_visibility-icon") onclick=@passOnClickHandler hidden></i></div>
+            <div class="input-group-append" onclick=@focusInputField>
+                <i class="bi bi-eye" id=@(Model.PropertyName + "_visibility-icon") onclick=@passOnClickHandler hidden></i>
+            </div>
+        }
+        else if(Model.InlineWithPassword)
+        {
+            <input class="@inputFieldClass" id="@(Model.PropertyName + "_input")"
+               name="@Model.PropertyName" type="@Model.InputType" placeholder="@Model.Placeholder"
+               title="@Model.HtmlTitle" onkeyup="@Model.OnKeyUp" value="@Model.PropertyValue" />
+            <div class="input-group-append" onclick=@focusInputField><i class="bi bi-eye" id=@(Model.PropertyName + "_visibility-icon") hidden></i></div>
         }
         else
         {
@@ -39,8 +49,8 @@
         }
         @if (!Model.AppendIcon.IsNullOrWhiteSpace())
         {
-            <div class="input-group-append"><i class="@Model.AppendIcon" id=@(Model.PropertyName + "_append-icon") aria-hidden="true" hidden></i></div>
+            <div class="input-group-append" onclick=@focusInputField><i class="@Model.AppendIcon" id=@(Model.PropertyName + "_append-icon") onclick=@focusInputField aria-hidden="true" hidden></i></div>
         }
     </div>
-    <span id="@(Model.PropertyName + "_hint")">@Model.Hint</span>
+    <span id="@(Model.PropertyName + "_hint")" class="hint-14">@Model.Hint</span>
 </div>

@@ -1,14 +1,17 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 @model Toolbar
-@*<p style="color: black;">Beginning of Components/Toolbar/Default</p>
-*@@foreach (var toolbarItem in Model.Items.OrderBy(i => i.Order))
-{
-    <li class="nav-item">@(await Component.InvokeAsync(toolbarItem.ComponentType))</li>
-}
+
 @if (!User.Identity.IsAuthenticated)
 {
-    <li class="nav-item"><a class="btn btn-primary" href="@Url.Page("/Account/SignUp")">Sign up</a></li>
+    <li class="nav-item"><a class="btn btn-outline-secondary" href="@Url.Page("/Account/Login")">Log in</a></li>
+    <li class="nav-item"><a class="btn btn-primary-14" href="@Url.Page("/Account/SignUp")">Sign up</a></li>
 }
-
-@*<p style="color: black;">End of Components/Toolbar/Default</p>
-*@
+else
+{
+    @foreach (var toolbarItem in Model.Items.OrderBy(i => i.Order))
+    {
+        <li class="nav-item">
+            @(await Component.InvokeAsync(toolbarItem.ComponentType))
+        </li>
+    }
+}

@@ -10,45 +10,42 @@
 <div class="row">
     <div class="col">
         <div class="dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                @if (CurrentUser.TenantId != null)
-                {
-                    <small><i>@CurrentTenant.Name</i>\</small>
-
-                    @CurrentUser.UserName
-                }
-                else
-                {
-                    @CurrentUser.UserName
-                }
-            </a>
-
-            @if (Model.Items.Any())
-            {
-                <div class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="dropdownMenuLink">
-                    @foreach (var menuItem in Model.Items)
+                <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @if (CurrentUser.TenantId != null)
                     {
-                        var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
-                        var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
-                        var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
-                        var url = string.IsNullOrEmpty(menuItem.Url) ? "#" : Url.Content(menuItem.Url);
+                        <small><i>@CurrentTenant.Name</i>\</small>
 
-                        <a class="dropdown-item @cssClass @disabled" href="@url" target="@menuItem.Target" @Html.Raw(elementId)>
-                            @if (menuItem.Icon != null)
-                            {
-                                if (menuItem.Icon.StartsWith("fa"))
-                                {
-                                    <i class="@menuItem.Icon"></i>
-                                }
-                            }
-                            @menuItem.DisplayName
-                        </a>
+                        @CurrentUser.UserName
                     }
-                </div>
-            }
+                    else
+                    {
+                        @CurrentUser.UserName
+                    }
+                </a>
+
+                @if (Model.Items.Any())
+                {
+                    <div class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="dropdownMenuLink">
+                        @foreach (var menuItem in Model.Items)
+                        {
+                            var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
+                            var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
+                            var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
+                            var url = string.IsNullOrEmpty(menuItem.Url) ? "#" : Url.Content(menuItem.Url);
+
+                            <a class="dropdown-item @cssClass @disabled" href="@url" target="@menuItem.Target" @Html.Raw(elementId)>
+                                @if (menuItem.Icon != null)
+                                {
+                                    if (menuItem.Icon.StartsWith("fa"))
+                                    {
+                                        <i class="@menuItem.Icon"></i>
+                                    }
+                                }
+                                @menuItem.DisplayName
+                            </a>
+                        }
+                    </div>
+                }
         </div>
-    </div>
-    <div class="col">
-        <a class="btn btn-secondary" href="@Url.Page("/Account/Logout")">Logout</a>
     </div>
 </div>

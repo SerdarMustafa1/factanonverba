@@ -33,18 +33,9 @@
     display: none;
 }
 
-/*.nav-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    width: 155px;
-    height: 39px;
-    padding: 8px 16px 9px;
-    gap: 4px
-}*/
+li.nav-item {
+    margin-inline: 6px;
+}
 
 .tab-content {
     background-color: var(--neutral25);
@@ -87,11 +78,11 @@ label {
     padding: 1.5rem
 }
 
-.btn-primary{
+.btn-primary {
     background-color: var(--secondary800) !important;
     border-color: var(--secondary800) !important;
-    border-radius: 4px;
-    gap: 1%;
+    border-radius: 8px !important;
+    color: #FAFAFA !important;
 }
 
 .btn-primary:disabled {
@@ -112,57 +103,30 @@ label {
     box-shadow: 0px 0px 0px 4px var(--neutral300);
 }
 
-.btn-primary {
+.btn-primary-14 {
     background-color: var(--secondary800) !important;
     border-color: var(--secondary800) !important;
-    border-radius: 4px;
-    gap: 1%;
+    border-radius: 8px !important;
+    color: #FAFAFA !important;
 }
 
-.btn-secondary:disabled {
-    background-color: transparent !important;
-    border-color: var(--neutral300) !important;
-    color: var(--neutral300) !important;
-}
+    .btn-primary-14:disabled {
+        background-color: var(--neutral300) !important;
+        border-color: var(--neutral300) !important;
+    }
 
-.btn-secondary:active {
-    background-color: var(--neutral500) !important;
-}
+    .btn-primary-14:active {
+        background-color: var(--primary800) !important;
+    }
 
-.btn-secondary:hover {
-    background-color: var(--neutral500) !important;
-}
+    .btn-primary-14:hover {
+        background-color: var(--primary800) !important;
+    }
 
-.btn-secondary:focus {
-    outline: 4px solid var(--neutral300) !important;
-    box-shadow: 0px 0px 0px 4px var(--neutral300);
-}
-
-.btn-outline-secondary:disabled {
-    background-color: transparent !important;
-    border-color: #ADB5BD !important;
-    color: #ADB5BD !important;
-}
-
-.btn-outline-secondary:active {
-    background-color: #344054 !important;
-    border-color: #344054 !important;
-    color: var(--neutral-white);
-}
-
-.btn-outline-secondary:hover {
-    background-color: #344054 !important;
-    border-color: #344054 !important;
-    color: var(--neutral-white);
-}
-
-.btn-outline-secondary:focus {
-    outline: 4px solid var(--neutral300) !important;
-    box-shadow: 0px 0px 0px 4px var(--neutral300);
-    background-color: #5C636A !important;
-    border-color: #5C636A !important;
-    color: var(--neutral-white);
-}
+    .btn-primary-14:focus {
+        outline: 4px solid var(--neutral300) !important;
+        box-shadow: 0px 0px 0px 4px var(--neutral300);
+    }
 
 .card-header-tabs .nav-link.active {
     background-color: var(--neutral-white);

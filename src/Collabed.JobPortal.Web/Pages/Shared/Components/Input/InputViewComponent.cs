@@ -19,10 +19,10 @@ namespace Collabed.JobPortal.Web.Pages.Shared.Components.Input
         /// <param name="onKeyUp">JS Function to perform when onKeyUp event will be fired. Requires the JS function's name visible in the Razor Page's scope.</param>
         /// <returns></returns>
         public async Task<IViewComponentResult> InvokeAsync(string propertyName, string inputType, string htmlTitle, string placeholder, string propertyValue = "", string prependIcon = "",
-            string appendIcon = "", string onKeyUp = "", string label = "", string hint = "", bool isPassword = false)
+            string appendIcon = "", string onKeyUp = "", string label = "", string hint = "", bool isPassword = false, bool inlineWithPassword = false)
         {
             return View(new InputViewModel() { PropertyName = propertyName, PropertyValue = propertyValue, InputType = inputType, HtmlTitle = htmlTitle, Placeholder = placeholder,
-                PrependIcon = prependIcon, AppendIcon = appendIcon, OnKeyUp = onKeyUp, Label = label, Hint = hint, IsPassword = isPassword});
+                PrependIcon = prependIcon, AppendIcon = appendIcon, OnKeyUp = onKeyUp, Label = label, Hint = hint, IsPassword = isPassword, InlineWithPassword = inlineWithPassword});
         }
     }
 }

@@ -23,6 +23,10 @@ let checkIfUserExists = (event) => {
         });
 }
 
+const focusInputField = (selector) => {
+    $(selector).focus();
+}
+
 let userNameOrEmailError = (message) => {
     $('div#UserNameOrEmailAddress_input-group').addClass('input-group-error');
     $('div#UserNameOrEmailAddress_input-group').removeClass('input-group-correct');

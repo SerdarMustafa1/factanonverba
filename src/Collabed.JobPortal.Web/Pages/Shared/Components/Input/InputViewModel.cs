@@ -14,5 +14,6 @@
         public string Label { get; set; }
         public string Hint { get; set; }
         public bool IsPassword { get; set; }
+        public bool InlineWithPassword { get; set; }
     }
 }

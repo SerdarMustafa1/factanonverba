@@ -24,6 +24,5 @@ public class BasicThemeMainTopToolbarContributor : IToolbarContributor
         {
             context.Toolbar.Items.Add(new ToolbarItem(typeof(UserMenuViewComponent)));
         }
-
     }
 }
