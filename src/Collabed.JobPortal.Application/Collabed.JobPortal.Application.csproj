@@ -6,15 +6,18 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Collabed.JobPortal</RootNamespace>
 	<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+	<UserSecretsId>cfe44353-9963-40fb-bc03-571b3392ef57</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Account\Emailing\Templates\BmtPasswordResetLink.tpl" />
     <None Remove="Account\Emailing\Templates\ConfirmEmail.tpl" />
+    <None Remove="Account\Emailing\Templates\ThirdPartyApplication.tpl" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Account\Emailing\Templates\BmtPasswordResetLink.tpl" />
+    <EmbeddedResource Include="Account\Emailing\Templates\ThirdPartyApplication.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\ConfirmEmail.tpl" />
   </ItemGroup>
 

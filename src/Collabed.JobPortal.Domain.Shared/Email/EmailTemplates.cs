@@ -15,6 +15,7 @@
         // Subjects
         public static string RegistrationSubject = "Welcome to Build My Talent!";
         public static string ConfirmEmailSubject = "Confirm your email";
+        public static string JobApplicationSubject = "Job application";
 
         // Simple body templates
     }

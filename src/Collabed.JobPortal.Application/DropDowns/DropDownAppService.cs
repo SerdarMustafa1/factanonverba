@@ -41,7 +41,7 @@ namespace Collabed.JobPortal.DropDowns
                 async () => (await _categoriesRepository.GetListAsync()).OrderBy(x => x.Name).Select(x => new DropDownDto(x.Id, x.Name)),
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddDays(30),
+                    AbsoluteExpiration = DateTimeOffset.Now.AddDays(1),
                 }
             );
         }

@@ -159,6 +159,7 @@ namespace JobPortal.Jobs
             ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, existingJob);
             _jobManager.ConvertSalaryRates(existingJob);
 
+            existingJob.ScreeningQuestions = _jobManager.CreateScreeningQuestions(ConvertScreeningQuestions(externalJobRequest.ScreeningQuestions), existingJob.Id);
             await _jobRepository.UpdateAsync(existingJob);
             message = $"Updated a job with reference {jobReference}";
 
@@ -168,19 +169,43 @@ namespace JobPortal.Jobs
         private async Task<string> InsertNewJobAsync(ExternalJobRequest externalJobRequest, JobOrigin jobOrigin, string message, string jobReference)
         {
             await CheckIfJobReferenceExistsAsync(externalJobRequest.Reference);
-            var organisationId = await GetOrganisationAsync(externalJobRequest.ContactEmail);
-            await DeductOrganisationsCredits(organisationId, externalJobRequest.ContactEmail);
+            // TODO: Implement post MVP, once business requirements are specified
+            //var organisationId = await GetOrganisationAsync(externalJobRequest.ContactEmail);
+            //await DeductOrganisationsCredits(organisationId, externalJobRequest.ContactEmail);
 
             var newJob = _jobManager.CreateExternal(jobReference);
             ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, newJob);
             newJob.JobOrigin = jobOrigin;
-            newJob.OrganisationId = organisationId;
             _jobManager.ConvertSalaryRates(newJob);
+
+            newJob.ScreeningQuestions = _jobManager.CreateScreeningQuestions(ConvertScreeningQuestions(externalJobRequest.ScreeningQuestions), newJob.Id);
             await _jobRepository.InsertAsync(newJob);
 
             message = $"Posted a new job with reference {jobReference}";
 
             return message;
+        }
+
+        private static IEnumerable<(string, bool?)> ConvertScreeningQuestions(IEnumerable<ScreeningQuestion> screeningQuestions)
+        {
+            foreach (var item in screeningQuestions)
+            {
+                bool? answer;
+                if (string.IsNullOrEmpty(item.CorrectAnswer))
+                {
+                    answer = null;
+                }
+                else
+                {
+                    answer =item.CorrectAnswer.ToLower() switch
+                    {
+                        "yes" => true,
+                        "no" => false,
+                        _ => null,
+                    };
+                }
+                yield return (item.Question, answer);
+            }
         }
 
         private async Task CheckIfJobReferenceExistsAsync(string reference)

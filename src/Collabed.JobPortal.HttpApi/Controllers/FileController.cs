@@ -1,11 +1,7 @@
 ﻿using Collabed.JobPortal.BlobStorage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -27,6 +23,17 @@ namespace Collabed.JobPortal.Controllers
             var fileDto = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = fileName });
 
             return File(fileDto.Content, "application/octet-stream", fileDto.Name);
+        }
+
+        [HttpPost("upload")]
+        public async Task Upload(IFormFile file)
+        {
+            using var ms = new MemoryStream();
+            file.CopyTo(ms);
+            var fileBytes = ms.ToArray();
+            await _fileAppService.SaveBlobAsync(new SaveBlobInputDto { Name = file.FileName, Content = fileBytes });
+
+            //TODO: Store file reference in sql against user
         }
     }
 }

@@ -7,8 +7,6 @@ using Volo.Abp.TextTemplating;
 
 namespace Collabed.JobPortal.Account.Emailing.Templates
 {
-    //[Dependency(ReplaceServices = true)]
-    //[ExposeServices(typeof(AccountEmailTemplateDefinitionProvider))]
     public class BmtAccountEmailTemplateDefinitionProvider : TemplateDefinitionProvider, ITransientDependency
     {
         public override void Define(ITemplateDefinitionContext context)
@@ -24,6 +22,13 @@ namespace Collabed.JobPortal.Account.Emailing.Templates
                     localizationResource: typeof(AccountResource)
                 ).WithVirtualFilePath("/Account/Emailing/Templates/ConfirmEmail.tpl", true)
             //Account\Emailing\Templates\
+            );
+            context.Add(
+                new TemplateDefinition(
+                    BmtAccountEmailTemplates.ThirdPartyApplication,
+                    layout: StandardEmailTemplates.Layout,
+                    localizationResource: typeof(AccountResource)
+                ).WithVirtualFilePath("/Account/Emailing/Templates/ThirdPartyApplication.tpl", true)
             );
         }
     }

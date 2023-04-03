@@ -42,6 +42,8 @@ public class JobPortalApplicationAutoMapperProfile : Profile
         CreateMap<ExternalJobRequest, Jobs.Job>()
             .ForMember(d => d.Type,
                     op => op.MapFrom(o => MapJobType(o.Type)))
+            .ForMember(d => d.CategoryId,
+                    op => op.MapFrom(o => o.CategoryId))
             .ForMember(d => d.SalaryPeriod,
                     op => op.MapFrom(o => MapSalaryPeriodType(o.SalaryPeriod)))
             .ForMember(d => d.SalaryCurrency,
@@ -52,6 +54,7 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             .ForMember(d => d.StartDateText,
                     op => op.MapFrom(o => o.StartDate))
             .ForMember(d => d.StartDate, op => op.Ignore())
+            .ForMember(d => d.ScreeningQuestions, op => op.Ignore())
             .IgnoreAuditedObjectProperties();
     }
     public static ContractType? MapJobType(string jobType)

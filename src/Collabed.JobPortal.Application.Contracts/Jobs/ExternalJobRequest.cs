@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Collabed.JobPortal.Jobs
 {
@@ -42,6 +43,8 @@ namespace Collabed.JobPortal.Jobs
 		public string Location { get; set; }
 		[JsonPropertyName("job_industry")]
 		public string Industry { get; set; }
+		[JsonPropertyName("job_category")]
+		public int CategoryId { get; set; }
 		[JsonPropertyName("salary_currency")]
 		public string SalaryCurrency { get; set; }
 		[JsonPropertyName("salary_from")]
@@ -54,6 +57,15 @@ namespace Collabed.JobPortal.Jobs
 		public string SalaryBenefits { get; set; }
 		[JsonPropertyName("salary")]
 		public string Salary { get; set; }
+		[JsonPropertyName("screening_questions")]
+		public IEnumerable<ScreeningQuestion> ScreeningQuestions { get; set; }
 	}
 
+	public class ScreeningQuestion
+	{
+		[JsonPropertyName("question")]
+		public string Question { get; set; }
+		[JsonPropertyName("correct_answer")]
+		public string CorrectAnswer { get; set; }
+	}
 }
