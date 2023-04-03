@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Collabed.JobPortal.Extensions;
+using Collabed.JobPortal.User;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -37,7 +39,7 @@ namespace Collabed.JobPortal.Web.Pages.Account
             var indeedProvider = new ExternalProviderModel() { DisplayName = "Indeed", AuthenticationScheme = "Indeed" };
             var externalProviders = new ExternalProviderModel[] { liProvider, indeedProvider };
             ExternalProviders = externalProviders;
-            ReturnUrl = "../JobDashboard";
+            ReturnUrl = "";
         }
 
         public override async Task<IActionResult> OnPostAsync(string action)
@@ -91,7 +93,7 @@ namespace Collabed.JobPortal.Web.Pages.Account
 
             Debug.Assert(user != null, nameof(user) + " != null");
 
-            return Redirect(ReturnUrl ?? "~/");
+            return Redirect(string.IsNullOrEmpty(ReturnUrl) ? "~/" : ReturnUrl);
         }
 
         protected override async Task ReplaceEmailToUsernameOfInputIfNeeds()

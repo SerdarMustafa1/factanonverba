@@ -1,11 +1,10 @@
-﻿
-const submitted = false;
-const lengthPattern = /^.{8,}$/;
+﻿const lengthPattern = /^.{8,}$/;
 const digitPattern = /\d/;
 const specialCharacterPattern = /[^a-zA-Z0-9]/;
 const hasLowerCasePattern = /[a-z]/;
 const hasUpperCasePattern = /[A-Z]/;
 const reWhiteSpace = new RegExp("/\s/g");
+let submitted = false;
 
 
 const selectUserType = (userType) => {
@@ -199,19 +198,9 @@ const isInputFieldEmpty = (propertyName) => {
     }
 }
 
-const isUserNameValid = () => {
-    let inputVal = $('input#UserName_input').val();
-    if (inputVal.length === 0) {
-        return false;
-    } else if (inputVal.indexOf(' ') >= 0) {
-        return false;
-    }
-    return true;
-}
-
 const validateForm = () => {
     if (validateConfirmPassword() && validateEmail(false) && validatePassword(false) &&
-        isUserNameValid() && !isInputFieldEmpty('FirstName') &&
+        !isInputFieldEmpty('FirstName') &&
         !isInputFieldEmpty('LastName') && !isInputFieldEmpty('OrganisationName') &&
         $("input#GDPRConsent_input").is(":checked")) {
         $("button#RegisterButton").attr('disabled', false); // enable button

@@ -23,33 +23,24 @@
                         <p class="text-20">Job seeker</p>
                     </div>
                     <div class="card-body">
-                        @*TODO GET RID OF ROWS WITH ICONS BELOW*@
-@*                        <div class="account-type-hints">
+                        <div class="account-type-hints">
                             <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Network with other AEC professionals</span>
                             </div>
                             <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Find a job in the AEC industry</span>
                             </div>
                             <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Keep up to date with the latest AEC industry news</span>
                             </div>
                             <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Take part in events and competitions</span>
                             </div>
                             <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Use our learning resources</span>
                             </div>
-                        </div>*@
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <button class="btn btn-primary" type="button" style="width:100%" onclick="selectUserType(0)">Get Started</button>
+                        </div>
+                        <button class="btn btn-primary" type="button" style="width:100%; margin-top:40px;" onclick="selectUserType(0)">Get Started</button>
                     </div>
                 </div>
             </div>
@@ -62,31 +53,23 @@
                     </div>
                     <div class="card-body">
                         <div class="account-type-hints">
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            @*<div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                            <div class="mt-2">
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Post jobs to our community of 16,000 users</span>
                             </div>
                             <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Access to a comprehensive applicant tracking system</span>
                             </div>
                             <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Integrations with HR software</span>
                             </div>
                             <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Video screening</span>
                             </div>
                             <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Product Benefit</span>
-                            </div>*@
+                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Automated social media ads</span>
+                            </div>
                         </div>
-                        <button class="btn btn-primary" type="button" style="width:100%" onclick="selectUserType(1)">Get started</button>
+                        <button class="btn btn-primary" type="button" style="width:100%; margin-top:40px;" onclick="selectUserType(1)">Get started</button>
                     </div>
                 </div>
             </div>
@@ -105,10 +88,6 @@
         </div>
         <form method="post" onsubmit="checkIfEmailExists(event)" id="registerForm">
             <input type="text" id="userTypeHiddenInput" asp-for="@Model.UserType" hidden>
-            @if (!Model.IsExternalLogin)
-            {
-                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.UserName), HtmlTitle="UserName", PropertyValue = Model.UserName, Label = "User name *", OnKeyUp = "styleValidationOfRequiredField('UserName', 'Please type your user name'); validateForm()"})
-            }
             @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.EmailAddress), HtmlTitle="EmailAddress", PropertyValue = Model.EmailAddress, OnKeyUp = "validateEmail(true); validateForm()", PrependIcon = "bi bi-envelope", Label = "Email address *"})
 
             <div class="container" id="PersonalNameContainer">

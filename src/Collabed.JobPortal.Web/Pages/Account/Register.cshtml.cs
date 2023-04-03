@@ -52,7 +52,7 @@ public class BMTRegisterModel : AccountPageModel
         var externalProviders = new ExternalProviderModel[] { liProvider, indeedProvider };
         this.ExternalProviders = externalProviders;
         _organisationAppService = organisationAppService;
-        ReturnUrl = "JobDashboard";
+        ReturnUrl = "";
     }
 
 
@@ -113,6 +113,11 @@ public class BMTRegisterModel : AccountPageModel
 
             await CheckSelfRegistrationAsync();
 
+            if (UserType == UserType.Organisation)
+            {
+                ReturnUrl = "/job/post/jobAdInformation";
+            }
+
             if (IsExternalLogin)
             {
                 var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
@@ -134,7 +139,7 @@ public class BMTRegisterModel : AccountPageModel
                 return RedirectToPage("RegisterConfirmation", new { email = EmailAddress, returnUrl = ReturnUrl });
             }
 
-            return Redirect(ReturnUrl ?? "~/");
+            return Redirect(string.IsNullOrEmpty(ReturnUrl) ? "~/" : ReturnUrl);
         }
         catch (BusinessException e)
         {
@@ -160,7 +165,7 @@ public class BMTRegisterModel : AccountPageModel
             AppName = "MVC",
             EmailAddress = EmailAddress,
             Password = Password,
-            UserName = UserName
+            UserName = EmailAddress
         };
 
         registerDto.SetUserType(userType);
@@ -278,10 +283,6 @@ public class BMTRegisterModel : AccountPageModel
     public string LastName { get; set; }
 
     public string OrganisationName { get; set; }
-
-    [Required]
-    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
-    public string UserName { get; set; }
 
     [Required(ErrorMessage = "Please type your email address")]
     [ExtendedEmailAddress("Please type valid email address")]
