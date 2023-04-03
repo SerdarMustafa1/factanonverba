@@ -17,12 +17,13 @@
     --gray300: #DEE2E6;
     --gray900: #101828;
     --primary800: #0C3779;
+    --theme-danger: #DC3545;
 }
 
 .input-group-error {
     height: 30px;
     border: 1px solid;
-    border-color: red;
+    border-color: var(--theme-danger);
     background-color: white;
     border-radius: 6px;
 }

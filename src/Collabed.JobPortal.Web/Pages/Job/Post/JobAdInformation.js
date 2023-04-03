@@ -24,6 +24,13 @@
     flatpickr("#StartDate_input", { minDate: today });
     flatpickr("#ApplicationDeadline_input", { minDate: today });
 
+    console.log('received description: ', $('#jobDescriptionHiddenInput').val());
+    const delta = quill.clipboard.convert($('#jobDescriptionHiddenInput').val());
+    quill.setContents(delta);
+    assignQuillToInput();
+    if ($('#jobTitleInput').val().trim().length > 0 && $('#subDescriptionInput').val().trim().length > 0) {
+        isFormValid();
+    }
 });
 let quill = undefined;
 
@@ -39,6 +46,7 @@ let assignQuillToInput = () => {
 }
 
 let onClickPublishButton = () => {
+    assignQuillToInput();
     $('#jobPostForm').submit();
 }
 
@@ -152,16 +160,16 @@ function nextPage(event) {
         // validate EmploymentType, ContractType, JobLocation, and StartDate fields
     }
 
-
     const nextTabLinkEl = $('.nav-tabs .active').closest('li').next('li').find('a')[0];
     const nextTab = new bootstrap.Tab(nextTabLinkEl);
     nextTab.show();
+    window.scrollTo(0, 0);
 }
 
 function validateInformationTab() {
     let isJobTitleValid = $('#jobTitleInput').val().length > 0;
     let isSubDescriptionValid = $('#subDescriptionInput').val().length > 0;
-    let isDescriptionValid = !quill.root.innerHTML.includes('<p><br></p>');
+    let isDescriptionValid = isQuillValid();
     let isCategoryValid = $('#JobCategoryId').val().length > 0;
 
     if (!isJobTitleValid) {
@@ -204,6 +212,16 @@ function validateInformationTab() {
     }
     else {
         return false;
+    }
+}
+
+const isQuillValid = () => {
+    if (quill.root.innerHTML.replace(/<(.|\n)*?>/g, '').trim().length === 0 &&
+        !quill.root.innerHTML.includes("<img") && !quill.root.innerHTML.includes("<iframe")) {
+        return false;
+    }
+    else {
+        return true;
     }
 }
 

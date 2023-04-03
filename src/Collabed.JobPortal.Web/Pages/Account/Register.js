@@ -1,12 +1,14 @@
 ﻿
-let submitted = false;
-let lengthPattern = /^.{8,}$/;
-let digitPattern = /\d/;
-let specialCharacterPattern = /[^a-zA-Z0-9]/;
-let hasLowerCasePattern = /[a-z]/;
-let hasUpperCasePattern = /[A-Z]/;
+const submitted = false;
+const lengthPattern = /^.{8,}$/;
+const digitPattern = /\d/;
+const specialCharacterPattern = /[^a-zA-Z0-9]/;
+const hasLowerCasePattern = /[a-z]/;
+const hasUpperCasePattern = /[A-Z]/;
+const reWhiteSpace = new RegExp("/\s/g");
 
-let selectUserType = (userType) => {
+
+const selectUserType = (userType) => {
     $('input#userTypeHiddenInput').val(userType);
     $('div#registerStepOne').attr('hidden', true);
     $('div#registerStepTwo').attr('hidden', false);
@@ -18,16 +20,38 @@ let selectUserType = (userType) => {
     }
 }
 
-let styleValidationOfRequiredField = (propertyName, validationMessage) => {
+const styleValidationOfRequiredField = (propertyName, validationMessage) => {
     let inputJQueryIdentifier = 'input#' + propertyName + '_input';
     let divJQueryIdentifier = 'div#' + propertyName + '_input-group';
     let inputValue = $(inputJQueryIdentifier).val();
-    if (inputValue.length == 0) {
+    if (propertyName === 'UserName') {
+        $(divJQueryIdentifier).removeClass('input-group-correct');
+        $(divJQueryIdentifier).addClass('input-group-error');
+        let inputVal = $('input#UserName_input').val();
+        if (inputVal.length > 0 && inputVal.indexOf(' ') >= 0) {
+            $('span#' + propertyName + '_hint').text('Spaces are not allowed for user name');
+            $('span#' + propertyName + '_hint').addClass('text-validation-error');
+            $(divJQueryIdentifier).removeClass('input-group-correct');
+            $(divJQueryIdentifier).addClass('input-group-error');
+        } else if (inputValue.length == 0) {
+            $(divJQueryIdentifier).removeClass('input-group-correct');
+            $(divJQueryIdentifier).addClass('input-group-error');
+            $('span#' + propertyName + '_hint').text(validationMessage);
+            $('span#' + propertyName + '_hint').addClass('text-validation-error');
+        } else {
+            $(divJQueryIdentifier).removeClass('input-group-error');
+            $(divJQueryIdentifier).addClass('input-group-correct');
+            $('span#' + propertyName + '_hint').text('');
+            $('span#' + propertyName + '_hint').removeClass('text-validation-error');
+        }
+    }
+    else if (inputValue.length == 0) {
         $(divJQueryIdentifier).removeClass('input-group-correct');
         $(divJQueryIdentifier).addClass('input-group-error');
         $('span#' + propertyName + '_hint').text(validationMessage);
         $('span#' + propertyName + '_hint').addClass('text-validation-error');
-    } else {
+    }
+    else {
         $(divJQueryIdentifier).removeClass('input-group-error');
         $(divJQueryIdentifier).addClass('input-group-correct');
         $('span#' + propertyName + '_hint').text('');
@@ -35,9 +59,7 @@ let styleValidationOfRequiredField = (propertyName, validationMessage) => {
     }
 }
 
-// modify styleValidationOfRequiredField() in order to make it usable in Username (validatable, distinct) and others (just not empty)
-
-let validateEmail  = (showErrors) => {
+const validateEmail  = (showErrors) => {
     let emailInputField = $('input#EmailAddress_input');
     let emailInputFieldVal = emailInputField.val();
     if (emailInputFieldVal.length == 0) {
@@ -64,14 +86,14 @@ let validateEmail  = (showErrors) => {
     return true;
 }
 
-let emailError = (message) => {
+const emailError = (message) => {
     $('div#EmailAddress_input-group').addClass('input-group-error');
     $('div#EmailAddress_input-group').removeClass('input-group-correct');
     $('span#EmailAddress_hint').addClass('text-validation-error');
     $('span#EmailAddress_hint').text(message);
 }
 
-let appropriateEmail = () => {
+const appropriateEmail = () => {
     $('div#EmailAddress_input-group').removeClass('input-group-error');
     $('div#EmailAddress_input-group').addClass('input-group-correct');
     $('span#EmailAddress_hint').removeClass('text-validation-error');
@@ -82,7 +104,7 @@ const focusInputField = (selector) => {
     $(selector).focus();
 }
 
-let validatePassword = (showErrors) => {
+const validatePassword = (showErrors) => {
     let passwordAppendIconIdentifier = "i#Password_append-icon";
     let registerPasswordInputField = $("input#Password_input");
     if (!registerPasswordInputField.is(':visible')) {
@@ -131,7 +153,7 @@ let validatePassword = (showErrors) => {
     }
 }
 
-let validateConfirmPassword = (showErrors) => {
+const validateConfirmPassword = (showErrors) => {
     let confirmPasswordInputGroupIdentifier = 'div#ConfirmPassword_input-group';
     let confirmPasswordInputFieldIdentifier = 'input#ConfirmPassword_input';
     let confirmPasswordIconIdentifier = 'i#ConfirmPassword_append-icon';
@@ -163,7 +185,7 @@ let validateConfirmPassword = (showErrors) => {
     }
 }
 
-let isInputFieldEmpty = (propertyName) => {
+const isInputFieldEmpty = (propertyName) => {
     let inputFieldJQueryIdentifier = "input#" + propertyName + "_input";
     if (!$(inputFieldJQueryIdentifier).is(':visible')) {
         // if field is not visible - will simply treat is as valid
@@ -177,19 +199,29 @@ let isInputFieldEmpty = (propertyName) => {
     }
 }
 
-let validateForm = () => {
+const isUserNameValid = () => {
+    let inputVal = $('input#UserName_input').val();
+    if (inputVal.length === 0) {
+        return false;
+    } else if (inputVal.indexOf(' ') >= 0) {
+        return false;
+    }
+    return true;
+}
+
+const validateForm = () => {
     if (validateConfirmPassword() && validateEmail(false) && validatePassword(false) &&
-        !isInputFieldEmpty('UserName') && !isInputFieldEmpty('FirstName') &&
+        isUserNameValid() && !isInputFieldEmpty('FirstName') &&
         !isInputFieldEmpty('LastName') && !isInputFieldEmpty('OrganisationName') &&
         $("input#GDPRConsent_input").is(":checked")) {
-        $("button#RegisterButton").attr('disabled', false);
+        $("button#RegisterButton").attr('disabled', false); // enable button
     }
     else {
-        $("button#RegisterButton").attr('disabled', true);
+        $("button#RegisterButton").attr('disabled', true); // disable button
     }
 }
 
-let styleHintPar = (isPasswordValid) => {
+const styleHintPar = (isPasswordValid) => {
     if (isPasswordValid === true) {
         $("#hintParagraph").attr("style", "color:dimgray;");
     }
@@ -201,7 +233,7 @@ let styleHintPar = (isPasswordValid) => {
     }
 }
 
-let styleCasePar = (isCaseValid) => {
+const styleCasePar = (isCaseValid) => {
     if(isCaseValid) {
         $("#caseIcon").attr("class", "bi bi-check2-circle");
         $("#caseIcon").attr("style", "color:green;");
@@ -214,7 +246,7 @@ let styleCasePar = (isCaseValid) => {
     }
 }
 
-let styleLengthPar = (isLengthValid) => {
+const styleLengthPar = (isLengthValid) => {
     if (isLengthValid) {
         $("#lengthIcon").attr("class", "bi bi-check2-circle");
         $("#lengthIcon").attr("style", "color:green;");
@@ -227,7 +259,7 @@ let styleLengthPar = (isLengthValid) => {
     }
 }
 
-let styleNonAlphabeticalPar = (containsNonAlphabeticalCharacters) => {
+const styleNonAlphabeticalPar = (containsNonAlphabeticalCharacters) => {
     if (containsNonAlphabeticalCharacters) {
         $("#nonAlphanumericIcon").attr("class", "bi bi-check2-circle");
         $("#nonAlphanumericIcon").attr("style", "color:green;");
@@ -240,7 +272,7 @@ let styleNonAlphabeticalPar = (containsNonAlphabeticalCharacters) => {
     }
 }
 
-let checkIfEmailExists = (event) => {
+const checkIfEmailExists = (event) => {
     if (submitted) return;
 
     event.preventDefault();

@@ -67,15 +67,10 @@
                 <span class="no-display-on-mobile">Screening</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" id="tabLink6" href="#preview" >
-                <i class="bi bi-6-circle-fill" id="icon6"></i>
-                <span class="no-display-on-mobile">Preview</span>
-            </a>
-        </li>
     </ul>
-    <form class="card-body tab-content" method="post" id="jobPostForm" novalidate >
+    <form class="card-body tab-content" method="post" id="jobPostForm" asp-page="JobAdPreview" novalidate >
         <input type="hidden" asp-for="JobDescription" id="jobDescriptionHiddenInput" />
+        <input type="hidden" name="Source" value="JobAdInformation" />
         <div class="tab-pane active" id="information">
             <div style="margin-inline: 4%; margin-top: 3%; margin-bottom: 3%;">
                 <div class="row">
@@ -98,7 +93,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <textarea class="form-control" asp-for="SubDescription" maxlength="190" id="subDescriptionInput" onkeyup="isFormValid()" placeholder="Autosize height based on content lines"></textarea>
+                            <textarea class="form-control" asp-for="SubDescription" maxlength="190" id="subDescriptionInput" onkeyup="isFormValid()" ></textarea>
                             <span id="subDescriptionErrorMessage" asp-validation-for="SubDescription" class="error-message-span"></span>
                         </div>
                     </div>
@@ -139,7 +134,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <textarea class="form-control" maxlength="250" asp-for="Skills" id="skillsInput" placeholder="Autosize height based on content lines"></textarea>
+                            <textarea class="form-control" maxlength="250" asp-for="Skills" id="skillsInput"></textarea>
                         </div>
                     </div>
                 </div>
@@ -261,7 +256,11 @@
                 <div class="row">
                     <div class="col-sm">
                         <p class="text-16-bold">Is the job NetZero compliant?</p>
-                        <br />
+                        <p class="text-14">Showcase your organisation's commitment to sustainability and attract 
+                            highly motivated candidates who share your values. By highlighting the job's 
+                            direct impact on reducing carbon emissions, you demonstrate your 
+                            environmental responsibility and offer an attractive opportunity to 
+                            candidates who are passionate about sustainability.</p>
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
@@ -276,7 +275,6 @@
                         </div>
                     </div>
                 </div>
-                <hr class="horizontal-line" />
                 <p class="no-display-on-mobile" style="text-align:end; margin-top:5%;">
                     <button class="btn btn-outline-secondary" style="margin-right:0.5vw" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()">
                         Cancel
@@ -351,7 +349,7 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="form-group">
-                                <textarea class="form-control" id="supplementalPayInput" asp-for="SupplementalPay" placeholder="Autosize height based on content lines"></textarea>
+                                <textarea class="form-control" id="supplementalPayInput" asp-for="SupplementalPay" ></textarea>
                             </div>
                         </div>
                     </div>
@@ -362,7 +360,7 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="form-group">
-                                <textarea class="form-control" id="otherBenefitsInput" asp-for="OtherCompanyBenefits" placeholder="Autosize height based on content lines"></textarea>
+                                <textarea class="form-control" id="otherBenefitsInput" asp-for="OtherCompanyBenefits" ></textarea>
                             </div>
                         </div>
                     </div>
@@ -387,13 +385,29 @@
                     </div>
                     <div class="col-sm-8"> 
                         <div class="form-group">
-                            @foreach(var item in Model.AvailableSupportedDocuments)
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="IsCvRequired" type="checkbox" id="isCvRequiredCheckbox">
+                                <label class="form-check-label" for="isCvRequiredCheckbox"> CV </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="IsCoverLetterRequired" type="checkbox" id="isCoverLetterRequiredCheckbox">
+                                <label class="form-check-label" for="isCoverLetterRequiredCheckbox"> Cover Letter </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="IsOnlinePortfolioRequired" id="isOnlinePortfolioRequired">
+                                <label class="form-check-label" for="isOnlinePortfolioRequired"> Online Portfolio </label>
+                            </div>
+@*                            @foreach(var item in Model.AvailableSupportedDocuments)
                             {
-                                <p>
-                                    <input type="checkbox" name="SelectedSupportedDocuments" value="@item.Value">
-                                    <label> @item.Text </label>
-                                </p>
-                            }
+                                if(Model.SelectedSupportedDocuments.FirstOrDefault(v => v.Equals(item.Value)) != null)
+                                {
+                                    item.Selected = true;
+                                }
+                                <div class="form-check">
+                                    <input class="form-check-input" name="SelectedSupportedDocuments" checked="@item.Selected" type="checkbox" value="@item.Value" id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault"> @item.Text </label>
+                                </div>
+                            }*@
                         </div>
                     </div>
                 </div>
@@ -476,11 +490,6 @@
                     </div>
                 </div>
                 <hr />
-                <div class="row">
-                    <p class="text-16-bold">Screening questions</p>
-                    <p class="text-14">These questions could be related to a candidate's experience, qualifications, or other specific job-related requirements. 
-                        This will help ensure that only the most qualified and suitable candidates are presented for further consideration</p>
-                </div>
                 <div class="row" style="margin-top:5%;">
                     <div class="col-2">
                         <p class="text-16-bold">Question</p>
@@ -505,11 +514,6 @@
                     </div>
                 </div>
                 <hr />
-                <div class="row">
-                    <p class="text-16-bold">Screening questions</p>
-                    <p class="text-14">These questions could be related to a candidate's experience, qualifications, or other specific job-related requirements. 
-                        This will help ensure that only the most qualified and suitable candidates are presented for further consideration</p>
-                </div>
                 <div class="row" style="margin-top:5%;">
                     <div class="col-2">
                         <p class="text-16-bold">Question</p>
@@ -539,19 +543,6 @@
                         Cancel
                     </button>
                     <button class="btn btn-primary" onclick="nextPage(event)">
-                        Next
-                    </button>
-                </p>
-            </div>
-        </div>
-        <div class="tab-pane" id="preview">
-            <div style="margin-inline:4%; margin-top: 3%; margin-bottom: 3%;">
-                <hr class="horizontal-line" />
-                <p class="no-display-on-mobile" style="text-align:end; margin-top:5%;">
-                    <button class="btn btn-outline-secondary" style="margin-right:0.5vw" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()">
-                        Cancel
-                    </button>
-                    <button class="btn btn-primary" disabled>
                         Next
                     </button>
                 </p>

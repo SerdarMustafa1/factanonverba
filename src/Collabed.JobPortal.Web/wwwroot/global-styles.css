@@ -96,6 +96,7 @@ label.text-14 {
 
 .btn-primary:active {
     background-color: var(--primary800) !important;
+    border-color: var(--primary800) !important;
 }
 
 .btn-primary:hover {
@@ -132,6 +133,28 @@ label.text-14 {
         box-shadow: 0px 0px 0px 4px var(--neutral300);
     }
 
+.btn-outline-primary {
+    color: var(--theme-primary) !important;
+    border-color: var(--theme-primary) !important;
+}
+
+    .btn-outline-primary:active {
+        color: var(--neutral-white) !important;
+        border-color: var(--theme-primary) !important;
+        background-color: var(--primary800) !important;
+    }
+
+    .btn-outline-primary:hover {
+        color: var(--neutral-white) !important;
+        border-color: var(--primary800) !important;
+        background-color: var(--primary800) !important;
+    }
+
+    .btn-outline-primary:focus {
+        outline: 4px solid var(--neutral300) !important;
+        box-shadow: 0px 0px 0px 4px var(--neutral300);
+    }
+
 .card-header-tabs .nav-link.active {
     background-color: var(--neutral-white);
     border-bottom-color: var(--neutral25);
@@ -152,7 +175,7 @@ label.text-14 {
 }
 
 .text-validation-error {
-    color: var(--theme-danger);
+    color: var(--theme-danger) !important;
 }
 
 .error-message-span {
@@ -166,10 +189,33 @@ label.text-14 {
     border: 1px solid #DC3545;
 }
 
+.bg-primary {
+    --bs-bg-opacity: 1;
+    color: var(--neutral-white);
+    background-color: var(--theme-primary) !important;
+}
+
+.job-ad-avatar {
+    border: 1px solid var(--primary800);
+    border-radius: 4px;
+}
+
+.ql-toolbar {
+    border-color: #CED4DA;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.ql-container {
+    border-color: #CED4DA;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
 .hint-14-bold {
     font-size: 14px;
     color: #212529;
-    font-weight:600;
+    font-weight: 600;
 }
 
 .hint-14 {
@@ -228,6 +274,13 @@ label.text-14 {
     font-size: 16px;
     font-weight: 600;
     color: var(--neutral700);
+}
+
+.text-36 {
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 44px;
+    color: var(--neutral900);
 }
 
 .text-14 {

@@ -1,0 +1,86 @@
+﻿@page
+@model Collabed.JobPortal.Web.Pages.Job.Post.JobAdPreviewModel
+@{
+}
+
+<abp-script src="/Pages/Job/Post/JobAdPreview.js"></abp-script>
+
+<form method="post" id="previewForm" asp-page="JobAdInformation" novalidate="novalidate">
+    <input type="hidden" asp-for="JobTitle" />
+    <input type="hidden" asp-for="JobDescription" id="jobDescriptionHiddenInput" />
+    <input type="hidden" asp-for="SubDescription" />
+    <input type="hidden" asp-for="JobCategoryId" />
+    <input type="hidden" asp-for="EmploymentTypeId" />
+    <input type="hidden" asp-for="ContractTypeId" />
+    <input type="hidden" asp-for="JobLocationTypeId" />
+    <input type="hidden" asp-for="Skills" />
+    @*    <input type="hidden" asp-for="SelectedSupportedDocuments" /> *@
+    <input type="hidden" asp-for="SupplementalPay" />
+    <input type="hidden" asp-for="OtherCompanyBenefits" />
+    <input type="hidden" asp-for="ExperienceLevelId" />
+    <input type="hidden" asp-for="JobLocationId" />
+    <input type="hidden" asp-for="StartDate" />
+    <input type="hidden" asp-for="CandidateExperienceLevel" />
+    <input type="hidden" asp-for="LocalLanguageRequired" />
+    <input type="hidden" asp-for="LanguageId" />
+    <input type="hidden" asp-for="OfferingVisaSponsorship" />
+    <input type="hidden" asp-for="IsNetZeroCompliant" />
+    <input type="hidden" asp-for="SalaryPeriodId" />
+    <input type="hidden" asp-for="SalaryMinimum" />
+    <input type="hidden" asp-for="SalaryMaximum" />
+    <input type="hidden" asp-for="IsSalaryNegotiable" />
+    <input type="hidden" asp-for="PositionsAvailable" />
+    <input type="hidden" asp-for="ApplicationDeadline" />
+    <input type="hidden" asp-for="ScreeningQuestion1" />
+    <input type="hidden" asp-for="AutoRejectAnswer1" />
+    <input type="hidden" asp-for="ScreeningQuestion2" />
+    <input type="hidden" asp-for="AutoRejectAnswer2" />
+    <input type="hidden" asp-for="ScreeningQuestion3" />
+    <input type="hidden" asp-for="AutoRejectAnswer3" />
+    <input type="hidden" asp-for="IsCvRequired" />
+    <input type="hidden" asp-for="IsCoverLetterRequired" />
+    <input type="hidden" asp-for="IsOnlinePortfolioRequired" />
+    <input type="hidden" name="Source" value="JobAdPreview" id="sourceHiddenInput" />
+
+    <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
+        <div class="col-sm">
+            <p class="heading-30">Preview Listing</p>
+        </div>
+        <div class="col-sm">
+            <p style="text-align:end;">
+                <button class="btn btn-outline-secondary" onclick="backButtonOnClick(event)" style="margin-right:4px;">Back</button>
+                <button class="btn btn-primary" onclick="publishButtonOnClick(event)" style="margin-left:4px;">Publish Listing</button>
+            </p>
+        </div>
+        <hr  style="margin-bottom: 2%;"/>
+        <div class="card" style="padding: 0 !important;">
+            <div class="card-header" style="background-color:#F2F4F7; border-bottom: 1px ">
+                <div class="row" style="margin-bottom:8px;">
+                    <div class="col-9">
+                        <span class="badge rounded-pill bg-primary">New</span>
+                    </div>
+                    <div class="col-3" style="position: relative;">
+                <span style="position:absolute; right:0; margin-right:4px;">
+                    <button class="btn btn-outline-primary" onclick="saveButtonOnClick(event)" style="margin-right:4px;">Save for later</button>
+                    <button class="btn btn-outline-primary" onclick="shareButtonOnClick(event)" style="margin-left:4px;">Share listing</button>
+                </span>
+                </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        <p class="text-36">@Model.JobTitle</p>
+                        <p class="text-14">Posted by INSERT_COMPANY_NAME</p>
+                        <br />
+                        <p class="text-16-bold">@Model.GetContractType()</p>
+                        <p><button class="btn btn-primary" onclick="applyNowOnClick(event)">Apply now</button></p>
+                    </div>
+                    <div class="col-2">
+                        <img src="https://picsum.photos/200/205/" class="job-ad-avatar" width="200" height="205" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

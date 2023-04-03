@@ -22,7 +22,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public IEnumerable<SelectListItem> ContractTypes { get; set; }
         public IEnumerable<SelectListItem> JobLocations { get; set; }
         public IEnumerable<SelectListItem> SalaryPeriods { get; set; }
-        public IEnumerable<SelectListItem> AvailableSupportedDocuments { get; set; }
+        //public IEnumerable<SelectListItem> AvailableSupportedDocuments { get; set; }
 
         #region required
 
@@ -62,14 +62,23 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         [MaxLength(250)]
         public string Skills { get; set; }
 
-        [BindProperty]
-        public string[] SelectedSupportedDocuments { get; set; }
+        //[BindProperty]
+        //public string[] SelectedSupportedDocuments { get; set; }
 
         [BindProperty]
         public string SupplementalPay { get; set; }
 
         [BindProperty]
         public string OtherCompanyBenefits { get; set; }
+
+        [BindProperty]
+        public bool IsCvRequired { get; set; }
+
+        [BindProperty]
+        public bool IsCoverLetterRequired { get; set; }
+
+        [BindProperty]
+        public bool IsOnlinePortfolioRequired { get; set; }
 
         #region nullable
 
@@ -154,44 +163,23 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
             ContractTypes = _dropDownService.GetContractTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             SalaryPeriods = _dropDownService.GetSalaryPeriod().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-            AvailableSupportedDocuments = (await _dropDownService.GetSupporitngDocumentsAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+            //AvailableSupportedDocuments = (await _dropDownService.GetSupporitngDocumentsAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
+            if (!Request.Form["Source"].IsNullOrEmpty() & Request.Form["Source"].ToString() == "JobAdPreview")
             {
-                var suppDocs = SelectedSupportedDocuments.Select(int.Parse).ToList();
-                var createdJob = new CreateJobDto()
-                {
-                    ApplicationDeadline = ApplicationDeadline,
-                    CategoryId = JobCategoryId,
-                    ContractType = (ContractType)ContractTypeId,
-                    Description = JobDescription,
-                    EmploymentType = (EmploymentType)EmploymentTypeId,
-                    ExperienceLevel = ExperienceLevelId != null ? (ExperienceLevel)ExperienceLevelId : null,
-                    IsLocalLanguageRequired = LocalLanguageRequired,
-                    IsSalaryNegotiable = IsSalaryNegotiable,
-                    JobLocation = (JobLocation)JobLocationTypeId,
-                    LocalLanguageId = LanguageId,
-                    OfferVisaSponsorship = OfferingVisaSponsorship,
-                    OfficeLocationId = JobLocationId,
-                    PaymentOption = SalaryPeriodId != null ? (SalaryPeriod)SalaryPeriodId : null,
-                    PositionsAvailable = PositionsAvailable,
-                    SalaryCurrency = JobPortal.Job.CurrencyType.GBP,
-                    SalaryMaximum = SalaryMaximum != null ? (float)SalaryMaximum : null,
-                    SalaryMinimum = SalaryMinimum != null ? (float)SalaryMinimum : null,
-                    SalaryOtherBenefits = OtherCompanyBenefits,
-                    Skills = Skills,
-                    StartDate = StartDate,
-                    SubDescription = SubDescription,
-                    SupplementalPay = SupplementalPay,
-                    SupportingDocuments = SelectedSupportedDocuments.Select(int.Parse).ToList(),
-                    Title = JobTitle,
-                    ScreeningQuestions = GetScreeningQuestions()
-                };
-                await _jobAppService.CreateAsync(createdJob);
-                return RedirectToPage("/Index");
+                JobCategories = (await _dropDownService.GetCategoriesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                OfficeLocations = (await _dropDownService.GetLocationsAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                Languages = (await _dropDownService.GetLanguagesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                ExperienceLevels = _dropDownService.GetExperienceLevel().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                EmploymentTypes = _dropDownService.GetEmploymentTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                ContractTypes = _dropDownService.GetContractTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                SalaryPeriods = _dropDownService.GetSalaryPeriod().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                //AvailableSupportedDocuments = (await _dropDownService.GetSupporitngDocumentsAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                return Page();
             }
             else
             {
