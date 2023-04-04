@@ -47,9 +47,9 @@ namespace JobPortal.Jobs
 
         public async Task<JobDto> GetByReferenceAsync(string reference)
         {
-            var job = await _jobRepository.GetByReferenceAsync(reference);
+            var job = await _jobRepository.GetWithDetailsByReferenceAsync(reference);
 
-            return ObjectMapper.Map<Job, JobDto>(job);
+            return ObjectMapper.Map<JobWithDetails, JobDto>(job);
         }
 
         public async Task<PagedResultDto<JobDto>> GetListAsync(JobGetListInput input)

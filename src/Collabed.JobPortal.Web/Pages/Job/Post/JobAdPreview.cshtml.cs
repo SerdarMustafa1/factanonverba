@@ -1,12 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
-using System;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Types;
-using System.Threading.Tasks;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Post
 {
@@ -34,12 +32,12 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public int JobCategoryId { get; set; }
 
         [BindProperty]
-        public int EmploymentTypeId { get; set; } 
+        public int EmploymentTypeId { get; set; }
         [BindProperty]
         public int ContractTypeId { get; set; }
 
         [BindProperty]
-        public int JobLocationTypeId { get; set; } 
+        public int JobLocationTypeId { get; set; }
 
         #endregion
 
@@ -157,7 +155,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
 
         public string GetSalaryRange()
         {
-            if(SalaryPeriodId != null)
+            if (SalaryPeriodId != null)
             {
                 // HACK TODO
             }
@@ -203,6 +201,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                     SupplementalPay = SupplementalPay,
                     SupportingDocuments = new List<int>(),// SelectedSupportedDocuments.Select(int.Parse).ToList(),
                     Title = JobTitle,
+                    IsNetZeroCompliant = IsNetZeroCompliant
                 };
                 await _jobAppService.CreateAsync(createdJob);
                 return RedirectToPage("/Index");

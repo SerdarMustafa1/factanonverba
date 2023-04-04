@@ -47,6 +47,7 @@ namespace Collabed.JobPortal.Jobs
         public JobOrigin JobOrigin { get; set; }
         public JobStatus Status { get; set; }
         public Guid? OrganisationId { get; set; }
+        public bool? IsNetZeroCompliant { get; set; }
         public IEnumerable<JobApplicant> Applicants { get; set; }
 
         // Broadbean/Idibu specific fields
@@ -59,6 +60,7 @@ namespace Collabed.JobPortal.Jobs
         public string ContactName { get; set; }
         public string ContactEmail { get; set; }
         public string ContactPhone { get; set; }
+        public string CompanyName { get; set; }
         public string ContactUrl { get; set; }
 
         private Job()

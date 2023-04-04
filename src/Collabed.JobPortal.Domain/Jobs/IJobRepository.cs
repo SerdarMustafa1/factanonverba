@@ -12,6 +12,6 @@ namespace Collabed.JobPortal.Jobs
 		Task<Job> GetByReferenceAsync(string reference);
 		Task DeleteByReferenceAsync(string reference);
 		Task<bool> CheckIfJobExistsByReference(string reference);
-
+		Task<JobWithDetails> GetWithDetailsByReferenceAsync(string reference);
 	}
 }

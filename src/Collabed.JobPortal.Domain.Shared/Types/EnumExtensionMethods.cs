@@ -30,6 +30,18 @@ namespace Collabed.JobPortal.Types
 
             return Enum.GetName(enumType, enumValue);
         }
-    }
 
+        public static string GetName(this Enum enumValue)
+        {
+            var enumType = enumValue.GetType();
+            var attribute = enumType.GetMember(enumValue.ToString())
+                           .First()
+                           .GetCustomAttribute<DisplayAttribute>();
+            if (attribute != null)
+            {
+                return attribute.Name;
+            }
+            return Enum.GetName(enumType, enumValue);
+        }
+    }
 }

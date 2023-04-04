@@ -34,5 +34,6 @@ namespace Collabed.JobPortal.Jobs
         public ICollection<int> SupportingDocuments { get; set; }
         public IEnumerable<(string, bool?)> ScreeningQuestions { get; set; }
         public string OtherDocuments { get; set; }
+        public bool? IsNetZeroCompliant { get; set; }
     }
 }

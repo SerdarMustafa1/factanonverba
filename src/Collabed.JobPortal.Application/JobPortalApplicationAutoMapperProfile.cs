@@ -16,7 +16,26 @@ public class JobPortalApplicationAutoMapperProfile : Profile
         /* You can configure your AutoMapper mapping configuration here.
          * Alternatively, you can split your mapping configurations
          * into multiple profile classes for a better organization. */
-        CreateMap<Jobs.Job, JobDto>();
+        CreateMap<Jobs.Job, JobDto>()
+            .ForMember(d => d.SalaryMinimum,
+                    op => op.MapFrom(o => o.SalaryFrom))
+            .ForMember(d => d.SalaryMaximum,
+                    op => op.MapFrom(o => o.SalaryTo));
+        CreateMap<JobWithDetails, JobDto>()
+            .ForMember(d => d.SalaryMinimum,
+                    op => op.MapFrom(o => o.SalaryFrom))
+            .ForMember(d => d.SalaryMaximum,
+                    op => op.MapFrom(o => o.SalaryTo))
+            .ForMember(d => d.ContractType,
+                    op => op.MapFrom(o => o.Type.HasValue ? o.Type.Value.GetName() : null))
+            .ForMember(d => d.EmploymentType,
+                    op => op.MapFrom(o => o.EmploymentType.HasValue ? o.EmploymentType.Value.GetName() : null))
+            .ForMember(d => d.SalaryPeriod,
+                    op => op.MapFrom(o => o.SalaryPeriod.HasValue ? o.SalaryPeriod.Value.GetName() : null))
+            .ForMember(d => d.JobLocation,
+                    op => op.MapFrom(o => o.JobLocation.HasValue ? o.JobLocation.Value.GetName() : null))
+            .ForMember(d => d.ExperienceLevel,
+                    op => op.MapFrom(o => o.ExperienceLevel.HasValue ? o.ExperienceLevel.Value.GetName() : null));
         CreateMap<JobDto, CreateUpdateJobDto>();
         CreateMap<Organisation, OrganisationDto>();
         CreateMap<PaymentRequest, PaymentRequestDto>();

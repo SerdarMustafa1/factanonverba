@@ -25,6 +25,5 @@ namespace Collabed.JobPortal.Organisations
 
             return ObjectMapper.Map<Organisation, OrganisationDto>(organisation);
         }
-
     }
 }
