@@ -31,7 +31,7 @@
         <p class="heading-30">New Listing</p>
     </div>
     <div class="col-sm">
-        <p class="no-display-on-mobile" style="text-align:end;"><button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="margin-right:0.5vw">Cancel</button> <button class="btn btn-primary" id="publishButton" onclick="onClickPublishButton()" disabled>Publish</button></p>
+        <p class="no-display-on-mobile" style="text-align:end;"><button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="margin-right:0.5vw">Cancel</button> <button class="btn btn-outline-primary" id="publishButton" onclick="onClickPublishButton(event)">Preview</button></p>
     </div>
 </div>
 
@@ -336,10 +336,8 @@
                         </div>
                         <hr class="horizontal-line" />
                         <div class="form-check" style="margin-left:0;padding-left:0;">
-                            <input type="checkbox" name="IsSalaryNegotiable" value="false" />
-                            <label class="form-check-label" for="SalaryNegotiable">
-                                Salary is negotiable
-                            </label>
+                            <input class="form-check-input" asp-for="IsSalaryNegotiable" type="checkbox" id="isSalaryNegotiableCheckbox">
+                            <label class="form-check-label" for="isSalaryNegotiableCheckbox"> Salary is negotiable </label>
                         </div>
                     </div>
                     <hr class="horizontal-line" />
@@ -563,7 +561,7 @@
     </div>
     <div class="row display-on-mobile" style="margin-top:5%;">
         <div class="col">
-            <button class="btn btn-primary" id="publishButton2" onclick="onClickPublishButton()" disabled style="width:100%">Publish</button>
+            <button class="btn btn-outline-primary" id="publishButton2" onclick="onClickPublishButton(event)" style="width:100%">Preview</button>
         </div>
     </div>
 </div>

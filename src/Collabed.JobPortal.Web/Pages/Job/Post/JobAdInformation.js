@@ -24,7 +24,6 @@
     flatpickr("#StartDate_input", { minDate: today });
     flatpickr("#ApplicationDeadline_input", { minDate: today });
 
-    console.log('received description: ', $('#jobDescriptionHiddenInput').val());
     const delta = quill.clipboard.convert($('#jobDescriptionHiddenInput').val());
     quill.setContents(delta);
     assignQuillToInput();
@@ -45,9 +44,12 @@ let assignQuillToInput = () => {
     $('#jobDescriptionHiddenInput').val(quill.root.innerHTML);
 }
 
-let onClickPublishButton = () => {
+let onClickPublishButton = (event) => {
+    event.preventDefault();
     assignQuillToInput();
-    $('#jobPostForm').submit();
+    if (isFormValid()) {
+        $('#jobPostForm').submit();
+    }
 }
 
 let isFormValid = () => {  
@@ -63,12 +65,14 @@ let isFormValid = () => {
     if (jobTitleValid && jobSubDescValid && jobDescValid &&
         jobCatValid && employmentTypeValid && contractTypeValid &&
         jobLocationTypeValid && startDateValid) {
-        $('#publishButton').removeAttr('disabled');
-        $('#publishButton2').removeAttr('disabled');
+        // form is valid
+        return true;
     }
     else {
-        $('#publishButton').prop('disabled', true);
-        $('#publishButton2').prop('disabled', true);
+        validateInformationTab();
+        validateRequirementsTab();
+        // form is invalid
+        return false;
     }
 }
 
@@ -204,13 +208,12 @@ function validateInformationTab() {
         $('#JobCategoryId').removeClass('input-validation-error');
         $('#jobCategoryErrorMessage').text('');
     }
-    if (!isJobTitleValid || !isSubDescriptionValid || !isDescriptionValid || !isCategoryValid) {
-        markTabAsInvalid('1');
-    }
     if (isJobTitleValid && isSubDescriptionValid && isDescriptionValid && isCategoryValid) {
+        markTabAsValid('1');
         return true;
     }
     else {
+        markTabAsInvalid('1');
         return false;
     }
 }
@@ -263,13 +266,12 @@ function validateRequirementsTab() {
             $('#StartDate_input').removeClass('input-validation-error');
             $('#StartDateErrorMessage').text('');
         }
-        if (!isEmploymentTypeValid || !isContractTypeValid || !isJobLocationValid || !isStartDateValid) {
-            markTabAsInvalid('2');
-        }
     if (isEmploymentTypeValid && isContractTypeValid && isJobLocationValid && isStartDateValid) {
+        markTabAsValid('2');
         return true;
     }
     else {
+        markTabAsInvalid('2');
         return false;
     }
 }

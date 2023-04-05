@@ -1,7 +1,5 @@
 ﻿@page
 @model Collabed.JobPortal.Web.Pages.Job.Post.JobAdPreviewModel
-@{
-}
 
 <abp-script src="/Pages/Job/Post/JobAdPreview.js"></abp-script>
 
@@ -52,32 +50,237 @@
                 <button class="btn btn-primary" onclick="publishButtonOnClick(event)" style="margin-left:4px;">Publish Listing</button>
             </p>
         </div>
-        <hr  style="margin-bottom: 2%;"/>
+        <hr style="margin-bottom: 2%;" />
         <div class="card" style="padding: 0 !important;">
-            <div class="card-header" style="background-color:#F2F4F7; border-bottom: 1px ">
+            <div class="card-header" style="background-color:#F2F4F7; border-bottom: 1px solid rgba(0, 0, 0, 0.175);">
                 <div class="row" style="margin-bottom:8px;">
                     <div class="col-9">
                         <span class="badge rounded-pill bg-primary">New</span>
                     </div>
                     <div class="col-3" style="position: relative;">
-                <span style="position:absolute; right:0; margin-right:4px;">
-                    <button class="btn btn-outline-primary" onclick="saveButtonOnClick(event)" style="margin-right:4px;">Save for later</button>
-                    <button class="btn btn-outline-primary" onclick="shareButtonOnClick(event)" style="margin-left:4px;">Share listing</button>
-                </span>
-                </div>
+@*                        <span style="position:absolute; right:0; margin-right:4px;">
+                            <button class="btn btn-outline-primary" onclick="saveButtonOnClick(event)" style="margin-right:4px;">Save for later</button>
+                            <button class="btn btn-outline-primary" onclick="shareButtonOnClick(event)" style="margin-left:4px;">Share listing</button>
+                        </span>*@
+                    </div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-10">
                         <p class="text-36">@Model.JobTitle</p>
-                        <p class="text-14">Posted by INSERT_COMPANY_NAME</p>
+                        <p>
+                            <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
+                                Posted by @Model.GetOrganisationName()
+                            </span>
+                            <span style="color: #667085; font-weight: 400; font-size: 16px; line-height:24px;">
+                                @Model.GetCurrentDate()
+                            </span>
+                        </p>
                         <br />
-                        <p class="text-16-bold">@Model.GetContractType()</p>
+                        <p class="text-16-bold">
+                            @Model.GetEmploymentType()
+                            <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                            @Model.GetContractType()
+                            @if (!string.IsNullOrEmpty(Model.GetSalaryRange()))
+                            {
+                                <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                @Model.GetSalaryRange()
+                            }
+                            @if (!string.IsNullOrEmpty(Model.GetOfficeLocation()))
+                            {
+                                <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                @Model.GetOfficeLocation()
+                            }
+                            <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                            @Model.GetJobLocationType()
+                        </p>
                         <p><button class="btn btn-primary" onclick="applyNowOnClick(event)">Apply now</button></p>
                     </div>
-                    <div class="col-2">
-                        <img src="https://picsum.photos/200/205/" class="job-ad-avatar" width="200" height="205" />
+                    @*                    <div class="col-2">
+                    <img src="https://picsum.photos/200/205/" class="job-ad-avatar" width="200" height="205" />
+                    </div>*@
+                    <div class="row">
+                        <hr />
+                        <div class="col-9">
+                            <p style="font-weight: 500; font-size: 28px; line-height: 120%; color: #101828;">About the job</p>
+                            <p style="font-weight: 500; font-size: 20px; line-height: 80%; color: #101828;">Description</p>
+                            <p>@Html.Raw(Model.JobDescription)</p>
+                            @if (!string.IsNullOrWhiteSpace(Model.Skills))
+                            {
+                                <hr />
+                                <p style="font-weight: 500; font-size: 20px; line-height: 80%; color: #101828;">Skills</p>
+                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;">@Model.Skills</p>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.SupplementalPay))
+                            {
+                                <hr />
+                                <p style="font-weight: 500; font-size: 20px; line-height: 80%; color: #101828;">Supplemental Pay</p>
+                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;"> @Model.SupplementalPay</p>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.OtherCompanyBenefits))
+                            {
+                                <hr />
+                                <p style="font-weight: 500; font-size: 20px; line-height: 80%; color: #101828;">Other Benefits</p>
+                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;">@Model.OtherCompanyBenefits</p>
+                            }
+                            <p>
+                                <button class="btn btn-primary" onclick="applyNowOnClick(event)">Apply now</button>
+                            </p>
+                        </div>
+                        <div class="col-3" style="background-color: #F2F4F7; ">
+                            <div style="margin-inline: 24px;margin-block:24px;">
+                                <p style="font-weight: 500;font-size: 28px;line-height: 120%;color: #101828;">Overview</p>
+                                <hr />
+
+                                <div class="row">
+                                    <div class="col-1">
+                                        <i class="bi bi-clock" style="color:#0C3779;"></i>
+                                    </div>
+                                    <div class="col-11">
+                                        <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Employment Type</span>
+                                        <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.GetEmploymentType()</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-1">
+                                        <i class="bi bi-briefcase" style="color:#0C3779;"></i>
+                                    </div>
+                                    <div class="col-11">
+                                        <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Contract Type</span>
+                                        <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.GetContractType()</p>
+                                    </div>
+                                </div>
+                                @if (Model.ExperienceLevelId.HasValue)
+                                {
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <i class="bi bi-file-bar-graph" style="color:#0C3779;"></i>
+                                        </div>
+                                        <div class="col-11">
+                                            <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Experience level</span>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.GetExperienceLevel()</p>
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.StartDate.HasValue)
+                                {
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <i class="bi bi-calendar" style="color:#0C3779;"></i>
+                                        </div>
+                                        <div class="col-11">
+                                            <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Start Date</span>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.StartDate.Value.Date.ToString("d")</p>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="row">
+                                    <div class="col-1">
+                                        <i class="bi bi-geo-alt" style="color:#0C3779;"></i>
+                                    </div>
+                                    <div class="col-11">
+                                        <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Location</span>
+                                        <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">
+                                            @if (Model.JobLocationId.HasValue)
+                                            {
+                                                @Model.GetOfficeLocation()
+                                            }
+                                            @if (Model.JobLocationId.HasValue)
+                                            {
+                                                <span>, </span>
+                                            }
+                                            @Model.GetJobLocationType()
+                                        </p>
+                                    </div>
+                                </div>
+                                @if (Model.SalaryMaximum.HasValue || Model.SalaryMinimum.HasValue || (Model.IsSalaryNegotiable.HasValue && Model.IsSalaryNegotiable.Value == true))
+                                {
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <i class="bi bi-currency-pound" style="color:#0C3779;"></i>
+                                        </div>
+                                        <div class="col-11">
+                                            <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Salary</span>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">
+                                                @if (Model.SalaryMinimum.HasValue)
+                                                {
+                                                    <i class="bi bi-currency-pound"></i>@Model.SalaryMinimum
+                                                }
+                                                @if (Model.SalaryMinimum.HasValue && Model.SalaryMaximum.HasValue)
+                                                {
+                                                    <span> - </span>
+                                                }
+                                                @if (Model.SalaryMaximum.HasValue)
+                                                {
+                                                    <i class="bi bi-currency-pound"></i>@Model.SalaryMaximum
+                                                }
+                                                @if (Model.SalaryPeriodId.HasValue)
+                                                {
+                                                    <span>/ @Model.GetSalaryPeriodName()</span>
+                                                }
+                                            </p>
+                                            @if(Model.IsSalaryNegotiable.HasValue && Model.IsSalaryNegotiable.Value == true){
+                                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #101828;">Negotiable</p>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.LocalLanguageRequired.HasValue && Model.LocalLanguageRequired.Value == true)
+                                {
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <i class="bi bi-translate" style="color:#0C3779;"></i>
+                                        </div>
+                                        <div class="col-11">
+                                            <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Local Language</span>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.GetLocalLanguageName()</p>
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.OfferingVisaSponsorship.HasValue) {
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <i class="bi bi-file-earmark-richtext" style="color:#0C3779;"></i>
+                                        </div>
+                                        <div class="col-11">
+                                            <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Offer Sponsorship</span>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">
+                                                @if (Model.OfferingVisaSponsorship.Value)
+                                                {
+                                                    <span> Yes </span>
+                                                }
+                                                else 
+                                                {
+                                                    <span> No </span>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.IsNetZeroCompliant.HasValue)
+                                {
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <i class="bi bi-lightning-charge-fill" style="color:#3BA190;"></i>
+                                        </div>
+                                        <div class="col-11">
+                                            <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">NetZero Compliant</span>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">
+                                                @if (Model.IsNetZeroCompliant.Value)
+                                                {
+                                                    <span>Yes</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>No</span>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

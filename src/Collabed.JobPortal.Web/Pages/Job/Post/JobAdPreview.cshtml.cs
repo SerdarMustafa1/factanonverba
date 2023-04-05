@@ -5,17 +5,31 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
+using Collabed.JobPortal.DropDowns;
+using Collabed.JobPortal.Users;
+using Volo.Abp.Users;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Collabed.JobPortal.Organisations;
+using Collabed.JobPortal.Permissions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Post
 {
-    public class JobAdPreviewModel : PageModel
+    [Authorize(BmtPermissions.ManageJobs)]
+    public class JobAdPreviewModel : AbpPageModel
     {
 
         private readonly IJobAppService _jobAppService;
+        private readonly IOrganisationRepository _organisationRepository;
+        private readonly DropDownAppService _dropDownAppService;
 
-        public JobAdPreviewModel(IJobAppService jobAppService)
+        public JobAdPreviewModel(IJobAppService jobAppService, IOrganisationRepository organisationRepository, DropDownAppService dropDownAppService)
         {
             _jobAppService= jobAppService;
+            _dropDownAppService= dropDownAppService;
+            _organisationRepository = organisationRepository;
         }
         #region required
 
@@ -122,48 +136,92 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         [BindProperty]
         public bool? AutoRejectAnswer3 { get; set; }
 
-        public string GetContractType()
+        public string GetOrganisationName()
         {
-            return Enum.GetName(Enum.Parse<ContractType>(ContractTypeId.ToString()));
+            var organisationClaim = CurrentUser.FindClaim(ClaimNames.OrganisationClaim);
+            if (organisationClaim != null && !string.IsNullOrEmpty(organisationClaim.Value))
+            {
+                var organisationId = Guid.Parse(organisationClaim.Value);
+                var organisation = _organisationRepository.GetAsync(x => x.Id == organisationId).Result;
+                if (organisation != null)
+                {
+                    return organisation.Name;
+                }
+            }
+            return string.Empty;
         }
 
-        public string GetEmploymentType()
+        public string GetLocalLanguageName()
         {
-            return Enum.GetName(Enum.Parse<EmploymentType>(EmploymentTypeId.ToString()));
+            var res = _dropDownAppService.GetLanguageNameById(LanguageId.Value).Result;
+            if(res != null)
+            {
+                return res;
+            }
+            return string.Empty;
         }
 
-        public string GetJobCategory()
+        public string GetSalaryPeriodName()
         {
-            throw new NotImplementedException("Add a service, this comes from the DB");
-            //return Enum.GetName(Enum.Parse<JobCategory>)
-        }
-
-        public string GetJobLocationType()
-        {
-            return Enum.GetName(Enum.Parse<JobLocation>(JobLocationTypeId.ToString()));
-        }
-
-        public string GetOfficeLocation()
-        {
-            throw new NotImplementedException("Add a service, this comes from the DB");
-        }
-
-        public string GetExperienceLevel()
-        {
-            return Enum.GetName(Enum.Parse<ExperienceLevel>(ExperienceLevelId.ToString()));
+            if(SalaryPeriodId.HasValue)
+            {
+                // HACK TODO shortcuts
+                return Enum.GetName(typeof(SalaryPeriod), SalaryPeriodId);
+            }
+            return string.Empty;
         }
 
         public string GetSalaryRange()
         {
-            if (SalaryPeriodId != null)
+            if (SalaryMinimum.HasValue && SalaryMinimum.Value > 0
+                && SalaryMaximum.HasValue && SalaryMaximum.Value > 0)
             {
-                // HACK TODO
+                return $"£{SalaryMinimum.Value.ToString("N2")} - £{SalaryMaximum.Value.ToString("N2")}";
             }
             else
             {
-                // HACK TODO
+                return string.Empty;
             }
-            throw new NotImplementedException();
+        }
+        
+        public string GetCurrentDate()
+        {
+            var suffix = "";
+            if (DateTime.Now.Day == 1 || DateTime.Now.Day == 21 || DateTime.Now.Day == 31) suffix = "st";
+            else if (DateTime.Now.Day == 2 || DateTime.Now.Day == 22) suffix = "nd";
+            else if (DateTime.Now.Day == 3 || DateTime.Now.Day == 23) suffix = "rd";
+            else suffix = "th";
+
+            return DateTime.Now.ToString($"d'\\{suffix[0]}\\{suffix[1]}' MMMM yyyy");
+        }
+
+        public string GetContractType()
+        {
+            return Enum.Parse<ContractType>(ContractTypeId.ToString()).GetDisplayName();
+        }
+
+        public string GetEmploymentType()
+        {
+            return Enum.Parse<EmploymentType>(EmploymentTypeId.ToString()).GetDisplayName(); 
+        }
+
+        public string GetJobLocationType()
+        {
+            return Enum.Parse<JobLocation>(JobLocationTypeId.ToString()).GetDisplayName(); 
+        }
+
+        public string GetOfficeLocation()
+        {
+            if (!JobLocationId.HasValue)
+                return string.Empty;
+            return _dropDownAppService.GetLocationByIdAsync(JobLocationId.Value).Result;
+        }
+
+        public string GetExperienceLevel()
+        {
+            if (!ExperienceLevelId.HasValue)
+                return string.Empty;
+            return Enum.GetName(Enum.Parse<ExperienceLevel>(ExperienceLevelId.ToString()));
         }
 
         public async Task<IActionResult> OnPostAsync()

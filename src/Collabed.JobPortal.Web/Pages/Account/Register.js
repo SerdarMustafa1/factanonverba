@@ -198,6 +198,16 @@ const isInputFieldEmpty = (propertyName) => {
     }
 }
 
+const isUserNameValid = () => {
+    let inputVal = $('input#UserName_input').val();
+    if (inputVal.length === 0) {
+        return false;
+    } else if (inputVal.indexOf(' ') >= 0) {
+        return false;
+    }
+    return true;
+}
+
 const validateForm = () => {
     if (validateConfirmPassword() && validateEmail(false) && validatePassword(false) &&
         !isInputFieldEmpty('FirstName') &&

@@ -1,6 +1,8 @@
 using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.Jobs;
+using Collabed.JobPortal.Permissions;
 using Collabed.JobPortal.Types;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Post
 {
+    [Authorize(BmtPermissions.ManageJobs)]
     public class JobAdInformationModel : PageModel
     {
         public IEnumerable<SelectListItem> JobCategories { get; set; }
@@ -116,7 +119,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public double? SalaryMaximum { get; set; }
 
         [BindProperty]
-        public bool? IsSalaryNegotiable { get; set; }
+        public bool IsSalaryNegotiable { get; set; } = false;
 
         [BindProperty]
         public int? PositionsAvailable { get; set; }

@@ -90,6 +90,13 @@ namespace Collabed.JobPortal.DropDowns
             );
         }
 
+        public async Task<string> GetLanguageNameById(int id)
+        {
+            var res = (await GetLanguagesAsync()).Where(l => l.Id == id).FirstOrDefault();
+            if (res == null) return "ERR: Language not found!";
+            return res.Name;
+        }
+
         public async Task<IEnumerable<DropDownDto>> GetLocationsBySearchTermAsync(string searchTerm)
         {
             return await _dropDownCache.GetOrAddAsync("locations_"+searchTerm,
@@ -110,6 +117,13 @@ namespace Collabed.JobPortal.DropDowns
                     AbsoluteExpiration = DateTimeOffset.Now.AddYears(1), // This list will never change
                 }
             );
+        }
+
+        public async Task<string> GetLocationByIdAsync(int id)
+        {
+            var res  = (await GetLocationsAsync()).Where(l => l.Id == id).FirstOrDefault();
+            if (res == null) return "ERR: Location not found!";
+            return res.Name;
         }
 
         public IEnumerable<DropDownDto> GetExperienceLevel()
