@@ -6,26 +6,155 @@
 @inject IHtmlLocalizer<JobPortalResource> L
 @inject ICurrentUser CurrentUser
 @section styles {
-@*<abp-style src="/Pages/Index.css" />*@
+    <abp-style src="/jobdashboard.css" />
 }
 @section scripts {
-<abp-script src="/Pages/JobDashboard/Index.js" />
+    <abp-script src="/Pages/JobDashboard/Index.js" />
 }
-<abp-card>
-    <abp-card-header>
-        <abp-row>
-            <abp-column size-md="_6">
-                <abp-card-title>Jobs</abp-card-title>
-            </abp-column>
-            <abp-column size-md="_6" class="text-right">
-                <abp-button id="NewJobButton"
-                            text="New Job"
-                        icon="plus"
-                            button-type="Primary"/>
-            </abp-column>
-        </abp-row>
-    </abp-card-header>
-    <abp-card-body>
-        <abp-table striped-rows="true" id="JobsTable"></abp-table>
-    </abp-card-body>
-</abp-card>
+
+<div style="background-color:#FFFFFF;">
+
+    <div style="text-align:center; margin-top: 130px; margin-bottom: 130px;">
+        <p style="font-weight: 400; font-size: 20px; line-height: 30px; color: #101828;">Get ahead in construction</p>
+        <p style="font-weight: 600; font-size: 48px; line-height: 60px; color: #2F70B6;">Build your talent and<br />boost your career</p>
+    </div>
+    <hr />
+    <div style="text-align:center;margin-top:70px;">
+        <p style="font-weight: 600; font-size: 36px; line-height: 44px; color: #101828;">Explore by category</p>
+        <p style="font-weight: 400; font-size: 18px; line-height: 28px; color: #101828;">The job board designed for and by construction-industry professionals.</p>
+    </div>
+
+    <div class="row" style="margin-inline:5%;margin-top:5%;">
+        <div class="col-4" style="min-width:300px;justify-content:center">
+            <div style="width:300px;height:130px;border: 1px solid #D0D5DD; margin-top:1%;">
+                <a href="../JobDashboard/@Model.Categories[0].Name" class="tile-link">
+                    <div class="category-tile-content">
+                        <p class="category-tile-header">
+                            @Model.Categories[0].Name
+                        </p>
+                        <p class="category-tile-jobs-count">
+                            @Model.Categories[0].JobsCount jobs available
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-4" style="min-width:300px;">
+            <div style="width:300px;height:130px;border: 1px solid #D0D5DD; margin-top:1%;">
+                <a href="../JobDashboard/@Model.Categories[1].Name" class="tile-link">
+                    <div class="category-tile-content">
+                        <p class="category-tile-header">
+                            @Model.Categories[1].Name
+                        </p>
+                        <p class="category-tile-jobs-count">
+                            @Model.Categories[1].JobsCount jobs available
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-4" style="min-width:300px;">
+            <div style="width:300px;height:130px;border: 1px solid #D0D5DD; margin-top:1%;">
+                <a href="../JobDashboard/@Model.Categories[2].Name" class="tile-link">
+                    <div class="category-tile-content">
+                        <p class="category-tile-header">
+                            @Model.Categories[2].Name
+                        </p>
+                        <p class="category-tile-jobs-count">
+                            @Model.Categories[2].JobsCount jobs available
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-inline:5%;margin-top:2.5%;margin-bottom:5%; margin-top:1%;">
+        <div class="col-4" style="min-width:300px;">
+            <div style="width:300px;height:130px;border: 1px solid #D0D5DD;">
+                <a href="../JobDashboard/@Model.Categories[3].Name" class="tile-link">
+                    <div class="category-tile-content">
+                        <p class="category-tile-header">
+                            @Model.Categories[3].Name
+                        </p>
+                        <p class="category-tile-jobs-count">
+                            @Model.Categories[3].JobsCount jobs available
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-4" style="min-width:300px;">
+            <div style="width:300px;height:130px;border: 1px solid #D0D5DD; margin-top:1%;">
+                <a href="../JobDashboard/@Model.Categories[4].Name" class="tile-link">
+                    <div class="category-tile-content">
+                        <p class="category-tile-header">
+                            @Model.Categories[4].Name
+                        </p>
+                        <p class="category-tile-jobs-count">
+                            @Model.Categories[4].JobsCount jobs available
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-4" style="min-width:300px;">
+            <div style="width:300px;height:130px;border: 1px solid #D0D5DD; margin-top:1%;">
+                <a href="../JobDashboard/@Model.Categories[5].Name" class="tile-link">
+                    <div class="category-tile-content">
+                        <p class="category-tile-header">
+                            @Model.Categories[5].Name
+                        </p>
+                        <p class="category-tile-jobs-count">
+                            @Model.Categories[5].JobsCount jobs available
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <p style="text-align:center;margin-block: 90px;"><a class="btn btn-primary" href="../JobDashboard/">View all jobs</a></p>
+
+    @if (!CurrentUser.IsAuthenticated)
+    {
+        <div class="mobile-conditional-box display-on-mobile" style="text-align:center;">
+            <div class="row mobile-conditional-box-contents" style="text-align:center;">
+                <div class="col-1" style="min-width:250px;text-align:center;">
+                    <img src="~/images/logo/BMT_Service_Drk Blue_symbol.png" width="60px" height="80px" />
+                </div>
+                <div class="col-3" style="min-width:250px;display:flex;justify-content:center;align-items:center;">
+                    <span style="font-weight: 700;font-size: 20px;line-height: 30px;text-align:center;color: #1D2939;text-align:center;">Find and be found</span>
+                </div>
+                <div class="col-3" style="min-width:250px;text-align: center;">
+                    <hr style="width:75px;text-align:center;margin-left:auto;margin-right:auto;"/>
+                </div>
+                <div class="col-3" style="min-width:250px;font-weight: 400;font-size: 14px;line-height: 20px;color: #1D2939;display: flex;justify-content: center;align-items: center;">
+                    <p style="">Create an account to land your<br />next job and grow your network</p>
+                </div>
+                <div class="col-3" style="min-width:250px;display:flex;justify-content:center;align-items:center;">
+                    <a href="../Account/SignUp" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
+        <div class="conditional-box no-display-on-mobile">
+            <div class="row conditional-box-contents" >
+                <div class="col-1">
+                    <img src="~/images/logo/BMT_Service_Drk Blue_symbol.png" width="60px" height="80px" />
+                </div>
+                <div class="col-2" style="display:flex;justify-content:center;align-items:center;">
+                    <span style="font-weight: 700;font-size: 20px;line-height: 30px;text-align:center;color: #1D2939;text-align:center;">Find and be found</span>
+                </div>
+                <div class="col-1" style="display:flex;justify-content:center;align-items:center;">
+                    <span style="height: 100%;width: 1px;background-color: #1D2939;"></span>
+                </div>
+                <div class="col-4" style="font-weight: 400;font-size: 14px;line-height: 20px;color: #1D2939;display: flex;justify-content: center;align-items: center;">
+                    <p style="">Create an account to land your<br />next job and grow your network</p>
+                </div>
+                <div class="col-3">
+                </div>
+                <div class="col-1" style="display:flex;justify-content:center;align-items:center;">
+                    <a href="../Account/SignUp" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
