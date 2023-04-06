@@ -60,11 +60,11 @@ let isFormValid = () => {
     let employmentTypeValid = ($('#EmploymentTypeId').val()).length > 0;
     let contractTypeValid = ($('#ContractTypeId').val()).length > 0;
     let jobLocationTypeValid = ($('#JobLocationTypeId').val()).length > 0;
-    let startDateValid = !isNaN(Date.parse($('#StartDate_input').val()));
+    //let startDateValid = !isNaN(Date.parse($('#StartDate_input').val()));
 
     if (jobTitleValid && jobSubDescValid && jobDescValid &&
         jobCatValid && employmentTypeValid && contractTypeValid &&
-        jobLocationTypeValid && startDateValid) {
+        jobLocationTypeValid) {
         // form is valid
         return true;
     }
@@ -232,7 +232,7 @@ function validateRequirementsTab() {
     let isEmploymentTypeValid = $('#EmploymentTypeId').val().length > 0;
     let isContractTypeValid = $('#ContractTypeId').val().length > 0;
     let isJobLocationValid = $('#JobLocationTypeId').val().length > 0;
-    let isStartDateValid = $('#StartDate_input').val().length > 0;
+    //let isStartDateValid = $('#StartDate_input').val().length > 0;
 
         if (!isEmploymentTypeValid) {
             $('#EmploymentTypeId').addClass('input-validation-error');
@@ -258,15 +258,15 @@ function validateRequirementsTab() {
             $('#JobLocationTypeId').removeClass('input-validation-error');
             $('#JobLocationTypeErrorMessage').text('');
         }
-        if (!isStartDateValid) {
-            $('#StartDate_input').addClass('input-validation-error');
-            $('#StartDateErrorMessage').text('Please select a starting date');
-        }
-        else {
-            $('#StartDate_input').removeClass('input-validation-error');
-            $('#StartDateErrorMessage').text('');
-        }
-    if (isEmploymentTypeValid && isContractTypeValid && isJobLocationValid && isStartDateValid) {
+        //if (!isStartDateValid) {
+        //    $('#StartDate_input').addClass('input-validation-error');
+        //    $('#StartDateErrorMessage').text('Please select a starting date');
+        //}
+        //else {
+        //    $('#StartDate_input').removeClass('input-validation-error');
+        //    $('#StartDateErrorMessage').text('');
+        //}
+    if (isEmploymentTypeValid && isContractTypeValid && isJobLocationValid) {
         markTabAsValid('2');
         return true;
     }

@@ -85,7 +85,7 @@ namespace Collabed.JobPortal.Jobs
                     job.MinSalaryConverted = salaryFrom * monthsInYear;
                     job.MaxSalaryConverted = salaryTo * monthsInYear;
                     break;
-                case Types.SalaryPeriod.Yearly:
+                case Types.SalaryPeriod.Annually:
                     job.MinSalaryConverted = salaryFrom;
                     job.MaxSalaryConverted = salaryTo;
                     break;

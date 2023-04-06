@@ -202,24 +202,27 @@
                                         </div>
                                         <div class="col-11">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Salary</span>
-                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">
-                                                @if (Model.SalaryMinimum.HasValue)
-                                                {
-                                                    <i class="bi bi-currency-pound"></i>@Model.SalaryMinimum
-                                                }
-                                                @if (Model.SalaryMinimum.HasValue && Model.SalaryMaximum.HasValue)
-                                                {
-                                                    <span> - </span>
-                                                }
-                                                @if (Model.SalaryMaximum.HasValue)
-                                                {
-                                                    <i class="bi bi-currency-pound"></i>@Model.SalaryMaximum
-                                                }
-                                                @if (Model.SalaryPeriodId.HasValue)
-                                                {
-                                                    <span>/ @Model.GetSalaryPeriodName()</span>
-                                                }
-                                            </p>
+                                            @if (Model.SalaryMaximum.HasValue || Model.SalaryMinimum.HasValue)
+                                            {
+                                                <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828; margin-bottom: 0;">
+                                                    @if (Model.SalaryMinimum.HasValue)
+                                                    {
+                                                        <i class="bi bi-currency-pound"></i>@Model.SalaryMinimum
+                                                    }
+                                                    @if (Model.SalaryMinimum.HasValue && Model.SalaryMaximum.HasValue)
+                                                    {
+                                                        <span> - </span>
+                                                    }
+                                                    @if (Model.SalaryMaximum.HasValue)
+                                                    {
+                                                        <i class="bi bi-currency-pound"></i>@Model.SalaryMaximum
+                                                    }
+                                                    @if (Model.SalaryPeriodId.HasValue)
+                                                    {
+                                                        <span>/ @Model.GetSalaryPeriodName()</span>
+                                                    }
+                                                </p>                                                
+                                            }
                                             @if(Model.IsSalaryNegotiable.HasValue && Model.IsSalaryNegotiable.Value == true){
                                                 <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #101828;">Negotiable</p>
                                             }

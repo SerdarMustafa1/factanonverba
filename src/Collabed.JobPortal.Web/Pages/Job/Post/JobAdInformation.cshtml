@@ -116,7 +116,7 @@
                     <div class="col-sm">
                         <p class="text-16-bold">Category*</p>
                         <p class="text-14">Please select the most relevant category for<br />your job listing. This will help job seekers<br />discover your job listing.</p>
-                        <p class="text-14">Can't find the right category? <a class="link-14" href="#">Contact us.</a></p>
+                        <p class="text-14">Can't find the right category? <a class="link-14" href="mailto:support@buildmytalent.com?subject=Category Support Request #0001&body=Hi BuildMyTalent team%0D%0A%0D%0AI'd like some help understanding how to categorise my job listing.%0D%0A%0D%0ACan you tell us a little more about the problem?">Contact us.</a></p>
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
@@ -202,12 +202,11 @@
                 <hr class="horizontal-line" />
                 <div class="row">
                     <div class="col-sm">
-                        <p class="text-16-bold">Start date*</p>
+                        <p class="text-16-bold">Start date (Optional)</p>
                         <br />
                     </div>
                     <div class="col-sm-8">
-                        <input class="form-control" id="StartDate_input" asp-for="StartDate"  type="text" placeholder="Select date" onchange="isFormValid()" />
-                        <span id="StartDateErrorMessage" asp-validation-for="StartDate" class="error-message-span"></span>
+                        <input class="form-control" id="StartDate_input" asp-for="StartDate"  type="text" placeholder="Select date" />
                     </div>
                 </div>
                 <hr class="horizontal-line" />
@@ -295,16 +294,24 @@
                                 <i class="bi bi-exclamation-triangle-fill" style="color:#F79009"></i>
                             </div>
                             <div class="col-11">
-                                <p class="text-14">
+                                <p class="text-14" style="margin-bottom: 5px;">
                                     Not including a salary range in a job posting may reduce the number of candidates and job ad performance.
                                     <br />
                                     <br />
-                                    Importance of sharing a salary:
-                                    <br />
-                                    <ul style=" color: #667085; font-weight: 400; font-size: 14px; line-height: 20px;">
-                                        <li>2x more clicks on every job ad</li>
-                                        <li>6x more applications</li>
-                                        <li>Number 1 priority/important component for candidates</li>
+                                    Why share the salary?
+                                    <ul style=" color: #667085; font-weight: 400; font-size: 14px; line-height: 20px; list-style-type: none; padding-left: 0;">
+                                        <li>
+                                            <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
+                                            Twice as many clicks
+                                        </li>
+                                        <li>
+                                            <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
+                                            Increased applications
+                                        </li>
+                                        <li>
+                                            <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
+                                            Priority for candidates
+                                        </li>
                                     </ul>
                                 </p>
                             </div>
@@ -335,7 +342,7 @@
                             </div>
                         </div>
                         <hr class="horizontal-line" />
-                        <div class="form-check" style="margin-left:0;padding-left:0;">
+                        <div class="form-check">
                             <input class="form-check-input" asp-for="IsSalaryNegotiable" type="checkbox" id="isSalaryNegotiableCheckbox">
                             <label class="form-check-label" for="isSalaryNegotiableCheckbox"> Salary is negotiable </label>
                         </div>
@@ -378,7 +385,18 @@
             <div style="margin-inline:4%; margin-top: 3%; margin-bottom: 3%;">
                 <div class="row">
                     <div class="col-sm">
-                        <p class="text-16-bold">Supporting documents needed</p>
+                        <p class="text-16-bold">Supporting documents</p>
+                        <div class="row">
+                            <div class="col-1">
+                                <i class="bi bi-exclamation-triangle-fill" style="color:#F79009"></i>
+                            </div>
+                            <div class="col-11">
+                                <p class="text-14">
+                                    Please select the required supporting documents. Keep in mind that these will be mandatory for applicant.
+                                </p>
+                            </div>
+                        </div>
+                        <span></span>
                         <br />
                     </div>
                     <div class="col-sm-8"> 
@@ -394,6 +412,10 @@
                             <div class="form-check">
                                 <input class="form-check-input" asp-for="IsOnlinePortfolioRequired" id="isOnlinePortfolioRequired">
                                 <label class="form-check-label" for="isOnlinePortfolioRequired"> Online Portfolio </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="noneOption">
+                                <label class="form-check-label" for="noneOption"> None</label>
                             </div>
 @*                            @foreach(var item in Model.AvailableSupportedDocuments)
                             {
@@ -478,7 +500,7 @@
                         
                     </div>
                     <div class="col-10">
-                        <label for="AutoRejectAnswer1" class="hint-14-bold">Auto-reject answer</label>
+                        <label for="AutoRejectAnswer1" class="hint-14-bold">Desired response</label>
                         <select asp-for="AutoRejectAnswer1" class="form-select">
                             <option value="" disabled selected hidden>Please select</option>
                             <option value="true">Yes</option>
@@ -502,7 +524,7 @@
                         
                     </div>
                     <div class="col-10">
-                        <label for="AutoRejectAnswer2" class="hint-14-bold">Auto-reject answer</label>
+                        <label for="AutoRejectAnswer2" class="hint-14-bold">Desired response</label>
                         <select asp-for="AutoRejectAnswer2" class="form-select">
                             <option value="" disabled selected hidden>Please select</option>
                             <option value="true">Yes</option>
@@ -526,7 +548,7 @@
                         
                     </div>
                     <div class="col-10">
-                        <label for="AutoRejectAnswer3" class="hint-14-bold">Auto-reject answer</label>
+                        <label for="AutoRejectAnswer3" class="hint-14-bold">Desired response</label>
                         <select asp-for="AutoRejectAnswer3" class="form-select">
                             <option value="" disabled selected hidden>Please select</option>
                             <option value="true">Yes</option>

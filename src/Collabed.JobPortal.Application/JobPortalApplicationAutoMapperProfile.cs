@@ -95,7 +95,7 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             "day" => (SalaryPeriod?)SalaryPeriod.Daily,
             "week" => (SalaryPeriod?)SalaryPeriod.Weekly,
             "month" => (SalaryPeriod?)SalaryPeriod.Monthly,
-            "annum" => (SalaryPeriod?)SalaryPeriod.Yearly,
+            "annum" => (SalaryPeriod?)SalaryPeriod.Annually,
             _ => null,
         };
     }
