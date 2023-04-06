@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
@@ -13,6 +14,6 @@ namespace Collabed.JobPortal.Jobs
 		Task DeleteAsync(Guid id);
 		Task<JobResponseDto> HandleExternalJobFeedAsync(ExternalJobRequest externalJobRequest);
 		Task<JobDto> GetByReferenceAsync(string reference);
-
+		Task<IEnumerable<CategorisedJobsDto>> GetCategorisedJobs();
 	}
 }

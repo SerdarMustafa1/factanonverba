@@ -1,4 +1,5 @@
 ﻿using Collabed.JobPortal;
+using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Permissions;
@@ -23,12 +24,13 @@ namespace JobPortal.Jobs
     {
         private readonly IJobRepository _jobRepository;
         private readonly IOrganisationRepository _organisationRepository;
+        private readonly IRepository<Category> _categoryRepository;
         private readonly JobManager _jobManager;
         private readonly ILogger<JobAppService> _logger;
         private readonly IdibuOptions _idibuOptions;
         private readonly BroadbeanOptions _broadBeanOptions;
 
-        public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger, IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IOrganisationRepository organisationRepository)
+        public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger, IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IOrganisationRepository organisationRepository, IRepository<Category> categoriesRepository)
         {
             _jobRepository = jobRepository;
             _jobManager = jobManager;
@@ -36,6 +38,7 @@ namespace JobPortal.Jobs
             _idibuOptions = idibuOptions.Value;
             _broadBeanOptions = broadBeanOptions.Value;
             _organisationRepository = organisationRepository;
+            _categoryRepository = categoriesRepository;
         }
 
         public async Task<JobDto> GetAsync(Guid id)
@@ -58,6 +61,19 @@ namespace JobPortal.Jobs
             var totalCount = await _jobRepository.CountAsync();
 
             return new PagedResultDto<JobDto>(totalCount, ObjectMapper.Map<List<Job>, List<JobDto>>(jobs));
+        }
+
+        public async Task<IEnumerable<CategorisedJobsDto>> GetCategorisedJobs()
+        {
+            var categories = await _categoryRepository.GetListAsync();
+            var categorisedJobs = new List<CategorisedJobsDto>();
+            foreach (var category in categories)
+            {
+                var jobs = await _jobRepository.CountAsync(x => x.CategoryId == category.Id);
+                categorisedJobs.Add(new CategorisedJobsDto { Id = category.Id, JobsCount = jobs, Name = category.Name });
+            }
+
+            return categorisedJobs;
         }
 
         [Authorize(BmtPermissions.ManageJobs)]
@@ -186,7 +202,7 @@ namespace JobPortal.Jobs
             return message;
         }
 
-        private static IEnumerable<(string, bool?)> ConvertScreeningQuestions(IEnumerable<ScreeningQuestion> screeningQuestions)
+        private static IEnumerable<(string, bool?)> ConvertScreeningQuestions(IEnumerable<Collabed.JobPortal.Jobs.ScreeningQuestion> screeningQuestions)
         {
             foreach (var item in screeningQuestions)
             {
