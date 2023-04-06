@@ -72,7 +72,7 @@
               </table>
               <div style="margin-top: 2rem;">
                 <p class="hint-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 200; color: #475467; margin: 1rem 0;" align="left">If you did not created an account, please let us know immediately by sending an<br>
-                  email to <a href="mailto:support@BuildMyTalentOAuthExtensions.com" class="secondary-link" style="color: #475467; text-decoration: underline;">support@buildmytalent.com</a></p>
+                  email to <a href="mailto:support@BuildMyTalent.com" class="secondary-link" style="color: #475467; text-decoration: underline;">support@buildmytalent.com</a></p>
                 <p class="hint-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 200; color: #475467; margin: 0 0 1rem;" align="left">We are here to help you at any step along the way.</p>
                 <p class="hint-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 200; color: #475467; margin: 0 0 1rem;" align="left">Sincerely,</p>
                 <p class="hint-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 200; color: #475467; margin: 0;" align="left">The BuildMyTalent team</p>

@@ -344,7 +344,7 @@
                         <hr class="horizontal-line" />
                         <div class="form-check">
                             <input class="form-check-input" asp-for="IsSalaryNegotiable" type="checkbox" id="isSalaryNegotiableCheckbox">
-                            <label class="form-check-label" for="isSalaryNegotiableCheckbox"> Salary is negotiable </label>
+                            <label class="form-check-label" for="isSalaryNegotiableCheckbox"> Salary to be confirmed </label>
                         </div>
                     </div>
                     <hr class="horizontal-line" />
@@ -414,7 +414,7 @@
                                 <label class="form-check-label" for="isOnlinePortfolioRequired"> Online Portfolio </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" id="noneOption">
+                                <input class="form-check-input" id="noneOption" type="checkbox">
                                 <label class="form-check-label" for="noneOption"> None</label>
                             </div>
 @*                            @foreach(var item in Model.AvailableSupportedDocuments)
@@ -483,8 +483,7 @@
             <div style="margin-inline:4%; margin-top: 3%; margin-bottom: 3%;">
                 <div class="row">
                     <p class="text-16-bold">Screening questions</p>
-                    <p class="text-14">These questions could be related to a candidate's experience, qualifications, or other specific job-related requirements. 
-                        This will help ensure that only the most qualified and suitable candidates are presented for further consideration</p>
+                    <p class="text-14">These questions could be related to a candidate's experience, qualifications, or other specific job-related requirements. This will help ensure that only the most qualified and suitable candidates are presented for further consideration. Although these are optional fields, if used they will become required fields for candidates.</p>
                 </div>
                 <div class="row" style="margin-top:5%;">
                     <div class="col-2">
@@ -506,7 +505,7 @@
                             <option value="true">Yes</option>
                             <option value="false">No</option>
                         </select>
-                        <label for="AutoRejectAnswer1" class="hint-14">Based on candidate responses, our system will automatically include or exclude them from the candidate pool.</label>
+                        <label for="AutoRejectAnswer1" class="hint-14">Our system carefully sorts applicants based on your criteria.</label>
                     </div>
                 </div>
                 <hr />
@@ -530,7 +529,7 @@
                             <option value="true">Yes</option>
                             <option value="false">No</option>
                         </select>
-                        <label for="AutoRejectAnswer1" class="hint-14">Based on candidate responses, our system will automatically include or exclude them from the candidate pool.</label>
+                        <label for="AutoRejectAnswer1" class="hint-14">Our system carefully sorts applicants based on your criteria.</label>
                     </div>
                 </div>
                 <hr />
@@ -554,7 +553,7 @@
                             <option value="true">Yes</option>
                             <option value="false">No</option>
                         </select>
-                        <label for="AutoRejectAnswer3" class="hint-14">Based on candidate responses, our system will automatically include or exclude them from the candidate pool.</label>
+                        <label for="AutoRejectAnswer3" class="hint-14">Our system carefully sorts applicants based on your criteria.</label>
                     </div>
                 </div>
 
