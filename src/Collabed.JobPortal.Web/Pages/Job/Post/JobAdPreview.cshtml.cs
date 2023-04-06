@@ -1,19 +1,15 @@
+using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.Jobs;
+using Collabed.JobPortal.Organisations;
+using Collabed.JobPortal.Permissions;
 using Collabed.JobPortal.Types;
+using Collabed.JobPortal.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
-using Collabed.JobPortal.DropDowns;
-using Collabed.JobPortal.Users;
-using Volo.Abp.Users;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Collabed.JobPortal.Organisations;
-using Collabed.JobPortal.Permissions;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Post
 {
@@ -154,7 +150,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public string GetLocalLanguageName()
         {
             var res = _dropDownAppService.GetLanguageNameById(LanguageId.Value).Result;
-            if(res != null)
+            if (res != null)
             {
                 return res;
             }
@@ -163,7 +159,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
 
         public string GetSalaryPeriodName()
         {
-            if(SalaryPeriodId.HasValue)
+            if (SalaryPeriodId.HasValue)
             {
                 // HACK TODO shortcuts
                 return Enum.GetName(typeof(SalaryPeriod), SalaryPeriodId);
@@ -183,7 +179,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                 return string.Empty;
             }
         }
-        
+
         public string GetCurrentDate()
         {
             var suffix = "";
@@ -202,12 +198,12 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
 
         public string GetEmploymentType()
         {
-            return Enum.Parse<EmploymentType>(EmploymentTypeId.ToString()).GetDisplayName(); 
+            return Enum.Parse<EmploymentType>(EmploymentTypeId.ToString()).GetDisplayName();
         }
 
         public string GetJobLocationType()
         {
-            return Enum.Parse<JobLocation>(JobLocationTypeId.ToString()).GetDisplayName(); 
+            return Enum.Parse<JobLocation>(JobLocationTypeId.ToString()).GetDisplayName();
         }
 
         public string GetOfficeLocation()
@@ -245,7 +241,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                     IsSalaryNegotiable = IsSalaryNegotiable,
                     JobLocation = (JobLocation)JobLocationTypeId,
                     LocalLanguageId = LanguageId,
-                    OfferVisaSponsorship = OfferingVisaSponsorship,
                     OfficeLocationId = JobLocationId,
                     PaymentOption = SalaryPeriodId != null ? (SalaryPeriod)SalaryPeriodId : null,
                     PositionsAvailable = PositionsAvailable,

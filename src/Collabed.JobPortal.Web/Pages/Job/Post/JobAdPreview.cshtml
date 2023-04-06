@@ -21,7 +21,6 @@
     <input type="hidden" asp-for="CandidateExperienceLevel" />
     <input type="hidden" asp-for="LocalLanguageRequired" />
     <input type="hidden" asp-for="LanguageId" />
-    <input type="hidden" asp-for="OfferingVisaSponsorship" />
     <input type="hidden" asp-for="IsNetZeroCompliant" />
     <input type="hidden" asp-for="SalaryPeriodId" />
     <input type="hidden" asp-for="SalaryMinimum" />
@@ -238,26 +237,6 @@
                                         <div class="col-11">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Local Language</span>
                                             <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.GetLocalLanguageName()</p>
-                                        </div>
-                                    </div>
-                                }
-                                @if (Model.OfferingVisaSponsorship.HasValue) {
-                                    <div class="row">
-                                        <div class="col-1">
-                                            <i class="bi bi-file-earmark-richtext" style="color:#0C3779;"></i>
-                                        </div>
-                                        <div class="col-11">
-                                            <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Offer Sponsorship</span>
-                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">
-                                                @if (Model.OfferingVisaSponsorship.Value)
-                                                {
-                                                    <span> Yes </span>
-                                                }
-                                                else 
-                                                {
-                                                    <span> No </span>
-                                                }
-                                            </p>
                                         </div>
                                     </div>
                                 }
