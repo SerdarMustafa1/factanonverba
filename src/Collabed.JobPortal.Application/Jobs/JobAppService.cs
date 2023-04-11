@@ -47,7 +47,7 @@ namespace JobPortal.Jobs
 
         public async Task<PagedResultDto<JobDto>> SearchAsync(SearchCriteriaInput criteria, CancellationToken cancellationToken)
         {
-            MapSearchResult mapSearchResult = null;
+            var mapSearchResult = new MapSearchResult();
             if (!string.IsNullOrEmpty(criteria.Location))
             {
                 mapSearchResult = await _searchService.GetLocationCoordinatesAsync(criteria.Location, cancellationToken);

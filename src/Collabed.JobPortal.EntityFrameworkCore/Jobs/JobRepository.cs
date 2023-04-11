@@ -88,8 +88,18 @@ namespace Collabed.JobPortal.Jobs
                 query = query.Where(x => context.FuzzyMatchString(x.job.Title, keyword) >= fuzzySearchRatio);
             }
 
+            if (!string.IsNullOrEmpty(sorting))
+            {
+                query = sorting switch
+                {
+                    "dateAdded" => query.OrderByDescending(x => x.job.CreationTime),
+                    "closingDate" => query.OrderBy(x => x.job.ApplicationDeadline),
+                    "salary" => query.OrderByDescending(x => x.job.MaxSalaryConverted),
+                    _ => query.OrderBy(x => x.job.Title),
+                };
+            }
+
             return await query
-                //.OrderBy(!string.IsNullOrWhiteSpace(sorting) ? sorting : nameof(Job.Title))
                 .PageBy(skipCount, maxResultCount)
                 .Select(x => new JobWithDetails
                 {
