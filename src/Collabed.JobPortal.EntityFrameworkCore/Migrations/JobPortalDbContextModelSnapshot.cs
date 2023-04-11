@@ -185,7 +185,7 @@ namespace Collabed.JobPortal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SupplementalPays");
+                    b.ToTable("SupplementalPays", (string)null);
                 });
 
             modelBuilder.Entity("Collabed.JobPortal.DropDowns.SupportingDocument", b =>

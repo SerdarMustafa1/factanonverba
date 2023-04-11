@@ -59,6 +59,11 @@ public class JobPortalApplicationModule : AbpModule
 		var configuration = context.Services.GetConfiguration();
 		Configure<BroadbeanOptions>(configuration.GetSection("ExternalFeed:Broadbean"));
 		Configure<IdibuOptions>(configuration.GetSection("ExternalFeed:Idibu"));
+		Configure<MapsSearchOptions>(options =>
+		{
+			options.SubscriptionKey =
+			configuration["Settings:MapsSubscriptionKey"];
+		});
 	}
 
 	private void ConfigureBlobStoringOptions(ServiceConfigurationContext context)

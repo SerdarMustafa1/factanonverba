@@ -3,6 +3,7 @@ using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.PaymentRequests;
 using Microsoft.EntityFrameworkCore;
+using System;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -211,5 +212,14 @@ public class JobPortalDbContext :
             b.HasIndex(x => x.CustomerId);
             b.HasIndex(x => x.State);
         });
+
+        builder.HasDbFunction(typeof(JobPortalDbContext).GetMethod(nameof(FuzzyMatchString), new[] { typeof(string), typeof(string) })).HasName("FuzzyMatchString");
+        builder.HasDbFunction(typeof(JobPortalDbContext).GetMethod(nameof(CalcDistanceMiles), new[] { typeof(decimal), typeof(decimal), typeof(decimal), typeof(decimal) })).HasName("CalcDistanceMiles");
     }
+
+    public int FuzzyMatchString(string jobTitle, string jobTitleParam)
+        => throw new NotSupportedException();
+
+    public int CalcDistanceMiles(decimal locLat, decimal locLon, decimal lat, decimal lon)
+        => throw new NotSupportedException();
 }

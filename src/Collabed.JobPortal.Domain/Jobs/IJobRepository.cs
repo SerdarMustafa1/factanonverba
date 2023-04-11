@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Collabed.JobPortal.Types;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,5 +14,9 @@ namespace Collabed.JobPortal.Jobs
 		Task DeleteByReferenceAsync(string reference);
 		Task<bool> CheckIfJobExistsByReference(string reference);
 		Task<JobWithDetails> GetWithDetailsByReferenceAsync(string reference);
+		Task<List<JobWithDetails>> GetListBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, int categoryId,
+			string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, bool? netZero, ContractType? contractType, EmploymentType? employmentType,
+			JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default);
+
 	}
 }

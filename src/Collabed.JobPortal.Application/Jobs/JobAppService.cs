@@ -3,6 +3,7 @@ using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Permissions;
+using Collabed.JobPortal.Search;
 using Collabed.JobPortal.Types;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -29,8 +31,9 @@ namespace JobPortal.Jobs
         private readonly ILogger<JobAppService> _logger;
         private readonly IdibuOptions _idibuOptions;
         private readonly BroadbeanOptions _broadBeanOptions;
+        private readonly ISearchService _searchService;
 
-        public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger, IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IOrganisationRepository organisationRepository, IRepository<Category> categoriesRepository)
+        public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger, IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IOrganisationRepository organisationRepository, IRepository<Category> categoriesRepository, ISearchService searchService)
         {
             _jobRepository = jobRepository;
             _jobManager = jobManager;
@@ -39,6 +42,23 @@ namespace JobPortal.Jobs
             _broadBeanOptions = broadBeanOptions.Value;
             _organisationRepository = organisationRepository;
             _categoryRepository = categoriesRepository;
+            _searchService = searchService;
+        }
+
+        public async Task<PagedResultDto<JobDto>> SearchAsync(SearchCriteriaInput criteria, CancellationToken cancellationToken)
+        {
+            MapSearchResult mapSearchResult = null;
+            if (!string.IsNullOrEmpty(criteria.Location))
+            {
+                mapSearchResult = await _searchService.GetLocationCoordinatesAsync(criteria.Location, cancellationToken);
+            }
+
+            var jobs = await _jobRepository.GetListBySearchCriteriaAsync(criteria.Sorting, criteria.SkipCount, criteria.MaxResultCount,
+                criteria.CategoryId, criteria.Keyword, mapSearchResult.ResultsFound, (mapSearchResult?.Latitude, mapSearchResult?.Longitude), criteria.SearchRadius, criteria.NetZero, criteria.ContractType,
+                criteria.EmploymentType, criteria.Workplace, criteria.SalaryMinimum, criteria.SalaryMaximum, cancellationToken);
+            var totalCount = await _jobRepository.CountAsync();
+
+            return new PagedResultDto<JobDto>(totalCount, ObjectMapper.Map<List<JobWithDetails>, List<JobDto>>(jobs));
         }
 
         public async Task<JobDto> GetAsync(Guid id)
@@ -87,11 +107,16 @@ namespace JobPortal.Jobs
 
             var organisationId = Guid.Parse(organisationClaim.Value);
             var job = await _jobManager.CreateAsync(organisationId);
-            var screeningQuestions = _jobManager.CreateScreeningQuestions(input.ScreeningQuestions, job.Id);
+
+            IEnumerable<Collabed.JobPortal.DropDowns.ScreeningQuestion> screeningQuestions = null;
+            if (input.ScreeningQuestions != null)
+            {
+                screeningQuestions = _jobManager.CreateScreeningQuestions(input.ScreeningQuestions, job.Id);
+            }
 
             ObjectMapper.Map(input, job);
             job.SetSupportingDocs(input.SupportingDocuments)
-               .ScreeningQuestions = screeningQuestions;
+               .ScreeningQuestions = screeningQuestions ?? null;
             _jobManager.ConvertSalaryRates(job);
 
             var newJob = await _jobRepository.InsertAsync(job);
@@ -194,7 +219,10 @@ namespace JobPortal.Jobs
             newJob.JobOrigin = jobOrigin;
             _jobManager.ConvertSalaryRates(newJob);
 
-            newJob.ScreeningQuestions = _jobManager.CreateScreeningQuestions(ConvertScreeningQuestions(externalJobRequest.ScreeningQuestions), newJob.Id);
+            if (externalJobRequest.ScreeningQuestions != null)
+            {
+                newJob.ScreeningQuestions = _jobManager.CreateScreeningQuestions(ConvertScreeningQuestions(externalJobRequest.ScreeningQuestions), newJob.Id);
+            }
             await _jobRepository.InsertAsync(newJob);
 
             message = $"Posted a new job with reference {jobReference}";
