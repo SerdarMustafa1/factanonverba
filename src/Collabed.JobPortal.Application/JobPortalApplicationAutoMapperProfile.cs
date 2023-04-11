@@ -22,6 +22,8 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             .ForMember(d => d.SalaryMaximum,
                     op => op.MapFrom(o => o.SalaryTo));
         CreateMap<JobWithDetails, JobDto>()
+            .ForMember(d => d.PublishedDate, 
+                    op => op.MapFrom(o => o.CreationTime))
             .ForMember(d => d.SalaryMinimum,
                     op => op.MapFrom(o => o.SalaryFrom))
             .ForMember(d => d.SalaryMaximum,
