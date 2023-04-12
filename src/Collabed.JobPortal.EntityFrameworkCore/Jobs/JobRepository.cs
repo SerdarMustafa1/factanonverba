@@ -136,6 +136,72 @@ namespace Collabed.JobPortal.Jobs
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<int> CountBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, int categoryId,
+            string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, bool? netZero, ContractType? contractType, EmploymentType? employmentType,
+            JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default)
+        {
+            var context = await GetDbContextAsync();
+            var query = from job in context.Set<Job>()
+                        join loc in context.Set<Location>()
+                           on job.OfficeLocationId equals loc.Id into grouping2
+                        from loc in grouping2.DefaultIfEmpty()
+                        select new { job, loc };
+
+            query = query.Where(x => x.job.CategoryId == categoryId);
+
+            if (netZero.HasValue)
+            {
+                query = query.Where(x => x.job.IsNetZeroCompliant == netZero.Value);
+            }
+            if (contractType.HasValue)
+            {
+                query = query.Where(x => x.job.Type == contractType.Value);
+            }
+            if (employmentType.HasValue)
+            {
+                query = query.Where(x => x.job.EmploymentType == employmentType.Value);
+            }
+            if (workplace.HasValue)
+            {
+                query = query.Where(x => x.job.JobLocation == workplace.Value);
+            }
+            if (salaryMinimum.HasValue)
+            {
+                query = query.Where(x => x.job.MaxSalaryConverted.HasValue && x.job.MaxSalaryConverted >= salaryMinimum.Value);
+
+                if (!salaryMaximum.HasValue)
+                {
+                    query = query.Where(x => x.job.MinSalaryConverted.HasValue && x.job.MinSalaryConverted >= salaryMinimum.Value);
+                }
+            }
+            if (salaryMaximum.HasValue)
+            {
+                query = query.Where(x => x.job.MinSalaryConverted.HasValue && x.job.MinSalaryConverted < salaryMaximum.Value);
+            }
+            if (locationsFound && searchRadius.HasValue && searchRadius.Value > 0)
+            {
+                query = query.Where(x => context.CalcDistanceMiles(location.lat.Value, location.lon.Value, x.loc.Latitude, x.loc.Longitude) <= searchRadius.Value);
+            }
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                var fuzzySearchRatio = Convert.ToInt32(keyword.Length*0.8);
+                query = query.Where(x => context.FuzzyMatchString(x.job.Title, keyword) >= fuzzySearchRatio);
+            }
+
+            if (!string.IsNullOrEmpty(sorting))
+            {
+                query = sorting switch
+                {
+                    "dateAdded" => query.OrderByDescending(x => x.job.CreationTime),
+                    "closingDate" => query.OrderBy(x => x.job.ApplicationDeadline),
+                    "salary" => query.OrderByDescending(x => x.job.MaxSalaryConverted),
+                    _ => query.OrderBy(x => x.job.Title),
+                };
+            }
+
+            return await query.CountAsync(cancellationToken);
+        }
+
         public async Task<Job> GetByReferenceAsync(string reference)
         {
             var query = await ApplyFilterAsync();
