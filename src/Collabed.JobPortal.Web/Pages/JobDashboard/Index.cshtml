@@ -23,11 +23,11 @@
         <p style="font-weight: 600; font-size: 36px; line-height: 44px; color: #101828;">Explore by category</p>
         <p style="font-weight: 400; font-size: 18px; line-height: 28px; color: #101828;">The job board designed for and by construction-industry professionals.</p>
     </div>
-
+    <div class="tiles-wrapper">
     <div class="row" style="margin-inline:5%;margin-top:5%;">
         <div class="col-4" style="min-width:300px;justify-content:center">
             <div class="category-tile">
-                <a href="../JobDashboard/@Model.Categories[0].Name" class="tile-link">
+                <a href="../JobDashboard/Search?category=@Model.Categories[0].Id" class="tile-link">
                     <div class="category-tile-content">
                         <p class="category-tile-header">
                             @Model.Categories[0].Name
@@ -41,7 +41,7 @@
         </div>
         <div class="col-4" style="min-width:300px;">
             <div class="category-tile">
-                <a href="../JobDashboard/@Model.Categories[1].Name" class="tile-link">
+                <a href="../JobDashboard/Search?category=@Model.Categories[1].Id" class="tile-link">
                     <div class="category-tile-content">
                         <p class="category-tile-header">
                             @Model.Categories[1].Name
@@ -55,7 +55,7 @@
         </div>
         <div class="col-4" style="min-width:300px;">
             <div class="category-tile">
-                <a href="../JobDashboard/@Model.Categories[2].Name" class="tile-link">
+                <a href="../JobDashboard/Search?category=@Model.Categories[2].Id" class="tile-link">
                     <div class="category-tile-content">
                         <p class="category-tile-header">
                             @Model.Categories[2].Name
@@ -71,7 +71,7 @@
     <div class="row" style="margin-inline:5%;margin-top:2.5%;margin-bottom:5%; margin-top:1%;">
         <div class="col-4" style="min-width:300px;">
             <div class="category-tile">
-                <a href="../JobDashboard/@Model.Categories[3].Name" class="tile-link">
+                <a href="../JobDashboard/Search?category=@Model.Categories[3].Id" class="tile-link">
                     <div class="category-tile-content">
                         <p class="category-tile-header">
                             @Model.Categories[3].Name
@@ -85,7 +85,7 @@
         </div>
         <div class="col-4" style="min-width:300px;">
             <div class="category-tile">
-                <a href="../JobDashboard/@Model.Categories[4].Name" class="tile-link">
+                <a href="../JobDashboard/Search?category=@Model.Categories[4].Id" class="tile-link">
                     <div class="category-tile-content">
                         <p class="category-tile-header">
                             @Model.Categories[4].Name
@@ -99,7 +99,7 @@
         </div>
         <div class="col-4" style="min-width:300px;">
             <div class="category-tile">
-                <a href="../JobDashboard/@Model.Categories[5].Name" class="tile-link">
+                <a href="../JobDashboard/Search?category=@Model.Categories[5].Id" class="tile-link">
                     <div class="category-tile-content">
                         <p class="category-tile-header">
                             @Model.Categories[5].Name
@@ -112,7 +112,8 @@
             </div>
         </div>
     </div>
-    <p style="text-align:center;margin-block: 90px;"><a class="btn btn-primary" href="../JobDashboard/">View all jobs</a></p>
+    </div>
+    <p style="text-align:center;margin-block: 90px;"><a class="btn btn-primary" href="../JobDashboard/Search">View all jobs</a></p>
 
     @if (!CurrentUser.IsAuthenticated)
     {

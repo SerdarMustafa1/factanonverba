@@ -33,6 +33,10 @@
     margin-block: 5%;
     margin-inline: 15%;
 }
+.tiles-wrapper {
+    max-width:1132px;
+    margin-inline: auto;
+}
 
 .tile-link {
     text-decoration: none !important;

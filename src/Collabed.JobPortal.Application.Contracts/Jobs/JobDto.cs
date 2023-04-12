@@ -38,5 +38,18 @@ namespace Collabed.JobPortal.Jobs
         //public Guid? OrganisationId { get; set; }
         public string OrganisationName { get; set; }
         public DateTime PublishedDate { get; set; }
+
+        public string GetSalaryRange()
+        {
+            if (SalaryMinimum.HasValue && SalaryMinimum.Value > 0
+                && SalaryMaximum.HasValue && SalaryMaximum.Value > 0)
+            {
+                return $"£{SalaryMinimum.Value.ToString("N2")} - £{SalaryMaximum.Value.ToString("N2")}";
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
     }
 }

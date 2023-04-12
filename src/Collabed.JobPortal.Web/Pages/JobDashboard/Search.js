@@ -1,0 +1,4 @@
+﻿
+const clearSearchTerm = () => {
+    $('#keywordInput').val('');
+}

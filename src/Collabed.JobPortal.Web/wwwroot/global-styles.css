@@ -4,9 +4,27 @@
     src: url('fonts/Montserrat/static/Montserrat-Regular.ttf');
 }
 
-@media (min-width: 1900px) {
+@media (min-width: 1300px) {
     .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
-        max-width: 1832px;
+        max-width: 1232px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+        max-width: 1332px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+        max-width: 1532px;
+    }
+}
+
+@media (min-width: 1800px) {
+    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+        max-width: 1732px;
     }
 }
 
@@ -261,6 +279,7 @@ label.text-14 {
 .text-30 {
     font-size: 30px;
     color: var(--neutral900);
+    font-weight: 600;
 }
 
 .heading-gray-30 {

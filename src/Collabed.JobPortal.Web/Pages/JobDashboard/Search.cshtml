@@ -1,0 +1,102 @@
+﻿@page
+@model Collabed.JobPortal.Web.Pages.JobDashboard.SearchModel
+@{
+}
+
+@section styles {
+    <abp-style src="/search.css"></abp-style>
+}
+
+@section scripts {
+    <abp-script src="/Pages/JobDashboard/Search.js" />
+}
+
+<input type="hidden" asp-for=@Model.DistanceRange />
+
+<form method="get" asp-page="Search">
+    <div class="row" style="width:100%;padding: 0px 64px; height: 10%;">
+        <div class="col-2">
+            @Html.DropDownListFor(c => c.Category, Model.Categories, "Select category", new { @class = "form-select", data_live_search = "true" })
+        </div>
+        <div class="col-5">
+            <div class="input-group">
+                @Html.TextBoxFor(c => c.Predicate,string.Empty, new { @class= "form-control", placeholder = "Keyword", id = "keywordInput"} )
+                <label class="input-group-text"><i class="bi bi-x-circle-fill" onclick="clearSearchTerm()" style="cursor:pointer;"></i></label>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="input-group">
+                <input type="text" class="form-control" asp-for="@Model.Location">
+                @Html.DropDownListFor(c => c.SelectedRadius, Model.AvailableLocationRadius, new { @class = "form-select", id="selectRadius" })
+            </div>
+        </div>
+        <div class="col-2">
+            <button type="submit" class="btn btn-primary searchBtn">Search</button>
+        </div>
+    </div>
+
+    <div class="semiheader no-display-on-mobile">
+        <div class="row">
+            <div class="col-2">
+                <p class="amountPar">Showing @Model.TotalCount results</p>
+            </div>
+            <div class="col-5"></div>
+            <div class="col-2">
+                <p class="sortingPar">Sort by: </p>
+            </div>
+            <div class="col-3">
+                <div class="input-group">
+                    @Html.DropDownListFor(c => c.SelectedSortingType, Model.AvailableSortingTypes, new { @class = "form-select sorting-select", id="selectSortingType" })
+                </div>
+            </div>
+        </div>
+    </div>
+    @*    <div class="display-on-mobile"> THIS CAUSES ISSUES WITH INSERTING TWO PARAMETERS WITH THE SAME NAME TO THE URL
+    <p class="sortingPar">Sort by: </p>
+    <div class="input-group">
+    @Html.DropDownListFor(c => c.SelectedSortingType, Model.AvailableSortingTypes, new { @class = "form-select", id="selectSortingType" })
+    </div>
+    </div>*@
+</form>
+
+<div>
+    @foreach (var jobDto in Model.JobOffers)
+    {
+        var link = $"../Job?Reference={jobDto.Reference}&PreviousParams=";
+        foreach (var keyValuePair in Request.Query)
+        {
+            link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
+        }
+        <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
+            <div class="card" style="padding: 0 !important;">
+                <div class="card-header" style="background-color:#FAFAFA; border-bottom: 1px solid rgba(0, 0, 0, 0.175);">
+                    <div class="row" style="margin-bottom:8px;">
+                        <div class="col-11">
+                            <span class="badge rounded-pill bg-primary">New</span>
+                        </div>
+                        <div class="col-1" style="text-align:right">
+                            <button class="btn btn-outline-primary" style="margin-right:4px; right:0;">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <p class="text-30">@jobDto.Title</p>
+                        <p>
+                            <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
+                                @jobDto.OrganisationName
+                            </span>
+                        </p>
+                        <p class="text-16-bold">@jobDto.OfficeLocation <i class="bi bi-dot"></i> @jobDto.JobLocation <i class="bi bi-dot"></i> @jobDto.GetSalaryRange()</p>
+                        <br />
+                        <p class="text-14">
+                            @jobDto.SubDescription
+                        </p>
+                        <p><a class="btn btn-primary full-width-on-mobile" href=@link >More Details</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
