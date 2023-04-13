@@ -14,7 +14,7 @@
 <input type="hidden" asp-for=@Model.DistanceRange />
 
 <form method="get" asp-page="Search">
-    <input type="hidden" asp-for="@Model.CurrentPage"/>
+    <input type="hidden" asp-for="@Model.CurrentPage" id="currentPageHiddenInput"/>
     <div class="row" style="width:100%;padding: 0px 64px; height: 10%;">
         <div class="col-2">
             @Html.DropDownListFor(c => c.Category, Model.Categories, "Select category", new { @class = "form-select", data_live_search = "true" })
@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="col-2">
-            <button type="submit" class="btn btn-primary searchBtn">Search</button>
+            <button type="submit" class="btn btn-primary searchBtn" onclick="onPostSearch()">Search</button>
         </div>
     </div>
 

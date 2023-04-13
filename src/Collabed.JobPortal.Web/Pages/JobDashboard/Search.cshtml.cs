@@ -84,10 +84,5 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
             TotalCount = (int)pagedJobsResult.TotalCount;
             JobOffers = pagedJobsResult.Items;
         }
-
-        public async Task<IActionResult> OnPostAsync() 
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
