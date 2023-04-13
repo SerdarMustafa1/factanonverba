@@ -39,6 +39,8 @@ namespace Collabed.JobPortal.Jobs
         public string OrganisationName { get; set; }
         public DateTime PublishedDate { get; set; }
 
+        public string ApplicationUrl { get; set; }
+
         public string GetSalaryRange()
         {
             if (SalaryMinimum.HasValue && SalaryMinimum.Value > 0
