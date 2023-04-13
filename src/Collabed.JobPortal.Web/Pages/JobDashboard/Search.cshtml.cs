@@ -16,6 +16,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         private readonly DropDownAppService _dropDownService;
         private readonly IJobAppService _jobAppService;
         public string DistanceRange { get; set; } = "Within 1 mile";
+        public int PaginatedCount { get; set; }
         public int TotalCount { get; set; }
 
         [BindProperty(SupportsGet = true)]
@@ -31,7 +32,15 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         public int SelectedRadius { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string SelectedSortingType { get; set; }
+        public string Sorting { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int CurrentPage { get; set; } = 1;
+
+        [BindProperty(SupportsGet = true)]
+        public int PageSize { get; set; } = 4;
+
+        public int TotalPages => (int)Math.Ceiling(decimal.Divide(TotalCount, PageSize));
 
         public IEnumerable<SelectListItem> Categories { get; set; }
 
@@ -61,19 +70,18 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         public async Task OnGetAsync()
         {
             Categories = (await _dropDownService.GetCategoriesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-            Categories.FirstOrDefault(c => c.Text.Equals(Category));
             var searchInput = new SearchCriteriaInput()
             {
                 CategoryId = Category,
                 Keyword = string.IsNullOrWhiteSpace(Predicate) ? string.Empty : Predicate,
-                MaxResultCount = 1000,
-                SkipCount = 0,
+                MaxResultCount = PageSize,
+                SkipCount = (CurrentPage - 1)* PageSize,
                 Location = string.IsNullOrWhiteSpace(Location) ? string.Empty : Location,
-                Sorting = SelectedSortingType,
-                SearchRadius = SelectedRadius
+                Sorting = Sorting,
+                SearchRadius = SelectedRadius,
             };
             var pagedJobsResult = await _jobAppService.SearchAsync(searchInput, default);
-            TotalCount = (int)pagedJobsResult.Items.Count;
+            TotalCount = (int)pagedJobsResult.TotalCount;
             JobOffers = pagedJobsResult.Items;
         }
 

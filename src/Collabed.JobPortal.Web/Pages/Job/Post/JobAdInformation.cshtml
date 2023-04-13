@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <input type="text" class="form-control" asp-for="JobTitle" maxlength="63" placeholder="Job role you are hiring for" aria-label="Job title" id="jobTitleInput" onkeyup="isFormValid()" />
+                            <input type="text" class="form-control" asp-for="JobTitle" maxlength="63" placeholder="Job role you are hiring for" aria-label="Job title" id="jobTitleInput" />
                             <span id="jobTitleErrorMessage" asp-validation-for="JobTitle" class="error-message-span"></span>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <textarea class="form-control" asp-for="SubDescription" maxlength="190" id="subDescriptionInput" onkeyup="isFormValid()" ></textarea>
+                            <textarea class="form-control" asp-for="SubDescription" maxlength="190" id="subDescriptionInput" ></textarea>
                             <span id="subDescriptionErrorMessage" asp-validation-for="SubDescription" class="error-message-span"></span>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                     <div class="col-sm-8">
                         <div class="form-group">
                             <label for="JobCategoryId">Category</label>
-                            @Html.DropDownListFor(c => c.JobCategoryId, Model.JobCategories, "Please select", new { @class = "form-select", data_live_search = "true", @onchange = "isFormValid()" })
+                            @Html.DropDownListFor(c => c.JobCategoryId, Model.JobCategories, "Please select", new { @class = "form-select", data_live_search = "true" })
                             <span id="jobCategoryErrorMessage" asp-validation-for="JobCategoryId" class="error-message-span"></span>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            @Html.DropDownListFor(x => x.EmploymentTypeId, Model.EmploymentTypes, "Please select", new { @class="form-select", data_live_search = "true", @onchange = "isFormValid()"})
+                            @Html.DropDownListFor(x => x.EmploymentTypeId, Model.EmploymentTypes, "Please select", new { @class="form-select", data_live_search = "true"})
                             <span id="EmploymentTypeErrorMessage" asp-validation-for="EmploymentTypeId" class="error-message-span"></span>
                         </div>
                     </div>
@@ -170,7 +170,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            @Html.DropDownListFor(x => x.ContractTypeId, Model.ContractTypes, "Please select", new { @class="form-select", data_live_search = "true", @onchange = "isFormValid()"})
+                            @Html.DropDownListFor(x => x.ContractTypeId, Model.ContractTypes, "Please select", new { @class="form-select", data_live_search = "true"})
                             <span id="ContractTypeIdErrorMessage" asp-validation-for="ContractTypeId" class="error-message-span"></span>
                         </div>
                     </div>
@@ -183,7 +183,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            @Html.DropDownListFor(x => x.JobLocationTypeId, Model.JobLocations, "Please select", new { @class="form-select", data_live_search = "true", @onchange = "isFormValid()"})
+                            @Html.DropDownListFor(x => x.JobLocationTypeId, Model.JobLocations, "Please select", new { @class="form-select", data_live_search = "true"})
                             <span id="JobLocationTypeErrorMessage" asp-validation-for="JobLocationTypeId" class="error-message-span"></span>
                         </div>
                     </div>
@@ -560,9 +560,6 @@
                 <p class="no-display-on-mobile" style="text-align:end; margin-top:5%;">
                     <button class="btn btn-outline-secondary" style="margin-right:0.5vw" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()">
                         Cancel
-                    </button>
-                    <button class="btn btn-primary" onclick="nextPage(event)">
-                        Next
                     </button>
                 </p>
             </div>

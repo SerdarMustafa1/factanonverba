@@ -14,6 +14,7 @@
 <input type="hidden" asp-for=@Model.DistanceRange />
 
 <form method="get" asp-page="Search">
+    <input type="hidden" asp-for="@Model.CurrentPage"/>
     <div class="row" style="width:100%;padding: 0px 64px; height: 10%;">
         <div class="col-2">
             @Html.DropDownListFor(c => c.Category, Model.Categories, "Select category", new { @class = "form-select", data_live_search = "true" })
@@ -46,7 +47,7 @@
             </div>
             <div class="col-3">
                 <div class="input-group">
-                    @Html.DropDownListFor(c => c.SelectedSortingType, Model.AvailableSortingTypes, new { @class = "form-select sorting-select", id="selectSortingType" })
+                    @Html.DropDownListFor(c => c.Sorting, Model.AvailableSortingTypes, new { @class = "form-select sorting-select", id="selectSortingType" })
                 </div>
             </div>
         </div>
@@ -67,36 +68,62 @@
         {
             link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
         }
-        <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
-            <div class="card" style="padding: 0 !important;">
-                <div class="card-header" style="background-color:#FAFAFA; border-bottom: 1px solid rgba(0, 0, 0, 0.175);">
-                    <div class="row" style="margin-bottom:8px;">
-                        <div class="col-11">
-                            <span class="badge rounded-pill bg-primary">New</span>
-                        </div>
-                        <div class="col-1" style="text-align:right">
-                            <button class="btn btn-outline-primary" style="margin-right:4px; right:0;">Save</button>
-                        </div>
+            <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
+                <div class="card" style="padding: 0 !important;">
+                    <div class="card-header" style="background-color:#FAFAFA; border-bottom: 1px solid rgba(0, 0, 0, 0.175);">
+                        <span class="badge rounded-pill bg-primary">New</span>
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <p class="text-30">@jobDto.Title</p>
-                        <p>
-                            <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
+                    <div class="card-body">
+                        <div class="row">
+                            <p class="text-30">@jobDto.Title</p>
+                            <p>
+                                <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
                                 @jobDto.OrganisationName
-                            </span>
-                        </p>
-                        <p class="text-16-bold">@jobDto.OfficeLocation <i class="bi bi-dot"></i> @jobDto.JobLocation <i class="bi bi-dot"></i> @jobDto.GetSalaryRange()</p>
-                        <br />
-                        <p class="text-14">
+                                </span>
+                            </p>
+                            <p class="text-16-bold">@jobDto.OfficeLocation <i class="bi bi-dot"></i> @jobDto.JobLocation <i class="bi bi-dot"></i> @jobDto.GetSalaryRange()</p>
+                            <br />
+                            <p class="text-14">
                             @jobDto.SubDescription
-                        </p>
-                        <p><a class="btn btn-primary full-width-on-mobile" href=@link >More Details</a></p>
+                            </p>
+                            <p><a class="btn btn-primary full-width-on-mobile" href=@link >More Details</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
     }
+</div>
+<div class="paginationContainer">
+    <ul class="pagination">
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            var shouldDisplayPage = i <= 5 || i > Model.TotalPages - 2 || (i >= Model.CurrentPage - 1 && i <= Model.CurrentPage + 1);
+            var isEllipsis = i == 6 && Model.TotalPages > 7;
+
+            if (shouldDisplayPage || isEllipsis)
+            {
+                var link = $"?";
+                foreach (var keyValuePair in Request.Query)
+                {
+                    if (keyValuePair.Key.Equals(nameof(Model.CurrentPage))) continue;
+
+                    link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
+                }
+                link += $"CurrentPage={i}";
+
+                if (isEllipsis)
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                        <a href=@link class="page-link">@i</a>
+                    </li>
+                }
+            }
+        }
+    </ul>
 </div>

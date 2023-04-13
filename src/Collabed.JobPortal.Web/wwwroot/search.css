@@ -1,5 +1,19 @@
 ﻿
 
+.pagination .page-item.active .page-link {
+    background-color: #2F70B6;
+    border-color: #2F70B6;
+}
+
+.paginationContainer {
+    margin-top: 35px;
+    display: grid;
+    justify-items: center;
+}
+
+.pagination {
+}
+
 .semiheader {
     border-radius: 4px 4px;
     border: 1px solid #EAECF0;

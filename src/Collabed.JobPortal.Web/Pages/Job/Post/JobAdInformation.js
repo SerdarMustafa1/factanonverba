@@ -27,9 +27,7 @@
     const delta = quill.clipboard.convert($('#jobDescriptionHiddenInput').val());
     quill.setContents(delta);
     assignQuillToInput();
-    if ($('#jobTitleInput').val().trim().length > 0 && $('#subDescriptionInput').val().trim().length > 0) {
-        isFormValid();
-    }
+
 });
 let quill = undefined;
 
