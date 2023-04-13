@@ -7,11 +7,34 @@
 
 .paginationContainer {
     margin-top: 35px;
-    display: grid;
-    justify-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Adjust this value based on your design requirements */
 }
 
 .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Adjust this value based on your design requirements */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.page-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 62px;
+    min-height: 56px;
 }
 
 .semiheader {
