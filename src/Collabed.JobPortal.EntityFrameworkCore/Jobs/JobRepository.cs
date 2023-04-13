@@ -129,7 +129,7 @@ namespace Collabed.JobPortal.Jobs
                     OrganisationId = x.job.OrganisationId,
                     LocalLanguageId = x.job.LocalLanguageId,
                     OfficeLocationId = x.job.OfficeLocationId,
-                    OrganisationName = x.org != null ? x.org.Name : null,
+                    OrganisationName = x.org != null ? x.org.Name : x.job.CompanyName,
                     LocalLanguage = x.lang != null ? x.lang.Name : null,
                     OfficeLocation = x.loc != null ? x.loc.Name : null
                 })
@@ -250,6 +250,9 @@ namespace Collabed.JobPortal.Jobs
                 var organisationDbSet = (await GetDbContextAsync()).Set<Organisations.Organisation>();
                 result.OrganisationName = (await organisationDbSet.FirstOrDefaultAsync(x => x.Id == result.OrganisationId.Value)).Name;
             }
+            else
+                result.OrganisationName = result.CompanyName;
+
             if (result.LocalLanguageId.HasValue)
             {
                 var localLanguageDbSet = (await GetDbContextAsync()).Set<Language>();

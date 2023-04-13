@@ -22,7 +22,7 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             .ForMember(d => d.SalaryMaximum,
                     op => op.MapFrom(o => o.SalaryTo));
         CreateMap<JobWithDetails, JobDto>()
-            .ForMember(d => d.PublishedDate, 
+            .ForMember(d => d.PublishedDate,
                     op => op.MapFrom(o => o.CreationTime))
             .ForMember(d => d.SalaryMinimum,
                     op => op.MapFrom(o => o.SalaryFrom))
@@ -37,7 +37,9 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             .ForMember(d => d.JobLocation,
                     op => op.MapFrom(o => o.JobLocation.HasValue ? o.JobLocation.Value.GetName() : null))
             .ForMember(d => d.ExperienceLevel,
-                    op => op.MapFrom(o => o.ExperienceLevel.HasValue ? o.ExperienceLevel.Value.GetName() : null));
+                    op => op.MapFrom(o => o.ExperienceLevel.HasValue ? o.ExperienceLevel.Value.GetName() : null))
+            .ForMember(d => d.OrganisationName,
+                    op => op.MapFrom(o => !string.IsNullOrEmpty(o.OrganisationName) ? o.OrganisationName : o.CompanyName));
         CreateMap<JobDto, CreateUpdateJobDto>();
         CreateMap<Organisation, OrganisationDto>();
         CreateMap<PaymentRequest, PaymentRequestDto>();
