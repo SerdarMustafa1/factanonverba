@@ -15,7 +15,7 @@
 <abp-script src="/Pages/Job/Post/JobAdPreview.js"></abp-script>
 
 @{
-    var previousPage = $"JobDashboard/Search?{Model.PreviousParams}";
+    var previousPage = $"JobDashboard/Search?{nameof(Model.Category)}={Model.Category}&{nameof(Model.Predicate)}={Model.Predicate}&{nameof(Model.Location)}={Model.Location}&{nameof(Model.SelectedRadius)}={Model.SelectedRadius}&{nameof(Model.Sorting)}={Model.Sorting}&{nameof(Model.CurrentPage)}={Model.CurrentPage}";
 }
 
 <form method="post" id="previewForm" asp-page="JobAdInformation" novalidate="novalidate">

@@ -11,12 +11,30 @@ namespace Collabed.JobPortal.Web.Pages.Job
     {
         public string Reference { get; set; }
 
+        #region searchParams
         /// <summary>
         /// Search params from jobDashboard page, to have smooth UX on after clicking back to results link
         /// Inserted directly after last endpoint, so it needs to be followed by / and other endpoints (if neccesary) 
         /// or question marks (if some param is necessary)
         /// </summary>
-        public string PreviousParams { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int Category { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Predicate { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Location { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int SelectedRadius { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Sorting { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int CurrentPage { get; set; } = 1;
+        #endregion
 
         public JobDto JobDto { get; set; }
 

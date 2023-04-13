@@ -63,7 +63,7 @@
 <div>
     @foreach (var jobDto in Model.JobOffers)
     {
-        var link = $"../Job?Reference={jobDto.Reference}&PreviousParams=";
+        var link = $"../Job?Reference={jobDto.Reference}&";
         foreach (var keyValuePair in Request.Query)
         {
             link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
