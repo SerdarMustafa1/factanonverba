@@ -24,6 +24,7 @@ namespace Collabed.JobPortal.Jobs
         public bool? OfferVisaSponsorship { get; set; }
         public float? SalaryFrom { get; set; }
         public float? SalaryTo { get; set; }
+        public bool IsSalaryEstimated { get; set; } = false;
         public decimal? MinSalaryConverted { get; set; }
         public decimal? MaxSalaryConverted { get; set; }
         public bool? IsSalaryNegotiable { get; set; }

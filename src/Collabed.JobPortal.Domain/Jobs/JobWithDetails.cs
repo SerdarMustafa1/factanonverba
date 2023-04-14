@@ -23,6 +23,7 @@ namespace Collabed.JobPortal.Jobs
         public float? SalaryTo { get; set; }
         public bool? IsSalaryNegotiable { get; set; }
         public string SalaryBenefits { get; set; }
+        public bool IsSalaryEstimated { get; set; }
         public bool? HiringMultipleCandidates { get; set; }
         public int? PositionsAvailable { get; set; }
         public DateTime ApplicationDeadline { get; set; }

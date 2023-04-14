@@ -32,6 +32,7 @@ namespace Collabed.JobPortal.Jobs
         public bool? IsNetZeroCompliant { get; set; }
         public bool? IsSalaryNegotiable { get; set; }
         public int CategoryId { get; set; }
+        public bool IsSalaryEstimated { get; set; }
         public string SupplementalPay { get; set; }
         public JobOrigin JobOrigin { get; set; }
         public JobStatus Status { get; set; }

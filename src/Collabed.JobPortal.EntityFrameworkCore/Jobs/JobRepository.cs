@@ -82,22 +82,23 @@ namespace Collabed.JobPortal.Jobs
             {
                 query = query.Where(x => context.CalcDistanceMiles(location.lat.Value, location.lon.Value, x.loc.Latitude, x.loc.Longitude) <= searchRadius.Value);
             }
+            //if (!string.IsNullOrEmpty(keyword))
+            //{
+            //    var fuzzySearchRatio = Convert.ToInt32(keyword.Length*0.8);
+            //    query = query.Where(x => context.FuzzyMatchString(x.job.Title, keyword) >= fuzzySearchRatio);
+            //}
             if (!string.IsNullOrEmpty(keyword))
             {
-                var fuzzySearchRatio = Convert.ToInt32(keyword.Length*0.8);
-                query = query.Where(x => context.FuzzyMatchString(x.job.Title, keyword) >= fuzzySearchRatio);
+                query = query.Where(x => x.job.Title.Contains(keyword));
             }
 
-            if (!string.IsNullOrEmpty(sorting))
+            query = sorting switch
             {
-                query = sorting switch
-                {
-                    "dateAdded" => query.OrderByDescending(x => x.job.CreationTime),
-                    "closingDate" => query.OrderBy(x => x.job.ApplicationDeadline),
-                    "salary" => query.OrderByDescending(x => x.job.MaxSalaryConverted),
-                    _ => query.OrderBy(x => x.job.Title),
-                };
-            }
+                "title" => query.OrderBy(x => x.job.Title),
+                "closingDate" => query.OrderBy(x => x.job.ApplicationDeadline),
+                "salary" => query.OrderByDescending(x => x.job.MaxSalaryConverted),
+                _ => query.OrderByDescending(x => x.job.CreationTime),
+            };
 
             return await query
                 .PageBy(skipCount, maxResultCount)
@@ -125,6 +126,7 @@ namespace Collabed.JobPortal.Jobs
                     JobLocation = x.job.JobLocation,
                     ExperienceLevel = x.job.ExperienceLevel,
                     CompanyName = x.job.CompanyName,
+                    IsSalaryEstimated = x.job.IsSalaryEstimated,
                     IsNetZeroCompliant = x.job.IsNetZeroCompliant,
                     OrganisationId = x.job.OrganisationId,
                     LocalLanguageId = x.job.LocalLanguageId,
@@ -183,10 +185,14 @@ namespace Collabed.JobPortal.Jobs
             {
                 query = query.Where(x => context.CalcDistanceMiles(location.lat.Value, location.lon.Value, x.loc.Latitude, x.loc.Longitude) <= searchRadius.Value);
             }
+            //if (!string.IsNullOrEmpty(keyword))
+            //{
+            //    var fuzzySearchRatio = Convert.ToInt32(keyword.Length*0.8);
+            //    query = query.Where(x => context.FuzzyMatchString(x.job.Title, keyword) >= fuzzySearchRatio);
+            //}
             if (!string.IsNullOrEmpty(keyword))
             {
-                var fuzzySearchRatio = Convert.ToInt32(keyword.Length*0.8);
-                query = query.Where(x => context.FuzzyMatchString(x.job.Title, keyword) >= fuzzySearchRatio);
+                query = query.Where(x => x.job.Title.Contains(keyword));
             }
 
             if (!string.IsNullOrEmpty(sorting))
