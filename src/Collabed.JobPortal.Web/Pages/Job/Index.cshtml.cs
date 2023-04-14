@@ -52,7 +52,11 @@ namespace Collabed.JobPortal.Web.Pages.Job
 
         public string GetSalaryRange()
         {
-            if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0
+            if(JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0 && JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value == JobDto.SalaryMinimum.Value)
+            {
+                return $"£{JobDto.SalaryMinimum.Value:N2}";
+            }
+            else if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0
                 && JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value > 0)
             {
                 return $"£{JobDto.SalaryMinimum.Value:N2} - £{JobDto.SalaryMaximum.Value:N2}";

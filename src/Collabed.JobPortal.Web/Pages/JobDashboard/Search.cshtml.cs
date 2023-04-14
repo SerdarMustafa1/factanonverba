@@ -29,10 +29,10 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         public string Location { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public int SelectedRadius { get; set; }
+        public int SelectedRadius { get; set; } 
 
         [BindProperty(SupportsGet = true)]
-        public string Sorting { get; set; }
+        public string Sorting { get; set; } = "dateAdded";
 
         [BindProperty(SupportsGet = true)]
         public int CurrentPage { get; set; } = 1;

@@ -79,6 +79,7 @@
   <ItemGroup>
     <Folder Include="node_modules\%40abp\" />
     <Folder Include="wwwroot\client-proxies\" />
+    <Folder Include="wwwroot\images\favicon\" />
   </ItemGroup>
 
 </Project>

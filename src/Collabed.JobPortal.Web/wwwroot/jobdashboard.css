@@ -34,8 +34,12 @@
     margin-inline: 15%;
 }
 .tiles-wrapper {
-    max-width:1132px;
+    max-width: 950px;
     margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    justify-content: center;
+    gap: 1rem;
 }
 
 .tile-link {

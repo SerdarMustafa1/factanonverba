@@ -8,6 +8,8 @@
 @section styles {
     <abp-style src="/jobdashboard.css" />
 }
+@section scripts {
+}
 
 <div style="background-color:#FFFFFF;">
 
@@ -21,98 +23,86 @@
         <p style="font-weight: 400; font-size: 18px; line-height: 28px; color: #101828;">The job board designed for and by construction-industry professionals.</p>
     </div>
     <div class="tiles-wrapper">
-    <div class="row" style="margin-inline:5%;margin-top:5%;">
-        <div class="col-4" style="min-width:300px;justify-content:center">
-            <div class="category-tile">
-                <a href="../JobDashboard/Search?category=@Model.Categories[0].Id" class="tile-link">
-                    <div class="category-tile-content">
-                        <p class="category-tile-header">
-                            @Model.Categories[0].Name
-                        </p>
-                        <p class="category-tile-jobs-count">
-                            @Model.Categories[0].JobsCount jobs available
-                        </p>
-                    </div>
-                </a>
+                <div class="category-tile">
+                    <a href="../JobDashboard/Search?category=@Model.Categories[0].Id" class="tile-link">
+                        <div class="category-tile-content">
+                            <p class="category-tile-header">
+                                @Model.Categories[0].Name
+                            </p>
+                            <p class="category-tile-jobs-count">
+                                @Model.Categories[0].JobsCount jobs available
+                            </p>
+                        </div>
+                    </a>
+               </div>
+        <div class="category-tile">
+                    <a href="../JobDashboard/Search?category=@Model.Categories[1].Id" class="tile-link">
+                        <div class="category-tile-content">
+                            <p class="category-tile-header">
+                                @Model.Categories[1].Name
+                            </p>
+                            <p class="category-tile-jobs-count">
+                                @Model.Categories[1].JobsCount jobs available
+                            </p>
+                        </div>
+                    </a>
+                </div>
+<div class="category-tile">
+                    <a href="../JobDashboard/Search?category=@Model.Categories[2].Id" class="tile-link">
+                        <div class="category-tile-content">
+                            <p class="category-tile-header">
+                                @Model.Categories[2].Name
+                            </p>
+                            <p class="category-tile-jobs-count">
+                                @Model.Categories[2].JobsCount jobs available
+                            </p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="category-tile">
+                    <a href="../JobDashboard/Search?category=@Model.Categories[3].Id" class="tile-link">
+                        <div class="category-tile-content">
+                            <p class="category-tile-header">
+                                @Model.Categories[3].Name
+                            </p>
+                            <p class="category-tile-jobs-count">
+                                @Model.Categories[3].JobsCount jobs available
+                            </p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="category-tile">
+                    <a href="../JobDashboard/Search?category=@Model.Categories[4].Id" class="tile-link">
+                        <div class="category-tile-content">
+                            <p class="category-tile-header">
+                                @Model.Categories[4].Name
+                            </p>
+                            <p class="category-tile-jobs-count">
+                                @Model.Categories[4].JobsCount jobs available
+                            </p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="category-tile">
+                    <a href="../JobDashboard/Search?category=@Model.Categories[5].Id" class="tile-link">
+                        <div class="category-tile-content">
+                            <p class="category-tile-header">
+                                @Model.Categories[5].Name
+                            </p>
+                            <p class="category-tile-jobs-count">
+                                @Model.Categories[5].JobsCount jobs available
+                            </p>
+                        </div>
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="col-4" style="min-width:300px;">
-            <div class="category-tile">
-                <a href="../JobDashboard/Search?category=@Model.Categories[1].Id" class="tile-link">
-                    <div class="category-tile-content">
-                        <p class="category-tile-header">
-                            @Model.Categories[1].Name
-                        </p>
-                        <p class="category-tile-jobs-count">
-                            @Model.Categories[1].JobsCount jobs available
-                        </p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-4" style="min-width:300px;">
-            <div class="category-tile">
-                <a href="../JobDashboard/Search?category=@Model.Categories[2].Id" class="tile-link">
-                    <div class="category-tile-content">
-                        <p class="category-tile-header">
-                            @Model.Categories[2].Name
-                        </p>
-                        <p class="category-tile-jobs-count">
-                            @Model.Categories[2].JobsCount jobs available
-                        </p>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="row" style="margin-inline:5%;margin-top:2.5%;margin-bottom:5%; margin-top:1%;">
-        <div class="col-4" style="min-width:300px;">
-            <div class="category-tile">
-                <a href="../JobDashboard/Search?category=@Model.Categories[3].Id" class="tile-link">
-                    <div class="category-tile-content">
-                        <p class="category-tile-header">
-                            @Model.Categories[3].Name
-                        </p>
-                        <p class="category-tile-jobs-count">
-                            @Model.Categories[3].JobsCount jobs available
-                        </p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-4" style="min-width:300px;">
-            <div class="category-tile">
-                <a href="../JobDashboard/Search?category=@Model.Categories[4].Id" class="tile-link">
-                    <div class="category-tile-content">
-                        <p class="category-tile-header">
-                            @Model.Categories[4].Name
-                        </p>
-                        <p class="category-tile-jobs-count">
-                            @Model.Categories[4].JobsCount jobs available
-                        </p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-4" style="min-width:300px;">
-            <div class="category-tile">
-                <a href="../JobDashboard/Search?category=@Model.Categories[5].Id" class="tile-link">
-                    <div class="category-tile-content">
-                        <p class="category-tile-header">
-                            @Model.Categories[5].Name
-                        </p>
-                        <p class="category-tile-jobs-count">
-                            @Model.Categories[5].JobsCount jobs available
-                        </p>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-    </div>
+         </div>
     <p style="text-align:center;margin-block: 90px;"><a class="btn btn-primary" href="../JobDashboard/Search">View all jobs</a></p>
 
-    @if (!CurrentUser.IsAuthenticated)
+@*    @if (!CurrentUser.IsAuthenticated)
     {
         <div class="mobile-conditional-box display-on-mobile" style="text-align:center;">
             <div class="row mobile-conditional-box-contents" style="text-align:center;">
@@ -154,5 +144,5 @@
                 </div>
             </div>
         </div>
-    }
+    }*@
 </div>

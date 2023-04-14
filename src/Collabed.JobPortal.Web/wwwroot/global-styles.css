@@ -74,6 +74,14 @@
     display: none;
 }
 
+ul.navbar-nav.mx-auto {
+    margin-left: 0 !important;
+}
+
+a.nav-link {
+    color: #2F6EB6 !important;
+}
+
 li.nav-item {
     margin-inline: 6px;
 }

@@ -21,7 +21,12 @@ public class JobPortalMenuContributor : IMenuContributor
         var administration = context.Menu.GetAdministration();
         var l = context.GetLocalizer<JobPortalResource>();
 
-        //context.Menu.AddItem(new ApplicationMenuItem(JobPortalMenus.Prefix, displayName: "Payment", "~/Payment", icon: "fa fa-globe"));
+        context.Menu.AddItem(new ApplicationMenuItem("SocialFeed", displayName: "Social Feed", "https://buildmytalent.com/activity-feed/"));
+        context.Menu.AddItem(new ApplicationMenuItem("SocialGroups", displayName: "Social Groups", "https://buildmytalent.com/groups"));
+        context.Menu.AddItem(new ApplicationMenuItem("SocialDirectory", displayName: "Social Directory", "https://buildmytalent.com/directory"));
+        context.Menu.AddItem(new ApplicationMenuItem("SocialForums", displayName: "Social Forums", "https://buildmytalent.com/forums"));
+        context.Menu.AddItem(new ApplicationMenuItem("Companies", displayName: "Companies", "https://buildmytalent.com/employers"));
+        context.Menu.AddItem(new ApplicationMenuItem("JobsBoard", displayName: "Jobs Board", "~/jobDashboard"));
 
         //below adds menu items to display in the middle of navigation bar
         //context.Menu.Items.Insert(

@@ -60,6 +60,8 @@
     </div>*@
 </form>
 
+@if(Model.JobOffers.Count() > 0)
+{
 <div>
     @foreach (var jobDto in Model.JobOffers)
     {
@@ -81,8 +83,22 @@
                                 @jobDto.OrganisationName
                                 </span>
                             </p>
-                            <p class="text-16-bold">@jobDto.OfficeLocation <i class="bi bi-dot"></i> @jobDto.JobLocation <i class="bi bi-dot"></i> @jobDto.GetSalaryRange()</p>
-                            <br />
+                        <p class="text-16-bold">
+                            @jobDto.OfficeLocation 
+                            @if (!string.IsNullOrWhiteSpace(jobDto.OfficeLocation) &&
+                                    (!string.IsNullOrWhiteSpace(jobDto.JobLocation) || !string.IsNullOrWhiteSpace(jobDto.GetSalaryRange())))
+                            {
+                                <i class="bi bi-dot"></i>
+                            }
+                            @jobDto.JobLocation 
+                            @if ((!string.IsNullOrWhiteSpace(jobDto.OfficeLocation) && !string.IsNullOrWhiteSpace(jobDto.JobLocation) && !string.IsNullOrWhiteSpace(jobDto.GetSalaryRange())) ||
+                                (!string.IsNullOrWhiteSpace(jobDto.OfficeLocation) && !string.IsNullOrWhiteSpace(jobDto.GetSalaryRange())) ||
+                                (!string.IsNullOrWhiteSpace(jobDto.JobLocation) && !string.IsNullOrWhiteSpace(jobDto.GetSalaryRange())))
+                            {
+                                <i class="bi bi-dot"></i>
+                            }
+                            @jobDto.GetSalaryRange()</p>
+                        <br />
                             <p class="text-14">
                             @jobDto.SubDescription
                             </p>
@@ -161,3 +177,28 @@
         }
     </ul>
 </div>
+}
+else {
+    <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
+        <div class="card" style="padding: 0 !important;">
+            <div class="card-body">
+                <div class="row">
+                    <p style="font-weight: 600;font-size: 14px;line-height: 21px;color: #1D2939;">Your search did not match any jobs.</p>
+                    <br />
+                    <p style="font-weight: 600;font-size: 14px;line-height: 21px;color: #1D2939;">Search suggestions:</p>
+                    <ul class="hint-14" style="margin-left:2%">
+                        <li>
+                            <p>Try more general keywords</p>
+                        </li>
+                        <li>
+                            <p>Check your spelling</p>
+                        </li>
+                        <li>
+                            <p>Replace abbreviations with whole words</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
