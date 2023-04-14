@@ -1,6 +1,5 @@
 using Collabed.JobPortal.Jobs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
@@ -52,14 +51,18 @@ namespace Collabed.JobPortal.Web.Pages.Job
 
         public string GetSalaryRange()
         {
-            if(JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0 && JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value == JobDto.SalaryMinimum.Value)
+            string salaryEstimated = string.Empty;
+            if (JobDto.IsSalaryEstimated)
+                salaryEstimated = " (estimated)";
+
+            if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0 && JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value == JobDto.SalaryMinimum.Value)
             {
-                return $"£{JobDto.SalaryMinimum.Value:N2}";
+                return $"£{JobDto.SalaryMinimum.Value:N2}{salaryEstimated}";
             }
             else if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0
                 && JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value > 0)
             {
-                return $"£{JobDto.SalaryMinimum.Value:N2} - £{JobDto.SalaryMaximum.Value:N2}";
+                return $"£{JobDto.SalaryMinimum.Value:N2} - £{JobDto.SalaryMaximum.Value:N2}{salaryEstimated}";
             }
             else
             {

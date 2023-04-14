@@ -248,7 +248,9 @@ namespace Collabed.JobPortal.Jobs
                     IsNetZeroCompliant = x.IsNetZeroCompliant,
                     OrganisationId = x.OrganisationId,
                     LocalLanguageId = x.LocalLanguageId,
-                    OfficeLocationId = x.OfficeLocationId
+                    OfficeLocationId = x.OfficeLocationId,
+                    ApplicationUrl = x.ApplicationUrl,
+                    IsSalaryEstimated = x.IsSalaryEstimated
                 })
                 .FirstOrDefaultAsync(x => x.Reference == reference);
 
