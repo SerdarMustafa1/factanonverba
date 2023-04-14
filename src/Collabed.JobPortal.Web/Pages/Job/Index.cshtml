@@ -50,21 +50,44 @@
                         </p>
                         <br />
                         <p class="text-16-bold">
-                            @Model.JobDto.EmploymentType
-                            <i class="bi bi-dot" style="color:#2F70B6;"></i>
-                            @Model.JobDto.ContractType
+                            @if (!string.IsNullOrWhiteSpace(Model.JobDto.EmploymentType))
+                            {
+                                @Model.JobDto.EmploymentType
+                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.ContractType) || !string.IsNullOrWhiteSpace(Model.GetSalaryRange()) ||
+                               !string.IsNullOrWhiteSpace(Model.JobDto.OfficeLocation) || !string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                                {
+                                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                }
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.JobDto.ContractType))
+                            {
+                                @Model.JobDto.ContractType
+                                @if (!string.IsNullOrWhiteSpace(Model.GetSalaryRange()) ||
+                               !string.IsNullOrWhiteSpace(Model.JobDto.OfficeLocation) || !string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                                {
+                                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                }
+                            }
                             @if (!string.IsNullOrEmpty(Model.GetSalaryRange()))
                             {
-                                <i class="bi bi-dot" style="color:#2F70B6;"></i>
                                 @Model.GetSalaryRange()
+                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.OfficeLocation) || !string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                                {
+                                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                }
                             }
                             @if (!string.IsNullOrEmpty(Model.JobDto.OfficeLocation))
                             {
-                                <i class="bi bi-dot" style="color:#2F70B6;"></i>
                                 @Model.JobDto.OfficeLocation
+                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                                {
+                                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                }
                             }
-                            <i class="bi bi-dot" style="color:#2F70B6;"></i>
-                            @Model.JobDto.JobLocation
+                            @if (!string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                            {
+                                @Model.JobDto.JobLocation
+                            }
                         </p>
                         <p><a class="btn btn-primary full-width-on-mobile" href=@Model.JobDto.ApplicationUrl target="_blank">Apply now</a></p>
                     </div>

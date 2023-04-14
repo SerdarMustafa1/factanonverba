@@ -83,21 +83,44 @@
                         </p>
                         <br />
                         <p class="text-16-bold">
-                            @Model.GetEmploymentType()
-                            <i class="bi bi-dot" style="color:#2F70B6;"></i>
-                            @Model.GetContractType()
+                            @if (!string.IsNullOrWhiteSpace(Model.GetEmploymentType()))
+                            {
+                                @Model.GetEmploymentType()
+                                @if (!string.IsNullOrWhiteSpace(Model.GetContractType()) || !string.IsNullOrWhiteSpace(Model.GetSalaryRange()) ||
+                               !string.IsNullOrWhiteSpace(Model.GetOfficeLocation()) || !string.IsNullOrWhiteSpace(Model.GetJobLocationType()))
+                                {
+                                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                }
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.GetContractType()))
+                            {
+                                @Model.GetContractType()
+                                @if (!string.IsNullOrWhiteSpace(Model.GetSalaryRange()) ||
+                                     !string.IsNullOrWhiteSpace(Model.GetOfficeLocation()) || !string.IsNullOrWhiteSpace(Model.GetJobLocationType()))
+                                {
+                                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                }
+                            }
                             @if (!string.IsNullOrEmpty(Model.GetSalaryRange()))
                             {
-                                <i class="bi bi-dot" style="color:#2F70B6;"></i>
                                 @Model.GetSalaryRange()
+                                @if (!string.IsNullOrWhiteSpace(Model.GetOfficeLocation()) || !string.IsNullOrWhiteSpace(Model.GetJobLocationType()))
+                                {
+                                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                }
                             }
                             @if (!string.IsNullOrEmpty(Model.GetOfficeLocation()))
                             {
-                                <i class="bi bi-dot" style="color:#2F70B6;"></i>
                                 @Model.GetOfficeLocation()
+                                @if (!string.IsNullOrWhiteSpace(Model.GetJobLocationType()))
+                                {
+                                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                                }
                             }
-                            <i class="bi bi-dot" style="color:#2F70B6;"></i>
-                            @Model.GetJobLocationType()
+                            @if (!string.IsNullOrWhiteSpace(Model.GetJobLocationType()))
+                            {
+                                @Model.GetJobLocationType()
+                            }
                         </p>
                         <p><button class="btn btn-primary full-width-on-mobile" onclick="applyNowOnClick(event)">Apply now</button></p>
                     </div>

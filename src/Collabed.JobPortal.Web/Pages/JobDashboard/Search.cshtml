@@ -65,7 +65,8 @@
 <div>
     @foreach (var jobDto in Model.JobOffers)
     {
-        var link = $"../Job?Reference={jobDto.Reference}&";
+            var salaryRange = jobDto.GetSalaryRange();
+            var link = $"../Job?Reference={jobDto.Reference}&";
         foreach (var keyValuePair in Request.Query)
         {
             link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
@@ -84,20 +85,27 @@
                                 </span>
                             </p>
                         <p class="text-16-bold">
-                            @jobDto.OfficeLocation 
-                            @if (!string.IsNullOrWhiteSpace(jobDto.OfficeLocation) &&
-                                    (!string.IsNullOrWhiteSpace(jobDto.JobLocation) || !string.IsNullOrWhiteSpace(jobDto.GetSalaryRange())))
-                            {
-                                <i class="bi bi-dot"></i>
-                            }
-                            @jobDto.JobLocation 
-                            @if ((!string.IsNullOrWhiteSpace(jobDto.OfficeLocation) && !string.IsNullOrWhiteSpace(jobDto.JobLocation) && !string.IsNullOrWhiteSpace(jobDto.GetSalaryRange())) ||
-                                (!string.IsNullOrWhiteSpace(jobDto.OfficeLocation) && !string.IsNullOrWhiteSpace(jobDto.GetSalaryRange())) ||
-                                (!string.IsNullOrWhiteSpace(jobDto.JobLocation) && !string.IsNullOrWhiteSpace(jobDto.GetSalaryRange())))
-                            {
-                                <i class="bi bi-dot"></i>
-                            }
-                            @jobDto.GetSalaryRange()</p>
+                                @if (!string.IsNullOrWhiteSpace(jobDto.OfficeLocation))
+                                {
+                                    @jobDto.OfficeLocation
+                                    @if (!string.IsNullOrWhiteSpace(jobDto.JobLocation) || !string.IsNullOrWhiteSpace(salaryRange))
+                                    {
+                                        <i class="bi bi-dot"></i>
+                                    }
+                                }
+                                @if (!string.IsNullOrWhiteSpace(jobDto.JobLocation))
+                                {
+                                    @jobDto.JobLocation
+                                    @if (!string.IsNullOrWhiteSpace(salaryRange))
+                                    {
+                                        <i class="bi bi-dot"></i>
+                                    }
+                                }
+                                @if (!string.IsNullOrWhiteSpace(salaryRange))
+                                {
+                                    @salaryRange
+                                }
+                            </p>
                         <br />
                             <p class="text-14">
                             @jobDto.SubDescription
