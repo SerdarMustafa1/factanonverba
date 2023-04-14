@@ -133,6 +133,7 @@ namespace Collabed.JobPortal.Jobs
                     LocalLanguage = x.lang != null ? x.lang.Name : null,
                     OfficeLocation = x.loc != null ? x.loc.Name : null
                 })
+                .AsNoTracking()
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
