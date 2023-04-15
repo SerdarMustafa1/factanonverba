@@ -17,23 +17,23 @@
 <form method="get" asp-page="Search">
     <input type="hidden" asp-for="@Model.CurrentPage" id="currentPageHiddenInput"/>
     <div class="row" style="height: 10%;">
-        <div class="col-2" id="multiselectWrapperId">
+        <div class="col-2" id="multiselectWrapperId" style="width: 14%">
             @Html.ListBoxFor(c => c.CategoriesSelected, Model.Categories, new { @class = "form-select" } )
         </div>
 
-        <div class="col-5" style="width: 45%">
+        <div class="col-6" style="width: 48%">
             <div class="input-group">
                 @Html.TextBoxFor(c => c.Predicate,string.Empty, new { @class= "form-control", placeholder = "Keyword", id = "keywordInput"} )
                 <label class="input-group-text"><i class="bi bi-x-circle-fill" onclick="clearSearchTerm()" style="cursor:pointer;"></i></label>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-3" style="width: 28%">
             <div class="input-group">
                 <input type="text" class="form-control" asp-for="@Model.Location">
                 @Html.DropDownListFor(c => c.SelectedRadius, Model.AvailableLocationRadius, new { @class = "form-select", id="selectRadius", name="Category" })
             </div>
         </div>
-        <div class="col-1">
+        <div class="col">
             <button type="submit" class="btn btn-primary searchBtn" style="float:right; width:100%" onclick="onPostSearch()">Search</button>
         </div>
     </div>
