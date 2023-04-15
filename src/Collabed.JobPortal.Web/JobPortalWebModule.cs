@@ -4,6 +4,7 @@ using Collabed.JobPortal.Localization;
 using Collabed.JobPortal.Settings;
 using Collabed.JobPortal.Web.Menus;
 using Collabed.JobPortal.Web.Pages.Shared.Components.Footer;
+using Collabed.JobPortal.Web.Pages.Shared.Components.GoogleAnalytics;
 using Collabed.JobPortal.Web.Pages.Shared.Components.Spacer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -99,6 +100,13 @@ public class JobPortalWebModule : AbpModule
         ConfigureAutoApiControllers();
         ConfigureIdentityOptions(context);
         ConfigureSwaggerServices(context.Services);
+        Configure<AbpLayoutHookOptions>(options =>
+        {
+            options.Add(
+                LayoutHooks.Head.Last,
+                typeof(GoogleAnalyticsViewComponent)
+            );
+        });
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -194,7 +202,7 @@ public class JobPortalWebModule : AbpModule
                 LayoutHooks.PageContent.Last,
                 typeof(SpacerViewComponent));
             options.Add(
-                LayoutHooks.Body.Last, 
+                LayoutHooks.Body.Last,
                 typeof(FooterViewComponent)
             );
         });

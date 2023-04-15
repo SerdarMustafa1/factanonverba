@@ -54,10 +54,10 @@ namespace JobPortal.Jobs
             }
 
             var jobs = await _jobRepository.GetListBySearchCriteriaAsync(criteria.Sorting, criteria.SkipCount, criteria.MaxResultCount,
-                criteria.CategoryId, criteria.Keyword, mapSearchResult.ResultsFound, (mapSearchResult?.Latitude, mapSearchResult?.Longitude), criteria.SearchRadius, criteria.NetZero, criteria.ContractType,
+                criteria.Categories, criteria.Keyword, mapSearchResult.ResultsFound, (mapSearchResult?.Latitude, mapSearchResult?.Longitude), criteria.SearchRadius, criteria.NetZero, criteria.ContractType,
                 criteria.EmploymentType, criteria.Workplace, criteria.SalaryMinimum, criteria.SalaryMaximum, cancellationToken);
             var totalCount = await _jobRepository.CountBySearchCriteriaAsync(criteria.Sorting, criteria.SkipCount, criteria.MaxResultCount,
-                criteria.CategoryId, criteria.Keyword, mapSearchResult.ResultsFound, (mapSearchResult?.Latitude, mapSearchResult?.Longitude), criteria.SearchRadius, criteria.NetZero, criteria.ContractType,
+                criteria.Categories, criteria.Keyword, mapSearchResult.ResultsFound, (mapSearchResult?.Latitude, mapSearchResult?.Longitude), criteria.SearchRadius, criteria.NetZero, criteria.ContractType,
                 criteria.EmploymentType, criteria.Workplace, criteria.SalaryMinimum, criteria.SalaryMaximum, cancellationToken);
 
             return new PagedResultDto<JobDto>(totalCount, ObjectMapper.Map<List<JobWithDetails>, List<JobDto>>(jobs));

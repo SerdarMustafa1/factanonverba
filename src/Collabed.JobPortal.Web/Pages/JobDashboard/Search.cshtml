@@ -4,22 +4,24 @@
 }
 
 @section styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.2/css/bootstrap-multiselect.css">
     <abp-style src="/search.css"></abp-style>
 }
 
 @section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.2/js/bootstrap-multiselect.min.js"></script>
     <abp-script src="/Pages/JobDashboard/Search.js" />
 }
 
 <input type="hidden" asp-for=@Model.DistanceRange />
-
 <form method="get" asp-page="Search">
     <input type="hidden" asp-for="@Model.CurrentPage" id="currentPageHiddenInput"/>
-    <div class="row" style="width:100%;padding: 0px 64px; height: 10%;">
-        <div class="col-2">
-            @Html.DropDownListFor(c => c.Category, Model.Categories, "Select category", new { @class = "form-select", data_live_search = "true" })
+    <div class="row" style="height: 10%;">
+        <div class="col-2" id="multiselectWrapperId">
+            @Html.ListBoxFor(c => c.CategoriesSelected, Model.Categories, new { @class = "form-select" } )
         </div>
-        <div class="col-5">
+
+        <div class="col-5" style="width: 45%">
             <div class="input-group">
                 @Html.TextBoxFor(c => c.Predicate,string.Empty, new { @class= "form-control", placeholder = "Keyword", id = "keywordInput"} )
                 <label class="input-group-text"><i class="bi bi-x-circle-fill" onclick="clearSearchTerm()" style="cursor:pointer;"></i></label>
@@ -28,11 +30,11 @@
         <div class="col-3">
             <div class="input-group">
                 <input type="text" class="form-control" asp-for="@Model.Location">
-                @Html.DropDownListFor(c => c.SelectedRadius, Model.AvailableLocationRadius, new { @class = "form-select", id="selectRadius" })
+                @Html.DropDownListFor(c => c.SelectedRadius, Model.AvailableLocationRadius, new { @class = "form-select", id="selectRadius", name="Category" })
             </div>
         </div>
-        <div class="col-2">
-            <button type="submit" class="btn btn-primary searchBtn" onclick="onPostSearch()">Search</button>
+        <div class="col-1">
+            <button type="submit" class="btn btn-primary searchBtn" style="float:right; width:100%" onclick="onPostSearch()">Search</button>
         </div>
     </div>
 
@@ -69,7 +71,13 @@
             var link = $"../Job?Reference={jobDto.Reference}&";
         foreach (var keyValuePair in Request.Query)
         {
-            link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
+                if (keyValuePair.Key == "Category")
+                    foreach (var item in keyValuePair.Value)
+                    {
+                        link += $"Category={item}&";
+                    }
+            else
+                link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
         }
             <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
                 <div class="card" style="padding: 0 !important;">

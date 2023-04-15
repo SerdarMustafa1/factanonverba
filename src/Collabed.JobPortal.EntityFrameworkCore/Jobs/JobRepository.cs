@@ -29,7 +29,7 @@ namespace Collabed.JobPortal.Jobs
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<JobWithDetails>> GetListBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, int categoryId,
+        public async Task<List<JobWithDetails>> GetListBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, IEnumerable<int> categories,
             string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, bool? netZero, ContractType? contractType, EmploymentType? employmentType,
             JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default)
         {
@@ -46,8 +46,10 @@ namespace Collabed.JobPortal.Jobs
                         from lang in grouping3.DefaultIfEmpty()
                         select new { job, org, loc, lang };
 
-
-            query = query.Where(x => x.job.CategoryId == categoryId);
+            if (categories.Any())
+            {
+                query = query.Where(x => categories.Contains(x.job.CategoryId));
+            }
 
             if (netZero.HasValue)
             {
@@ -139,7 +141,7 @@ namespace Collabed.JobPortal.Jobs
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<int> CountBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, int categoryId,
+        public async Task<int> CountBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, IEnumerable<int> categories,
             string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, bool? netZero, ContractType? contractType, EmploymentType? employmentType,
             JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default)
         {
@@ -150,7 +152,10 @@ namespace Collabed.JobPortal.Jobs
                         from loc in grouping2.DefaultIfEmpty()
                         select new { job, loc };
 
-            query = query.Where(x => x.job.CategoryId == categoryId);
+            if (categories.Any())
+            {
+                query = query.Where(x => categories.Contains(x.job.CategoryId));
+            }
 
             if (netZero.HasValue)
             {

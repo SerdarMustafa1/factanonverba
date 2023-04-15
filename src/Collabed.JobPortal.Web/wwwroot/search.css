@@ -1,4 +1,6 @@
-﻿
+﻿html {
+    visibility: hidden;
+}
 
 .pagination .page-item.active .page-link {
     background-color: #2F70B6;

@@ -1,5 +1,6 @@
 using Collabed.JobPortal.Jobs;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
@@ -17,7 +18,7 @@ namespace Collabed.JobPortal.Web.Pages.Job
         /// or question marks (if some param is necessary)
         /// </summary>
         [BindProperty(SupportsGet = true)]
-        public int Category { get; set; }
+        public IEnumerable<string> Category { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public string Predicate { get; set; }

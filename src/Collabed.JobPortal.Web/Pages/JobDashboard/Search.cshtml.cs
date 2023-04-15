@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +19,9 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         public int TotalCount { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public int Category { get; set; }
+        public List<string> Category { get; set; }
+
+        public List<int> CategoriesSelected { get; set; } = new List<int>();
 
         [BindProperty(SupportsGet = true)]
         public string Predicate { get; set; }
@@ -29,7 +30,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         public string Location { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public int SelectedRadius { get; set; } 
+        public int SelectedRadius { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public string Sorting { get; set; } = "dateAdded";
@@ -54,10 +55,10 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         {
             _dropDownService = dropDownAppService;
             _jobAppService = jobAppService;
-            AvailableLocationRadius = new SelectListItem[] { 
-                new SelectListItem("1 mile", "1", true), 
-                new SelectListItem("5 miles", "5", false), 
-                new SelectListItem("10 miles", "10", false) 
+            AvailableLocationRadius = new SelectListItem[] {
+                new SelectListItem("1 mile", "1", true),
+                new SelectListItem("5 miles", "5", false),
+                new SelectListItem("10 miles", "10", false)
             };
             AvailableSortingTypes = new SelectListItem[] {
                 new SelectListItem("Date added", "dateAdded", true),
@@ -70,9 +71,11 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         public async Task OnGetAsync()
         {
             Categories = (await _dropDownService.GetCategoriesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+
+            CategoriesSelected = ConvertStringParameters(Category);
             var searchInput = new SearchCriteriaInput()
             {
-                CategoryId = Category,
+                Categories = CategoriesSelected,
                 Keyword = string.IsNullOrWhiteSpace(Predicate) ? string.Empty : Predicate,
                 MaxResultCount = PageSize,
                 SkipCount = (CurrentPage - 1)* PageSize,
@@ -83,6 +86,18 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
             var pagedJobsResult = await _jobAppService.SearchAsync(searchInput, default);
             TotalCount = (int)pagedJobsResult.TotalCount;
             JobOffers = pagedJobsResult.Items;
+        }
+
+        private List<int> ConvertStringParameters(List<string> categories)
+        {
+            var convertedCategories = new List<int>();
+            foreach (var item in categories)
+            {
+                if (int.TryParse(item, out int result))
+                    convertedCategories.Add(result);
+            }
+
+            return convertedCategories;
         }
     }
 }
