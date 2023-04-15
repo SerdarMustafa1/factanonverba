@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Collabed.JobPortal.Types
 {
@@ -9,8 +10,10 @@ namespace Collabed.JobPortal.Types
         [Display(Name = "Part-time")]
         Parttime,
         [Display(Name = "Graduate Scheme")]
+        [IgnoreDataMember]
         GraduateScheme,
         [Display(Name = "Work Placement")]
-        WorkPlacement,
+        [IgnoreDataMember]
+        WorkPlacement
     }
 }

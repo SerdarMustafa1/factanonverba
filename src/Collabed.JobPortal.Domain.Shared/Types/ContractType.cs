@@ -6,9 +6,10 @@ namespace Collabed.JobPortal.Types
     {
         Permanent,
         Temporary,
-        Internship,
-        Apprenticeship,
         [IgnoreDataMember]
+        Internship,
+        [IgnoreDataMember]
+        Apprenticeship,
         Contract
     }
 }
