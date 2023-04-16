@@ -50,7 +50,7 @@
                                 Posted by @Model.JobDto.OrganisationName
                             </span>
                             <span style="color: #667085; font-weight: 400; font-size: 16px; line-height:24px;">
-                                on @Model.JobDto.PublishedDate.ToShortDateString()
+                                on @Model.JobDto.PublishedDate.ToString("dd/MM/yyyy")
                             </span>
                         </p>
                         <br />
@@ -175,7 +175,7 @@
                                         </div>
                                         <div class="col-10">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Start Date</span>
-                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.JobDto.StartDate.Value.Date.ToString("d")</p>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.JobDto.StartDate.Value.Date.ToString("dd/MM/yyyy")</p>
                                         </div>
                                     </div>
                                 }
