@@ -1,4 +1,5 @@
 ﻿@page
+@using Collabed.Application.Helpers;
 @model Collabed.JobPortal.Web.Pages.JobDashboard.SearchModel
 @{
 }
@@ -100,7 +101,7 @@
 <div>
     @foreach (var jobDto in Model.JobOffers)
     {
-            var salaryRange = jobDto.GetSalaryRange();
+            var salaryRange = SalaryRangeHelper.GetSalaryRange(jobDto.SalaryMinimum, jobDto.SalaryMaximum, jobDto.IsSalaryEstimated);
             var link = $"../Job?Reference={jobDto.Reference}&";
         foreach (var keyValuePair in Request.Query)
         {

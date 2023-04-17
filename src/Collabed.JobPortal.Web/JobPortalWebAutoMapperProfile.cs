@@ -13,7 +13,6 @@ public class JobPortalWebAutoMapperProfile : AbpIdentityWebAutoMapperProfile
     public JobPortalWebAutoMapperProfile() : base()
     {
         //Define your AutoMapper configuration here for the Web project.
-
     }
 
     protected override void CreateUserMappings()

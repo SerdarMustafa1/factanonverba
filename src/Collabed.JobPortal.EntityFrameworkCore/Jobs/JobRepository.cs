@@ -255,7 +255,8 @@ namespace Collabed.JobPortal.Jobs
                     LocalLanguageId = x.LocalLanguageId,
                     OfficeLocationId = x.OfficeLocationId,
                     ApplicationUrl = x.ApplicationUrl,
-                    IsSalaryEstimated = x.IsSalaryEstimated
+                    IsSalaryEstimated = x.IsSalaryEstimated,
+                    IsSalaryNegotiable = x.IsSalaryNegotiable
                 })
                 .FirstOrDefaultAsync(x => x.Reference == reference);
 

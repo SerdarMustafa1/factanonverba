@@ -1,3 +1,4 @@
+using Collabed.Application.Helpers;
 using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
@@ -100,10 +101,10 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public int? SalaryPeriodId { get; set; }
 
         [BindProperty]
-        public double? SalaryMinimum { get; set; }
+        public float? SalaryMinimum { get; set; }
 
         [BindProperty]
-        public double? SalaryMaximum { get; set; }
+        public float? SalaryMaximum { get; set; }
 
         [BindProperty]
         public bool? IsSalaryNegotiable { get; set; }
@@ -169,27 +170,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
 
         public string GetSalaryRange()
         {
-            if (SalaryMinimum.HasValue && SalaryMinimum.Value > 0 && SalaryMaximum.HasValue && SalaryMaximum.Value == SalaryMinimum.Value)
-            {
-                return $"£{SalaryMinimum.Value:N2}";
-            }
-            else if (SalaryMinimum.HasValue && SalaryMinimum.Value > 0 && (!SalaryMaximum.HasValue || SalaryMaximum.Value == 0))
-            {
-                return $"£{SalaryMinimum.Value:N2}";
-            }
-            else if (SalaryMaximum.HasValue && SalaryMaximum.Value > 0 && (!SalaryMinimum.HasValue || SalaryMinimum.Value == 0))
-            {
-                return $"£{SalaryMaximum.Value:N2}";
-            }
-            else if (SalaryMinimum.HasValue && SalaryMinimum.Value > 0
-                && SalaryMaximum.HasValue && SalaryMaximum.Value > 0)
-            {
-                return $"£{SalaryMinimum.Value:N2} - £{SalaryMaximum.Value:N2}";
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return SalaryRangeHelper.GetSalaryRange(SalaryMinimum, SalaryMaximum, false);
         }
 
         public string GetCurrentDate()

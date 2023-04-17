@@ -1,3 +1,4 @@
+using Collabed.Application.Helpers;
 using Collabed.JobPortal.Jobs;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -39,7 +40,6 @@ namespace Collabed.JobPortal.Web.Pages.Job
         public JobDto JobDto { get; set; }
 
         private readonly IJobAppService _jobAppService;
-
         public JobModel(IJobAppService jobAppService)
         {
             _jobAppService = jobAppService;
@@ -52,30 +52,7 @@ namespace Collabed.JobPortal.Web.Pages.Job
 
         public string GetSalaryRange()
         {
-            string salaryEstimated = string.Empty;
-            if (JobDto.IsSalaryEstimated)
-                salaryEstimated = " (estimated)";
-
-            if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0 && JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value == JobDto.SalaryMinimum.Value)
-            {
-                return $"£{JobDto.SalaryMinimum.Value:N2}{salaryEstimated}";
-            }
-            else if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0 && (!JobDto.SalaryMaximum.HasValue || JobDto.SalaryMaximum.Value == 0))
-            {
-                return $"£{JobDto.SalaryMinimum.Value:N2}{salaryEstimated}";
-            }
-            else if (JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value > 0 && (!JobDto.SalaryMinimum.HasValue || JobDto.SalaryMinimum.Value == 0))
-            {
-                return $"£{JobDto.SalaryMaximum.Value:N2}{salaryEstimated}";
-            }
-            else if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0 && JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value > 0)
-            {
-                return $"£{JobDto.SalaryMinimum.Value:N2} - £{JobDto.SalaryMaximum.Value:N2}{salaryEstimated}";
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return SalaryRangeHelper.GetSalaryRange(JobDto.SalaryMinimum, JobDto.SalaryMaximum, JobDto.IsSalaryEstimated);
         }
     }
 }
