@@ -48,6 +48,14 @@ namespace Collabed.JobPortal.Jobs
             {
                 return $"£{SalaryMinimum.Value:N2}";
             }
+            else if (SalaryMinimum.HasValue && SalaryMinimum.Value > 0 && (!SalaryMaximum.HasValue || SalaryMaximum.Value == 0))
+            {
+                return $"£{SalaryMinimum.Value:N2}";
+            }
+            else if(SalaryMaximum.HasValue && SalaryMaximum.Value > 0 && (!SalaryMinimum.HasValue || SalaryMinimum.Value == 0))
+            {
+                return $"£{SalaryMaximum.Value:N2}";
+            }
             else if (SalaryMinimum.HasValue && SalaryMinimum.Value > 0
                 && SalaryMaximum.HasValue && SalaryMaximum.Value > 0)
             {

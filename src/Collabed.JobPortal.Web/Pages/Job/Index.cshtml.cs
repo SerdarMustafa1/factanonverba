@@ -60,8 +60,15 @@ namespace Collabed.JobPortal.Web.Pages.Job
             {
                 return $"£{JobDto.SalaryMinimum.Value:N2}{salaryEstimated}";
             }
-            else if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0
-                && JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value > 0)
+            else if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0 && (!JobDto.SalaryMaximum.HasValue || JobDto.SalaryMaximum.Value == 0))
+            {
+                return $"£{JobDto.SalaryMinimum.Value:N2}{salaryEstimated}";
+            }
+            else if (JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value > 0 && (!JobDto.SalaryMinimum.HasValue || JobDto.SalaryMinimum.Value == 0))
+            {
+                return $"£{JobDto.SalaryMaximum.Value:N2}{salaryEstimated}";
+            }
+            else if (JobDto.SalaryMinimum.HasValue && JobDto.SalaryMinimum.Value > 0 && JobDto.SalaryMaximum.HasValue && JobDto.SalaryMaximum.Value > 0)
             {
                 return $"£{JobDto.SalaryMinimum.Value:N2} - £{JobDto.SalaryMaximum.Value:N2}{salaryEstimated}";
             }
