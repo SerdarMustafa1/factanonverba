@@ -2,6 +2,7 @@
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.PaymentRequests;
+using Collabed.JobPortal.Users;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
@@ -49,6 +50,8 @@ public class JobPortalDbContext :
     #endregion
 
     //Job board
+    public DbSet<UserProfile> UserProfiles { get; set; }
+    public DbSet<ApplicantScreeningAnswer> ApplicantScreeningAnswer { get; set; }
     public DbSet<Jobs.Job> Jobs { get; set; }
     public DbSet<JobApplicant> JobApplicants { get; set; }
     public DbSet<Organisations.Organisation> Organisations { get; set; }
@@ -110,9 +113,22 @@ public class JobPortalDbContext :
             //define composite key
             b.HasKey(x => new { x.JobId, x.UserId });
             //many-to-many configuration
-            b.HasOne<Jobs.Job>().WithMany(x => x.Applicants).HasForeignKey(x => x.UserId).IsRequired();
+            b.HasOne<Jobs.Job>().WithMany(x => x.Applicants).HasForeignKey(x => x.JobId).OnDelete(DeleteBehavior.NoAction).IsRequired();
             b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
             b.HasIndex(x => new { x.JobId, x.UserId });
+        });
+
+        builder.Entity<ApplicantScreeningAnswer>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "ApplicantScreeningAnswers", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            //define composite key
+            //many-to-many configuration
+            b.HasOne<JobApplicant>().WithMany(x => x.ApplicantScreeningAnswers).HasPrincipalKey(x => x.JobApplicantId).IsRequired();
+            //b.HasOne<Jobs.Job>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
+            //b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
+            b.HasOne<ScreeningQuestion>().WithMany().HasForeignKey(x => x.ScreeningQuestionId).IsRequired();
+            //b.HasIndex(x => new { x.JobApplicationId, x.ScreeningQuestionId });
         });
 
         #region Dropdown many-to-many relationships
@@ -211,6 +227,13 @@ public class JobPortalDbContext :
             b.Property(x => x.Price).HasPrecision(10, 2);
             b.HasIndex(x => x.CustomerId);
             b.HasIndex(x => x.State);
+        });
+
+        builder.Entity<UserProfile>(b =>
+        {
+            b.ToTable(JobPortalConsts.DbTablePrefix + "UserProfiles", JobPortalConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
         });
 
         builder.HasDbFunction(typeof(JobPortalDbContext).GetMethod(nameof(FuzzyMatchString), new[] { typeof(string), typeof(string) })).HasName("FuzzyMatchString");

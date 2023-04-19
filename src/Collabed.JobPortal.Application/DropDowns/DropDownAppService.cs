@@ -121,7 +121,7 @@ namespace Collabed.JobPortal.DropDowns
 
         public async Task<string> GetLocationByIdAsync(int id)
         {
-            var res  = (await GetLocationsAsync()).Where(l => l.Id == id).FirstOrDefault();
+            var res = (await GetLocationsAsync()).Where(l => l.Id == id).FirstOrDefault();
             if (res == null) return "ERR: Location not found!";
             return res.Name;
         }

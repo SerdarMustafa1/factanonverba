@@ -4,6 +4,7 @@
     {
         Native,
         Broadbean,
-        Idibu
+        Idibu,
+        Adzuna
     }
 }

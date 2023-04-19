@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Collabed.JobPortal.Applications;
+using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.Job;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
@@ -79,6 +81,13 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             .ForMember(d => d.StartDate, op => op.Ignore())
             .ForMember(d => d.ScreeningQuestions, op => op.Ignore())
             .IgnoreAuditedObjectProperties();
+        CreateMap<ApplicationDto, ThirdPartyJobApplicationDto>()
+            .ForMember(d => d.CompanyName, op => op.Ignore())
+            .ForMember(d => d.JobPosition, op => op.Ignore());
+        CreateMap<SupportingDocument, SupportingDocumentDto>();
+        CreateMap<ScreeningQuestion, ScreeningQuestionDto>()
+            .ForMember(d => d.Text,
+                    op => op.MapFrom(o => o.Name));
     }
     public static ContractType? MapJobType(string jobType)
     {

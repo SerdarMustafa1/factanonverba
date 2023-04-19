@@ -58,10 +58,10 @@ namespace Collabed.JobPortal.Jobs
 		[JsonPropertyName("salary")]
 		public string Salary { get; set; }
 		[JsonPropertyName("screening_questions")]
-		public IEnumerable<ScreeningQuestion> ScreeningQuestions { get; set; }
+		public IEnumerable<ExtScreeningQuestion> ScreeningQuestions { get; set; }
 	}
 
-	public class ScreeningQuestion
+	public class ExtScreeningQuestion
 	{
 		[JsonPropertyName("question")]
 		public string Question { get; set; }

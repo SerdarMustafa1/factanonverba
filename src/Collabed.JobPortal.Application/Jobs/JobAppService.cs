@@ -1,5 +1,9 @@
 ﻿using Collabed.JobPortal;
+using Collabed.JobPortal.Account.Emailing.Templates;
+using Collabed.JobPortal.Applications;
+using Collabed.JobPortal.BlobStorage;
 using Collabed.JobPortal.DropDowns;
+using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Permissions;
@@ -19,6 +23,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 
 namespace JobPortal.Jobs
 {
@@ -28,12 +33,21 @@ namespace JobPortal.Jobs
         private readonly IOrganisationRepository _organisationRepository;
         private readonly IRepository<Category> _categoryRepository;
         private readonly JobManager _jobManager;
+        private readonly UserManager _userManager;
         private readonly ILogger<JobAppService> _logger;
         private readonly IdibuOptions _idibuOptions;
         private readonly BroadbeanOptions _broadBeanOptions;
         private readonly ISearchService _searchService;
+        private readonly IFileAppService _fileAppService;
+        private readonly IBmtAccountEmailer _bmtAccountEmailer;
+        private readonly IRepository<UserProfile> _profileRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly IRepository<SupportingDocument> _supportingDocumentRepository;
 
-        public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger, IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IOrganisationRepository organisationRepository, IRepository<Category> categoriesRepository, ISearchService searchService)
+        public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger,
+            IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IOrganisationRepository organisationRepository,
+            IRepository<Category> categoriesRepository, ISearchService searchService, IFileAppService fileAppService,
+            IBmtAccountEmailer bmtAccountEmailer, IRepository<UserProfile> profileRepository, IRepository<IdentityUser, Guid> userRepository, UserManager userManager, IRepository<SupportingDocument> supportingDocumentRepository)
         {
             _jobRepository = jobRepository;
             _jobManager = jobManager;
@@ -43,6 +57,12 @@ namespace JobPortal.Jobs
             _organisationRepository = organisationRepository;
             _categoryRepository = categoriesRepository;
             _searchService = searchService;
+            _fileAppService = fileAppService;
+            _bmtAccountEmailer = bmtAccountEmailer;
+            _profileRepository = profileRepository;
+            _userRepository = userRepository;
+            _userManager = userManager;
+            _supportingDocumentRepository=supportingDocumentRepository;
         }
 
         public async Task<PagedResultDto<JobDto>> SearchAsync(SearchCriteriaInput criteria, CancellationToken cancellationToken)
@@ -145,6 +165,72 @@ namespace JobPortal.Jobs
             await _jobRepository.DeleteAsync(id);
         }
 
+        [Authorize(BmtPermissions.ApplyForJobs)]
+        public async Task ApplyForAJob(ApplicationDto application)
+        {
+            var blobFileName = string.Empty;
+            var job = await _jobRepository.GetByReferenceAsync(application.JobReference);
+            if (job == null)
+            {
+                throw new UserFriendlyException("Job you're applying for has not been found.");
+            }
+            if (job.Applicants.Any(x => x.UserId== application.UserId))
+            {
+                throw new UserFriendlyException("You have already applied for this job.");
+            }
+
+            var userProfile = await _profileRepository.FindAsync(x => x.UserId == application.UserId);
+            if (userProfile == null)
+            {
+                userProfile = _userManager.CreateUserProfile(application.UserId);
+                userProfile = await _profileRepository.InsertAsync(userProfile);
+            }
+            var cvContentType = application.CvContentType;
+            var cvFileName = application.CvFileName;
+
+            if (application.IsNewCvAttached)
+            {
+                if (!string.IsNullOrEmpty(cvFileName) &&
+                    !string.IsNullOrEmpty(cvContentType) && application.CvContent != null)
+                {
+                    blobFileName = RandomNameGenerator.GenerateRandomName(10);
+                    await _fileAppService.SaveBlobAsync(new SaveBlobInputDto { Name = blobFileName, Content = application.CvContent });
+                }
+            }
+            else
+            {
+                blobFileName = userProfile.CvBlobName;
+                cvContentType = userProfile.CvContentType;
+                cvFileName = userProfile.CvFileName;
+            }
+
+            await UpdateUserProfile(userProfile, application, blobFileName);
+            var screeningAnswers = application.ScreeningQuestions.Any() ? application.ScreeningQuestions.Select(x => (x.Id, x.Answer)) : default;
+            job.AddApplicant(application.UserId, blobFileName, cvContentType, cvFileName, application.PortfolioLink, application.CoverLetter, screeningAnswers);
+
+            if ((job.JobOrigin == JobOrigin.Idibu && string.IsNullOrEmpty(job.ApplicationUrl)) || job.JobOrigin == JobOrigin.Broadbean)
+            {
+                await ProcessThirdPartyApplication(application, job, blobFileName);
+            }
+
+            await _jobRepository.UpdateAsync(job);
+
+            // send notification email to applicant/employer
+        }
+
+        public async Task<IEnumerable<SupportingDocumentDto>> GetSupportingDocumentsByJobRefAsync(string jobReference)
+        {
+            var supportingDocIds = await _jobRepository.GetSupportingDocumentsByReferenceAsync(jobReference);
+            var supportingDocs = await _supportingDocumentRepository.GetListAsync(x => supportingDocIds.Contains(x.Id));
+            return ObjectMapper.Map<IEnumerable<SupportingDocument>, IEnumerable<SupportingDocumentDto>>(supportingDocs);
+        }
+
+        public async Task<IEnumerable<ScreeningQuestionDto>> ScreeningQuestionsByJobRefAsync(string jobReference)
+        {
+            var screeningQuestions = await _jobRepository.GetScreeningQuestionsByReferenceAsync(jobReference);
+            return ObjectMapper.Map<IEnumerable<ScreeningQuestion>, IEnumerable<ScreeningQuestionDto>>(screeningQuestions);
+        }
+
         [AllowAnonymous]
         [RemoteService(IsEnabled = false)]
         public async Task<JobResponseDto> HandleExternalJobFeedAsync(ExternalJobRequest externalJobRequest)
@@ -196,6 +282,32 @@ namespace JobPortal.Jobs
             }
         }
 
+        private async Task UpdateUserProfile(UserProfile userProfile, ApplicationDto application, string blobFileName)
+        {
+            userProfile.PostCode= application.PostCode;
+            if (application.IsNewCvAttached)
+            {
+                userProfile.CvFileName = application.CvFileName;
+                userProfile.CvContentType = application.CvContentType;
+                userProfile.CvBlobName = blobFileName;
+            }
+            var user = await _userRepository.GetAsync(x => x.Id == application.UserId);
+            user.Name = application.FirstName;
+            user.Surname = application.LastName;
+            user.SetPhoneNumber(application.PhoneNumber, false);
+
+            await _userRepository.UpdateAsync(user);
+        }
+
+        private async Task ProcessThirdPartyApplication(ApplicationDto application, Job job, string blobFileName)
+        {
+            var thirdPartyApplication = ObjectMapper.Map<ApplicationDto, ThirdPartyJobApplicationDto>(application);
+            thirdPartyApplication.JobPosition = job.Title;
+            thirdPartyApplication.CompanyName = job.CompanyName;
+            thirdPartyApplication.CvBlobName = blobFileName;
+            await _bmtAccountEmailer.SendApplicationEmailToThirdPartyAsync(thirdPartyApplication, job.ApplicationEmail);
+        }
+
         private async Task<string> UpdateJobAsync(ExternalJobRequest externalJobRequest, string message, string jobReference)
         {
             var existingJob = await _jobRepository.GetByReferenceAsync(jobReference);
@@ -232,7 +344,7 @@ namespace JobPortal.Jobs
             return message;
         }
 
-        private static IEnumerable<(string, bool?)> ConvertScreeningQuestions(IEnumerable<Collabed.JobPortal.Jobs.ScreeningQuestion> screeningQuestions)
+        private static IEnumerable<(string, bool?)> ConvertScreeningQuestions(IEnumerable<Collabed.JobPortal.Jobs.ExtScreeningQuestion> screeningQuestions)
         {
             foreach (var item in screeningQuestions)
             {

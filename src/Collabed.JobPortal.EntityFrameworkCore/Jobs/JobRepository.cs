@@ -217,7 +217,29 @@ namespace Collabed.JobPortal.Jobs
         public async Task<Job> GetByReferenceAsync(string reference)
         {
             var query = await ApplyFilterAsync();
-            return await query.FirstOrDefaultAsync(x => x.Reference == reference);
+            return await query
+                .Include(x => x.Applicants)
+                .FirstOrDefaultAsync(x => x.Reference == reference);
+        }
+
+        public async Task<IEnumerable<int>> GetSupportingDocumentsByReferenceAsync(string reference)
+        {
+            var query = await ApplyFilterAsync();
+            var result = await query
+                .Include(x => x.SupportingDocuments)
+                .FirstOrDefaultAsync(x => x.Reference == reference);
+
+            return result.SupportingDocuments?.Select(x => x.SupportingDocumentId);
+        }
+
+        public async Task<IEnumerable<ScreeningQuestion>> GetScreeningQuestionsByReferenceAsync(string reference)
+        {
+            var query = await ApplyFilterAsync();
+            var result = await query
+                .Include(x => x.ScreeningQuestions)
+                .FirstOrDefaultAsync(x => x.Reference == reference);
+
+            return result?.ScreeningQuestions;
         }
 
         public async Task<JobWithDetails> GetWithDetailsByReferenceAsync(string reference)

@@ -3,8 +3,10 @@ using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 
 namespace Collabed.JobPortal.Account
@@ -14,15 +16,46 @@ namespace Collabed.JobPortal.Account
     public class BmtAccountAppService : AccountAppService, IBmtAccountAppService
     {
         private readonly IBmtAccountEmailer _accountEmailer;
+        private readonly IRepository<UserProfile> _userProfileRepository;
 
         public BmtAccountAppService(
             IdentityUserManager userManager,
             IIdentityRoleRepository roleRepository,
             IBmtAccountEmailer accountEmailer,
             IdentitySecurityLogManager identitySecurityLogManager,
-            IOptions<IdentityOptions> identityOptions) : base(userManager, roleRepository, accountEmailer, identitySecurityLogManager, identityOptions)
+            IOptions<IdentityOptions> identityOptions,
+            IRepository<UserProfile> userProfileRepository) : base(userManager, roleRepository, accountEmailer, identitySecurityLogManager, identityOptions)
         {
             _accountEmailer = accountEmailer;
+            _userProfileRepository = userProfileRepository;
+        }
+
+        public async Task<UserProfileDto> GetLoggedUserProfileAsync()
+        {
+            if (CurrentUser == null)
+            {
+                throw new UserFriendlyException("User must be logged in");
+            }
+
+            var userProfileDto = new UserProfileDto
+            {
+                FirstName = CurrentUser.Name,
+                LastName = CurrentUser.SurName,
+                Email = CurrentUser.Email,
+                PhoneNumber = CurrentUser.PhoneNumber,
+            };
+
+            var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == CurrentUser.Id);
+            if (userProfile == null)
+            {
+                return userProfileDto;
+            }
+
+            userProfileDto.CvBlobName = userProfile.CvBlobName;
+            userProfileDto.CvFileName= userProfile.CvFileName;
+            userProfileDto.CvContentType = userProfile.CvContentType;
+
+            return userProfileDto;
         }
 
         public override async Task<IdentityUserDto> RegisterAsync(RegisterDto input)

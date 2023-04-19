@@ -86,12 +86,15 @@ namespace Collabed.JobPortal.Account.Emailing
             };
             mailMessage.To.Add(aplitrakEmailAddress);
             mailMessage.ReplyToList.Add(new MailAddress(jobApplicationDto.Email, $"{jobApplicationDto.FirstName} {jobApplicationDto.LastName}"));
-            var blob = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name  = jobApplicationDto.CvBlobName });
+            if (!string.IsNullOrWhiteSpace(jobApplicationDto.CvBlobName))
+            {
+                var blob = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name  = jobApplicationDto.CvBlobName });
 
-            using var stream = new MemoryStream();
-            stream.Write(blob.Content, 0, blob.Content.Length);
-            stream.Seek(0, SeekOrigin.Begin);
-            mailMessage.Attachments.Add(new Attachment(stream, blob.Name, jobApplicationDto.ContentType));
+                using var stream = new MemoryStream();
+                stream.Write(blob.Content, 0, blob.Content.Length);
+                stream.Seek(0, SeekOrigin.Begin);
+                mailMessage.Attachments.Add(new Attachment(stream, blob.Name, jobApplicationDto.CvContentType));
+            }
 
             await EmailSender.SendAsync(mailMessage);
         }

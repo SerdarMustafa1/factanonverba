@@ -1,10 +1,12 @@
 ﻿using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.ErrorCodes;
+using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Job;
 using Collabed.JobPortal.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -49,7 +51,7 @@ namespace Collabed.JobPortal.Jobs
         public JobStatus Status { get; set; }
         public Guid? OrganisationId { get; set; }
         public bool? IsNetZeroCompliant { get; set; }
-        public IEnumerable<JobApplicant> Applicants { get; set; }
+        public List<JobApplicant> Applicants { get; set; }
 
         // Broadbean/Idibu specific fields
         public string StartDateText { get; set; }
@@ -74,7 +76,7 @@ namespace Collabed.JobPortal.Jobs
             {
                 OrganisationId = organisationId;
             }
-            Reference = GenerateJobReference();
+            Reference = RandomNameGenerator.GenerateRandomName(10);
             Schedules = new Collection<JobSchedule>();
             SupportingDocuments = new Collection<JobSupportingDocument>();
         }
@@ -86,6 +88,28 @@ namespace Collabed.JobPortal.Jobs
         }
 
         #region Public setters
+        public Job AddApplicant(Guid applicantId, string cvBlobName, string cvContentType, string cvFileName, string portfolio, string coverLetter, IEnumerable<(Guid, bool)> screeningAnswers)
+        {
+            Applicants ??= new List<JobApplicant>();
+            var applicant = new JobApplicant(applicantId, Id);
+            if (!string.IsNullOrEmpty(cvBlobName) && !string.IsNullOrEmpty(cvFileName))
+            {
+                applicant.CvBlobName = cvBlobName;
+                applicant.CvContentType = cvContentType;
+                applicant.CvFileName = cvFileName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(portfolio))
+                applicant.Portfolio = portfolio;
+            if (!string.IsNullOrWhiteSpace(coverLetter))
+                applicant.CoverLetter = coverLetter;
+            if (screeningAnswers != null && screeningAnswers.Any())
+                applicant.SetApplicantScreeningAnswers(screeningAnswers);
+
+            Applicants.Add(applicant);
+
+            return this;
+        }
         public Job SetTitle(string title)
         {
             Title = Check.NotNullOrWhiteSpace(title, nameof(title), JobConsts.MaxTitleLength);
@@ -127,30 +151,5 @@ namespace Collabed.JobPortal.Jobs
             return this;
         }
         #endregion
-
-        private string GenerateJobReference()
-        {
-            var res = new Random();
-
-            // String that contain both alphabets and numbers
-            var str = "abcdefghijklmnopqrstuvwxyz0123456789";
-            int size = 10;
-
-            // Initializing the empty string
-            string randomString = "";
-
-            for (int i = 0; i < size; i++)
-            {
-
-                // Selecting a index randomly
-                int x = res.Next(str.Length);
-
-                // Appending the character at the 
-                // index to the random alphanumeric string.
-                randomString += str[x];
-            }
-
-            return randomString;
-        }
     }
 }

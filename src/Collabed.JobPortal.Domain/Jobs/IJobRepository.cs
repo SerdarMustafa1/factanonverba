@@ -1,4 +1,5 @@
-﻿using Collabed.JobPortal.Types;
+﻿using Collabed.JobPortal.DropDowns;
+using Collabed.JobPortal.Types;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -20,7 +21,8 @@ namespace Collabed.JobPortal.Jobs
 		Task<int> CountBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, IEnumerable<int> categories,
 			string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, bool? netZero, ContractType? contractType, EmploymentType? employmentType,
 			JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default);
-
+		Task<IEnumerable<int>> GetSupportingDocumentsByReferenceAsync(string reference);
+		Task<IEnumerable<ScreeningQuestion>> GetScreeningQuestionsByReferenceAsync(string reference);
 
 	}
 }
