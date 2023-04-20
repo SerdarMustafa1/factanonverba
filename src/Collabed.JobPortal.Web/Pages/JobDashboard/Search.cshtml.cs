@@ -93,7 +93,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
                 new SelectListItem("Date added", "dateAdded", true),
                 new SelectListItem("Closing Date", "closingDate", false),
                 new SelectListItem("Salary", "salary", false),
-                new SelectListItem("Title", "title", false)
+                new SelectListItem("Alphabetical", "title", false)
             };
         }
 
@@ -104,7 +104,8 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
             JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             NetZeros = new List<SelectListItem>
             {
-                new SelectListItem("Yes","1")
+                new SelectListItem("Yes","1"),
+                new SelectListItem("Unknown","2") // Value 2 will search for null entries
             };
             SalaryRanges = GetSalaryRanges();
             Categories = (await _dropDownService.GetCategoriesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
@@ -122,7 +123,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
                 SearchRadius = SelectedRadius,
                 EmploymentType = EmploymentType.HasValue ? (EmploymentType)EmploymentType.Value : null,
                 ContractType = ContractType.HasValue ? (ContractType)ContractType.Value : null,
-                NetZero = NetZero.HasValue ? Convert.ToBoolean(NetZero.Value) : null,
+                NetZero = NetZero.HasValue ? Convert.ToInt32(NetZero.Value) : null,
                 Workplace = JobLocation.HasValue ? (JobLocation)JobLocation.Value : null,
                 SalaryMinimum = string.IsNullOrEmpty(SalaryRange) ? null : int.Parse(SalaryRange.Split(',')[0])*1000,
                 SalaryMaximum = ExtractSalaryMax(SalaryRange)

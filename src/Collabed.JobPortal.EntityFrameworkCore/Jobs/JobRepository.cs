@@ -30,7 +30,7 @@ namespace Collabed.JobPortal.Jobs
         }
 
         public async Task<List<JobWithDetails>> GetListBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, IEnumerable<int> categories,
-            string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, bool? netZero, ContractType? contractType, EmploymentType? employmentType,
+            string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, int? netZero, ContractType? contractType, EmploymentType? employmentType,
             JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default)
         {
             var context = await GetDbContextAsync();
@@ -53,7 +53,10 @@ namespace Collabed.JobPortal.Jobs
 
             if (netZero.HasValue)
             {
-                query = query.Where(x => x.job.IsNetZeroCompliant == netZero.Value);
+                if (netZero.Value == 2)
+                    query = query.Where(x => x.job.IsNetZeroCompliant == null);
+                else
+                    query = query.Where(x => x.job.IsNetZeroCompliant == (netZero.Value == 1));
             }
             if (contractType.HasValue)
             {
@@ -65,7 +68,10 @@ namespace Collabed.JobPortal.Jobs
             }
             if (workplace.HasValue)
             {
-                query = query.Where(x => x.job.JobLocation == workplace.Value);
+                if (workplace.Value == JobLocation.Unknown)
+                    query = query.Where(x => x.job.JobLocation == null);
+                else
+                    query = query.Where(x => x.job.JobLocation == workplace.Value);
             }
             if (salaryMinimum.HasValue)
             {
@@ -142,7 +148,7 @@ namespace Collabed.JobPortal.Jobs
         }
 
         public async Task<int> CountBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, IEnumerable<int> categories,
-            string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, bool? netZero, ContractType? contractType, EmploymentType? employmentType,
+            string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, int? netZero, ContractType? contractType, EmploymentType? employmentType,
             JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default)
         {
             var context = await GetDbContextAsync();
@@ -159,7 +165,10 @@ namespace Collabed.JobPortal.Jobs
 
             if (netZero.HasValue)
             {
-                query = query.Where(x => x.job.IsNetZeroCompliant == netZero.Value);
+                if (netZero.Value == 2)
+                    query = query.Where(x => x.job.IsNetZeroCompliant == null);
+                else
+                    query = query.Where(x => x.job.IsNetZeroCompliant == (netZero.Value == 1));
             }
             if (contractType.HasValue)
             {
@@ -219,6 +228,15 @@ namespace Collabed.JobPortal.Jobs
             var query = await ApplyFilterAsync();
             return await query
                 .Include(x => x.Applicants)
+                .FirstOrDefaultAsync(x => x.Reference == reference);
+        }
+
+        public async Task<Job> GetJobForApplyByReferenceAsync(string reference)
+        {
+            var query = await ApplyFilterAsync();
+            return await query
+                .Include(x => x.SupportingDocuments)
+                .Include(x => x.ScreeningQuestions)
                 .FirstOrDefaultAsync(x => x.Reference == reference);
         }
 

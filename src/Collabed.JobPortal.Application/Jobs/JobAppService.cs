@@ -65,6 +65,30 @@ namespace JobPortal.Jobs
             _supportingDocumentRepository=supportingDocumentRepository;
         }
 
+        public async Task<int?> GetApplicationStepsByJobReferenceAsync(string reference)
+        {
+            var steps = 2; // Contact details + right to work in UK
+
+            var job = await _jobRepository.GetJobForApplyByReferenceAsync(reference);
+
+            if (job.ScreeningQuestions.Any())
+            {
+                steps++;
+            }
+
+            if (job.JobOrigin != JobOrigin.Native)
+            {
+                // For external jobs we want to collect CV, Cover letter and portfolio
+                steps += 3;
+            }
+            else
+            {
+                steps += job.SupportingDocuments.Count;
+            }
+
+            return steps;
+        }
+
         public async Task<PagedResultDto<JobDto>> SearchAsync(SearchCriteriaInput criteria, CancellationToken cancellationToken)
         {
             var mapSearchResult = new MapSearchResult();

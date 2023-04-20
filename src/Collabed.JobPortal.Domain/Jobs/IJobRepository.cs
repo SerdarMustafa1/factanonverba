@@ -16,13 +16,13 @@ namespace Collabed.JobPortal.Jobs
 		Task<bool> CheckIfJobExistsByReference(string reference);
 		Task<JobWithDetails> GetWithDetailsByReferenceAsync(string reference);
 		Task<List<JobWithDetails>> GetListBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, IEnumerable<int> categories,
-			string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, bool? netZero, ContractType? contractType, EmploymentType? employmentType,
+			string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, int? netZero, ContractType? contractType, EmploymentType? employmentType,
 			JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default);
 		Task<int> CountBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, IEnumerable<int> categories,
-			string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, bool? netZero, ContractType? contractType, EmploymentType? employmentType,
+			string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, int? netZero, ContractType? contractType, EmploymentType? employmentType,
 			JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default);
 		Task<IEnumerable<int>> GetSupportingDocumentsByReferenceAsync(string reference);
 		Task<IEnumerable<ScreeningQuestion>> GetScreeningQuestionsByReferenceAsync(string reference);
-
+		Task<Job> GetJobForApplyByReferenceAsync(string reference);
 	}
 }

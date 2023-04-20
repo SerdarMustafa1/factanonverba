@@ -7,6 +7,7 @@ namespace Collabed.JobPortal.Types
         [Display(Name = "In-office")]
         InOffice,
         Hybrid,
-        Remote
+        Remote,
+        Unknown
     }
 }

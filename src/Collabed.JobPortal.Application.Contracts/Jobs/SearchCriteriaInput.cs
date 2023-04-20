@@ -10,7 +10,7 @@ namespace Collabed.JobPortal.Jobs
         public string Keyword { get; set; }
         public string Location { get; set; }
         public int? SearchRadius { get; set; }
-        public bool? NetZero { get; set; }
+        public int? NetZero { get; set; }
         public ContractType? ContractType { get; set; }
         public EmploymentType? EmploymentType { get; set; }
         public JobLocation? Workplace { get; set; }
