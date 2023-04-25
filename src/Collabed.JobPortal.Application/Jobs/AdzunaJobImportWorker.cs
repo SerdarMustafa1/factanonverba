@@ -1,47 +1,43 @@
-﻿using Microsoft.Extensions.Logging;
-using Quartz;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.Threading;
 
 namespace Collabed.JobPortal.Jobs
 {
-    public class AdzunaJobImportWorker : BackgroundWorkerBase
+    public class AdzunaJobImportWorker : AsyncPeriodicBackgroundWorkerBase
     {
-        private const string schedule = "0 1 3 * * ?"; // every day at 01:00
-        private readonly CronExpression _cron;
         private readonly IJobAppService _jobAppService;
 
-        public AdzunaJobImportWorker(IJobAppService jobAppService)
+        public AdzunaJobImportWorker(IJobAppService jobAppService, AbpAsyncTimer timer,
+            IServiceScopeFactory serviceScopeFactory) : base(timer, serviceScopeFactory)
         {
-            _cron = new CronExpression(schedule);
-            _jobAppService=jobAppService;
+            _jobAppService = jobAppService;
+            Timer.Period = 3540000; //59 minutes
         }
 
-        public async override Task StartAsync(CancellationToken cancellationToken = default)
-        {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                var utcNow = DateTime.UtcNow;
-                var nextUtc = _cron.GetNextValidTimeAfter(utcNow);
-                await Task.Delay(nextUtc.Value - utcNow, cancellationToken);
-                await DoWorkAsync();
-            }
-        }
-
-        public async override Task StopAsync(CancellationToken cancellationToken = default)
-        {
-            Logger.LogInformation("Stopped Adzuna Job Import Worker");
-        }
-
-        protected async Task DoWorkAsync()
+        protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
             Logger.LogInformation("Starting: Importing job ads from Adzuna");
 
+            var start = new TimeSpan(3, 0, 0); //3.01 o'clock
+            var end = new TimeSpan(4, 0, 0); //4.01 o'clock
+            var now = DateTime.Now.TimeOfDay;
+
+            if ((now < start) || (now > end))
+            {
+                return;
+            }
+
+            var jobAppService = workerContext
+                .ServiceProvider
+                .GetRequiredService<IJobAppService>();
+
             try
             {
-                await _jobAppService.FeedAllAdzunaJobsAsync();
+                await jobAppService.FeedAllAdzunaJobsAsync();
                 Logger.LogInformation("Completed: Finished job ads import from Adzuna");
             }
             catch (Exception ex)

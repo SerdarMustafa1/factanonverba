@@ -78,11 +78,7 @@ namespace JobPortal.Jobs
         [RemoteService(IsEnabled = false)]
         public async Task FeedAllAdzunaJobsAsync()
         {
-            //using (var uow = _unitOfWorkManager.Begin(isTransactional: false))
-            //{
             await _jobRepository.DeleteAsync(x => x.JobOrigin == JobOrigin.Adzuna, true);
-            //    await _unitOfWorkManager.Current.SaveChangesAsync();
-            //}
 
             var architectureJobs = new string[] { "Architect", "CAD Technician", "Interior Designer", "Exhibition Designer" };
             foreach (var job in architectureJobs)
