@@ -15,8 +15,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Authentication;
+using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -24,6 +29,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
+using Volo.Abp.Uow;
 
 namespace JobPortal.Jobs
 {
@@ -43,11 +49,13 @@ namespace JobPortal.Jobs
         private readonly IRepository<UserProfile> _profileRepository;
         private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IRepository<SupportingDocument> _supportingDocumentRepository;
+        private readonly IRepository<Location> _locationRepository;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger,
             IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IOrganisationRepository organisationRepository,
             IRepository<Category> categoriesRepository, ISearchService searchService, IFileAppService fileAppService,
-            IBmtAccountEmailer bmtAccountEmailer, IRepository<UserProfile> profileRepository, IRepository<IdentityUser, Guid> userRepository, UserManager userManager, IRepository<SupportingDocument> supportingDocumentRepository)
+            IBmtAccountEmailer bmtAccountEmailer, IRepository<UserProfile> profileRepository, IRepository<IdentityUser, Guid> userRepository, UserManager userManager, IRepository<SupportingDocument> supportingDocumentRepository, IRepository<Location> locationRepository, IUnitOfWorkManager unitOfWorkManager)
         {
             _jobRepository = jobRepository;
             _jobManager = jobManager;
@@ -57,13 +65,163 @@ namespace JobPortal.Jobs
             _organisationRepository = organisationRepository;
             _categoryRepository = categoriesRepository;
             _searchService = searchService;
+            _locationRepository = locationRepository;
+            _unitOfWorkManager = unitOfWorkManager;
             _fileAppService = fileAppService;
             _bmtAccountEmailer = bmtAccountEmailer;
             _profileRepository = profileRepository;
             _userRepository = userRepository;
             _userManager = userManager;
-            _supportingDocumentRepository=supportingDocumentRepository;
+            _supportingDocumentRepository = supportingDocumentRepository;
         }
+
+        [RemoteService(IsEnabled = false)]
+        public async Task FeedAllAdzunaJobsAsync()
+        {
+            //using (var uow = _unitOfWorkManager.Begin(isTransactional: false))
+            //{
+            await _jobRepository.DeleteAsync(x => x.JobOrigin == JobOrigin.Adzuna, true);
+            //    await _unitOfWorkManager.Current.SaveChangesAsync();
+            //}
+
+            var architectureJobs = new string[] { "Architect", "CAD Technician", "Interior Designer", "Exhibition Designer" };
+            foreach (var job in architectureJobs)
+            {
+                await GetAdzunaJobsAsync(job, "creative-design-jobs", 2);
+                await GetAdzunaJobsAsync(job, "trade-construction-jobs", 2);
+                await GetAdzunaJobsAsync(job, "engineering-jobs", 2);
+            }
+            var constructionJobs = new string[] { "Acoustics Consultant", "Building Control Officer", "Building Site Inspector",
+                "Conservation Officer", "Construction Contracts Manager", "Construction Plant Hire Adviser", "Construction Manager",
+                "Construction Site Supervisor", "Project Manager", "Site Manager", "Estimator", "Facilities Manager"};
+            foreach (var job in constructionJobs)
+            {
+                await GetAdzunaJobsAsync(job, "trade-construction-jobs", 3);
+            }
+
+            var assesorJobs = new string[] { "Energy Assessor", "Fire Risk Assessor" };
+            foreach (var job in assesorJobs)
+            {
+                await GetAdzunaJobsAsync(job, "trade-construction-jobs", 1);
+                await GetAdzunaJobsAsync(job, "engineering-jobs", 1);
+            }
+            var engineeringJobs = new string[] { "Building Services", "Building Engineer", "Civil Engineer", "Thermal Insulation Engineer",
+                "Engineering Construction", "Heating Engineer", "Ventilation Engineer"};
+            foreach (var job in engineeringJobs)
+            {
+                await GetAdzunaJobsAsync(job, "trade-construction-jobs", 4);
+                await GetAdzunaJobsAsync(job, "engineering-jobs", 4);
+            }
+
+            var surveyingJobs = new string[] { "Surveyor", "Heritage Building", "Building Surveying", "Survey Technician", "Surveying" };
+            foreach (var job in surveyingJobs)
+            {
+                await GetAdzunaJobsAsync(job, "trade-construction-jobs", 6);
+            }
+            var planningJobs = new string[] { "Construction Planning", "Planning Engineer", "Heritage Officer", "Heritage Assistant",
+                "Planning and Development Surveyor", "Town Planner", "Urban Planner"};
+            foreach (var job in planningJobs)
+            {
+                await GetAdzunaJobsAsync(job, "", 5);
+            }
+        }
+
+        #region Adzuna private methods
+        private async Task<int?> GetAdzunaJobsAsync(string title, string category, int catId)
+        {
+            var locations = await _locationRepository.GetListAsync();
+            var page = 1;
+            int count;
+            int? response = await FeedAdzunaJobsAsync(page, title, category, catId, locations);
+            count = page*50;
+            page++;
+
+            while (response != null && response.Value > count)
+            {
+                response = await FeedAdzunaJobsAsync(page, title, category, catId, locations);
+                count = page*50;
+                page++;
+            }
+
+            return response;
+        }
+
+        private async Task<int?> FeedAdzunaJobsAsync(int page, string title, string category, int catId, List<Location> locations)
+        {
+            title = Uri.EscapeDataString(title);
+            var whatExclude = "software%20microsoft%20data%20migration%20systems%20solution%20integration%20security%20enterprise%20infrastructure%20service%20DBRE";
+            var adzunaJobSearchUrl = new StringBuilder();
+            adzunaJobSearchUrl.Append(@$"http://api.adzuna.com:80/v1/api/jobs/gb/search/{page}?app_id");
+            adzunaJobSearchUrl.Append("&app_id=10dbdc09&app_key=5bc51c49c3c47b753ed62f8165a85d00");
+            if (!string.IsNullOrEmpty(whatExclude))
+                adzunaJobSearchUrl.Append($"&what_exclude={whatExclude}");
+
+            adzunaJobSearchUrl.Append($"&title_only={title}");
+            if (!string.IsNullOrEmpty(category))
+                adzunaJobSearchUrl.Append($"&category={category}");
+
+            adzunaJobSearchUrl.Append("&salary_include_unknown=1&results_per_page=500");
+
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders
+              .Accept
+              .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await httpClient.GetAsync(adzunaJobSearchUrl.ToString());
+            var resultUtf8 = await response.Content.ReadAsStreamAsync();
+            var jobsResponse = JsonSerializer.Deserialize<AdzunaJobResponse>(resultUtf8);
+
+            using (var uow = _unitOfWorkManager.Begin(
+                isTransactional: true))
+            {
+                if (jobsResponse?.Count > 0)
+                {
+                    foreach (var item in jobsResponse.Results)
+                    {
+                        if ((await _jobRepository.GetByReferenceAsync(item.Reference)) != null)
+                            continue;
+
+                        var newJob = _jobManager.CreateExternal(item.Reference);
+                        ObjectMapper.Map<AdzunaJobResult, Job>(item, newJob);
+                        _jobManager.ConvertSalaryRates(newJob);
+
+                        if (DateTime.TryParseExact(item.PostDate, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out var postDate))
+                        {
+                            newJob.CreationTime = postDate;
+                        }
+
+                        newJob.JobOrigin = JobOrigin.Adzuna;
+                        newJob.OfficeLocationId = MapOfficeLocation(item.JobLocation?.Name, locations);
+                        newJob.CategoryId = catId;
+                        await _jobRepository.InsertAsync(newJob);
+                    }
+                }
+                await _unitOfWorkManager.Current.SaveChangesAsync();
+            }
+
+            return jobsResponse?.Count;
+        }
+
+        private static int? MapOfficeLocation(string name, List<Location> locations)
+        {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            var locationSplit = name.Split(',');
+            var foundLocation = locations.FirstOrDefault(x => x.Name == locationSplit[0].TrimEnd().TrimStart());
+            if (foundLocation == null)
+            {
+                if (locationSplit.Length <= 1)
+                    return null;
+            }
+            else
+            {
+                return foundLocation.Id;
+            }
+
+            return locations.FirstOrDefault(x => x.Name == locationSplit[1].TrimEnd().TrimStart())?.Id;
+        }
+
+        #endregion
 
         public async Task<int?> GetApplicationStepsByJobReferenceAsync(string reference)
         {

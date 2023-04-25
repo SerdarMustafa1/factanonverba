@@ -79,12 +79,14 @@ namespace Collabed.JobPortal.Jobs
             Reference = RandomNameGenerator.GenerateRandomName(10);
             Schedules = new Collection<JobSchedule>();
             SupportingDocuments = new Collection<JobSupportingDocument>();
+            Status = JobStatus.Live;
         }
 
         // This constructor is used for external jobs feed
         internal Job(Guid id, string reference) : base(id)
         {
             SetReference(reference);
+            Status = JobStatus.Live;
         }
 
         #region Public setters

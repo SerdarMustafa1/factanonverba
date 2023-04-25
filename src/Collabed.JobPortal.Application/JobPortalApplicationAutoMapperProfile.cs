@@ -81,6 +81,26 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             .ForMember(d => d.StartDate, op => op.Ignore())
             .ForMember(d => d.ScreeningQuestions, op => op.Ignore())
             .IgnoreAuditedObjectProperties();
+        CreateMap<AdzunaJobResult, Jobs.Job>()
+            .ForMember(d => d.Type,
+                    op => op.MapFrom(o => MapAdzunaJobType(o.ContractType)))
+            .ForMember(d => d.EmploymentType,
+                    op => op.MapFrom(o => MapEmploymentType(o.ContractTime)))
+            .ForMember(d => d.SalaryPeriod,
+                    op => op.MapFrom(o => (SalaryPeriod?)SalaryPeriod.Annually))
+            .ForMember(d => d.SalaryCurrency,
+                    op => op.MapFrom(o => CurrencyType.GBP))
+            .ForMember(d => d.ApplicationDeadline,
+                    op => op.MapFrom(o => DateTime.UtcNow.AddDays(30)))
+            .ForMember(d => d.CompanyName,
+                    op => op.MapFrom(o => o.Company != null ? o.Company.Name : default))
+            .ForMember(d => d.IsSalaryEstimated,
+                    op => op.MapFrom(o => o.IsSalaryEstimated == "1"))
+            .ForMember(d => d.Id, op => op.Ignore())
+            .ForMember(d => d.StartDate, op => op.Ignore())
+            .ForMember(d => d.ScreeningQuestions, op => op.Ignore())
+            .ForMember(d => d.JobLocation, op => op.Ignore())
+            .IgnoreAuditedObjectProperties();
         CreateMap<ApplicationDto, ThirdPartyJobApplicationDto>()
             .ForMember(d => d.CompanyName, op => op.Ignore())
             .ForMember(d => d.JobPosition, op => op.Ignore());
@@ -97,6 +117,32 @@ public class JobPortalApplicationAutoMapperProfile : Profile
         Enum.TryParse(jobType, out ContractType jobTypeEnum);
         return jobTypeEnum;
     }
+    public static ContractType? MapAdzunaJobType(string jobType)
+    {
+        if (string.IsNullOrEmpty(jobType))
+            return null;
+
+        if (jobType == "permanent")
+            return ContractType.Permanent;
+
+        if (jobType == "contract")
+            return ContractType.Contract;
+
+        return null;
+    }
+    public static EmploymentType? MapEmploymentType(string employmentType)
+    {
+        if (string.IsNullOrEmpty(employmentType))
+            return null;
+
+        if (employmentType == "full_time")
+            return EmploymentType.Fulltime;
+        if (employmentType == "part_time")
+            return EmploymentType.Parttime;
+
+        return null;
+    }
+
     public static SalaryPeriod? MapSalaryPeriodType(string salaryPeriodType)
     {
         if (string.IsNullOrEmpty(salaryPeriodType))

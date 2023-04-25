@@ -18,5 +18,7 @@ namespace Collabed.JobPortal.Jobs
 		Task<IEnumerable<CategorisedJobsDto>> GetCategorisedJobs();
 		Task<PagedResultDto<JobDto>> SearchAsync(SearchCriteriaInput criteria, CancellationToken cancellationToken);
 		Task<int?> GetApplicationStepsByJobReferenceAsync(string reference);
+		Task FeedAllAdzunaJobsAsync();
+
 	}
 }

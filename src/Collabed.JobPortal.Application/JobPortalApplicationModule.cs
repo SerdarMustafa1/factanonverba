@@ -1,4 +1,5 @@
 using Collabed.JobPortal.BlobStorage;
+using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.PayPal;
 using Collabed.JobPortal.Settings;
 using Microsoft.Extensions.Configuration;
@@ -6,8 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using PayPalCheckoutSdk.Core;
 using System;
+using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Azure;
 using Volo.Abp.FeatureManagement;
@@ -64,6 +68,11 @@ public class JobPortalApplicationModule : AbpModule
 			options.SubscriptionKey =
 			configuration["Settings:MapsSubscriptionKey"];
 		});
+	}
+
+	public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+	{
+		await context.AddBackgroundWorkerAsync<AdzunaJobImportWorker>();
 	}
 
 	private void ConfigureBlobStoringOptions(ServiceConfigurationContext context)
