@@ -29,5 +29,10 @@ namespace Collabed.JobPortal.Files
                 Content = blob
             };
         }
+
+        public async Task<bool> DeleteBlobAsync(string blobName)
+        {
+            return await _fileContainer.DeleteAsync(blobName);
+        }
     }
 }

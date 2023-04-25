@@ -14,7 +14,7 @@ namespace Collabed.JobPortal.Users
             UserId = userId;
         }
 
-        public Guid UserId { get; set; }
+        public Guid UserId { get; }
         public string PostCode { get; set; }
         public string CvBlobName { get; set; }
         public string CvFileName { get; set; }

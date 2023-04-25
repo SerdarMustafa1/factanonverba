@@ -1,7 +1,12 @@
 ﻿using Collabed.JobPortal.Account.Emailing.Templates;
+using Collabed.JobPortal.BlobStorage;
+using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -17,6 +22,9 @@ namespace Collabed.JobPortal.Account
     {
         private readonly IBmtAccountEmailer _accountEmailer;
         private readonly IRepository<UserProfile> _userProfileRepository;
+        private readonly IFileAppService _fileAppService;
+        private readonly ILogger<BmtAccountAppService> _logger;
+        private readonly UserManager _profileUserManager;
 
         public BmtAccountAppService(
             IdentityUserManager userManager,
@@ -24,10 +32,16 @@ namespace Collabed.JobPortal.Account
             IBmtAccountEmailer accountEmailer,
             IdentitySecurityLogManager identitySecurityLogManager,
             IOptions<IdentityOptions> identityOptions,
-            IRepository<UserProfile> userProfileRepository) : base(userManager, roleRepository, accountEmailer, identitySecurityLogManager, identityOptions)
+            IRepository<UserProfile> userProfileRepository,
+            IFileAppService fileAppService,
+            UserManager profileUserManager,
+            ILogger<BmtAccountAppService> logger) : base(userManager, roleRepository, accountEmailer, identitySecurityLogManager, identityOptions)
         {
             _accountEmailer = accountEmailer;
             _userProfileRepository = userProfileRepository;
+            _fileAppService = fileAppService;
+            _profileUserManager = profileUserManager;
+            _logger = logger;
         }
 
         public async Task<UserProfileDto> GetLoggedUserProfileAsync()
@@ -56,6 +70,40 @@ namespace Collabed.JobPortal.Account
             userProfileDto.CvContentType = userProfile.CvContentType;
 
             return userProfileDto;
+        }
+
+        public async Task UploadCvToUserProfile(Guid UserId, Stream fileStream, string fileName, string contentType)
+        {
+            var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == UserId);
+            if (userProfile != null)
+            {
+                if (!string.IsNullOrWhiteSpace(userProfile.CvBlobName))
+                {
+                    var blobDeleted = await _fileAppService.DeleteBlobAsync(userProfile.CvBlobName);
+                    _logger.LogInformation($"Attempted to delete CV blob '{userProfile.CvBlobName}' for user with Id: {UserId} with result: {blobDeleted}");
+                }
+            }
+            else
+            {
+                userProfile = _profileUserManager.CreateUserProfile(UserId);
+                userProfile = await _userProfileRepository.InsertAsync(userProfile);
+            }
+
+            var blobFileName = RandomNameGenerator.GenerateRandomName(10);
+            userProfile.CvBlobName = blobFileName;
+            userProfile.CvContentType = contentType;
+            userProfile.CvFileName = fileName;
+
+            try
+            {
+                await _fileAppService.SaveBlobAsync(new SaveBlobInputDto { Name = fileName, Content = ReadFully(fileStream) });
+                await _userProfileRepository.UpdateAsync(userProfile);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Unexpected error occured during CV upload for user {UserId}: {ex.Message}");
+                _logger.LogException(ex);
+            }
         }
 
         public override async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
@@ -94,6 +142,13 @@ namespace Collabed.JobPortal.Account
                 var user = await UserManager.FindByNameAsync(loginInput);
                 return user != null ? await UserManager.CheckPasswordAsync(user, password) : false;
             }
+        }
+
+        private static byte[] ReadFully(Stream input)
+        {
+            using MemoryStream ms = new();
+            input.CopyTo(ms);
+            return ms.ToArray();
         }
     }
 }
