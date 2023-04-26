@@ -1,7 +1,9 @@
 ﻿using Collabed.JobPortal.Account.Emailing.Templates;
 using Collabed.JobPortal.BlobStorage;
 using Collabed.JobPortal.Extensions;
+using Collabed.JobPortal.Permissions;
 using Collabed.JobPortal.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -44,6 +46,7 @@ namespace Collabed.JobPortal.Account
             _logger = logger;
         }
 
+        [Authorize(BmtPermissions.ApplyForJobs)]
         public async Task<UserProfileDto> GetLoggedUserProfileAsync()
         {
             if (CurrentUser == null)

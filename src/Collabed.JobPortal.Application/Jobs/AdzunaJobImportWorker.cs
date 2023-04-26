@@ -9,12 +9,9 @@ namespace Collabed.JobPortal.Jobs
 {
     public class AdzunaJobImportWorker : AsyncPeriodicBackgroundWorkerBase
     {
-        private readonly IJobAppService _jobAppService;
-
-        public AdzunaJobImportWorker(IJobAppService jobAppService, AbpAsyncTimer timer,
+        public AdzunaJobImportWorker(AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory) : base(timer, serviceScopeFactory)
         {
-            _jobAppService = jobAppService;
             Timer.Period = 3540000; //59 minutes
         }
 
