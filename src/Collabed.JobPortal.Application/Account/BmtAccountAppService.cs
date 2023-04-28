@@ -60,6 +60,7 @@ namespace Collabed.JobPortal.Account
                 LastName = CurrentUser.SurName,
                 Email = CurrentUser.Email,
                 PhoneNumber = CurrentUser.PhoneNumber,
+                UserId = CurrentUser.Id.Value
             };
 
             var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == CurrentUser.Id);
@@ -89,7 +90,7 @@ namespace Collabed.JobPortal.Account
             else
             {
                 userProfile = _profileUserManager.CreateUserProfile(UserId);
-                userProfile = await _userProfileRepository.InsertAsync(userProfile);
+                userProfile = await _userProfileRepository.InsertAsync(userProfile, true);
             }
 
             var blobFileName = RandomNameGenerator.GenerateRandomName(10);

@@ -1,0 +1,144 @@
+﻿@page
+@model Collabed.JobPortal.Web.Pages.Job.Apply.UploadPortfolioModel
+@section styles{
+    <abp-style src="/apply-pages.css"></abp-style>
+}
+@{
+    var previousPage = TempData.Peek("BackToJobOfferParams")?.ToString();
+}
+<div class="row no-display-on-mobile">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <div style="text-align:left;">
+            <p class="text-36" style="margin-top:4%">@TempData.Peek("Title")</p>
+            <p>
+                <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
+                    Posted by @TempData.Peek("OrganisationName")
+                </span>
+                <span style="color: #667085; font-weight: 400; font-size: 16px; line-height:24px;">
+                    on @DateTime.Parse(TempData.Peek("PublishedDate")?.ToString()).ToString("dd/MM/yyyy")
+                </span>
+            </p>
+            <p class="text-16-bold">
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("EmploymentType")?.ToString()))
+                {
+                    @TempData.Peek("EmploymentType")
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+                   !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()))
+                {
+                    @TempData.Peek("ContractType")
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+                   !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrEmpty(TempData.Peek("SalaryRange").ToString()))
+                {
+                    @TempData.Peek("SalaryRange")
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrEmpty(TempData.Peek("OfficeLocation")?.ToString()))
+                {
+                    @TempData["OfficeLocation"]
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    @TempData.Peek("JobLocation")
+                }
+            </p>
+            <p><a href=@previousPage class="back-link"><i class="bi bi-arrow-left back-arrow"></i>Back to job description</a></p>
+        </div>
+    </div>
+    <div class="col-4"></div>
+</div>
+<div class="row display-on-mobile">
+    <div style="text-align:left;">
+        <p class="text-36" style="margin-top:4%">@TempData.Peek("Title")</p>
+        <p>
+            <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
+                Posted by @TempData.Peek("OrganisationName")
+            </span>
+            <span style="color: #667085; font-weight: 400; font-size: 16px; line-height:24px;">
+                on @DateTime.Parse(TempData.Peek("PublishedDate")?.ToString()).ToString("dd/MM/yyyy")
+            </span>
+        </p>
+        <p class="text-16-bold no-display-on-mobile">
+            @if (!string.IsNullOrWhiteSpace(TempData.Peek("EmploymentType")?.ToString()))
+            {
+                @TempData.Peek("EmploymentType")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+               !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()))
+            {
+                @TempData.Peek("ContractType")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+               !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrEmpty(TempData.Peek("SalaryRange").ToString()))
+            {
+                @TempData.Peek("SalaryRange")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrEmpty(TempData.Peek("OfficeLocation")?.ToString()))
+            {
+                @TempData.Peek("OfficeLocation")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+            {
+                @TempData.Peek("JobLocation")
+            }
+        </p>
+        <p><a href=@previousPage class="back-link"><i class="bi bi-arrow-left back-arrow"></i>Back to job description</a></p>
+    </div>
+</div>
+<hr class="divider" />
+<div class="alert alert-warning alert-dismissible fade show bmt-warning-alert" role="alert">
+    <i class="bi bi-exclamation-triangle-fill" style="margin-right:1%;"></i>Your profile will also be updated with this contact information.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div> 
+<div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: @Model.ProgressBarValue%;background-color: #2F70B6;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<div style="max-width:400px; margin-inline:auto">
+    <form method="post">
+        <p class="text-30">Portfolio</p>
+        <hr class="divider" />
+        <p class="hint-16">Give your application the edge by including a link to your online portfolio.</p>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="protocol">https://</span>
+            </div>
+            <input type="text" class="form-control" asp-for="PortfolioLink" aria-label="Portfolio Url" aria-describedby="protocol" />
+        </div>
+        <div style="display: flex; justify-content: center">
+            <button class="btn btn-primary submit-btn" type="submit">Continue</button>
+        </div>
+    </form>
+</div>

@@ -5,10 +5,12 @@ using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Permissions;
 using Collabed.JobPortal.Types;
 using Collabed.JobPortal.Users;
+using Collabed.JobPortal.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
@@ -116,19 +118,19 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public DateTime? ApplicationDeadline { get; set; }
 
         [BindProperty]
-        public string? ScreeningQuestion1 { get; set; }
+        public string ScreeningQuestion1 { get; set; }
 
         [BindProperty]
         public bool? AutoRejectAnswer1 { get; set; }
 
         [BindProperty]
-        public string? ScreeningQuestion2 { get; set; }
+        public string ScreeningQuestion2 { get; set; }
 
         [BindProperty]
         public bool? AutoRejectAnswer2 { get; set; }
 
         [BindProperty]
-        public string? ScreeningQuestion3 { get; set; }
+        public string ScreeningQuestion3 { get; set; }
 
         [BindProperty]
         public bool? AutoRejectAnswer3 { get; set; }
@@ -221,7 +223,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
             }
             else
             {
-                // fix wrong input checkboxes on JobAdInformation.cshtml
+
                 var createdJob = new CreateJobDto()
                 {
                     ApplicationDeadline = ApplicationDeadline,
@@ -245,13 +247,38 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                     StartDate = StartDate,
                     SubDescription = SubDescription,
                     SupplementalPay = SupplementalPay,
-                    SupportingDocuments = new List<int>(),// SelectedSupportedDocuments.Select(int.Parse).ToList(),
+                    ScreeningQuestions = GetScreeningQuestions(),
+                    SupportingDocuments = GetRequiredDocuments(),
                     Title = JobTitle,
                     IsNetZeroCompliant = IsNetZeroCompliant
                 };
+                // HACK: Implement Suporting Documents appropriatelly and add Screening questions 
                 await _jobAppService.CreateAsync(createdJob);
                 return RedirectToPage("/Index");
             }
+        }
+
+        private ICollection<int> GetRequiredDocuments()
+        {
+            var result = new List<int>();
+            if (IsCvRequired) result.Add(1);
+            if (IsCoverLetterRequired) result.Add(2);
+            if (IsOnlinePortfolioRequired) result.Add(3);
+            return result;
+        }
+
+        private IEnumerable<(string, bool?)> GetScreeningQuestions()
+        {
+            var screeningQuestionsList = new List<Models.ScreeningQuestion>();
+            if (ScreeningQuestion1 != null) screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion1, AutoRejectAnswer1));
+            if (ScreeningQuestion2 != null) screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion2, AutoRejectAnswer2));
+            if (ScreeningQuestion3 != null) screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion3, AutoRejectAnswer3));
+            var screeningQuestionTuples = new (string, bool?)[screeningQuestionsList.Count];
+            for (int i = 0; i < screeningQuestionsList.Count; i++)
+            {
+                screeningQuestionTuples[i] = new(screeningQuestionsList[i].Question, screeningQuestionsList[i].AutoRejectAnswer);
+            }
+            return screeningQuestionTuples;
         }
     }
 }

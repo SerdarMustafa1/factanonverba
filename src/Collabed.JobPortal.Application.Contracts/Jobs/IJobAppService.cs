@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Collabed.JobPortal.Applications;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,9 @@ namespace Collabed.JobPortal.Jobs
 		Task<PagedResultDto<JobDto>> SearchAsync(SearchCriteriaInput criteria, CancellationToken cancellationToken);
 		Task<int?> GetApplicationStepsByJobReferenceAsync(string reference);
 		Task FeedAllAdzunaJobsAsync();
+		Task<IEnumerable<ScreeningQuestionDto>> ScreeningQuestionsByJobRefAsync(string jobReference);
+		Task<IEnumerable<SupportingDocumentDto>> GetSupportingDocumentsByJobRefAsync(string jobReference);
+		Task ApplyForAJob(ApplicationDto application);
 
-	}
+    }
 }

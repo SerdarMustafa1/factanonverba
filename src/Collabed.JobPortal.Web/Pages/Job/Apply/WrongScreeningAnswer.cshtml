@@ -1,0 +1,140 @@
+﻿@page
+@model Collabed.JobPortal.Web.Pages.Job.Apply.WrongScreeningAnswerModel
+
+@section styles{
+    <abp-style src="/apply-pages.css"></abp-style>
+}
+
+@{
+    var previousPage = TempData.Peek("BackToJobOfferParams")?.ToString();
+}
+<div class="row no-display-on-mobile">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <div style="text-align:left;">
+            <p class="text-36" style="margin-top:4%">@TempData.Peek("Title")</p>
+            <p>
+                <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
+                    Posted by @TempData.Peek("OrganisationName")
+                </span>
+                <span style="color: #667085; font-weight: 400; font-size: 16px; line-height:24px;">
+                    on @DateTime.Parse(TempData.Peek("PublishedDate")?.ToString()).ToString("dd/MM/yyyy")
+                </span>
+            </p>
+            <p class="text-16-bold">
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("EmploymentType")?.ToString()))
+                {
+                    @TempData.Peek("EmploymentType")
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+                   !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()))
+                {
+                    @TempData.Peek("ContractType")
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+                   !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrEmpty(TempData.Peek("SalaryRange").ToString()))
+                {
+                    @TempData.Peek("SalaryRange")
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrEmpty(TempData.Peek("OfficeLocation")?.ToString()))
+                {
+                    @TempData["OfficeLocation"]
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    @TempData.Peek("JobLocation")
+                }
+            </p>
+            <p><a href=@previousPage class="back-link"><i class="bi bi-arrow-left back-arrow"></i>Back to job description</a></p>
+        </div>
+    </div>
+    <div class="col-4"></div>
+</div>
+<div class="row display-on-mobile">
+    <div style="text-align:left;">
+        <p class="text-36" style="margin-top:4%">@TempData.Peek("Title")</p>
+        <p>
+            <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
+                Posted by @TempData.Peek("OrganisationName")
+            </span>
+            <span style="color: #667085; font-weight: 400; font-size: 16px; line-height:24px;">
+                on @DateTime.Parse(TempData.Peek("PublishedDate")?.ToString()).ToString("dd/MM/yyyy")
+            </span>
+        </p>
+        <p class="text-16-bold no-display-on-mobile">
+            @if (!string.IsNullOrWhiteSpace(TempData.Peek("EmploymentType")?.ToString()))
+            {
+                @TempData.Peek("EmploymentType")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+               !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()))
+            {
+                @TempData.Peek("ContractType")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+               !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrEmpty(TempData.Peek("SalaryRange").ToString()))
+            {
+                @TempData.Peek("SalaryRange")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrEmpty(TempData.Peek("OfficeLocation")?.ToString()))
+            {
+                @TempData.Peek("OfficeLocation")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+            {
+                @TempData.Peek("JobLocation")
+            }
+        </p>
+        <p><a href=@previousPage class="back-link"><i class="bi bi-arrow-left back-arrow"></i>Back to job description</a></p>
+
+    </div>
+</div>
+<hr class="divider" />
+
+<div style="max-width:400px;margin-inline:auto; text-align:center;">
+    <p><i class="bi bi-info-circle-fill" style="font-size:40px;"></i></p>
+    <p class="text-30">Unfortunatelly your answers did not meet the desired criteria</p>
+    <hr class="divider" />
+    <p class="text-16">Thank you for your interest. Unfortunatelly your answers did not meet the desired criteria.</p>
+    <p class="text-16">
+        You're welcome to proceed, but please know that when your application is shared with @TempData.Peek("OrganisationName"),
+        it will include a message indicating that your response to their screening questions did not match
+    </p>
+    <p class="text-16">Good luck with your job search. It can be a challenging process, and we want to make sure that you have all the information you need to make the best decision for your career</p>
+    <p class="text-16">BuildMyTalent</p>
+</div>
+<form method="post">
+    <p style="text-align:center;"><a href="../../JobDashboard" class="btn btn-outline-secondary" style="margin-inline:0.5%;">More Opportunities</a><button type="submit" class="btn btn-primary" style="margin-inline:0.5%;">Continue</button></p>
+</form>

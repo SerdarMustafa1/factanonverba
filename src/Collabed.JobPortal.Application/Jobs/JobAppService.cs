@@ -309,7 +309,7 @@ namespace JobPortal.Jobs
             var job = await _jobManager.CreateAsync(organisationId);
 
             IEnumerable<Collabed.JobPortal.DropDowns.ScreeningQuestion> screeningQuestions = null;
-            if (input.ScreeningQuestions != null)
+            if (input.ScreeningQuestions != null && input.ScreeningQuestions.Count() > 0)
             {
                 screeningQuestions = _jobManager.CreateScreeningQuestions(input.ScreeningQuestions, job.Id);
             }

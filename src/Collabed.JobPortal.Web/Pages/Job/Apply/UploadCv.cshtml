@@ -1,0 +1,152 @@
+﻿@page
+@model Collabed.JobPortal.Web.Pages.Job.Apply.UploadCvModel
+@section styles{
+        <abp-style src="/apply-pages.css"></abp-style>
+}
+@{
+    var previousPage = TempData.Peek("BackToJobOfferParams")?.ToString();
+    var fileInputLabel = string.IsNullOrWhiteSpace(Model.StoredCvFileName) ? "Attach your CV" : "Attach a different CV";
+}
+<div class="row no-display-on-mobile">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <div style="text-align:left;">
+            <p class="text-36" style="margin-top:4%">@TempData.Peek("Title")</p>
+            <p>
+                <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
+                    Posted by @TempData.Peek("OrganisationName")
+                </span>
+                <span style="color: #667085; font-weight: 400; font-size: 16px; line-height:24px;">
+                    on @DateTime.Parse(TempData.Peek("PublishedDate")?.ToString()).ToString("dd/MM/yyyy")
+                </span>
+            </p>
+            <p class="text-16-bold">
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("EmploymentType")?.ToString()))
+                {
+                    @TempData.Peek("EmploymentType")
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+                   !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()))
+                {
+                    @TempData.Peek("ContractType")
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+                   !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrEmpty(TempData.Peek("SalaryRange").ToString()))
+                {
+                    @TempData.Peek("SalaryRange")
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrEmpty(TempData.Peek("OfficeLocation")?.ToString()))
+                {
+                    @TempData["OfficeLocation"]
+                    @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                    {
+                        <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                    }
+                }
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    @TempData.Peek("JobLocation")
+                }
+            </p>
+            <p><a href=@previousPage class="back-link"><i class="bi bi-arrow-left back-arrow"></i>Back to job description</a></p>
+        </div>
+    </div>
+    <div class="col-4"></div>
+</div>
+<div class="row display-on-mobile">
+    <div style="text-align:left;">
+        <p class="text-36" style="margin-top:4%">@TempData.Peek("Title")</p>
+        <p>
+            <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
+                Posted by @TempData.Peek("OrganisationName")
+            </span>
+            <span style="color: #667085; font-weight: 400; font-size: 16px; line-height:24px;">
+                on @DateTime.Parse(TempData.Peek("PublishedDate")?.ToString()).ToString("dd/MM/yyyy")
+            </span>
+        </p>
+        <p class="text-16-bold no-display-on-mobile">
+            @if (!string.IsNullOrWhiteSpace(TempData.Peek("EmploymentType")?.ToString()))
+            {
+                @TempData.Peek("EmploymentType")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+               !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrWhiteSpace(TempData.Peek("ContractType")?.ToString()))
+            {
+                @TempData.Peek("ContractType")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("SalaryRange")?.ToString()) ||
+               !string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrEmpty(TempData.Peek("SalaryRange").ToString()))
+            {
+                @TempData.Peek("SalaryRange")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("OfficeLocation")?.ToString()) || !string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrEmpty(TempData.Peek("OfficeLocation")?.ToString()))
+            {
+                @TempData.Peek("OfficeLocation")
+                @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+                {
+                    <i class="bi bi-dot" style="color:#2F70B6;"></i>
+                }
+            }
+            @if (!string.IsNullOrWhiteSpace(TempData.Peek("JobLocation")?.ToString()))
+            {
+                @TempData.Peek("JobLocation")
+            }
+        </p>
+        <p><a href=@previousPage class="back-link"><i class="bi bi-arrow-left back-arrow"></i>Back to job description</a></p>
+    </div>
+</div>
+<hr class="divider" />
+<div class="alert alert-warning alert-dismissible fade show bmt-warning-alert" role="alert">
+    <i class="bi bi-exclamation-triangle-fill" style="margin-right:1%;"></i>Your profile will also be updated with this contact information.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: @Model.ProgressBarValue%;background-color: #2F70B6;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<form method="post" enctype="multipart/form-data">
+    <div style="max-width:400px;margin-inline:auto;">
+        <p class="text-30" style="margin-block:5%;">Upload CV *</p>
+        @if (!string.IsNullOrWhiteSpace(Model.StoredCvFileName))
+        {
+            <p class="text-16">CV attached, you're ready to apply</p>
+            <div class="file-tile">
+                <p style="margin-block:auto;">
+                    <i class="bi bi-check-circle-fill" style="color:#146C43"></i>
+                    <span style="margin-left:5%;"><i class="bi bi-file-earmark"></i>@Model.StoredCvFileName</span>
+                </p>
+            </div>
+            @await Component.InvokeAsync("DividerOr", null)
+        } 
+        <div class="mb-3" style="margin-top:10%;">
+            <label asp-for="Upload" class="form-label" style="margin-top:1%;font-weight: 400; font-size: 16px; line-height: 24px;color: #101828;">@fileInputLabel</label>
+            <input class="form-control" type="file" asp-for="Upload">
+        </div>
+        <div style="display: flex; justify-content: center">
+            <button class="btn btn-primary submit-btn" type="submit" style="margin-top:8%;">Continue</button>
+        </div>
+    </div>
+</form>

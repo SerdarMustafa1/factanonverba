@@ -18,7 +18,8 @@
     {
         categories = $"{categories}Category={item}&";
     }
-    var previousPage = $"JobDashboard/Search?{categories}{nameof(Model.Predicate)}={Model.Predicate}&{nameof(Model.Location)}={Model.Location}&{nameof(Model.SelectedRadius)}={Model.SelectedRadius}&{nameof(Model.Sorting)}={Model.Sorting}&{nameof(Model.CurrentPage)}={Model.CurrentPage}";
+    var forwardParams = $"{categories}{nameof(Model.Predicate)}={Model.Predicate}&{nameof(Model.Location)}={Model.Location}&{nameof(Model.SelectedRadius)}={Model.SelectedRadius}&{nameof(Model.Sorting)}={Model.Sorting}&{nameof(Model.CurrentPage)}={Model.CurrentPage}";
+    var previousPage = $"JobDashboard/Search?{forwardParams}";
 }
 
 <form method="post" id="previewForm" asp-page="JobAdInformation" novalidate="novalidate">
@@ -125,6 +126,9 @@
                             }
                             <p>
                                 <a class="btn btn-primary full-width-on-mobile" href=@Model.JobDto.ApplicationUrl target="_blank">Apply now</a>
+                            </p>
+                            <p> @*HACK TODO Pass return parameters from job page to apply page*@
+                                <a class="btn btn-primary full-width-on-mobile" href="/Job/Apply/ContactDetails?jobReference=@Model.JobDto.Reference&@forwardParams" >Apply now via BMT</a>
                             </p>
                         </div>
                         <div class="col-3 no-display-on-mobile" style="background-color: #F2F4F7; ">
