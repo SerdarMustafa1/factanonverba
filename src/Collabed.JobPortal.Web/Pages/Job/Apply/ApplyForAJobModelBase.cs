@@ -1,5 +1,4 @@
-﻿using BuildMyTalentOAuthExtensions;
-using Collabed.Application.Helpers;
+﻿using Collabed.Application.Helpers;
 using Collabed.JobPortal.Applications;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Permissions;
@@ -8,14 +7,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Apply
 {
     [Authorize(BmtPermissions.ApplyForJobs)]
-    public class ApplyForAJobModelAbstract : AbpPageModel
+    public class ApplyForAJobModelBase : AbpPageModel
     {
         private readonly IJobAppService _jobAppService;
         private readonly IBmtAccountAppService _accountAppService;
@@ -46,21 +44,21 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         #endregion
 
         [BindProperty]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please type your first name")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter your first name")]
         public string FirstName { get; set; }
 
         [BindProperty]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please type your last name")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter your last name")]
         public string LastName { get; set; }
 
         [BindProperty]
-        [RegularExpression("^[^@]+@[^@]+(\\.[^@]+)*\\.[a-zA-Z]{2,}$", ErrorMessage = "Please type a valid email address")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please type your email address")]
+        [RegularExpression("^[^@]+@[^@]+(\\.[^@]+)*\\.[a-zA-Z]{2,}$", ErrorMessage = "Please enter a valid email address")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter your email address")]
         public string EmailAddress { get; set; }
 
         [BindProperty]
-        [RegularExpression("^(?:\\d{3}-\\d{3}-\\d{3}|\\d{9})$", ErrorMessage = "Please type a phone number: XXXXXXXXX or XXX-XXX-XXX")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please type your phone number")]
+        [RegularExpression("^(\\d{10})$", ErrorMessage = "Please enter a valid UK phone number")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter your phone number")]
         public string PhoneNumber { get; set; }
 
         [BindProperty]
@@ -80,7 +78,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         public IEnumerable<SupportingDocumentDto> RequiredDocuments { get; set; }
         public JobDto JobDto { get; set; }
 
-        public ApplyForAJobModelAbstract(IJobAppService jobAppService, IBmtAccountAppService accountAppService)
+        public ApplyForAJobModelBase(IJobAppService jobAppService, IBmtAccountAppService accountAppService)
         {
             _jobAppService = jobAppService;
             _accountAppService = accountAppService;
@@ -92,7 +90,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             LastName = (string)TempData.Peek(nameof(LastName));
             EmailAddress = (string)TempData.Peek(nameof(EmailAddress));
             PhoneNumber = (string)TempData.Peek(nameof(PhoneNumber));
-            CurrentStep = int.Parse(TempData.Peek(nameof(CurrentStep)).ToString()); 
+            CurrentStep = int.Parse(TempData.Peek(nameof(CurrentStep)).ToString());
             ScreeningQuestionsExists = bool.Parse(TempData.Peek(nameof(ScreeningQuestionsExists)).ToString());
             IsCvRequired = bool.Parse(TempData.Peek(nameof(IsCvRequired)).ToString());
             IsCoverLetterRequired = bool.Parse(TempData.Peek(nameof(IsCoverLetterRequired)).ToString());
@@ -124,22 +122,32 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
                 case 1:
                     return RedirectToPage("PermissionToWorkInUk");
                 case 2:
-                    if (ScreeningQuestionsExists) return RedirectToPage("ScreeningQuestions");
-                    else if (IsCvRequired) return RedirectToPage("UploadCv");
-                    else if (IsPortfolioRequired) return RedirectToPage("Portfolio");
-                    else if (IsCoverLetterRequired) return RedirectToPage("CoverLetter");
+                    if (ScreeningQuestionsExists)
+                        return RedirectToPage("ScreeningQuestions");
+                    else if (IsCvRequired)
+                        return RedirectToPage("UploadCv");
+                    else if (IsPortfolioRequired)
+                        return RedirectToPage("Portfolio");
+                    else if (IsCoverLetterRequired)
+                        return RedirectToPage("CoverLetter");
                     break;
                 case 3:
-                    if (IsCvRequired) return RedirectToPage("UploadCv");
-                    else if (IsPortfolioRequired) return RedirectToPage("Portfolio");
-                    else if (IsCoverLetterRequired) return RedirectToPage("CoverLetter");
+                    if (IsCvRequired)
+                        return RedirectToPage("UploadCv");
+                    else if (IsPortfolioRequired)
+                        return RedirectToPage("Portfolio");
+                    else if (IsCoverLetterRequired)
+                        return RedirectToPage("CoverLetter");
                     break;
                 case 4:
-                    if (IsPortfolioRequired) return RedirectToPage("Portfolio");
-                    else if (IsCoverLetterRequired) return RedirectToPage("CoverLetter");
+                    if (IsPortfolioRequired)
+                        return RedirectToPage("Portfolio");
+                    else if (IsCoverLetterRequired)
+                        return RedirectToPage("CoverLetter");
                     break;
                 case 5:
-                    if (IsCoverLetterRequired) return RedirectToPage("CoverLetter");
+                    if (IsCoverLetterRequired)
+                        return RedirectToPage("CoverLetter");
                     break;
                 default:
                     break;
@@ -172,9 +180,13 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             var answer3 = TempData.Peek("Answer3")?.ToString();
 
             var result = new List<ScreeningQuestionDto>();
-            if (answer1 != null) result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer1.Split(',')[0]), "") { Answer = bool.Parse(answer1.Split(',')[1]) });
-            if (answer2 != null) result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer2.Split(',')[0]), "") { Answer = bool.Parse(answer2.Split(',')[1]) });
-            if (answer3 != null) result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer3.Split(',')[0]), "") { Answer = bool.Parse(answer3.Split(',')[1]) });
+            if (answer1 != null)
+                result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer1.Split(',')[0]), "") { Answer = bool.Parse(answer1.Split(',')[1]) });
+            if (answer2 != null)
+                result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer2.Split(',')[0]), "") { Answer = bool.Parse(answer2.Split(',')[1]) });
+            if (answer3 != null)
+                result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer3.Split(',')[0]), "") { Answer = bool.Parse(answer3.Split(',')[1]) });
+
             return result;
         }
 

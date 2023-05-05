@@ -300,6 +300,9 @@ namespace Collabed.JobPortal.Jobs
                 })
                 .FirstOrDefaultAsync(x => x.Reference == reference);
 
+            if (result == null)
+                return null;
+
             if (result.OrganisationId.HasValue)
             {
                 var organisationDbSet = (await GetDbContextAsync()).Set<Organisations.Organisation>();

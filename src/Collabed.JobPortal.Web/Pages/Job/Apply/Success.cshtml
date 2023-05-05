@@ -66,7 +66,7 @@
 </div>
 <div class="row display-on-mobile">
     <div style="text-align:left;">
-        <p class="text-36" style="margin-top:4%">@TempData.Peek("Title")</p>
+        <p class="text-36" style="margin-top:4%; margin-bottom: 0;">@TempData.Peek("Title")</p>
         <p>
             <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
                 Posted by @TempData.Peek("OrganisationName")
@@ -119,14 +119,19 @@
     </div>
 </div>
 <hr class="divider" />
-<div style="max-width:400px; margin-inline:auto">
-        <div style="text-align:center;">
-            <i class="bi bi-check2-circle" style="font-size:30px; color:#039855"></i>
-        </div>
-        <p class="text-30">Application Submitted</p>
-        <hr class="divider" />
-        <p class="hint-16">Thank you for your application. Keep an eye on your account for updates.</p>
-        <div style="display: flex; justify-content: center">
-        <a class="btn btn-primary submit-btn" href="../../" type="submit">View My Jobs</a>
-        </div>
+<div class="row"> 
+    <div class="col-4"></div>
+    <div class="col-4">
+            <div style="text-align:center;">
+                <i class="bi bi-check2-circle" style="font-size:30px; color:#039855"></i>
+            </div>
+            <p class="text-30" style="text-align: center">Application Submitted</p>
+            <hr class="divider" />
+            <p class="hint-16" style="text-align: center">Thank you for your application.<br />Keep an eye on your account for updates.</p>
+            <div style="display: flex; justify-content: center;">
+                
+            <a class="btn btn-primary submit-btn" style="margin-top: 15px;" href="../../" type="submit">View My Jobs</a>
+            </div>
+    </div>
+    <div class="col-4"></div>
 </div>

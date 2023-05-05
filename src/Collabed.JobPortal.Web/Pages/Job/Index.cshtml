@@ -10,8 +10,8 @@
 <abp-style src="/Pages/Job/Index.css" />
 }
 @section scripts {
+    <abp-script src="/Pages/Job/job-description.js"></abp-script>
 }
-
 @{
     var categories ="";
     foreach (var item in Model.Category)
@@ -45,31 +45,31 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-10">
-                        <p class="text-36">@Model.JobDto.Title</p>
+                        <p class="text-36">@Model.Job.Title</p>
                         <p>
                             <span style="color: #101828; font-size: 16px; font-weight: 400; line-height: 24px;">
-                                Posted by @Model.JobDto.OrganisationName
+                                Posted by @Model.Job.OrganisationName
                             </span>
                             <span style="color: #667085; font-weight: 400; font-size: 16px; line-height:24px;">
-                                on @Model.JobDto.PublishedDate.ToString("dd/MM/yyyy")
+                                on @Model.Job.PublishedDate.ToString("dd/MM/yyyy")
                             </span>
                         </p>
                         <br />
                         <p class="text-16-bold">
-                            @if (!string.IsNullOrWhiteSpace(Model.JobDto.EmploymentType))
+                            @if (!string.IsNullOrWhiteSpace(Model.Job.EmploymentType))
                             {
-                                @Model.JobDto.EmploymentType
-                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.ContractType) || !string.IsNullOrWhiteSpace(Model.GetSalaryRange()) ||
-                               !string.IsNullOrWhiteSpace(Model.JobDto.OfficeLocation) || !string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                                @Model.Job.EmploymentType
+                                @if (!string.IsNullOrWhiteSpace(Model.Job.ContractType) || !string.IsNullOrWhiteSpace(Model.GetSalaryRange()) ||
+                               !string.IsNullOrWhiteSpace(Model.Job.OfficeLocation) || !string.IsNullOrWhiteSpace(Model.Job.JobLocation))
                                 {
                                     <i class="bi bi-dot" style="color:#2F70B6;"></i>
                                 }
                             }
-                            @if (!string.IsNullOrWhiteSpace(Model.JobDto.ContractType))
+                            @if (!string.IsNullOrWhiteSpace(Model.Job.ContractType))
                             {
-                                @Model.JobDto.ContractType
+                                @Model.Job.ContractType
                                 @if (!string.IsNullOrWhiteSpace(Model.GetSalaryRange()) ||
-                               !string.IsNullOrWhiteSpace(Model.JobDto.OfficeLocation) || !string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                               !string.IsNullOrWhiteSpace(Model.Job.OfficeLocation) || !string.IsNullOrWhiteSpace(Model.Job.JobLocation))
                                 {
                                     <i class="bi bi-dot" style="color:#2F70B6;"></i>
                                 }
@@ -77,25 +77,34 @@
                             @if (!string.IsNullOrEmpty(Model.GetSalaryRange()))
                             {
                                 @Model.GetSalaryRange()
-                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.OfficeLocation) || !string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                                @if (!string.IsNullOrWhiteSpace(Model.Job.OfficeLocation) || !string.IsNullOrWhiteSpace(Model.Job.JobLocation))
                                 {
                                     <i class="bi bi-dot" style="color:#2F70B6;"></i>
                                 }
                             }
-                            @if (!string.IsNullOrEmpty(Model.JobDto.OfficeLocation))
+                            @if (!string.IsNullOrEmpty(Model.Job.OfficeLocation))
                             {
-                                @Model.JobDto.OfficeLocation
-                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                                @Model.Job.OfficeLocation
+                                @if (!string.IsNullOrWhiteSpace(Model.Job.JobLocation))
                                 {
                                     <i class="bi bi-dot" style="color:#2F70B6;"></i>
                                 }
                             }
-                            @if (!string.IsNullOrWhiteSpace(Model.JobDto.JobLocation))
+                            @if (!string.IsNullOrWhiteSpace(Model.Job.JobLocation))
                             {
-                                @Model.JobDto.JobLocation
+                                @Model.Job.JobLocation
                             }
                         </p>
-                        <p><a class="btn btn-primary full-width-on-mobile" href=@Model.JobDto.ApplicationUrl target="_blank">Apply now</a></p>
+                        <p>
+                            @if (string.IsNullOrEmpty(Model.Job.ApplicationUrl) || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Broadbean)
+                            {
+                                <a class="btn btn-primary full-width-on-mobile" href="#" onclick="applyForInternal('@Model.Job.Reference')">Apply now</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary full-width-on-mobile" href="#" onclick="onExternalApply('@Model.Job.OrganisationName', '@Model.Job.Title', '@Model.Job.ApplicationUrl'); return false;" target="_blank">Apply now</a>
+                            }
+                        </p>
                     </div>
                     @*                    <div class="col-2">
                     <img src="https://picsum.photos/200/205/" class="job-ad-avatar" width="200" height="205" />
@@ -105,37 +114,39 @@
                         <div class="col-9">
                             <p style="font-weight: 500; font-size: 28px; line-height: 120%; color: #101828;">About the job</p>
                             <p style="font-weight: 500; font-size: 20px; line-height: 80%; color: #101828;">Description</p>
-                            <p>@Html.Raw(Model.JobDto.Description)</p>
-                            @if (!string.IsNullOrWhiteSpace(Model.JobDto.Skills))
+                            <p>@Html.Raw(Model.Job.Description)</p>
+                            @if (!string.IsNullOrWhiteSpace(Model.Job.Skills))
                             {
                                 <hr />
                                 <p style="font-weight: 500; font-size: 20px; line-height: 80%; color: #101828;">Skills</p>
-                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;">@Model.JobDto.Skills</p>
+                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;">@Model.Job.Skills</p>
                             }
-                            @if (!string.IsNullOrWhiteSpace(Model.JobDto.SupplementalPay))
+                            @if (!string.IsNullOrWhiteSpace(Model.Job.SupplementalPay))
                             {
                                 <hr />
                                 <p style="font-weight: 500; font-size: 20px; line-height: 80%; color: #101828;">Supplemental Pay</p>
-                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;"> @Model.JobDto.SupplementalPay</p>
+                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;"> @Model.Job.SupplementalPay</p>
                             }
-                            @if (!string.IsNullOrWhiteSpace(Model.JobDto.SalaryBenefits))
+                            @if (!string.IsNullOrWhiteSpace(Model.Job.SalaryBenefits))
                             {
                                 <hr />
                                 <p style="font-weight: 500; font-size: 20px; line-height: 80%; color: #101828;">Other Benefits</p>
-                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;">@Model.JobDto.SalaryBenefits</p>
+                                <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;">@Model.Job.SalaryBenefits</p>
                             }
-                            <p>
-                                <a class="btn btn-primary full-width-on-mobile" href=@Model.JobDto.ApplicationUrl target="_blank">Apply now</a>
-                            </p>
-                            <p> @*HACK TODO Pass return parameters from job page to apply page*@
-                                <a class="btn btn-primary full-width-on-mobile" href="/Job/Apply/ContactDetails?jobReference=@Model.JobDto.Reference&@forwardParams" >Apply now via BMT</a>
-                            </p>
+                            @if (string.IsNullOrEmpty(Model.Job.ApplicationUrl) || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Broadbean)
+                            {
+                                <a class="btn btn-primary full-width-on-mobile" href="#" onclick="applyForInternal('@Model.Job.Reference')">Apply now</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary full-width-on-mobile" href="#" onclick="onExternalApply('@Model.Job.OrganisationName', '@Model.Job.Title', '@Model.Job.ApplicationUrl'); return false;" target="_blank">Apply now</a>
+                            }
                         </div>
                         <div class="col-3 no-display-on-mobile" style="background-color: #F2F4F7; ">
                             <div style="margin-inline: 24px;margin-block:24px;">
                                 <p style="font-weight: 500;font-size: 28px;line-height: 120%;color: #101828;">Overview</p>
                                 <hr />
-                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.EmploymentType))
+                                @if (!string.IsNullOrWhiteSpace(Model.Job.EmploymentType))
                                 {
                                     <div class="row">
                                         <div class="col-2">
@@ -143,11 +154,11 @@
                                         </div>
                                         <div class="col-10">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Employment Type</span>
-                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.JobDto.EmploymentType</p>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.Job.EmploymentType</p>
                                         </div>
                                     </div>
                                 }
-                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.ContractType))
+                                @if (!string.IsNullOrWhiteSpace(Model.Job.ContractType))
                                 {
                                     <div class="row">
                                         <div class="col-2">
@@ -155,11 +166,11 @@
                                         </div>
                                         <div class="col-10">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Contract Type</span>
-                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.JobDto.ContractType</p>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.Job.ContractType</p>
                                         </div>
                                     </div>
                                 }
-                                @if (!string.IsNullOrEmpty(Model.JobDto.ExperienceLevel))
+                                @if (!string.IsNullOrEmpty(Model.Job.ExperienceLevel))
                                 {
                                     <div class="row">
                                         <div class="col-2">
@@ -167,11 +178,11 @@
                                         </div>
                                         <div class="col-10">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Experience level</span>
-                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.JobDto.ExperienceLevel</p>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.Job.ExperienceLevel</p>
                                         </div>
                                     </div>
                                 }
-                                @if (Model.JobDto.StartDate.HasValue)
+                                @if (Model.Job.StartDate.HasValue)
                                 {
                                     <div class="row">
                                         <div class="col-2">
@@ -179,11 +190,11 @@
                                         </div>
                                         <div class="col-10">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Start Date</span>
-                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.JobDto.StartDate.Value.Date.ToString("dd/MM/yyyy")</p>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.Job.StartDate.Value.Date.ToString("dd/MM/yyyy")</p>
                                         </div>
                                     </div>
                                 }
-                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.JobLocation) || !string.IsNullOrWhiteSpace(Model.JobDto.OfficeLocation))
+                                @if (!string.IsNullOrWhiteSpace(Model.Job.JobLocation) || !string.IsNullOrWhiteSpace(Model.Job.OfficeLocation))
                                 {
                                     <div class="row">
                                         <div class="col-2">
@@ -192,20 +203,20 @@
                                         <div class="col-10">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Location</span>
                                             <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">
-                                                @if (!string.IsNullOrEmpty(Model.JobDto.OfficeLocation))
+                                                @if (!string.IsNullOrEmpty(Model.Job.OfficeLocation))
                                                 {
-                                                    @Model.JobDto.OfficeLocation
+                                                    @Model.Job.OfficeLocation
                                                 }
-                                                @if (!string.IsNullOrWhiteSpace(Model.JobDto.JobLocation) && !string.IsNullOrWhiteSpace(Model.JobDto.OfficeLocation))
+                                                @if (!string.IsNullOrWhiteSpace(Model.Job.JobLocation) && !string.IsNullOrWhiteSpace(Model.Job.OfficeLocation))
                                                 {
                                                     <span>, </span>
                                                 }
-                                                @Model.JobDto.JobLocation
+                                                @Model.Job.JobLocation
                                             </p>
                                         </div>
                                     </div>
                                 }
-                                @if (Model.JobDto.SalaryMaximum.HasValue || Model.JobDto.SalaryMinimum.HasValue || (Model.JobDto.IsSalaryNegotiable.HasValue && Model.JobDto.IsSalaryNegotiable.Value == true))
+                                @if (Model.Job.SalaryMaximum.HasValue || Model.Job.SalaryMinimum.HasValue || (Model.Job.IsSalaryNegotiable.HasValue && Model.Job.IsSalaryNegotiable.Value == true))
                                 {
                                     <div class="row">
                                         <div class="col-2">
@@ -213,20 +224,20 @@
                                         </div>
                                         <div class="col-10">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Salary</span>
-                                            @if (Model.JobDto.SalaryMaximum.HasValue || Model.JobDto.SalaryMinimum.HasValue)
+                                            @if (Model.Job.SalaryMaximum.HasValue || Model.Job.SalaryMinimum.HasValue)
                                             {
                                                 <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">
                                                     @Model.GetSalaryRange()
                                                 </p>
                                             }
-                                            @if (Model.JobDto.IsSalaryNegotiable.HasValue && Model.JobDto.IsSalaryNegotiable.Value == true)
+                                            @if (Model.Job.IsSalaryNegotiable.HasValue && Model.Job.IsSalaryNegotiable.Value == true)
                                             {
                                                 <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #101828;">Negotiable</p>
                                             }
                                         </div>
                                     </div>
                                 }
-                                @if (!string.IsNullOrEmpty(Model.JobDto.LocalLanguage))
+                                @if (!string.IsNullOrEmpty(Model.Job.LocalLanguage))
                                 {
                                     <div class="row">
                                         <div class="col-2">
@@ -234,11 +245,11 @@
                                         </div>
                                         <div class="col-10">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">Local Language</span>
-                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.JobDto.LocalLanguage</p>
+                                            <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">@Model.Job.LocalLanguage</p>
                                         </div>
                                     </div>
                                 }
-                                @if (Model.JobDto.IsNetZeroCompliant.HasValue)
+                                @if (Model.Job.IsNetZeroCompliant.HasValue)
                                 {
                                     <div class="row">
                                         <div class="col-2">
@@ -247,7 +258,7 @@
                                         <div class="col-10">
                                             <span style="font-weight: 500;font-size: 20px;line-height: 80%;color: #101828;">NetZero Compliant</span>
                                             <p style="font-weight: 400;font-size: 16px;line-height: 24px;color: #101828;">
-                                                @if (Model.JobDto.IsNetZeroCompliant.Value)
+                                                @if (Model.Job.IsNetZeroCompliant.Value)
                                                 {
                                                     <span>Yes</span>
                                                 }

@@ -6,12 +6,7 @@
 }
 
 @{
-    var categories = "";
-    foreach (var item in Model.Category)
-    {
-        categories = $"{categories}Category={item}&";
-    }
-    var previousPage = $"../../Job?Reference={Model.JobDto.Reference}&{categories}{nameof(Model.Predicate)}={Model.Predicate}&{nameof(Model.Location)}={Model.Location}&{nameof(Model.SelectedRadius)}={Model.SelectedRadius}&{nameof(Model.Sorting)}={Model.Sorting}&{nameof(Model.CurrentPage)}={Model.CurrentPage}";
+    var previousPage = $"../../Job?Reference={Model.JobDto.Reference}";
     TempData["BackToJobOfferParams"] = previousPage;
 }
 <div class="row no-display-on-mobile">

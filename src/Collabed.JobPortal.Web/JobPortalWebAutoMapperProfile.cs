@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
-using Volo.Abp.Identity;
+using Collabed.JobPortal.Jobs;
+using Collabed.JobPortal.Web.Models;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity.Web.Pages.Identity.Roles;
+using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
+using Volo.Abp.Identity.Web.Pages.Identity.Roles;
 using CreateUserModalModel = Collabed.JobPortal.Web.Pages.Identity.Users.CreateModalModel;
 using EditUserModalModel = Collabed.JobPortal.Web.Pages.Identity.Users.EditModalModel;
 
@@ -13,6 +15,7 @@ public class JobPortalWebAutoMapperProfile : AbpIdentityWebAutoMapperProfile
     public JobPortalWebAutoMapperProfile() : base()
     {
         //Define your AutoMapper configuration here for the Web project.
+        CreateMap<JobDto, JobBase>();
     }
 
     protected override void CreateUserMappings()

@@ -1,5 +1,6 @@
 using Collabed.Application.Helpers;
 using Collabed.JobPortal.Jobs;
+using Collabed.JobPortal.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Collabed.JobPortal.Web.Pages.Job
     {
         public string Reference { get; set; }
 
-        #region searchParams
+        #region Search Params
         /// <summary>
         /// Search params from jobDashboard page, to have smooth UX on after clicking back to results link
         /// Inserted directly after last endpoint, so it needs to be followed by / and other endpoints (if neccesary) 
@@ -37,7 +38,7 @@ namespace Collabed.JobPortal.Web.Pages.Job
         public int CurrentPage { get; set; } = 1;
         #endregion
 
-        public JobDto JobDto { get; set; }
+        public JobBase Job { get; set; }
 
         private readonly IJobAppService _jobAppService;
         public JobModel(IJobAppService jobAppService)
@@ -45,14 +46,22 @@ namespace Collabed.JobPortal.Web.Pages.Job
             _jobAppService = jobAppService;
         }
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            JobDto = await _jobAppService.GetByReferenceAsync(Reference);
+            var jobDto = await _jobAppService.GetByReferenceAsync(Reference);
+            if (jobDto == null)
+            {
+                return NotFound();
+            }
+
+            Job = ObjectMapper.Map<JobDto, JobBase>(jobDto);
+
+            return Page();
         }
 
         public string GetSalaryRange()
         {
-            return SalaryRangeHelper.GetSalaryRange(JobDto.SalaryMinimum, JobDto.SalaryMaximum, JobDto.IsSalaryEstimated);
+            return SalaryRangeHelper.GetSalaryRange(Job.SalaryMinimum, Job.SalaryMaximum, Job.IsSalaryEstimated);
         }
     }
 }

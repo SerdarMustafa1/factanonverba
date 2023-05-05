@@ -1,12 +1,9 @@
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Users;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Volo.Abp.Application.Services;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Apply
 {
-    public class NoPermissionModel : ApplyForAJobModelAbstract
+    public class NoPermissionModel : ApplyForAJobModelBase
     {
         private readonly IJobAppService _jobAppService;
         private readonly IBmtAccountAppService _accountAppService;
@@ -14,11 +11,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         {
             _jobAppService = jobAppService;
             _accountAppService = accountAppService;
-        }
-
-        public void OnGet()
-        {
-
         }
     }
 }

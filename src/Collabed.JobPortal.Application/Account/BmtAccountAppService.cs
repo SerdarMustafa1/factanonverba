@@ -60,7 +60,7 @@ namespace Collabed.JobPortal.Account
                 LastName = CurrentUser.SurName,
                 Email = CurrentUser.Email,
                 PhoneNumber = CurrentUser.PhoneNumber,
-                UserId = CurrentUser.Id.Value
+                UserId = CurrentUser.Id.Value,
             };
 
             var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == CurrentUser.Id);
@@ -72,6 +72,7 @@ namespace Collabed.JobPortal.Account
             userProfileDto.CvBlobName = userProfile.CvBlobName;
             userProfileDto.CvFileName= userProfile.CvFileName;
             userProfileDto.CvContentType = userProfile.CvContentType;
+            userProfileDto.PostCode = userProfile.PostCode;
 
             return userProfileDto;
         }

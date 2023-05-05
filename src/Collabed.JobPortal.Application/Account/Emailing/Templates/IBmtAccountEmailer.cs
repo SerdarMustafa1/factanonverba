@@ -9,5 +9,6 @@ namespace Collabed.JobPortal.Account.Emailing.Templates
     {
         Task SendEmailVerificationRequestAsync(IdentityUser user, string callbackUrl);
         Task SendApplicationEmailToThirdPartyAsync(ThirdPartyJobApplicationDto jobApplicationDto, string aplitrakEmailAddress);
+        Task SendApplicationConfirmationAsync(ApplicationConfirmationDto application);
     }
 }

@@ -27,12 +27,14 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Uow;
 
 namespace JobPortal.Jobs
 {
+    [ExposeServices(typeof(JobAppService), typeof(IJobAppService))]
     public class JobAppService : ApplicationService, IJobAppService
     {
         private readonly IJobRepository _jobRepository;
@@ -309,7 +311,7 @@ namespace JobPortal.Jobs
             var job = await _jobManager.CreateAsync(organisationId);
 
             IEnumerable<Collabed.JobPortal.DropDowns.ScreeningQuestion> screeningQuestions = null;
-            if (input.ScreeningQuestions != null && input.ScreeningQuestions.Count() > 0)
+            if (input.ScreeningQuestions != null && input.ScreeningQuestions.Any())
             {
                 screeningQuestions = _jobManager.CreateScreeningQuestions(input.ScreeningQuestions, job.Id);
             }
@@ -343,6 +345,17 @@ namespace JobPortal.Jobs
             await _jobRepository.DeleteAsync(id);
         }
 
+        public async Task<bool> CheckIfAlreadyAppliedAsync(string jobRef, Guid userId)
+        {
+            var job = await _jobRepository.GetByReferenceAsync(jobRef);
+            if (job != null && job.Applicants.Any(x => x.UserId == userId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         [Authorize(BmtPermissions.ApplyForJobs)]
         public async Task ApplyForAJob(ApplicationDto application)
         {
@@ -350,7 +363,7 @@ namespace JobPortal.Jobs
             var job = await _jobRepository.GetByReferenceAsync(application.JobReference);
             if (job == null)
             {
-                throw new UserFriendlyException("Job you're applying for has not been found.");
+                throw new UserFriendlyException("The job you're applying for has not been found.");
             }
             if (job.Applicants.Any(x => x.UserId== application.UserId))
             {
@@ -393,7 +406,19 @@ namespace JobPortal.Jobs
 
             await _jobRepository.UpdateAsync(job);
 
-            // send notification email to applicant/employer
+            var organisation = await _organisationRepository.FindAsync(job.OrganisationId.Value);
+            if (organisation == null)
+                throw new BusinessException("Failed to find the organisation that posted a job");
+
+            await _bmtAccountEmailer.SendApplicationConfirmationAsync(new ApplicationConfirmationDto
+            {
+                FirstName= application.FirstName,
+                LastName= application.LastName,
+                Email = application.Email,
+                CompanyName = organisation.Name,
+                JobReference = job.Reference,
+                JobTitle = job.Title
+            });
         }
 
         public async Task<IEnumerable<SupportingDocumentDto>> GetSupportingDocumentsByJobRefAsync(string jobReference)

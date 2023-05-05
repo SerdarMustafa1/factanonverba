@@ -1,17 +1,12 @@
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using NUglify.Helpers;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Apply
 {
-    public class ScreeningQuestionsModel : ApplyForAJobModelAbstract
+    public class ScreeningQuestionsModel : ApplyForAJobModelBase
     {
         private readonly IJobAppService _jobAppService;
         private readonly IBmtAccountAppService _accountAppService;
@@ -48,15 +43,14 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             {
                 return Page();
             }
+
             if (ValidateAnsers())
             {
                 StoreAnswers();
                 return await NextPage();
             }
-            else
-            {
-                return RedirectToPage("WrongScreeningAnswer");
-            }
+
+            return RedirectToPage("WrongScreeningAnswer");
         }
 
         public int GetStepsRequired()

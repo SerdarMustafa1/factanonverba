@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Apply
 {
-    public class CoverLetterModel : ApplyForAJobModelAbstract
+    public class CoverLetterModel : ApplyForAJobModelBase
     {
         private readonly IJobAppService _jobAppService;
         private readonly IBmtAccountAppService _accountAppService;

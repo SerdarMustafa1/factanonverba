@@ -1,23 +1,18 @@
-﻿using Collabed.JobPortal.BlobStorage;
-using Collabed.JobPortal.Extensions;
+﻿using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Apply
 {
-    public class UploadCvModel : ApplyForAJobModelAbstract
+    public class UploadCvModel : ApplyForAJobModelBase
     {
-        private readonly IJobAppService _jobAppService;            
-        private readonly IBmtAccountAppService _accountAppService; 
+        private readonly IJobAppService _jobAppService;
+        private readonly IBmtAccountAppService _accountAppService;
         private readonly IWebHostEnvironment _env;
 
         [BindProperty]
@@ -27,16 +22,15 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         public string StoredCvContentType { get; set; }
         public string StoredCvFileName { get; set; }
 
-        public UploadCvModel(IJobAppService jobAppService, IBmtAccountAppService accountAppService, IWebHostEnvironment env) : 
-            base(jobAppService, accountAppService) 
-        { 
-            _jobAppService = jobAppService; 
+        public UploadCvModel(IJobAppService jobAppService, IBmtAccountAppService accountAppService, IWebHostEnvironment env) :
+            base(jobAppService, accountAppService)
+        {
+            _jobAppService = jobAppService;
             _accountAppService = accountAppService;
             _env = env;
         }
         public async Task OnGetAsync()
         {
-
             TempData[nameof(CurrentStep)] = 4;
             ReadTempData();
             JobDto = await _jobAppService.GetByReferenceAsync(TempData.Peek(nameof(JobReference))?.ToString());
@@ -53,8 +47,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             TempData["UserId"] = accountProfile.UserId;
         }
 
-
-
         public async Task<IActionResult> OnPostAsync()
         {
             StoredCvFileName = TempData.Peek("CvFileName")?.ToString();
@@ -66,27 +58,23 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
                 await AssignProgressBar();
                 return Page();
             }
-            else
+
+            var userId = Guid.Parse(TempData.Peek("UserId")?.ToString());
+            var cvFileName = TempData.Peek("CvFileName")?.ToString();
+            var cvContentType = TempData.Peek("CvContentType")?.ToString();
+            var uploadingNewCv = string.IsNullOrWhiteSpace(cvFileName) && string.IsNullOrWhiteSpace(cvContentType) && Upload != null ||
+                !string.IsNullOrWhiteSpace(cvFileName) && !string.IsNullOrWhiteSpace(cvContentType) && Upload != null && !Upload.FileName.Equals(cvFileName);
+            if (uploadingNewCv)
             {
-                var userId = Guid.Parse(TempData.Peek("UserId")?.ToString());
+                cvFileName = Upload.FileName;
+                cvContentType = Upload.ContentType;
+                using var memoryStream = new CustomMemoryStream();
+                await Upload.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
 
-                var cvFileName = TempData.Peek("CvFileName")?.ToString();
-                var cvContentType = TempData.Peek("CvContentType")?.ToString();
-
-                var uploadingNewCv = string.IsNullOrWhiteSpace(cvFileName) && string.IsNullOrWhiteSpace(cvContentType) && Upload != null || 
-                    !string.IsNullOrWhiteSpace(cvFileName) && !string.IsNullOrWhiteSpace(cvContentType) && Upload != null && !Upload.FileName.Equals(cvFileName); 
-                if (uploadingNewCv)
-                {
-                    cvFileName = Upload.FileName;
-                    cvContentType = Upload.ContentType;
-                    using var memoryStream = new CustomMemoryStream();
-                    await Upload.CopyToAsync(memoryStream);
-                    memoryStream.Position = 0;
-
-                    await _accountAppService.UploadCvToUserProfile(userId, memoryStream, cvFileName, cvContentType);
-                }
-                return await NextPage();
+                await _accountAppService.UploadCvToUserProfile(userId, memoryStream, cvFileName, cvContentType);
             }
+            return await NextPage();
         }
         private async Task AssignProgressBar()
         {

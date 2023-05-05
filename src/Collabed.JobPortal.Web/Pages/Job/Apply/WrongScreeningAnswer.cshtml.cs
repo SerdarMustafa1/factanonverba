@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Apply
 {
-    public class WrongScreeningAnswerModel : ApplyForAJobModelAbstract
+    public class WrongScreeningAnswerModel : ApplyForAJobModelBase
     {
         private readonly IJobAppService _jobAppService;
         private readonly IBmtAccountAppService _accountAppService;

@@ -30,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Job\Apply\ExternalApplicationModal.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Pages\Identity\Roles\CreateModal.cshtml" />
     <None Include="Pages\Identity\Roles\EditModal.cshtml" />
     <None Include="Pages\Identity\Roles\Index.cshtml" />
@@ -37,6 +41,7 @@
     <None Include="Pages\Identity\Users\EditModal.cshtml" />
     <None Include="Pages\Identity\Users\Index.cshtml" />
     <None Include="Pages\Identity\_ViewImports.cshtml" />
+    <None Include="Pages\Job\ExternalApplicationModal.cshtml" />
     <None Include="wwwroot\libs\bootstrap-icons\bootstrap-icons.svg" />
     <None Include="wwwroot\libs\bootstrap-icons\font\bootstrap-icons.scss" />
   </ItemGroup>
@@ -76,6 +81,14 @@
     <Folder Include="node_modules\%40abp\" />
     <Folder Include="wwwroot\client-proxies\" />
     <Folder Include="wwwroot\images\favicon\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Job\Apply\ExternalApplicationModal.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Job\Apply\ExternalApplicationModal.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -5,12 +5,10 @@ using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.Permissions;
 using Collabed.JobPortal.Types;
 using Collabed.JobPortal.Users;
-using Collabed.JobPortal.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
@@ -19,7 +17,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
     [Authorize(BmtPermissions.ManageJobs)]
     public class JobAdPreviewModel : AbpPageModel
     {
-
         private readonly IJobAppService _jobAppService;
         private readonly IOrganisationRepository _organisationRepository;
         private readonly DropDownAppService _dropDownAppService;
@@ -30,28 +27,22 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
             _dropDownAppService= dropDownAppService;
             _organisationRepository = organisationRepository;
         }
-        #region required
 
+        #region Required props
         [BindProperty]
         public string JobTitle { get; set; }
-
         [BindProperty]
         public string JobDescription { get; set; }
-
         [BindProperty]
         public string SubDescription { get; set; }
-
         [BindProperty]
         public int JobCategoryId { get; set; }
-
         [BindProperty]
         public int EmploymentTypeId { get; set; }
         [BindProperty]
         public int ContractTypeId { get; set; }
-
         [BindProperty]
         public int JobLocationTypeId { get; set; }
-
         #endregion
 
         [BindProperty]
@@ -178,10 +169,19 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public string GetCurrentDate()
         {
             var suffix = "";
-            if (DateTime.Now.Day == 1 || DateTime.Now.Day == 21 || DateTime.Now.Day == 31) suffix = "st";
-            else if (DateTime.Now.Day == 2 || DateTime.Now.Day == 22) suffix = "nd";
-            else if (DateTime.Now.Day == 3 || DateTime.Now.Day == 23) suffix = "rd";
-            else suffix = "th";
+
+            if (DateTime.Now.Day == 1 ||
+                DateTime.Now.Day == 21 ||
+                DateTime.Now.Day == 31)
+                suffix = "st";
+            else if (DateTime.Now.Day == 2 ||
+                DateTime.Now.Day == 22)
+                suffix = "nd";
+            else if (DateTime.Now.Day == 3 ||
+                DateTime.Now.Day == 23)
+                suffix = "rd";
+            else
+                suffix = "th";
 
             return DateTime.Now.ToString($"d'\\{suffix[0]}\\{suffix[1]}' MMMM yyyy");
         }
@@ -205,6 +205,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         {
             if (!JobLocationId.HasValue)
                 return string.Empty;
+
             return _dropDownAppService.GetLocationByIdAsync(JobLocationId.Value).Result;
         }
 
@@ -212,6 +213,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         {
             if (!ExperienceLevelId.HasValue)
                 return string.Empty;
+
             return Enum.GetName(Enum.Parse<ExperienceLevel>(ExperienceLevelId.ToString()));
         }
 
@@ -221,63 +223,69 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
             {
                 return Page();
             }
-            else
-            {
 
-                var createdJob = new CreateJobDto()
-                {
-                    ApplicationDeadline = ApplicationDeadline,
-                    CategoryId = JobCategoryId,
-                    ContractType = (ContractType)ContractTypeId,
-                    Description = JobDescription,
-                    EmploymentType = (EmploymentType)EmploymentTypeId,
-                    ExperienceLevel = ExperienceLevelId != null ? (ExperienceLevel)ExperienceLevelId : null,
-                    IsLocalLanguageRequired = LocalLanguageRequired,
-                    IsSalaryNegotiable = IsSalaryNegotiable,
-                    JobLocation = (JobLocation)JobLocationTypeId,
-                    LocalLanguageId = LanguageId,
-                    OfficeLocationId = JobLocationId,
-                    PaymentOption = SalaryPeriodId != null ? (SalaryPeriod)SalaryPeriodId : null,
-                    PositionsAvailable = PositionsAvailable,
-                    SalaryCurrency = JobPortal.Job.CurrencyType.GBP,
-                    SalaryMaximum = SalaryMaximum != null ? (float)SalaryMaximum : null,
-                    SalaryMinimum = SalaryMinimum != null ? (float)SalaryMinimum : null,
-                    SalaryOtherBenefits = OtherCompanyBenefits,
-                    Skills = Skills,
-                    StartDate = StartDate,
-                    SubDescription = SubDescription,
-                    SupplementalPay = SupplementalPay,
-                    ScreeningQuestions = GetScreeningQuestions(),
-                    SupportingDocuments = GetRequiredDocuments(),
-                    Title = JobTitle,
-                    IsNetZeroCompliant = IsNetZeroCompliant
-                };
-                // HACK: Implement Suporting Documents appropriatelly and add Screening questions 
-                await _jobAppService.CreateAsync(createdJob);
-                return RedirectToPage("/Index");
-            }
+            var createdJob = new CreateJobDto()
+            {
+                ApplicationDeadline = ApplicationDeadline,
+                CategoryId = JobCategoryId,
+                ContractType = (ContractType)ContractTypeId,
+                Description = JobDescription,
+                EmploymentType = (EmploymentType)EmploymentTypeId,
+                ExperienceLevel = ExperienceLevelId != null ? (ExperienceLevel)ExperienceLevelId : null,
+                IsLocalLanguageRequired = LocalLanguageRequired,
+                IsSalaryNegotiable = IsSalaryNegotiable,
+                JobLocation = (JobLocation)JobLocationTypeId,
+                LocalLanguageId = LanguageId,
+                OfficeLocationId = JobLocationId,
+                PaymentOption = SalaryPeriodId != null ? (SalaryPeriod)SalaryPeriodId : null,
+                PositionsAvailable = PositionsAvailable,
+                SalaryCurrency = JobPortal.Job.CurrencyType.GBP,
+                SalaryMaximum = SalaryMaximum != null ? (float)SalaryMaximum : null,
+                SalaryMinimum = SalaryMinimum != null ? (float)SalaryMinimum : null,
+                SalaryOtherBenefits = OtherCompanyBenefits,
+                Skills = Skills,
+                StartDate = StartDate,
+                SubDescription = SubDescription,
+                SupplementalPay = SupplementalPay,
+                ScreeningQuestions = GetScreeningQuestions(),
+                SupportingDocuments = GetRequiredDocuments(),
+                Title = JobTitle,
+                IsNetZeroCompliant = IsNetZeroCompliant
+            };
+            // HACK: Implement Suporting Documents appropriatelly and add Screening questions 
+            await _jobAppService.CreateAsync(createdJob);
+            return RedirectToPage("/Index");
         }
 
         private ICollection<int> GetRequiredDocuments()
         {
             var result = new List<int>();
-            if (IsCvRequired) result.Add(1);
-            if (IsCoverLetterRequired) result.Add(2);
-            if (IsOnlinePortfolioRequired) result.Add(3);
+            if (IsCvRequired)
+                result.Add(1);
+            if (IsCoverLetterRequired)
+                result.Add(3);
+            if (IsOnlinePortfolioRequired)
+                result.Add(5);
             return result;
         }
 
         private IEnumerable<(string, bool?)> GetScreeningQuestions()
         {
             var screeningQuestionsList = new List<Models.ScreeningQuestion>();
-            if (ScreeningQuestion1 != null) screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion1, AutoRejectAnswer1));
-            if (ScreeningQuestion2 != null) screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion2, AutoRejectAnswer2));
-            if (ScreeningQuestion3 != null) screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion3, AutoRejectAnswer3));
+            if (ScreeningQuestion1 != null)
+                screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion1, AutoRejectAnswer1));
+            if (ScreeningQuestion2 != null)
+                screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion2, AutoRejectAnswer2));
+            if (ScreeningQuestion3 != null)
+                screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion3, AutoRejectAnswer3));
+
             var screeningQuestionTuples = new (string, bool?)[screeningQuestionsList.Count];
+
             for (int i = 0; i < screeningQuestionsList.Count; i++)
             {
                 screeningQuestionTuples[i] = new(screeningQuestionsList[i].Question, screeningQuestionsList[i].AutoRejectAnswer);
             }
+
             return screeningQuestionTuples;
         }
     }

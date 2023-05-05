@@ -29,6 +29,7 @@ namespace Collabed.JobPortal.Account.Emailing
     public class BmtAccountEmailer : AccountEmailer, IBmtAccountEmailer
     {
         private readonly IFileAppService _fileAppService;
+
         public BmtAccountEmailer(
             IEmailSender emailSender,
             ITemplateRenderer templateRenderer,
@@ -53,6 +54,33 @@ namespace Collabed.JobPortal.Account.Emailing
                 Subject = EmailTemplates.ConfirmEmailSubject,
             };
             mailMessage.To.Add(user.Email);
+
+            await EmailSender.SendAsync(mailMessage);
+        }
+
+        public async Task SendApplicationConfirmationAsync(ApplicationConfirmationDto application)
+        {
+            var url = await AppUrlProvider.GetUrlAsync("MVC");
+
+            var emailContent = await TemplateRenderer.RenderAsync(
+                BmtAccountEmailTemplates.ApplicationConfirmation, new
+                {
+                    link = url + "/JobDashboard/Search",
+                    firstname = application.FirstName,
+                    lastname = application.LastName,
+                    reference = application.JobReference,
+                    title = application.JobTitle,
+                    company = application.CompanyName
+                });
+
+            var mailMessage = new MailMessage
+            {
+                From= new MailAddress(EmailTemplates.InfoSender, EmailTemplates.BuildMyTalentTitle),
+                Body = emailContent,
+                IsBodyHtml = true,
+                Subject = EmailTemplates.ApplicationConfirmationSubject + application.JobTitle,
+            };
+            mailMessage.To.Add(application.Email);
 
             await EmailSender.SendAsync(mailMessage);
         }

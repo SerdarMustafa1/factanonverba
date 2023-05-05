@@ -93,6 +93,7 @@ public class JobPortalDbContext :
         {
             b.ToTable(JobPortalConsts.DbTablePrefix + "Jobs", JobPortalConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
+            b.HasIndex(x => x.Reference);
             b.Property(x => x.MinSalaryConverted).HasPrecision(18, 2);
             b.Property(x => x.MaxSalaryConverted).HasPrecision(18, 2);
             b.HasMany(x => x.Applicants).WithOne().HasForeignKey(x => x.JobId).IsRequired();
