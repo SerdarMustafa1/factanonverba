@@ -40,7 +40,20 @@
             <button type="submit" class="btn btn-primary searchBtn" style="float:right; width:100%" onclick="onPostSearch()">Search</button>
         </div>
     </div>
-    <br />
+    <div class="no-display-on-mobile" style="margin-top: 5px">
+        <div class="row">
+            <div class="col-8" style="width:62%"></div>
+            <div class="col-3" style="width:28%; display:flex;">
+                <div style="width:46.5%">
+                    <p class="sortingPar">Sort by: </p>
+                </div>
+                <div style="flex-grow: 1; display:block">
+                    @Html.DropDownListFor(c => c.Sorting, Model.AvailableSortingTypes, new { @class = "form-select sorting-select", id="selectSortingType" })
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
     <div class="full-filters-width">
         <div class="row">
             <div class="col-2" style="margin-left: 3.5%;">
@@ -73,29 +86,13 @@
             </div>
         </div>
     </div>
-
     <div class="semiheader no-display-on-mobile">
         <div class="row">
             <div class="col-2">
                 <p class="amountPar">Showing @Model.TotalCount results</p>
             </div>
-            <div class="col-5"></div>
-            <div class="col-2">
-                <p class="sortingPar">Sort by: </p>
-            </div>
-            <div class="col-3">
-                <div class="input-group">
-                    @Html.DropDownListFor(c => c.Sorting, Model.AvailableSortingTypes, new { @class = "form-select sorting-select", id="selectSortingType" })
-                </div>
-            </div>
         </div>
     </div>
-    @*    <div class="display-on-mobile"> THIS CAUSES ISSUES WITH INSERTING TWO PARAMETERS WITH THE SAME NAME TO THE URL
-    <p class="sortingPar">Sort by: </p>
-    <div class="input-group">
-    @Html.DropDownListFor(c => c.SelectedSortingType, Model.AvailableSortingTypes, new { @class = "form-select", id="selectSortingType" })
-    </div>
-    </div>*@
 </form>
 
 @if(Model.JobOffers.Count() > 0)
@@ -107,15 +104,15 @@
             var link = $"../Job?Reference={jobDto.Reference}&";
         foreach (var keyValuePair in Request.Query)
         {
-                if (keyValuePair.Key == "Category")
-                    foreach (var item in keyValuePair.Value)
-                    {
-                        link += $"Category={item}&";
-                    }
+            if (keyValuePair.Key == "Category")
+                foreach (var item in keyValuePair.Value)
+                {
+                    link += $"Category={item}&";
+                }
             else
                 link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
         }
-            <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
+            <div class="row" style="margin-top:2%;padding-inline: 0.5%;">
                 <div class="card" style="padding: 0 !important;">
                     <div class="card-header" style="background-color:#FAFAFA; border-bottom: 1px solid rgba(0, 0, 0, 0.175);">
                         <span class="badge rounded-pill bg-primary">New</span>

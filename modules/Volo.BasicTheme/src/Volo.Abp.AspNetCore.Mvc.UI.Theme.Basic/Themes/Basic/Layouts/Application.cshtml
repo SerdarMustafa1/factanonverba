@@ -54,7 +54,7 @@
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
-    <div class="@containerClass flex-grow-1 ">
+    <div class="@containerClass flex-grow-1 relative-to-menu">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
         <div id="AbpContentToolbar">
             <div class="text-end mb-2">

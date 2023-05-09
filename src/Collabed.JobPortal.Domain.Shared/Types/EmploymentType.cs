@@ -14,6 +14,8 @@ namespace Collabed.JobPortal.Types
         GraduateScheme,
         [Display(Name = "Work Placement")]
         [IgnoreDataMember]
-        WorkPlacement
+        WorkPlacement,
+        [IgnoreDataMember]
+        Unknown
     }
 }

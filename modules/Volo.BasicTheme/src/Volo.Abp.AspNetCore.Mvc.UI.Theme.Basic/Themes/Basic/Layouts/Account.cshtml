@@ -53,7 +53,7 @@
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
-    <div class="@containerClass flex-grow-1">
+    <div class="@containerClass flex-grow-1 relative-to-menu">
         <abp-row>
             <abp-column class="col mx-auto" >
                 @if (MultiTenancyOptions.Value.IsEnabled &&

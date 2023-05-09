@@ -26,7 +26,7 @@ public class JobPortalMenuContributor : IMenuContributor
         context.Menu.AddItem(new ApplicationMenuItem("Directory", displayName: "Directory", "https://buildmytalent.com/directory"));
         context.Menu.AddItem(new ApplicationMenuItem("Forums", displayName: "Forums", "https://buildmytalent.com/forums"));
         context.Menu.AddItem(new ApplicationMenuItem("Employers", displayName: "Employers", "https://buildmytalent.com/employers"));
-        context.Menu.AddItem(new ApplicationMenuItem("JobsBoard", displayName: "Job Board", "~/jobDashboard"));
+        context.Menu.AddItem(new ApplicationMenuItem("JobsBoard", displayName: "Job Board", "~/jobDashboard", cssClass: "bold"));
 
         //below adds menu items to display in the middle of navigation bar
         //context.Menu.Items.Insert(

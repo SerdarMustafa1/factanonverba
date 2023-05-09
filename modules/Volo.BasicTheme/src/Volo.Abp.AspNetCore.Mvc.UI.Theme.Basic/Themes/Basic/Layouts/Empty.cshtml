@@ -54,7 +54,7 @@
 <body class="body-container @rtl d-flex flex-column min-vh-100">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Empty)
 
-    <div class="@containerClass flex-grow-1">
+    <div class="@containerClass flex-grow-1 relative-to-menu">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Empty)
         @RenderBody()

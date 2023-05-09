@@ -10,6 +10,8 @@ namespace Collabed.JobPortal.Types
         Internship,
         [IgnoreDataMember]
         Apprenticeship,
-        Contract
+        Contract,
+        [IgnoreDataMember]
+        Unknown
     }
 }

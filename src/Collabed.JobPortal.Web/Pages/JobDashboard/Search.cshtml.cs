@@ -40,7 +40,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         public int CurrentPage { get; set; } = 1;
 
         [BindProperty(SupportsGet = true)]
-        public int PageSize { get; set; } = 4;
+        public int PageSize { get; set; } = 10;
 
         public int TotalPages => (int)Math.Ceiling(decimal.Divide(TotalCount, PageSize));
 
@@ -99,8 +99,8 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
 
         public async Task OnGetAsync()
         {
-            EmploymentTypes = _dropDownService.GetEmploymentTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-            ContractTypes = _dropDownService.GetContractTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+            EmploymentTypes = _dropDownService.GetEmploymentTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString())).Concat(new List<SelectListItem> { new SelectListItem("Unknown", "4") });
+            ContractTypes = _dropDownService.GetContractTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString())).Concat(new List<SelectListItem> { new SelectListItem("Unknown", "5") });
             JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             NetZeros = new List<SelectListItem>
             {
@@ -163,6 +163,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
                 new SelectListItem("£80,000 - £90,000", "80,90"),
                 new SelectListItem("£90,000 - £100,000", "90,100"),
                 new SelectListItem("£100,000 +", "100"),
+                new SelectListItem("Unknown", "0,0")
             };
         }
 

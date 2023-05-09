@@ -60,11 +60,17 @@ namespace Collabed.JobPortal.Jobs
             }
             if (contractType.HasValue)
             {
-                query = query.Where(x => x.job.Type == contractType.Value);
+                if (contractType.Value == ContractType.Unknown)
+                    query = query.Where(x => x.job.Type == null);
+                else
+                    query = query.Where(x => x.job.Type == contractType.Value);
             }
             if (employmentType.HasValue)
             {
-                query = query.Where(x => x.job.EmploymentType == employmentType.Value);
+                if (employmentType.Value == EmploymentType.Unknown)
+                    query = query.Where(x => x.job.EmploymentType == null);
+                else
+                    query = query.Where(x => x.job.EmploymentType == employmentType.Value);
             }
             if (workplace.HasValue)
             {
@@ -73,7 +79,7 @@ namespace Collabed.JobPortal.Jobs
                 else
                     query = query.Where(x => x.job.JobLocation == workplace.Value);
             }
-            if (salaryMinimum.HasValue)
+            if (salaryMinimum.HasValue && salaryMinimum > 0)
             {
                 query = query.Where(x => x.job.MaxSalaryConverted.HasValue && x.job.MaxSalaryConverted >= salaryMinimum.Value);
 
@@ -82,9 +88,13 @@ namespace Collabed.JobPortal.Jobs
                     query = query.Where(x => x.job.MinSalaryConverted.HasValue && x.job.MinSalaryConverted >= salaryMinimum.Value);
                 }
             }
-            if (salaryMaximum.HasValue)
+            if (salaryMaximum.HasValue && salaryMaximum > 0)
             {
                 query = query.Where(x => x.job.MinSalaryConverted.HasValue && x.job.MinSalaryConverted < salaryMaximum.Value);
+            }
+            if (salaryMinimum.HasValue && salaryMinimum == 0)
+            {
+                query = query.Where(x => x.job.IsSalaryEstimated == true || (x.job.SalaryFrom == null && x.job.SalaryTo == null));
             }
             if (locationsFound && searchRadius.HasValue && searchRadius.Value > 0)
             {
