@@ -42,21 +42,21 @@
     </div>
     <div class="no-display-on-mobile" style="margin-top: 5px">
         <div class="row">
-            <div class="col-8" style="width:62%"></div>
+            <div class="col-8 hide-mobile" style="width:62%"></div>
             <div class="col-3" style="width:28%; display:flex;">
-                <div style="width:46.5%">
+                <div class="sort-by" style="width:46.5%">
                     <p class="sortingPar">Sort by: </p>
                 </div>
                 <div style="flex-grow: 1; display:block">
                     @Html.DropDownListFor(c => c.Sorting, Model.AvailableSortingTypes, new { @class = "form-select sorting-select", id="selectSortingType" })
                 </div>
             </div>
-            <div class="col"></div>
+            <div class="col hide-mobile"></div>
         </div>
     </div>
     <div class="full-filters-width">
         <div class="row">
-            <div class="col-2" style="margin-left: 3.5%;">
+            <div class="col-2" style="margin-left: 2%;">
                 <div class="input-group">
                     @Html.DropDownListFor(c => c.ContractType, Model.ContractTypes, "Contract type", new { @class = "form-select" })
                 </div>
@@ -81,7 +81,7 @@
                     @Html.DropDownListFor(c => c.NetZero, Model.NetZeros, "NetZero", new { @class = "form-select" })
                 </div>
             </div>
-            <div class="col-2" style="width:9%">
+            <div class="col-2" style="width:14%">
                 <button type="submit" class="btn btn-secondary searchBtn" style="float:right;background-color: #344054; border-color: #344054;" onclick="onPostSearch()">Apply Filters</button>
             </div>
         </div>
