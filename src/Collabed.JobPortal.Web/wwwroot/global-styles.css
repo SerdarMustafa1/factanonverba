@@ -58,13 +58,22 @@
     .hide-mobile {
         display: none;
     }
+    .navbar > .container {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
 }
 
 @media (min-width: 1200px) {
-    .container, .container-lg, .container-md, .container-sm, .container-xl, .navbar {
+    .container, .container-lg, .container-md, .container-sm, .container-xl {
         max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
+    }
+    .navbar > .container {
+        max-width: 1200px;
+        margin-left: 10%;
+        margin-right: 10%;
     }
     .full-filters-width {
         max-width: 1173px !important;

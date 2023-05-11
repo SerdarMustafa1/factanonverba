@@ -1,23 +1,26 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Brand
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Menu
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar
-<nav class="navbar navbar-expand-lg flex-column flex-md-row mb-4 fixed-top header-border" id="main-navbar">
-    <div class="container"> 
-        @(await Component.InvokeAsync<MainNavbarBrandViewComponent>())
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#main-navbar-collapse" aria-controls="main-navbar-collapse"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="main-navbar-collapse">
-            <ul class="navbar-nav mx-auto">
-                @* INSERT LINKS HERE*@
-                @(await Component.InvokeAsync<MainNavbarMenuViewComponent>())
-            </ul>
-            <ul class="navbar-nav">
-                @(await Component.InvokeAsync<MainNavbarToolbarViewComponent>())
-            </ul>
+
+<div style="display:flex">
+    <nav class="navbar navbar-expand-lg flex-column flex-md-row mb-4 fixed-top" id="main-navbar">
+        <div class="container"> 
+            @(await Component.InvokeAsync<MainNavbarBrandViewComponent>())
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#main-navbar-collapse" aria-controls="main-navbar-collapse"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="main-navbar-collapse">
+                <ul class="navbar-nav mx-auto">
+                    @* INSERT LINKS HERE*@
+                    @(await Component.InvokeAsync<MainNavbarMenuViewComponent>())
+                </ul>
+                <ul class="navbar-nav">
+                    @(await Component.InvokeAsync<MainNavbarToolbarViewComponent>())
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</div>
 
