@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Collabed.JobPortal.Types
 {
@@ -8,6 +9,7 @@ namespace Collabed.JobPortal.Types
         InOffice,
         Hybrid,
         Remote,
+        [IgnoreDataMember]
         Unknown
     }
 }

@@ -1,5 +1,5 @@
 ﻿@page
-@model Collabed.JobPortal.Web.Pages.Job.Post.JobAdPreviewModel
+@model Collabed.JobPortal.Web.Pages.Job.Post.PreviewModel
 
 @section scripts {
 <abp-script src="/Pages/Job/Post/JobAdPreview.js"></abp-script>
@@ -9,7 +9,7 @@
     <abp-style src="/Pages/Job/Index.css" />
 }
 
-<form method="post" id="previewForm" asp-page="JobAdInformation" novalidate="novalidate">
+<form method="post" id="previewForm" asp-page="/" novalidate="novalidate">
     <input type="hidden" asp-for="JobTitle" />
     <input type="hidden" asp-for="JobDescription" id="jobDescriptionHiddenInput" />
     <input type="hidden" asp-for="SubDescription" />
@@ -43,7 +43,7 @@
     <input type="hidden" asp-for="IsCvRequired" />
     <input type="hidden" asp-for="IsCoverLetterRequired" />
     <input type="hidden" asp-for="IsOnlinePortfolioRequired" />
-    <input type="hidden" name="Source" value="JobAdPreview" id="sourceHiddenInput" />
+    <input type="hidden" name="Source" value="Preview" id="sourceHiddenInput" />
 
     <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
         <div class="col-sm">

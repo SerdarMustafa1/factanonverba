@@ -16,7 +16,7 @@ const backButtonOnClick = (event) => {
     event.preventDefault();
     // set action on form and then submit
     const form = document.getElementById('previewForm');
-    form.action = '/Job/Post/JobAdInformation';
+    form.action = '/Job/Post';
     form.submit();
 }
 

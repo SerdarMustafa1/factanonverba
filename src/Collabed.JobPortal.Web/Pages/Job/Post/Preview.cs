@@ -15,13 +15,13 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 namespace Collabed.JobPortal.Web.Pages.Job.Post
 {
     [Authorize(BmtPermissions.ManageJobs)]
-    public class JobAdPreviewModel : AbpPageModel
+    public class PreviewModel : AbpPageModel
     {
         private readonly IJobAppService _jobAppService;
         private readonly IOrganisationRepository _organisationRepository;
         private readonly DropDownAppService _dropDownAppService;
 
-        public JobAdPreviewModel(IJobAppService jobAppService, IOrganisationRepository organisationRepository, DropDownAppService dropDownAppService)
+        public PreviewModel(IJobAppService jobAppService, IOrganisationRepository organisationRepository, DropDownAppService dropDownAppService)
         {
             _jobAppService= jobAppService;
             _dropDownAppService= dropDownAppService;
@@ -219,7 +219,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!Request.Form["Source"].IsNullOrEmpty() & Request.Form["Source"].ToString() == "JobAdInformation")
+            if (!Request.Form["Source"].IsNullOrEmpty() && Request.Form["Source"].ToString() == "JobAdInformation")
             {
                 return Page();
             }

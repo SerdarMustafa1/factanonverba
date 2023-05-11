@@ -107,7 +107,7 @@ namespace Collabed.JobPortal.Jobs
             //}
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(x => x.job.Title.Contains(keyword));
+                query = query.Where(x => x.job.Title.Contains(keyword) || x.job.Skills.Contains(keyword));
             }
 
             query = sorting switch

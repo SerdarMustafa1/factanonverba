@@ -57,7 +57,7 @@ public class BMTRegisterModel : AccountPageModel
 
 
     public async Task<IActionResult> OnGetAsync()
-    { 
+    {
         await CheckSelfRegistrationAsync();
         await SetClaimCredentials();
         return Page();
@@ -115,7 +115,7 @@ public class BMTRegisterModel : AccountPageModel
 
             if (UserType == UserType.Organisation)
             {
-                ReturnUrl = "/job/post/jobAdInformation";
+                ReturnUrl = "/job/post";
             }
 
             if (IsExternalLogin)

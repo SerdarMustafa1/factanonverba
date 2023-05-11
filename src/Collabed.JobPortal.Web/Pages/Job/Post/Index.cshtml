@@ -31,7 +31,10 @@
         <p class="heading-30">New Listing</p>
     </div>
     <div class="col-sm">
-        <p class="no-display-on-mobile" style="text-align:end;"><button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="margin-right:0.5vw">Cancel</button> <button class="btn btn-outline-primary" id="publishButton" onclick="onClickPublishButton(event)">Preview</button></p>
+        <p class="no-display-on-mobile" style="text-align:end;">
+            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="margin-right:0.5vw">Cancel</button>
+            <button class="btn btn-outline-primary" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+        </p>
     </div>
 </div>
 
@@ -68,7 +71,7 @@
             </a>
         </li>
     </ul>
-    <form class="card-body tab-content" method="post" id="jobPostForm" asp-page="JobAdPreview" novalidate >
+    <form class="card-body tab-content" method="post" id="jobPostForm" asp-page="Preview" novalidate >
         <input type="hidden" asp-for="JobDescription" id="jobDescriptionHiddenInput" />
         <input type="hidden" name="Source" value="JobAdInformation" />
         <div class="tab-pane active" id="information">

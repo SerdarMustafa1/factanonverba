@@ -1,7 +1,6 @@
 using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Permissions;
-using Collabed.JobPortal.Types;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -171,7 +170,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!Request.Form["Source"].IsNullOrEmpty() & Request.Form["Source"].ToString() == "JobAdPreview")
+            if (!Request.Form["Source"].IsNullOrEmpty() & Request.Form["Source"].ToString() == "Preview")
             {
                 JobCategories = (await _dropDownService.GetCategoriesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
                 OfficeLocations = (await _dropDownService.GetLocationsAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
