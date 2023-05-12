@@ -29,7 +29,7 @@ namespace Collabed.JobPortal.Controllers
 				var result = await _jobAppService.HandleExternalJobFeedAsync(jobRequest);
 				var baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
 
-				var response = new JobResponse(result.Status, result.Status  == JobResponseCodes.Success ? $"{baseUrl}/Job?jobReference={result.JobReference}" : "", result.Message);
+				var response = new JobResponse(result.Status, result.Status  == JobResponseCodes.Success ? $"{baseUrl}/Job?Reference={result.JobReference}" : "", result.Message);
 				return Ok(response);
 			}
 			catch (Exception ex)

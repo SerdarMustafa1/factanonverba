@@ -59,6 +59,10 @@ namespace Collabed.JobPortal.Jobs
 		public string Salary { get; set; }
 		[JsonPropertyName("screening_questions")]
 		public IEnumerable<ExtScreeningQuestion> ScreeningQuestions { get; set; }
+		[JsonPropertyName("company_name")]
+		public string CompanyName { get; set; }
+		[JsonPropertyName("company_logo")]
+		public string CompanyLogoUrl { get; set; }
 	}
 
 	public class ExtScreeningQuestion

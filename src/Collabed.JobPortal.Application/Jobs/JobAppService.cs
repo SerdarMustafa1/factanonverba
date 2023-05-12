@@ -304,7 +304,7 @@ namespace JobPortal.Jobs
             var organisationClaim = CurrentUser.FindClaim(ClaimNames.OrganisationClaim);
             if (organisationClaim == null || string.IsNullOrEmpty(organisationClaim.Value))
             {
-                throw new BusinessException("User is not allowed to post jobs. User is not a member of any organisation.");
+                throw new BusinessException(message: "User is not allowed to post jobs. User is not a member of any organisation.");
             }
 
             var organisationId = Guid.Parse(organisationClaim.Value);
@@ -408,7 +408,7 @@ namespace JobPortal.Jobs
 
             var organisation = await _organisationRepository.FindAsync(job.OrganisationId.Value);
             if (organisation == null)
-                throw new BusinessException("Failed to find the organisation that posted a job");
+                throw new BusinessException(message: "Failed to find the organisation that posted a job");
 
             await _bmtAccountEmailer.SendApplicationConfirmationAsync(new ApplicationConfirmationDto
             {
@@ -516,7 +516,8 @@ namespace JobPortal.Jobs
             var existingJob = await _jobRepository.GetByReferenceAsync(jobReference);
             ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, existingJob);
             _jobManager.ConvertSalaryRates(existingJob);
-
+            var locations = await _locationRepository.GetListAsync();
+            existingJob.OfficeLocationId = MapOfficeLocation(externalJobRequest.Location, locations);
             existingJob.ScreeningQuestions = _jobManager.CreateScreeningQuestions(ConvertScreeningQuestions(externalJobRequest.ScreeningQuestions), existingJob.Id);
             await _jobRepository.UpdateAsync(existingJob);
             message = $"Updated a job with reference {jobReference}";
@@ -534,6 +535,8 @@ namespace JobPortal.Jobs
             var newJob = _jobManager.CreateExternal(jobReference);
             ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, newJob);
             newJob.JobOrigin = jobOrigin;
+            var locations = await _locationRepository.GetListAsync();
+            newJob.OfficeLocationId = MapOfficeLocation(externalJobRequest.Location, locations);
             _jobManager.ConvertSalaryRates(newJob);
 
             if (externalJobRequest.ScreeningQuestions != null)
@@ -560,8 +563,9 @@ namespace JobPortal.Jobs
                 {
                     answer =item.CorrectAnswer.ToLower() switch
                     {
-                        "yes" => true,
-                        "no" => false,
+                        // Convert CorrectAnswer to AutoReject
+                        "yes" => false,
+                        "no" => true,
                         _ => null,
                     };
                 }
@@ -573,7 +577,7 @@ namespace JobPortal.Jobs
         {
             if (await _jobRepository.CheckIfJobExistsByReference(reference))
             {
-                throw new BusinessException("Job with the same reference has already been added.");
+                throw new BusinessException(message: "Job with the same reference has already been added.");
             }
         }
 
@@ -595,7 +599,7 @@ namespace JobPortal.Jobs
 
             if (!creditsDeducted)
             {
-                throw new BusinessException($"Insufficient credits to post a job to BuildMyTalent job board");
+                throw new BusinessException(message: $"Insufficient credits to post a job to BuildMyTalent job board");
             }
         }
 

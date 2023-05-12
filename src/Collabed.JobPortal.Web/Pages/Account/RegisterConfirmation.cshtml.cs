@@ -62,7 +62,7 @@ namespace Collabed.JobPortal.Web.Pages.Account
         private async Task<string> SetEmailConfirmationUrl()
         {
             var user = await _userManager.FindByEmailAsync(EmailAddress);
-            if (user == null) throw new BusinessException($"Unable to load user with email '{EmailAddress}'.");
+            if (user == null) throw new BusinessException(message: $"Unable to load user with email '{EmailAddress}'.");
             var userId = await _userManager.GetUserIdAsync(user);
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

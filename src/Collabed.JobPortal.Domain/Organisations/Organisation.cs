@@ -38,7 +38,7 @@ namespace Collabed.JobPortal.Organisations
             Check.NotNullOrWhiteSpace(email, nameof(email));
             if (!RegexUtilities.IsValidEmail(email))
             {
-                throw new BusinessException($"Email: {email} is invalid.");
+                throw new BusinessException(message: $"Email: {email} is invalid.");
             }
             EmailAddress = email;
 

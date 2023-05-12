@@ -65,6 +65,7 @@ namespace Collabed.JobPortal.Jobs
         public string ContactPhone { get; set; }
         public string CompanyName { get; set; }
         public string ContactUrl { get; set; }
+        public string CompanyLogoUrl { get; set; }
 
         private Job()
         {
