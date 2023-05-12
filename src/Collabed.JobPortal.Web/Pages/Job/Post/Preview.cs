@@ -112,19 +112,19 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public string ScreeningQuestion1 { get; set; }
 
         [BindProperty]
-        public bool? AutoRejectAnswer1 { get; set; }
+        public bool? DesiredAnswer1 { get; set; }
 
         [BindProperty]
         public string ScreeningQuestion2 { get; set; }
 
         [BindProperty]
-        public bool? AutoRejectAnswer2 { get; set; }
+        public bool? DesiredAnswer2 { get; set; }
 
         [BindProperty]
         public string ScreeningQuestion3 { get; set; }
 
         [BindProperty]
-        public bool? AutoRejectAnswer3 { get; set; }
+        public bool? DesiredAnswer3 { get; set; }
 
         public string GetOrganisationName()
         {
@@ -273,11 +273,11 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         {
             var screeningQuestionsList = new List<Models.ScreeningQuestion>();
             if (ScreeningQuestion1 != null)
-                screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion1, AutoRejectAnswer1));
+                screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion1, !DesiredAnswer1));
             if (ScreeningQuestion2 != null)
-                screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion2, AutoRejectAnswer2));
+                screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion2, !DesiredAnswer2));
             if (ScreeningQuestion3 != null)
-                screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion3, AutoRejectAnswer3));
+                screeningQuestionsList.Add(new Models.ScreeningQuestion(ScreeningQuestion3, !DesiredAnswer3));
 
             var screeningQuestionTuples = new (string, bool?)[screeningQuestionsList.Count];
 

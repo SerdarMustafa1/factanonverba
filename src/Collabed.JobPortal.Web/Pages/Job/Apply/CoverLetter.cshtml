@@ -128,7 +128,8 @@
         <hr class="divider" />
         <p class="hint-16">Set yourself apart. Candidates that include a tailored covering letter are more likely to be successful.</p>
         <textarea class="form-control" asp-for="CoverLetter" style="min-height:190px; margin-bottom:20%;"></textarea>
-        <div style="display: flex; justify-content: center">
+        <div style="display: block; text-align: center">
+            <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="window.history.go(-1); return false;">Back</button>
             <button class="btn btn-primary submit-btn" type="submit">Submit Application</button>
         </div>
     </form>

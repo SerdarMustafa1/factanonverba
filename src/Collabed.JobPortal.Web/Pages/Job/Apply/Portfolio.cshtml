@@ -137,7 +137,8 @@
             </div>
             <input type="text" class="form-control" asp-for="PortfolioLink" aria-label="Portfolio Url" aria-describedby="protocol" />
         </div>
-        <div style="display: flex; justify-content: center">
+        <div style="display: block; text-align: center">
+            <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="window.history.go(-1); return false;">Back</button>
             <button class="btn btn-primary submit-btn" type="submit">Continue</button>
         </div>
     </form>

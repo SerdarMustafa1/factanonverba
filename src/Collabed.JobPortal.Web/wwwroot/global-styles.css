@@ -397,3 +397,18 @@ label.text-14 {
     color: var(--neutral500);
     text-decoration: underline;
 }
+
+/*
+    Quill editor fixes
+*/
+.ql-align-right {
+    text-align: right;
+}
+
+.ql-align-center {
+    text-align: center;
+}
+
+.ql-align-left {
+    text-align: left;
+}

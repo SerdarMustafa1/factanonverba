@@ -1,5 +1,4 @@
 using Collabed.JobPortal.DropDowns;
-using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +23,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public IEnumerable<SelectListItem> ContractTypes { get; set; }
         public IEnumerable<SelectListItem> JobLocations { get; set; }
         public IEnumerable<SelectListItem> SalaryPeriods { get; set; }
-        //public IEnumerable<SelectListItem> AvailableSupportedDocuments { get; set; }
 
         #region required
 
@@ -63,9 +61,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         [BindProperty]
         [MaxLength(250)]
         public string Skills { get; set; }
-
-        //[BindProperty]
-        //public string[] SelectedSupportedDocuments { get; set; }
 
         [BindProperty]
         public string SupplementalPay { get; set; }
@@ -130,29 +125,27 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public string? ScreeningQuestion1 { get; set; }
 
         [BindProperty]
-        public bool? AutoRejectAnswer1 { get; set; }
+        public bool? DesiredAnswer1 { get; set; }
 
         [BindProperty]
         public string? ScreeningQuestion2 { get; set; }
 
         [BindProperty]
-        public bool? AutoRejectAnswer2 { get; set; }
+        public bool? DesiredAnswer2 { get; set; }
 
         [BindProperty]
         public string? ScreeningQuestion3 { get; set; }
 
         [BindProperty]
-        public bool? AutoRejectAnswer3 { get; set; }
+        public bool? DesiredAnswer3 { get; set; }
 
         #endregion
 
         private readonly DropDownAppService _dropDownService;
-        private readonly IJobAppService _jobAppService;
 
-        public JobAdInformationModel(DropDownAppService dropDownService, IJobAppService jobAppService)
+        public JobAdInformationModel(DropDownAppService dropDownService)
         {
             _dropDownService = dropDownService;
-            _jobAppService = jobAppService;
         }
 
         public async Task OnGet()
@@ -165,7 +158,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
             ContractTypes = _dropDownService.GetContractTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             SalaryPeriods = _dropDownService.GetSalaryPeriod().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-            //AvailableSupportedDocuments = (await _dropDownService.GetSupporitngDocumentsAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -180,33 +172,9 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                 ContractTypes = _dropDownService.GetContractTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
                 JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
                 SalaryPeriods = _dropDownService.GetSalaryPeriod().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-                //AvailableSupportedDocuments = (await _dropDownService.GetSupporitngDocumentsAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-                return Page();
-            }
-            else
-            {
-                return Page();
-            }
-        }
-
-
-        private IEnumerable<(string, bool?)> GetScreeningQuestions()
-        {
-            var result = new List<(string, bool?)>();
-            if (!string.IsNullOrWhiteSpace(ScreeningQuestion1))
-            {
-                result.Add((ScreeningQuestion1, AutoRejectAnswer1 ?? null));
-            }
-            if (!string.IsNullOrWhiteSpace(ScreeningQuestion2))
-            {
-                result.Add((ScreeningQuestion2, AutoRejectAnswer2 ?? null));
-            }
-            if (!string.IsNullOrWhiteSpace(ScreeningQuestion3))
-            {
-                result.Add((ScreeningQuestion3, AutoRejectAnswer3 ?? null));
             }
 
-            return result;
+            return Page();
         }
     }
 }

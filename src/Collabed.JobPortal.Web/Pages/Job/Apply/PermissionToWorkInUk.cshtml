@@ -126,8 +126,7 @@
     <div style="max-width:400px;margin-inline:auto;">
         <p class="text-30">Right to Work</p>
         <p class="text-16">The hiring company has indicated that the right to work in the UK is a requirement for this role.</p>
-        <br />
-        <hr />
+        <hr style="margin-top:20px; margin-bottom:20px" />
         <p class="text-16">Do you have the right to work in the UK, either through a British passport or a valid visa?</p>
         <div class="form-check">
             <input class="form-check-input" type="radio" asp-for="HasRightToWork" value="true">
@@ -142,6 +141,9 @@
             </label>
         </div>
         <hr /><br />
-        <button class="btn btn-primary submit-btn" type="submit">Continue</button>
+        <div style="display: block; text-align: center">
+            <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="window.history.go(-1); return false;">Back</button>
+            <button class="btn btn-primary submit-btn" type="submit">Continue</button>
+        </div>
     </div>
 </form>
