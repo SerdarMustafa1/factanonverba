@@ -80,6 +80,8 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             if (JobDto.JobOrigin != Types.JobOrigin.Native)
             {
                 TempData[nameof(IsCvRequired)] = true;
+                TempData[nameof(IsCoverLetterRequired)] = true;
+                TempData[nameof(IsPortfolioRequired)] = true;
                 return;
             }
 

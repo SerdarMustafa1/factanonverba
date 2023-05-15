@@ -101,7 +101,7 @@ namespace Collabed.JobPortal.Account
 
             try
             {
-                await _fileAppService.SaveBlobAsync(new SaveBlobInputDto { Name = fileName, Content = ReadFully(fileStream) });
+                await _fileAppService.SaveBlobAsync(new SaveBlobInputDto { Name = blobFileName, Content = ReadFully(fileStream) });
                 await _userProfileRepository.UpdateAsync(userProfile);
             }
             catch (Exception ex)

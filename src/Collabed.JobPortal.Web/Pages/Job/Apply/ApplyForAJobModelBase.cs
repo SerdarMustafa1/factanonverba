@@ -5,6 +5,7 @@ using Collabed.JobPortal.Permissions;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -175,17 +176,33 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
 
         private List<ScreeningQuestionDto> ExtractScreeningAnswers()
         {
-            var answer1 = TempData.Peek("Answer1")?.ToString();
-            var answer2 = TempData.Peek("Answer2")?.ToString();
-            var answer3 = TempData.Peek("Answer3")?.ToString();
-
             var result = new List<ScreeningQuestionDto>();
-            if (answer1 != null)
-                result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer1.Split(',')[0]), "") { Answer = bool.Parse(answer1.Split(',')[1]) });
-            if (answer2 != null)
-                result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer2.Split(',')[0]), "") { Answer = bool.Parse(answer2.Split(',')[1]) });
-            if (answer3 != null)
-                result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer3.Split(',')[0]), "") { Answer = bool.Parse(answer3.Split(',')[1]) });
+
+            if (TempData.TryGetValue("Answer1", out var question1))
+            {
+                var answer1 = JsonConvert.DeserializeObject<ScreeningQuestionDto>((string)question1);
+                result.Add(answer1);
+            }
+            if (TempData.TryGetValue("Answer2", out var question2))
+            {
+                var answer2 = JsonConvert.DeserializeObject<ScreeningQuestionDto>((string)question2);
+                result.Add(answer2);
+            }
+            if (TempData.TryGetValue("Answer3", out var question3))
+            {
+                var answer3 = JsonConvert.DeserializeObject<ScreeningQuestionDto>((string)question3);
+                result.Add(answer3);
+            }
+
+            //var answer2 = TempData.Peek("Answer2")?.ToString();
+            //var answer3 = TempData.Peek("Answer3")?.ToString();
+
+            //if (answer1 != null)
+            //    result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer1.Split(',')[0]), "") { Answer = bool.Parse(answer1.Split(',')[1]) });
+            //if (answer2 != null)
+            //    result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer2.Split(',')[0]), "") { Answer = bool.Parse(answer2.Split(',')[1]) });
+            //if (answer3 != null)
+            //    result.Add(new ScreeningQuestionDto(System.Guid.Parse(answer3.Split(',')[0]), "") { Answer = bool.Parse(answer3.Split(',')[1]) });
 
             return result;
         }

@@ -406,16 +406,26 @@ namespace JobPortal.Jobs
 
             await _jobRepository.UpdateAsync(job);
 
-            var organisation = await _organisationRepository.FindAsync(job.OrganisationId.Value);
-            if (organisation == null)
-                throw new BusinessException(message: "Failed to find the organisation that posted a job");
+            var companyName = string.Empty;
+
+            if (job.OrganisationId.HasValue)
+            {
+                var organisation = await _organisationRepository.FindAsync(job.OrganisationId.Value);
+                if (organisation == null)
+                    throw new BusinessException(message: "Failed to find the organisation that posted a job");
+                companyName = organisation.Name;
+            }
+            else
+            {
+                companyName = job.CompanyName;
+            }
 
             await _bmtAccountEmailer.SendApplicationConfirmationAsync(new ApplicationConfirmationDto
             {
                 FirstName= application.FirstName,
                 LastName= application.LastName,
                 Email = application.Email,
-                CompanyName = organisation.Name,
+                CompanyName = companyName,
                 JobReference = job.Reference,
                 JobTitle = job.Title
             });

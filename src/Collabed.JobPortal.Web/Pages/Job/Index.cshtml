@@ -96,13 +96,13 @@
                             }
                         </p>
                         <p>
-                            @if (string.IsNullOrEmpty(Model.Job.ApplicationUrl) || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Broadbean)
+                            @if (string.IsNullOrEmpty(Model.Job.ApplicationUrl) || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Broadbean || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Native)
                             {
                                 <a class="btn btn-primary full-width-on-mobile" href="#" onclick="applyForInternal('@Model.Job.Reference')">Apply now</a>
                             }
                             else
                             {
-                                <a class="btn btn-primary full-width-on-mobile" href="#" onclick="onExternalApply('@Model.Job.OrganisationName', '@Model.Job.Title', '@Model.Job.ApplicationUrl'); return false;" target="_blank">Apply now</a>
+                                <a class="btn btn-primary full-width-on-mobile" href="@Model.Job.ApplicationUrl" target="_blank">Apply now</a>
                             }
                         </p>
                     </div>
@@ -133,13 +133,13 @@
                                 <p style="font-weight: 500; font-size: 20px; line-height: 80%; color: #101828;">Other Benefits</p>
                                 <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #344054;">@Model.Job.SalaryBenefits</p>
                             }
-                            @if (string.IsNullOrEmpty(Model.Job.ApplicationUrl) || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Broadbean)
+                            @if (string.IsNullOrEmpty(Model.Job.ApplicationUrl) || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Broadbean || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Native)
                             {
                                 <a class="btn btn-primary full-width-on-mobile" href="#" onclick="applyForInternal('@Model.Job.Reference')">Apply now</a>
                             }
                             else
                             {
-                                <a class="btn btn-primary full-width-on-mobile" href="#" onclick="onExternalApply('@Model.Job.OrganisationName', '@Model.Job.Title', '@Model.Job.ApplicationUrl'); return false;" target="_blank">Apply now</a>
+                                <a class="btn btn-primary full-width-on-mobile" href="@Model.Job.ApplicationUrl" target="_blank">Apply now</a>
                             }
                         </div>
                         <div class="col-3 no-display-on-mobile" style="background-color: #F2F4F7; ">

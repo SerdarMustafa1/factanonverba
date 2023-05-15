@@ -1,6 +1,7 @@
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -62,15 +63,18 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         {
             if (Answer1.HasValue && Question1 != null)
             {
-                TempData["Answer1"] = $"{Question1.Id},{Answer1.Value}";
+                Question1.Answer = Answer1.Value;
+                TempData["Answer1"] = JsonConvert.SerializeObject(Question1);//$"{Question1.Id},{Answer1.Value}";
             }
             if (Answer2.HasValue && Question2 != null)
             {
-                TempData["Answer2"] = $"{Question2.Id},{Answer2.Value}";
+                Question2.Answer = Answer2.Value;
+                TempData["Answer2"] = JsonConvert.SerializeObject(Question2);// $"{Question2.Id},{Answer2.Value}";
             }
             if (Answer3.HasValue && Question3 != null)
             {
-                TempData["Answer3"] = $"{Question3.Id},{Answer3.Value}";
+                Question3.Answer = Answer3.Value;
+                TempData["Answer3"] = JsonConvert.SerializeObject(Question3);// $"{Question3.Id},{Answer3.Value}";
             }
         }
 

@@ -118,10 +118,14 @@ namespace Collabed.JobPortal.Account.Emailing
             {
                 var blob = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name  = jobApplicationDto.CvBlobName });
 
-                using var stream = new MemoryStream();
-                stream.Write(blob.Content, 0, blob.Content.Length);
-                stream.Seek(0, SeekOrigin.Begin);
-                mailMessage.Attachments.Add(new Attachment(stream, blob.Name, jobApplicationDto.CvContentType));
+                using (var stream = new MemoryStream())
+                {
+                    stream.Write(blob.Content, 0, blob.Content.Length);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    mailMessage.Attachments.Add(new Attachment(stream, jobApplicationDto.CvFileName, jobApplicationDto.CvContentType));
+                    await EmailSender.SendAsync(mailMessage);
+                }
+                return;
             }
 
             await EmailSender.SendAsync(mailMessage);
