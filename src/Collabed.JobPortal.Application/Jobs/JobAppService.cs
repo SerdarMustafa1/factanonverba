@@ -40,6 +40,7 @@ namespace JobPortal.Jobs
         private readonly IJobRepository _jobRepository;
         private readonly IOrganisationRepository _organisationRepository;
         private readonly IRepository<Category> _categoryRepository;
+        private readonly IRepository<JobApplicant> _jobApplicantsRepository;
         private readonly JobManager _jobManager;
         private readonly UserManager _userManager;
         private readonly ILogger<JobAppService> _logger;
@@ -52,12 +53,13 @@ namespace JobPortal.Jobs
         private readonly IRepository<IdentityUser, Guid> _userRepository;
         private readonly IRepository<SupportingDocument> _supportingDocumentRepository;
         private readonly IRepository<Location> _locationRepository;
+        private readonly IRepository<ScreeningQuestion> _screeningQuestionRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public JobAppService(IJobRepository jobRepository, JobManager jobManager, ILogger<JobAppService> logger,
             IOptions<IdibuOptions> idibuOptions, IOptions<BroadbeanOptions> broadBeanOptions, IOrganisationRepository organisationRepository,
             IRepository<Category> categoriesRepository, ISearchService searchService, IFileAppService fileAppService,
-            IBmtAccountEmailer bmtAccountEmailer, IRepository<UserProfile> profileRepository, IRepository<IdentityUser, Guid> userRepository, UserManager userManager, IRepository<SupportingDocument> supportingDocumentRepository, IRepository<Location> locationRepository, IUnitOfWorkManager unitOfWorkManager)
+            IBmtAccountEmailer bmtAccountEmailer, IRepository<UserProfile> profileRepository, IRepository<IdentityUser, Guid> userRepository, UserManager userManager, IRepository<SupportingDocument> supportingDocumentRepository, IRepository<Location> locationRepository, IUnitOfWorkManager unitOfWorkManager, IRepository<JobApplicant> jobApplicantsRepository, IRepository<ScreeningQuestion> screeningQuestionRepository)
         {
             _jobRepository = jobRepository;
             _jobManager = jobManager;
@@ -75,6 +77,8 @@ namespace JobPortal.Jobs
             _userRepository = userRepository;
             _userManager = userManager;
             _supportingDocumentRepository = supportingDocumentRepository;
+            _jobApplicantsRepository = jobApplicantsRepository;
+            _screeningQuestionRepository = screeningQuestionRepository;
         }
 
         [RemoteService(IsEnabled = false)]
@@ -464,6 +468,7 @@ namespace JobPortal.Jobs
                         message = await UpdateJobAsync(externalJobRequest, message, jobReference);
                         break;
                     case CommandType.delete:
+                        await DeleteApplicants(jobReference);
                         await _jobRepository.DeleteByReferenceAsync(jobReference);
                         message = $"Deleted a job with reference {jobReference}";
                         break;
@@ -492,6 +497,21 @@ namespace JobPortal.Jobs
             {
                 _logger.LogError($"Unexpected error has occured when feeding an external job: {ex.Message}", ex.InnerException);
                 return new JobResponseDto(JobResponseCodes.Failed, externalJobRequest.Reference, "Unexpected error has occured");
+            }
+        }
+
+        private async Task DeleteApplicants(string jobReference)
+        {
+            var job = await _jobRepository.GetByReferenceAsync(jobReference);
+            if (job == null)
+            {
+                throw new BusinessException(message: "The job has already been deleted.");
+            }
+
+            var applicants = await _jobApplicantsRepository.GetListAsync(x => x.JobId == job.Id);
+            if (applicants.Any())
+            {
+                await _jobApplicantsRepository.DeleteManyAsync(applicants);
             }
         }
 
@@ -524,10 +544,17 @@ namespace JobPortal.Jobs
         private async Task<string> UpdateJobAsync(ExternalJobRequest externalJobRequest, string message, string jobReference)
         {
             var existingJob = await _jobRepository.GetByReferenceAsync(jobReference);
+            if (existingJob == null)
+            {
+                throw new BusinessException(message: $"The job with reference '{jobReference}' could not be found.");
+            }
             ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, existingJob);
             _jobManager.ConvertSalaryRates(existingJob);
             var locations = await _locationRepository.GetListAsync();
             existingJob.OfficeLocationId = MapOfficeLocation(externalJobRequest.Location, locations);
+            var screeningQuestions = await _screeningQuestionRepository.GetListAsync(x => x.JobId == existingJob.Id);
+            if (screeningQuestions.Any())
+                await _screeningQuestionRepository.DeleteManyAsync(screeningQuestions);
             existingJob.ScreeningQuestions = _jobManager.CreateScreeningQuestions(ConvertScreeningQuestions(externalJobRequest.ScreeningQuestions), existingJob.Id);
             await _jobRepository.UpdateAsync(existingJob);
             message = $"Updated a job with reference {jobReference}";
