@@ -23,6 +23,6 @@ namespace Collabed.JobPortal.Jobs
 		Task<IEnumerable<ScreeningQuestionDto>> ScreeningQuestionsByJobRefAsync(string jobReference);
 		Task<IEnumerable<SupportingDocumentDto>> GetSupportingDocumentsByJobRefAsync(string jobReference);
 		Task ApplyForAJob(ApplicationDto application);
-
-    }
+		Task DeactivateJobAsync(string reference);
+	}
 }

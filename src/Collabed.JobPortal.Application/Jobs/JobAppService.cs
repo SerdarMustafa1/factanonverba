@@ -283,8 +283,18 @@ namespace JobPortal.Jobs
 
         public async Task<PagedResultDto<JobDto>> GetListAsync(JobGetListInput input)
         {
-            var jobs = await _jobRepository.GetListAsync(input.Sorting, input.SkipCount, input.MaxResultCount);
-            var totalCount = await _jobRepository.CountAsync();
+            var jobs = new List<Job>();
+            int totalCount = 0;
+            if (input.OrganisationId.HasValue)
+            {
+                jobs = await _jobRepository.GetListByOrganisationIdAsync(input.Sorting, input.SkipCount, input.MaxResultCount, input.OrganisationId.Value);
+                totalCount = await _jobRepository.CountAsync(x => x.OrganisationId == input.OrganisationId && x.Status != JobStatus.Deleted);
+            }
+            else
+            {
+                jobs = await _jobRepository.GetListAsync(input.Sorting, input.SkipCount, input.MaxResultCount);
+                totalCount = await _jobRepository.CountAsync();
+            }
 
             return new PagedResultDto<JobDto>(totalCount, ObjectMapper.Map<List<Job>, List<JobDto>>(jobs));
         }
@@ -305,13 +315,7 @@ namespace JobPortal.Jobs
         [Authorize(BmtPermissions.ManageJobs)]
         public async Task<JobDto> CreateAsync(CreateJobDto input)
         {
-            var organisationClaim = CurrentUser.FindClaim(ClaimNames.OrganisationClaim);
-            if (organisationClaim == null || string.IsNullOrEmpty(organisationClaim.Value))
-            {
-                throw new BusinessException(message: "User is not allowed to post jobs. User is not a member of any organisation.");
-            }
-
-            var organisationId = Guid.Parse(organisationClaim.Value);
+            var organisationId = ExtractOrganisationId();
             var job = await _jobManager.CreateAsync(organisationId);
 
             IEnumerable<Collabed.JobPortal.DropDowns.ScreeningQuestion> screeningQuestions = null;
@@ -327,6 +331,18 @@ namespace JobPortal.Jobs
 
             var newJob = await _jobRepository.InsertAsync(job);
             return ObjectMapper.Map<Job, JobDto>(newJob);
+        }
+
+        private Guid ExtractOrganisationId()
+        {
+            var organisationClaim = CurrentUser.FindClaim(ClaimNames.OrganisationClaim);
+            if (organisationClaim == null || string.IsNullOrEmpty(organisationClaim.Value))
+            {
+                throw new BusinessException(message: "You are not allowed to perform this action. User is not a member of any organisation.");
+            }
+
+            var organisationId = Guid.Parse(organisationClaim.Value);
+            return organisationId;
         }
 
         [Authorize(BmtPermissions.ManageJobs)]
@@ -347,6 +363,28 @@ namespace JobPortal.Jobs
         public async Task DeleteAsync(Guid id)
         {
             await _jobRepository.DeleteAsync(id);
+        }
+
+        [Authorize(BmtPermissions.ManageJobs)]
+        public async Task DeactivateJobAsync(string reference)
+        {
+            var organisationId = ExtractOrganisationId();
+
+            var job = await _jobRepository.GetByReferenceAsync(reference);
+            if (job == null)
+            {
+                throw new BusinessException(message: "The job has already been deleted.");
+            }
+            if (job.OrganisationId != organisationId)
+            {
+                throw new BusinessException(message: "Job can only be deleted by the user that has created it.");
+            }
+            job.Status = JobStatus.Deleted;
+            job.Applicants = null;
+
+            await _jobApplicantsRepository.DeleteAsync(x => x.JobId == job.Id);
+            await DeleteScreeningQuestionsAsync(job.Id);
+            await _jobRepository.UpdateAsync(job);
         }
 
         public async Task<bool> CheckIfAlreadyAppliedAsync(string jobRef, Guid userId)
@@ -468,8 +506,7 @@ namespace JobPortal.Jobs
                         message = await UpdateJobAsync(externalJobRequest, message, jobReference);
                         break;
                     case CommandType.delete:
-                        await DeleteApplicants(jobReference);
-                        await _jobRepository.DeleteByReferenceAsync(jobReference);
+                        await DeleteJobAsync(jobReference);
                         message = $"Deleted a job with reference {jobReference}";
                         break;
                 }
@@ -500,19 +537,15 @@ namespace JobPortal.Jobs
             }
         }
 
-        private async Task DeleteApplicants(string jobReference)
+        private async Task DeleteJobAsync(string jobReference)
         {
             var job = await _jobRepository.GetByReferenceAsync(jobReference);
             if (job == null)
             {
                 throw new BusinessException(message: "The job has already been deleted.");
             }
-
-            var applicants = await _jobApplicantsRepository.GetListAsync(x => x.JobId == job.Id);
-            if (applicants.Any())
-            {
-                await _jobApplicantsRepository.DeleteManyAsync(applicants);
-            }
+            await _jobApplicantsRepository.DeleteAsync(x => x.JobId == job.Id);
+            await _jobRepository.DeleteByReferenceAsync(jobReference);
         }
 
         private async Task UpdateUserProfile(UserProfile userProfile, ApplicationDto application, string blobFileName)
@@ -552,14 +585,19 @@ namespace JobPortal.Jobs
             _jobManager.ConvertSalaryRates(existingJob);
             var locations = await _locationRepository.GetListAsync();
             existingJob.OfficeLocationId = MapOfficeLocation(externalJobRequest.Location, locations);
-            var screeningQuestions = await _screeningQuestionRepository.GetListAsync(x => x.JobId == existingJob.Id);
-            if (screeningQuestions.Any())
-                await _screeningQuestionRepository.DeleteManyAsync(screeningQuestions);
+            await DeleteScreeningQuestionsAsync(existingJob.Id);
             existingJob.ScreeningQuestions = _jobManager.CreateScreeningQuestions(ConvertScreeningQuestions(externalJobRequest.ScreeningQuestions), existingJob.Id);
             await _jobRepository.UpdateAsync(existingJob);
             message = $"Updated a job with reference {jobReference}";
 
             return message;
+        }
+
+        private async Task DeleteScreeningQuestionsAsync(Guid jobId)
+        {
+            var screeningQuestions = await _screeningQuestionRepository.GetListAsync(x => x.JobId == jobId);
+            if (screeningQuestions.Any())
+                await _screeningQuestionRepository.DeleteManyAsync(screeningQuestions);
         }
 
         private async Task<string> InsertNewJobAsync(ExternalJobRequest externalJobRequest, JobOrigin jobOrigin, string message, string jobReference)

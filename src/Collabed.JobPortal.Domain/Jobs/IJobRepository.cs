@@ -11,6 +11,8 @@ namespace Collabed.JobPortal.Jobs
 	public interface IJobRepository : IRepository<Job, Guid>
 	{
 		Task<List<Job>> GetListAsync(string sorting, int skipCount, int maxResultCount, CancellationToken cancellationToken = default);
+		Task<List<Job>> GetListByOrganisationIdAsync(string sorting, int skipCount, int maxResultCount, Guid organisationId, CancellationToken cancellationToken = default);
+
 		Task<Job> GetByReferenceAsync(string reference);
 		Task DeleteByReferenceAsync(string reference);
 		Task<bool> CheckIfJobExistsByReference(string reference);

@@ -29,6 +29,18 @@ namespace Collabed.JobPortal.Jobs
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<List<Job>> GetListByOrganisationIdAsync(string sorting, int skipCount, int maxResultCount, Guid organisationId, CancellationToken cancellationToken = default)
+        {
+            var query = await ApplyFilterAsync();
+
+            return await query
+                .Where(x => x.OrganisationId == organisationId)
+                .Where(x => x.Status != JobStatus.Deleted)
+                .OrderBy(!string.IsNullOrWhiteSpace(sorting) ? sorting : nameof(Job.CreationTime))
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public async Task<List<JobWithDetails>> GetListBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, IEnumerable<int> categories,
             string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, int? netZero, ContractType? contractType, EmploymentType? employmentType,
             JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default)
@@ -109,6 +121,9 @@ namespace Collabed.JobPortal.Jobs
             {
                 query = query.Where(x => x.job.Title.Contains(keyword) || x.job.Skills.Contains(keyword));
             }
+
+            query = query.Where(x => x.job.Status == JobStatus.Live);
+            query = query.Where(x => x.job.ApplicationDeadline > DateTime.UtcNow);
 
             query = sorting switch
             {
@@ -218,6 +233,9 @@ namespace Collabed.JobPortal.Jobs
             {
                 query = query.Where(x => x.job.Title.Contains(keyword));
             }
+
+            query = query.Where(x => x.job.Status == JobStatus.Live);
+            query = query.Where(x => x.job.ApplicationDeadline > DateTime.UtcNow);
 
             if (!string.IsNullOrEmpty(sorting))
             {

@@ -98,7 +98,14 @@
                         <p>
                             @if (string.IsNullOrEmpty(Model.Job.ApplicationUrl) || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Broadbean || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Native)
                             {
-                                <a class="btn btn-primary full-width-on-mobile" href="#" onclick="applyForInternal('@Model.Job.Reference')">Apply now</a>
+                                if (Model.Job.Status != Collabed.JobPortal.Types.JobStatus.Live)
+                                {
+                                    <a class="btn btn-primary full-width-on-mobile disabled" href="#">Apply now</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary full-width-on-mobile" href="#" onclick="applyForInternal('@Model.Job.Reference')">Apply now</a>
+                                }
                             }
                             else
                             {
@@ -135,7 +142,14 @@
                             }
                             @if (string.IsNullOrEmpty(Model.Job.ApplicationUrl) || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Broadbean || Model.Job.JobOrigin == Collabed.JobPortal.Types.JobOrigin.Native)
                             {
-                                <a class="btn btn-primary full-width-on-mobile" href="#" onclick="applyForInternal('@Model.Job.Reference')">Apply now</a>
+                                if (Model.Job.Status != Collabed.JobPortal.Types.JobStatus.Live)
+                                {
+                                    <a class="btn btn-primary full-width-on-mobile disabled" href="#">Apply now</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary full-width-on-mobile" href="#" onclick="applyForInternal('@Model.Job.Reference')">Apply now</a>
+                                }
                             }
                             else
                             {

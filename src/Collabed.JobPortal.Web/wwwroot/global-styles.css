@@ -412,3 +412,9 @@ label.text-14 {
 .ql-align-left {
     text-align: left;
 }
+
+
+/* Table */
+.table > :not(:first-child) {
+    border-top: 2px solid black;
+}
