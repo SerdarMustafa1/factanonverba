@@ -320,7 +320,7 @@ public class JobPortalWebModule : AbpModule
         // temp
         //if (env.IsDevelopment())
         //{
-        app.UseDeveloperExceptionPage();
+        //app.UseDeveloperExceptionPage();
         //}
 
         app.UseAbpRequestLocalization();
