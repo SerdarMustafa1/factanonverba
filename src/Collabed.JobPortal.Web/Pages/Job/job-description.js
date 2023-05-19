@@ -16,6 +16,7 @@ function onExternalApply(company, title, url) {
 function applyForInternal(reference) {
     if (!abp.currentUser.id) {
         location.href = "/Account/Login?returnUrl=" + window.location.href;
+        return;
     }
 
     jobPortal.jobs.job.checkIfAlreadyApplied(reference, abp.currentUser.id)

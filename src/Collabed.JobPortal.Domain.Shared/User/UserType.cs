@@ -3,6 +3,7 @@
     public enum UserType
     {
         Candidate,
-        Organisation
+        Organisation,
+        Admin
     }
 }

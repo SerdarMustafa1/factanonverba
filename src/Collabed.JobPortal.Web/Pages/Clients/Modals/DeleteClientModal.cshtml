@@ -1,0 +1,25 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model Collabed.JobPortal.Web.Pages.Clients.Modals.DeleteClientModal
+@{
+    Layout = null;
+}
+<form method="post" data-check-form-on-close="false" action="@Url.Page("/Clients/Modals/DeleteClientModal")">
+    <input asp-for="UserId" hidden />
+    <input asp-for="CompanyId" hidden />
+    <abp-modal>
+        <abp-modal-header><h5 class="modal-title" style="font-weight:600; font-size:20px">Delete Client Account</h5></abp-modal-header>
+        <abp-modal-body>
+            <p>
+                If you decide to delete @Model.CompanyName account, we want to make sure that you are aware that this action is permanent and cannot be undone.
+                <br />
+                <br />
+                Deleting @Model.CompanyName account will erase all of their data, including all content associated to their account.
+            </p>
+        </abp-modal-body>
+        <abp-modal-footer>
+            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+            <button class="btn btn-danger" data-busy-text="Deleting" type="submit">Delete</button>
+        </abp-modal-footer>
+    </abp-modal>
+</form>

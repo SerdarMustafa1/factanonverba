@@ -52,6 +52,8 @@
     "FailReason": "Fail Reason",
     "CreationTime": "Creation Time",
     "Permission:PaymentManagement": "Payment Management",
-    "Permission:PaymentRequest": "Payment Requests"
+    "Permission:PaymentRequest": "Payment Requests",
+    "Permission:PostAJob": "Post a Job",
+    "Permission:Admin": "Admin"
   }
 }

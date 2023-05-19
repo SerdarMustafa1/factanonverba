@@ -1,6 +1,7 @@
 ﻿@page
-@using Collabed.Application.Helpers;
-@model Collabed.JobPortal.Web.Pages.JobListings.JobListingsModel
+@model Collabed.JobPortal.Web.Pages.Clients.ClientsModel
+@{
+}
 @{
 }
 @section styles {
@@ -8,37 +9,43 @@
 }
 
 @section scripts {
-    <abp-script src="/Pages/JobListings/joblistings.js" />
+    <abp-script src="/Pages/Clients/clients.js" />
 }
-
 <input type="hidden" asp-for="@Model.CurrentPage" id="currentPageHiddenInput" />
 <div>
     <div class="row">
         <div class="col-3" style="font-weight: 600; font-size: 36px;">
-            <span>Job Listings</span>
-        </div>
-        <div class="offset-7 col-2">
-            <a href="/Job/Post" class="btn btn-primary searchBtn" style="float:right;">New Listing</a>
+            <span>Clients</span>
         </div>
     </div>
     <br />
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th style="width: 17%" scope="Column">Reference</th>
-                <th style="width: 70%" scope="Column">Job Listing</th>
+                <th style="width: 50%" scope="Column">Company Name</th>
+                <th style="width: 37%" scope="Column">Status</th>
                 <th style="width: 13%" scope="Column" colspan="2">Manage</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var listing in Model.JobListings)
+            @foreach (var client in Model.Clients)
             {
-                <tr id="@listing.Reference">
-                    <td scope="Row">@listing.Reference</td>
-                    <td>@listing.Title</td>
-                    <td><a href="../job?reference=@listing.Reference">View</a></td>
-                    <td><a href="#" onclick="onJobDelete('@listing.Reference')">Delete</a></td>
-                </tr>            
+                <tr id="@client.CompanyId">
+                    <td scope="Row">@client.CompanyName</td>
+                    <td id="@client.UserId">
+                        @if(client.PermissionStatus)
+                        {
+                            <text>Post a Job / ON</text>
+                        }
+                        else
+                        {
+                            <text>Post a Job / OFF</text>
+                        }
+                        
+                    </td>
+                    <td><a href="" onclick="onClientEdit('@client.UserId', '@client.PermissionStatus'); return false;">Edit</a></td>
+                    <td><a href="" onclick="onClientDelete('@client.UserId', '@client.CompanyId', '@client.CompanyName'); return false;">Delete</a></td>
+                </tr>
             }
         </tbody>
     </table>
@@ -91,7 +98,7 @@
     </div>
     <br />
     <div class="row">
-        <span style="font-weight: 600; font-size:18px">Tracking Applications</span>
-        <p style="margin-top:10px">We are currently in the process of developing a complete applicant tracking system (ATS). In the meantime, please check your email regularly to review and sort through the incoming job applications.</p>
+        <span style="font-weight: 600; font-size:18px">Permissions</span>
+        <p style="margin-top:10px">If you need to grant a client access to post a job, you can do so by adjusting the company's permissions. However, it's important to note that this functionality is only available for clients who have contracted through our account management team and have made payment for this feature.</p>
     </div>
 </div>

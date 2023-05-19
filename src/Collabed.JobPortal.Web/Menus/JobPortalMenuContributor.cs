@@ -1,7 +1,6 @@
 ﻿using Collabed.JobPortal.Localization;
+using Collabed.JobPortal.Permissions;
 using System.Threading.Tasks;
-using Volo.Abp.Identity.Web.Navigation;
-using Volo.Abp.SettingManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 
 namespace Collabed.JobPortal.Web.Menus;
@@ -14,11 +13,18 @@ public class JobPortalMenuContributor : IMenuContributor
         {
             await ConfigureMainMenuAsync(context);
         }
+        if (context.Menu.Name == StandardMenus.User)
+        {
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Clients", displayName: "Clients", url: "~/clients", icon: "fa fa-users", order: 1001, BmtPermissions.Admin));
+            context.Menu.AddItem(new ApplicationMenuItem("Account.JobListings", displayName: "Job Listings", url: "~/joblistings", icon: "fa fa-list-ul", order: 1002, BmtPermissions.ManageJobs));
+        }
     }
 
     private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
         var administration = context.Menu.GetAdministration();
+        context.Menu.Items.Remove(administration);
+
         var l = context.GetLocalizer<JobPortalResource>();
 
         context.Menu.AddItem(new ApplicationMenuItem("SocialFeed", displayName: "Social Feed", "https://buildmytalent.com/activity-feed/"));
@@ -40,7 +46,7 @@ public class JobPortalMenuContributor : IMenuContributor
         //    )
         //);
 
-        administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
-        administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
+        //administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
+        //administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
     }
 }
