@@ -104,7 +104,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
             JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             NetZeros = new List<SelectListItem>
             {
-                new SelectListItem("Yes","1"),
+                new SelectListItem("NetZero","1"),
                 new SelectListItem("Unknown","2") // Value 2 will search for null entries
             };
             SalaryRanges = GetSalaryRanges();

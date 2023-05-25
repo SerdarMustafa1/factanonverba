@@ -15,8 +15,8 @@ public class JobPortalMenuContributor : IMenuContributor
         }
         if (context.Menu.Name == StandardMenus.User)
         {
-            context.Menu.AddItem(new ApplicationMenuItem("Account.Clients", displayName: "Clients", url: "~/clients", icon: "fa fa-users", order: 1001, BmtPermissions.Admin));
-            context.Menu.AddItem(new ApplicationMenuItem("Account.JobListings", displayName: "Job Listings", url: "~/joblistings", icon: "fa fa-list-ul", order: 1002, BmtPermissions.ManageJobs));
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Clients", displayName: "Clients", url: "~/clients", icon: "fa fa-users", order: 1001, requiredPermissionName: BmtPermissions.Admin));
+            context.Menu.AddItem(new ApplicationMenuItem("Account.JobListings", displayName: "Job Listings", url: "~/joblistings", icon: "fa fa-list-ul", order: 1002, requiredPermissionName: BmtPermissions.ManageJobs));
         }
     }
 
