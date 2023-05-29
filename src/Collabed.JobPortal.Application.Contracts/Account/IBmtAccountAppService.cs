@@ -14,5 +14,7 @@ namespace Collabed.JobPortal.Users
         Task<bool> CheckPasswordCredentials(string loginInput, string password);
         Task<UserProfileDto> GetLoggedUserProfileAsync();
         Task UploadCvToUserProfile(Guid UserId, Stream fileStream, string fileName, string contentType);
+        Task<UserProfileDto> GetUserProfileByIdAsync(Guid userId);
+        Task UpdateUserProfileAsync(UpdateUserProfileDto updateProfileDto);
     }
 }

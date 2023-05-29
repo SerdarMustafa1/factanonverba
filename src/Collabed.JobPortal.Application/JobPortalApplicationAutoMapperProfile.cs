@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Collabed.JobPortal.Account;
 using Collabed.JobPortal.Applications;
 using Collabed.JobPortal.DropDowns;
 using Collabed.JobPortal.Job;
@@ -6,6 +7,7 @@ using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Organisations;
 using Collabed.JobPortal.PaymentRequests;
 using Collabed.JobPortal.Types;
+using Collabed.JobPortal.Users;
 using System;
 using Volo.Abp.AutoMapper;
 
@@ -108,6 +110,7 @@ public class JobPortalApplicationAutoMapperProfile : Profile
         CreateMap<ScreeningQuestion, ScreeningQuestionDto>()
             .ForMember(d => d.Text,
                     op => op.MapFrom(o => o.Name));
+        CreateMap<UserProfile, UserProfileDto>();
     }
     public static ContractType? MapJobType(string jobType)
     {

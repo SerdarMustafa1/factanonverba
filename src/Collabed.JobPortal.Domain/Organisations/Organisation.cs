@@ -12,6 +12,9 @@ namespace Collabed.JobPortal.Organisations
     {
         public string Name { get; private set; }
         public string EmailAddress { get; private set; }
+        public string LogoBlobName { get; set; }
+        public string LogoFileName { get; set; }
+        public string LogoContentType { get; set; }
         public ICollection<OrganisationMember> Members { get; private set; }
         public ICollection<Jobs.Job> PostedJobs { get; private set; }
 

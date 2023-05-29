@@ -34,7 +34,11 @@
 .navbar .dropdown-submenu .dropdown-menu {
     top: 0;
     left: 100%; 
-} 
+}
+
+.nav-link.active {
+    background-color: #c8d9f1 !important;
+}
 
 .card-header .btn {
     padding: 2px 6px;

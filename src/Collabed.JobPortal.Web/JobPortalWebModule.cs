@@ -3,9 +3,11 @@ using Collabed.JobPortal.EntityFrameworkCore;
 using Collabed.JobPortal.Localization;
 using Collabed.JobPortal.Settings;
 using Collabed.JobPortal.Web.Menus;
+using Collabed.JobPortal.Web.Pages.Account;
 using Collabed.JobPortal.Web.Pages.Shared.Components.Footer;
 using Collabed.JobPortal.Web.Pages.Shared.Components.GoogleAnalytics;
 using Collabed.JobPortal.Web.Pages.Shared.Components.Spacer;
+using Collabed.JobPortal.Web.ProfileManagement;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -22,6 +24,7 @@ using System.IO;
 using System.Security.Claims;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
+using Volo.Abp.Account.Web.ProfileManagement;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -100,6 +103,7 @@ public class JobPortalWebModule : AbpModule
         ConfigureAutoApiControllers();
         ConfigureIdentityOptions(context);
         ConfigureSwaggerServices(context.Services);
+        ConfigureProfileManagementContributors();
         Configure<AbpLayoutHookOptions>(options =>
         {
             options.Add(
@@ -346,5 +350,25 @@ public class JobPortalWebModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
+    }
+
+    private void ConfigureProfileManagementContributors()
+    {
+        Configure<ProfileManagement.ProfileManagementPageOptions>(options =>
+        {
+            options.Contributors.RemoveAll(x => x.GetType() == typeof(AccountProfileManagementPageContributor));
+            options.Contributors.Add(new BmtProfileManagementPageContributor());
+        });
+
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.ScriptBundles
+                .Configure(typeof(ManageModel).FullName,
+                    configuration =>
+                    {
+                        configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Password/Default.js");
+                        configuration.AddFiles("/Pages/Account/Manage.js");
+                    });
+        });
     }
 }

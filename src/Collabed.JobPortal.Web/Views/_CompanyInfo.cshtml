@@ -1,0 +1,77 @@
+﻿@using Collabed.JobPortal.Web.Models;
+@model CompanyAccountModel
+
+<form method="post" enctype="multipart/form-data" id="CompanySettingsForm" asp-page-handler="CompanyProfile">
+    <input asp-for="Id" />
+    <input asp-for="UserType" />
+    <input asp-for="ConcurrencyStamp" />
+    <input asp-for="LogoFileName" />
+    <div style="margin-inline: 4%;">
+        <p class="text-18" style="font-weight:600">Company Details</p>
+@*        <div class="row mb-3">
+            <div class="col-12">
+                <label asp-for="Name" class="form-label">First Name <span style="color:#DC3545;">*</span></label>
+                <input asp-for="Name" required class="form-control" />
+                <span asp-validation-for="Name"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <label asp-for="Surname" class="form-label">Last Name <span style="color:#DC3545;">*</span></label>
+                <input asp-for="Surname" required class="form-control" />
+                <span asp-validation-for="Surname"></span>
+            </div>
+        </div>*@
+        <div class="row mb-3">
+            <div class="col-12">
+                <label asp-for="CompanyName" class="form-label">Company Name <span style="color:#DC3545;">*</span></label>
+                <input asp-for="CompanyName" required class="form-control" />
+                <span asp-validation-for="CompanyName"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <label asp-for="Email" class="form-label">Email Address <span style="color:#DC3545;">*</span></label>
+                <input asp-for="Email" required class="form-control" />
+                <span asp-validation-for="Email"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <label asp-for="PhoneNumber" class="form-label">Phone number <span style="color:#DC3545;">*</span></label>
+                <div class="input-group mb-3" style="margin-bottom:0 !important">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="phone">+44</span>
+                    </div>
+                    <input asp-for="PhoneNumber" required class="form-control" />
+                </div>
+                <span class="hint">Please enter a UK mobile number</span><br />
+                <span asp-validation-for="PhoneNumber"></span>
+            </div>
+        </div>
+        <p class="text-18" style="margin-top:5%; margin-bottom:3%; font-weight: 600">Your Logo</p>
+        @if (!string.IsNullOrWhiteSpace(Model.LogoFileName))
+        {
+            <div class="file-tile">
+                <p style="margin-block:auto;">
+                    <i class="bi bi-check-circle-fill" style="color:#146C43"></i>
+                    <span style="margin-left:5%;"><i class="bi bi-file-earmark"></i>@Model.LogoFileName</span>
+                </p>
+            </div>
+            <div style="width: 100%; height: 15px; border-bottom: 1px solid #c5c6c8; text-align: center">
+                <span style="font-size: 14px; background-color: #FAFAFA; color: #667085; padding: 0 10px;">
+                    OR
+                </span>
+            </div>
+        }
+        <div class="mb-3" style="margin-top:4%;">
+            <label asp-for="NewLogo" class="form-label" style="margin-top:1%;font-weight: 400; font-size: 16px; line-height: 24px;color: #101828;">Upload a New Logo</label>
+            <input id="newLogoId" class="form-control" type="file" asp-for="NewLogo" onchange="validateCompanyForm()">
+        </div>
+    </div>
+    <div class="row" style="margin-inline: 4%;">
+        <div class="offset-10 col-2" style="text-align: right; padding-right: 0; margin-bottom: 3%">
+            <abp-button id="CompanyProfileSubmitId" type="submit" button-type="Primary" disabled="true" text="Save" />
+        </div>
+    </div>
+</form>

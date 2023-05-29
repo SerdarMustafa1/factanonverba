@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Collabed.JobPortal.Account;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Web.Models;
 using Volo.Abp.AutoMapper;
@@ -16,6 +17,14 @@ public class JobPortalWebAutoMapperProfile : AbpIdentityWebAutoMapperProfile
     {
         //Define your AutoMapper configuration here for the Web project.
         CreateMap<JobDto, JobBase>();
+        CreateMap<ProfileDto, CompanyAccountModel>()
+            .MapExtraProperties();
+        CreateMap<ProfileDto, IndividualAccountModel>();
+        CreateMap<IndividualAccountModel, UpdateUserProfileDto>();
+        CreateMap<CompanyAccountModel, UpdateCompanyProfileDto>();
+        CreateMap<IdentityUser, ProfileDto>()
+            .Ignore(x => x.UserType)
+            .MapExtraProperties();
     }
 
     protected override void CreateUserMappings()

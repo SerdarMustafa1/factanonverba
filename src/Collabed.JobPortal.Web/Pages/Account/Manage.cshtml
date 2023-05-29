@@ -1,0 +1,60 @@
+﻿@page
+@using Collabed.JobPortal.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo;
+@using Collabed.JobPortal.Web.Pages.Account.Components.ProfileManagementGroup.Password;
+@using Collabed.JobPortal.User;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using Collabed.JobPortal.Web.Pages.Account;
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
+@inject IHtmlLocalizer<AccountResource> L
+@model ManageModel
+@{
+    Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
+}
+@section scripts {
+    <abp-script-bundle name="@typeof(ManageModel).FullName"/>
+}
+@{
+    var userType = await Model.GetUserType();
+}
+
+@if (!Model.ReturnUrl.IsNullOrWhiteSpace())
+{
+    <abp-row class="mb-2">
+        <abp-column>
+            <a class="btn btn-primary" href="@Model.ReturnUrl">
+                <i class="fa fa-chevron-left me-2"></i>@L["ReturnToApplication"]
+            </a>
+        </abp-column>
+    </abp-row>
+}
+<input id="userTypeId" asp-for="UserType" />
+
+<div id="ProfileManagementWrapper">
+    <abp-card>
+        <abp-card-body>
+            <abp-tabs tab-style="PillVertical" vertical-header-size="_3">
+                @if (Model.UserType == UserType.Candidate)
+                {
+                    <abp-tab title="Personal Profile">
+                        <p class="text-36" style="font-weight: 600; margin: 3%">My Profile</p>
+                        <partial name="~/Views/_PerfonalInfo.cshtml" model="Model.IndividualAccountModel") />
+                    </abp-tab>
+                }
+                else
+                {
+                    <abp-tab title="Company Profile">
+                        <p class="text-36" style="font-weight: 600; margin: 3%">My Company Profile</p>
+                        <partial name="~/Views/_CompanyInfo.cshtml" model="Model.CompanyAccountModel" ) />
+                    </abp-tab>
+                }
+                <abp-tab title="Change Password">
+                    <h2>Change Password</h2>
+                    <hr class="my-4" />
+                    @await Component.InvokeAsync(typeof(AccountProfilePasswordManagementGroupViewComponent))
+                </abp-tab>
+            </abp-tabs>
+        </abp-card-body>
+    </abp-card>
+</div>

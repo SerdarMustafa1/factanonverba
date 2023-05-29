@@ -58,7 +58,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         public string EmailAddress { get; set; }
 
         [BindProperty]
-        [RegularExpression("^(\\d{10})$", ErrorMessage = "Please enter a valid UK phone number")]
+        [RegularExpression("^(\\d{10})$", ErrorMessage = "Please enter a valid UK Phone Number")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter your phone number")]
         public string PhoneNumber { get; set; }
 

@@ -398,6 +398,16 @@ label.text-14 {
     text-decoration: underline;
 }
 
+.file-tile {
+    width: 100%;
+    background-color: #E2E3E5;
+    border: 1px solid #D3D6D8;
+    border-radius: 4px;
+    padding-inline: 5%;
+    padding-block: 2%;
+    margin-bottom: 5%;
+}
+
 /*
     Quill editor fixes
 */

@@ -1,0 +1,77 @@
+﻿@using Volo.Abp.Account.Localization
+@using Volo.Abp.Users
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using Collabed.JobPortal.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo;
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.Data
+@using Volo.Abp.Identity.Settings
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+@using Volo.Abp.Settings
+@inject IHtmlLocalizer<AccountResource> L
+@inject ICurrentUser CurrentUser
+@inject ISettingProvider SettingManager
+@inject IThemeManager ThemeManager
+@inject IStringLocalizerFactory StringLocalizerFactory
+@model Collabed.JobPortal.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo.AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel
+@{
+    var isUserNameUpdateEnabled = string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled), "true",
+        StringComparison.OrdinalIgnoreCase);
+
+    var isEmailUpdateEnabled = string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsEmailUpdateEnabled), "true",
+        StringComparison.OrdinalIgnoreCase);
+}
+
+<h4>@L["PersonalSettings"]</h4>
+<hr />
+<form method="post" id="PersonalSettingsForm" action="@Url.Page("/Account/Components/ProfileManagementGroup/PersonalInfo/AccountProfileHandler")">
+
+    <input asp-for="ConcurrencyStamp" />
+
+    @*<abp-input asp-for="UserName" readonly="!isUserNameUpdateEnabled" />*@
+
+@*    <abp-row>
+        <abp-column size-md="_6">
+            <abp-input asp-for="Name" />
+        </abp-column>
+        <abp-column size-md="_6">
+            <abp-input asp-for="Surname" />
+            TEST XCZ
+        </abp-column>
+    </abp-row>*@
+    <abp-input asp-for="Name" />
+
+    <abp-input asp-for="Surname" />
+
+    <abp-input asp-for="Email" readonly="!isEmailUpdateEnabled" />
+
+    <abp-input asp-for="PhoneNumber" />
+
+    <abp-input asp-for="PostCode" />
+
+    <div style="max-width:400px;margin-inline:auto;">
+        <p class="text-30" style="margin-block:5%;">Upload CV *</p>
+        @if (!string.IsNullOrWhiteSpace(Model.CvFileName))
+        {
+            <p class="text-16">Your CV</p>
+            <div class="file-tile">
+                <p style="margin-block:auto;">
+                    <i class="bi bi-check-circle-fill" style="color:#146C43"></i>
+                    <span style="margin-left:5%;"><i class="bi bi-file-earmark"></i>@Model.CvFileName</span>
+                </p>
+            </div>
+            @await Component.InvokeAsync("DividerOr", null)
+        }
+        <div class="mb-3" style="margin-top:10%;">
+            <label asp-for="NewCv" class="form-label" style="margin-top:1%;font-weight: 400; font-size: 16px; line-height: 24px;color: #101828;">Upload a New CV</label>
+            <input class="form-control" type="file" asp-for="NewCv">
+        </div>
+    </div>
+    <abp-button type="submit" button-type="Primary" text="Save" />
+</form>

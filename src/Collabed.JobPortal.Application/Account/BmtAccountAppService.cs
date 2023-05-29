@@ -27,6 +27,7 @@ namespace Collabed.JobPortal.Account
         private readonly IFileAppService _fileAppService;
         private readonly ILogger<BmtAccountAppService> _logger;
         private readonly UserManager _profileUserManager;
+        private readonly IdentityUserManager IdentityUserManager;
 
         public BmtAccountAppService(
             IdentityUserManager userManager,
@@ -44,6 +45,7 @@ namespace Collabed.JobPortal.Account
             _fileAppService = fileAppService;
             _profileUserManager = profileUserManager;
             _logger = logger;
+            IdentityUserManager = userManager;
         }
 
         [Authorize(BmtPermissions.ApplyForJobs)]
@@ -75,6 +77,24 @@ namespace Collabed.JobPortal.Account
             userProfileDto.PostCode = userProfile.PostCode;
 
             return userProfileDto;
+        }
+
+        public async Task UpdateUserProfileAsync(UpdateUserProfileDto updateProfileDto)
+        {
+            var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == updateProfileDto.Id);
+            userProfile.PostCode = updateProfileDto.PostCode;
+            await _userProfileRepository.UpdateAsync(userProfile);
+        }
+
+        public async Task<UserProfileDto> GetUserProfileByIdAsync(Guid userId)
+        {
+            var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == userId);
+            if (userProfile == null)
+            {
+                return default;
+            }
+
+            return ObjectMapper.Map<UserProfile, UserProfileDto>(userProfile);
         }
 
         public async Task UploadCvToUserProfile(Guid UserId, Stream fileStream, string fileName, string contentType)
