@@ -129,9 +129,5 @@ namespace Collabed.JobPortal.Organisations
             input.CopyTo(ms);
             return ms.ToArray();
         }
-        //public async Task UploadCompanyLogoAsync(Guid id, Stream fileStream, string fileName, string contentType)
-        //{
-
-        //}
     }
 }

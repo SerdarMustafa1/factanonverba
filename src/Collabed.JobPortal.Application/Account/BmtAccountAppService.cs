@@ -2,6 +2,7 @@
 using Collabed.JobPortal.BlobStorage;
 using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Permissions;
+using Collabed.JobPortal.User;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -27,7 +28,7 @@ namespace Collabed.JobPortal.Account
         private readonly IFileAppService _fileAppService;
         private readonly ILogger<BmtAccountAppService> _logger;
         private readonly UserManager _profileUserManager;
-        private readonly IdentityUserManager IdentityUserManager;
+        private readonly IdentityUserManager _identityUserManager;
 
         public BmtAccountAppService(
             IdentityUserManager userManager,
@@ -45,7 +46,27 @@ namespace Collabed.JobPortal.Account
             _fileAppService = fileAppService;
             _profileUserManager = profileUserManager;
             _logger = logger;
-            IdentityUserManager = userManager;
+            _identityUserManager = userManager;
+        }
+
+        public async Task<UserType> GetUserTypeByIdAsync(Guid userId)
+        {
+            var user = await _identityUserManager.GetByIdAsync(userId);
+            return (UserType)Enum.Parse(typeof(UserType), user.GetUserType(), true);
+        }
+
+        public async Task DeleteUserAsync(Guid userId)
+        {
+            var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == userId);
+            if (userProfile != null)
+            {
+                if (!string.IsNullOrWhiteSpace(userProfile.CvBlobName))
+                    await _fileAppService.DeleteBlobAsync(userProfile.CvBlobName);
+
+                await _userProfileRepository.DeleteAsync(userProfile);
+            }
+            var user = await _identityUserManager.GetByIdAsync(userId);
+            await _identityUserManager.DeleteAsync(user);
         }
 
         [Authorize(BmtPermissions.ApplyForJobs)]
@@ -82,6 +103,11 @@ namespace Collabed.JobPortal.Account
         public async Task UpdateUserProfileAsync(UpdateUserProfileDto updateProfileDto)
         {
             var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == updateProfileDto.Id);
+            if (userProfile == null)
+            {
+                await _userProfileRepository.InsertAsync(userProfile);
+                return;
+            }
             userProfile.PostCode = updateProfileDto.PostCode;
             await _userProfileRepository.UpdateAsync(userProfile);
         }

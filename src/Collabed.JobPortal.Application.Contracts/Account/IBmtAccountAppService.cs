@@ -1,4 +1,5 @@
 ﻿using Collabed.JobPortal.Account;
+using Collabed.JobPortal.User;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,5 +17,7 @@ namespace Collabed.JobPortal.Users
         Task UploadCvToUserProfile(Guid UserId, Stream fileStream, string fileName, string contentType);
         Task<UserProfileDto> GetUserProfileByIdAsync(Guid userId);
         Task UpdateUserProfileAsync(UpdateUserProfileDto updateProfileDto);
+        Task DeleteUserAsync(Guid userId);
+        Task<UserType> GetUserTypeByIdAsync(Guid userId);
     }
 }

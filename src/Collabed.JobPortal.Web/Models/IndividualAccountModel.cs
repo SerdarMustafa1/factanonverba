@@ -1,4 +1,4 @@
-using Collabed.JobPortal.User;
+﻿using Collabed.JobPortal.User;
 using Collabed.JobPortal.Web.Attributes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

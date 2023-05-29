@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Account;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Settings;
@@ -91,12 +90,12 @@ namespace Collabed.JobPortal.Account
 
             if (currentUser.PasswordHash == null)
             {
-                (await UserManager.AddPasswordAsync(currentUser, input.NewPassword)).CheckErrors();
+                (await UserManager.AddPasswordAsync(currentUser, input.Password)).CheckErrors();
 
                 return;
             }
 
-            (await UserManager.ChangePasswordAsync(currentUser, input.CurrentPassword, input.NewPassword)).CheckErrors();
+            (await UserManager.ChangePasswordAsync(currentUser, input.CurrentPassword, input.Password)).CheckErrors();
         }
     }
 }

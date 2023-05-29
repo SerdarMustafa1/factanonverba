@@ -15,6 +15,9 @@
 @section scripts {
     <abp-script-bundle name="@typeof(ManageModel).FullName"/>
 }
+@section styles {
+    <abp-style-bundle name="@typeof(ManageModel).FullName" />
+}
 @{
     var userType = await Model.GetUserType();
 }
@@ -39,20 +42,19 @@
                 {
                     <abp-tab title="Personal Profile">
                         <p class="text-36" style="font-weight: 600; margin: 3%">My Profile</p>
-                        <partial name="~/Views/_PerfonalInfo.cshtml" model="Model.IndividualAccountModel") />
+                        @*<partial name="~/Views/_PerfonalInfo.cshtml" model="Model.IndividualAccountModel") />*@
                     </abp-tab>
                 }
                 else
                 {
                     <abp-tab title="Company Profile">
                         <p class="text-36" style="font-weight: 600; margin: 3%">My Company Profile</p>
-                        <partial name="~/Views/_CompanyInfo.cshtml" model="Model.CompanyAccountModel" ) />
+                        @*<partial name="~/Views/_CompanyInfo.cshtml" model="Model.CompanyAccountModel" ) />*@
                     </abp-tab>
                 }
                 <abp-tab title="Change Password">
-                    <h2>Change Password</h2>
-                    <hr class="my-4" />
-                    @await Component.InvokeAsync(typeof(AccountProfilePasswordManagementGroupViewComponent))
+                    <p class="text-36" style="font-weight: 600; margin: 3%">Change Password</p>
+                    @*@await Component.InvokeAsync(typeof(AccountProfilePasswordManagementGroupViewComponent))*@
                 </abp-tab>
             </abp-tabs>
         </abp-card-body>

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+
 namespace Collabed.JobPortal.Web.Pages.Account;
 
 public class ManageModel : Volo.Abp.Account.Web.Pages.Account.AccountPageModel
@@ -48,8 +49,8 @@ public class ManageModel : Volo.Abp.Account.Web.Pages.Account.AccountPageModel
         {
             IndividualAccountModel = ObjectMapper.Map<ProfileDto, IndividualAccountModel>(user);
             var userProfile = await BmtAccountAppService.GetUserProfileByIdAsync(user.Id);
-            IndividualAccountModel.PostCode = userProfile.PostCode;
-            IndividualAccountModel.CvFileName = userProfile.CvFileName;
+            IndividualAccountModel.PostCode = userProfile?.PostCode;
+            IndividualAccountModel.CvFileName = userProfile?.CvFileName;
         }
         else
         {

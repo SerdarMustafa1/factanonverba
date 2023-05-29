@@ -1,17 +1,67 @@
 ﻿@using Volo.Abp.Account.Localization
 @using Volo.Abp.Users
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Collabed.JobPortal.Web.Pages.Shared.Components.PassInput
+@using Collabed.JobPortal.Web.Pages.Account;
 @inject IHtmlLocalizer<AccountResource> L
 @inject ICurrentUser CurrentUser
 @model Collabed.JobPortal.Web.Pages.Account.Components.ProfileManagementGroup.Password.AccountProfilePasswordManagementGroupViewComponent.ChangePasswordInfoModel
+<div id="passwordChangedAlertId" class="alert alert-success align-items-center" role="alert" style="display:none">
+    @*<i class="bi bi-check-circle"></i>*@
+    <div class="btn btn-sm btn-success success-btn">
+        <span>Success</span>
+    </div>
+    <div class="btn-success-txt">
+        Password has been changed successfully!
+    </div>
+</div>
+<div style="margin-inline: 4%;" class="change-password">
+    <p class="text-18" style="font-weight:600">Change Password</p>
+    <ul class="text-16">
+        <li>Your new password must be different from previous passwords used.</li>
+        <li>Password must contain 8 or more characters with a mix of letters, numbers and symbols.</li>
+    </ul>
 
-<h4>@L["ChangePassword"]</h4><hr/>
-<form id="ChangePasswordForm">
-    @if (!Model.HideOldPasswordInput)
+    @if (!Model.IsExternalLogin)
     {
-        <abp-input asp-for="CurrentPassword"/>
+        <div>
+            <form method="post" id="ChangePasswordForm" class="change-password">
+                @await Component.InvokeAsync("PassInput", new PassInputViewModel(){ InputType = "password", OnKeyUp="validateCurrentPassword(); validateForm()", PropertyName = nameof(Model.CurrentPassword), HtmlTitle=Model.CurrentPassword,
+            Label = "Current Password *", PrependIcon = "bi bi-lock", AppendIcon = "bi bi-exclamation-circle", IsPassword = true})
+                <br>
+                @await Component.InvokeAsync("PassInput", new PassInputViewModel(){ InputType = "password", OnKeyUp="validatePassword(true); validateForm()", PropertyName = nameof(Model.Password), HtmlTitle=Model.Password,
+            Label = "Password *", PrependIcon = "bi bi-lock", AppendIcon = "bi bi-exclamation-circle", IsPassword = true})
+                <div>
+                    <p id="hintParagraph">Your password must contain:</p>
+                    <p>
+                        <i class="bi bi-check2-circle" id="caseIcon"></i><span id="caseHint">Uppercase and lowercase letters</span><br />
+                        <i class="bi bi-check2-circle" id="lengthIcon"></i><span id="lengthHint">At least 8 characters</span><br />
+                        <i class="bi bi-check2-circle" id="nonAlphanumericIcon"></i><span id="nonAlphanumericParagraph">A number and a symbol</span>
+                    </p>
+                </div>
+                @await Component.InvokeAsync("PassInput", new PassInputViewModel(){ InputType = "password", PropertyName = nameof(Model.ConfirmPassword), HtmlTitle=Model.ConfirmPassword,
+            OnKeyUp = "validateConfirmPassword(true); validateForm()", Label = "Confirm New Password *", PrependIcon = "bi bi-lock", AppendIcon = "bi bi-exclamation-circle", IsPassword = true})
+@*                <div>
+                    <abp-button button-type="Primary" type="submit" id="ChangePasswordBtn" class="btn-lg mt-4" style="width:100%;" disabled="true">Update Password</abp-button>
+                </div>*@
+                <div class="row" style="margin-top: 3%;">
+                    <div class="offset-9 col-3" style="text-align: right; margin-bottom: 3%">
+                        <abp-button id="ChangePasswordBtn" type="submit" button-type="Primary" disabled="true" text="Update Password" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div style="width: 100%; height: 15px; border-bottom: 1px solid #c5c6c8; text-align: center; margin-bottom: 3%">
+@*            <span style="font-size: 14px; background-color: #FAFAFA; color: #667085; padding: 0 10px;">
+            </span>*@
+        </div>
     }
-    <abp-input asp-for="NewPassword"/>
-    <abp-input asp-for="NewPasswordConfirm"/>
-    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value"/>
-</form>
+    <p class="text-18" style="font-weight:600">Delete My Account</p>
+    <p class="text-16">If you decide to delete your account, we want to make sure that you are aware that this action is permanent and cannot be undone. Deleting your account will erase all of your data, including all content associated to your account.</p>
+    <p class="text-16">Before you proceed, we encourage you to review our <a href="#">terms & conditions</a> and <a href="#">privacy policy</a> to ensure that you fully understand the implications of deleting your account. If you still wish to proceed with the deletion, please click on the delete account button and follow the prompts.</p>
+    <div class="row">
+        <div class="offset-9 col-3" style="text-align: right; margin-bottom: 3%">
+            <abp-button type="button" button-type="Primary" onclick="onMyAccountDelete(); return false;" text="Delete Account" />
+        </div>
+    </div>
+</div>

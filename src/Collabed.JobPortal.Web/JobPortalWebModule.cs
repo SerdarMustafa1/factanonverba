@@ -369,6 +369,12 @@ public class JobPortalWebModule : AbpModule
                         configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Password/Default.js");
                         configuration.AddFiles("/Pages/Account/Manage.js");
                     });
+            options.StyleBundles
+                .Configure(typeof(ManageModel).FullName,
+                    configuration =>
+                    {
+                        configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Password/password-fields.css");
+                    });
         });
     }
 }

@@ -1,0 +1,21 @@
+﻿@page
+@model Collabed.JobPortal.Web.Pages.Account.Components.ProfileManagementGroup.Password.DeleteMyAccountModal
+@{
+    Layout = null;
+}
+<form method="post" data-check-form-on-close="false" action="@Url.Page("/Account/Components/ProfileManagementGroup/Password/DeleteMyAccountModal")">
+    <abp-modal>
+        <abp-modal-header><h5 class="modal-title" style="font-weight:600; font-size:20px">Delete My Account</h5></abp-modal-header>
+        <abp-modal-body>
+            <p>
+                Deleting your account is permanent and irreversible. All your data will be erased, and you won't be able to access your account or content again. 
+                <br />
+                Are you sure you want to proceed with deleting your account?
+            </p>
+        </abp-modal-body>
+        <abp-modal-footer>
+            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+            <button class="btn btn-primary" data-busy-text="Deleting" type="submit">Confirm</button>
+        </abp-modal-footer>
+    </abp-modal>
+</form>

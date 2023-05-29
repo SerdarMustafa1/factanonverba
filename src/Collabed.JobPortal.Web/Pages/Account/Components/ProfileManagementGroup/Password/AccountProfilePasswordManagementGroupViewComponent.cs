@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Account;
@@ -35,24 +36,27 @@ public class AccountProfilePasswordManagementGroupViewComponent : AbpViewCompone
     {
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-        [Display(Name = "DisplayName:CurrentPassword")]
+        [Display(Name = "Current Password")]
         [DataType(DataType.Password)]
         [DisableAuditing]
         public string CurrentPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " ")]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
         [Display(Name = "DisplayName:NewPassword")]
         [DataType(DataType.Password)]
         [DisableAuditing]
-        public string NewPassword { get; set; }
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])(?=.*\d).{8,}$", ErrorMessage = " ")]
+        public string Password { get; set; }
 
-        [Required]
-        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-        [Display(Name = "DisplayName:NewPasswordConfirm")]
+        [Required(ErrorMessage = "Your passwords don't match")]
+        [DisplayName("Confirm Password")]
         [DataType(DataType.Password)]
+        [Compare(nameof(Password), ErrorMessage = "Passwords don't match each other")]
         [DisableAuditing]
-        public string NewPasswordConfirm { get; set; }
+        public string ConfirmPassword { get; set; }
+
+        public bool IsExternalLogin { get; set; }
 
         public bool HideOldPasswordInput { get; set; }
     }
