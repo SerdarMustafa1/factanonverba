@@ -36,8 +36,13 @@
     left: 100%; 
 }
 
-.nav-link.active {
+.nav-pills .nav-link.active {
     background-color: #c8d9f1 !important;
+}
+
+.dropdown-item:active {
+    background-color: #e9ecef !important;
+    color: #1e2125 !important;
 }
 
 .card-header .btn {
