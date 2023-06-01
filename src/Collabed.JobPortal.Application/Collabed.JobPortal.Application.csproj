@@ -13,10 +13,12 @@
     <None Remove="Account\Emailing\Templates\ApplicationConfirmation.tpl" />
     <None Remove="Account\Emailing\Templates\BmtPasswordResetLink.tpl" />
     <None Remove="Account\Emailing\Templates\ConfirmEmail.tpl" />
+    <None Remove="Account\Emailing\Templates\NativeApplication.tpl" />
     <None Remove="Account\Emailing\Templates\ThirdPartyApplication.tpl" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Account\Emailing\Templates\NativeApplication.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\ApplicationConfirmation.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\BmtPasswordResetLink.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\ThirdPartyApplication.tpl" />

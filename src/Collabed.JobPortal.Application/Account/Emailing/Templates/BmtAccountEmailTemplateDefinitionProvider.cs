@@ -37,6 +37,13 @@ namespace Collabed.JobPortal.Account.Emailing.Templates
                     localizationResource: typeof(AccountResource)
                 ).WithVirtualFilePath("/Account/Emailing/Templates/ApplicationConfirmation.tpl", true)
             );
+            context.Add(
+                new TemplateDefinition(
+                    BmtAccountEmailTemplates.NativeApplication,
+                    layout: StandardEmailTemplates.Layout,
+                    localizationResource: typeof(AccountResource)
+                ).WithVirtualFilePath("/Account/Emailing/Templates/NativeApplication.tpl", true)
+            );
         }
     }
 }

@@ -103,7 +103,7 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             .ForMember(d => d.ScreeningQuestions, op => op.Ignore())
             .ForMember(d => d.JobLocation, op => op.Ignore())
             .IgnoreAuditedObjectProperties();
-        CreateMap<ApplicationDto, ThirdPartyJobApplicationDto>()
+        CreateMap<ApplicationDto, ApplicationEmailDto>()
             .ForMember(d => d.CompanyName, op => op.Ignore())
             .ForMember(d => d.JobPosition, op => op.Ignore());
         CreateMap<SupportingDocument, SupportingDocumentDto>();

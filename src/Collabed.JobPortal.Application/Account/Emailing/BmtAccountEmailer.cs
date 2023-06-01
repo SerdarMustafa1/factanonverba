@@ -85,25 +85,24 @@ namespace Collabed.JobPortal.Account.Emailing
             await EmailSender.SendAsync(mailMessage);
         }
 
-        public async Task SendApplicationEmailToThirdPartyAsync(ThirdPartyJobApplicationDto jobApplicationDto, string aplitrakEmailAddress)
+        public async Task SendApplicationEmailToCompanyAsync(ApplicationEmailDto jobApplicationDto, bool isNative)
         {
             var screeningQuestions = ConvertScreeningQuestions(jobApplicationDto.ScreeningQuestions);
 
-            var emailContent = await TemplateRenderer.RenderAsync(
-                BmtAccountEmailTemplates.ThirdPartyApplication, new
-                {
-                    firstname = jobApplicationDto.FirstName,
-                    lastname = jobApplicationDto.LastName,
-                    phonenumber = jobApplicationDto.PhoneNumber,
-                    postcode = jobApplicationDto.PostCode,
-                    companyname = jobApplicationDto.CompanyName,
-                    jobposition = jobApplicationDto.JobPosition,
-                    cvfilename = jobApplicationDto.CvFileName,
-                    coverletter = jobApplicationDto.CoverLetter,
-                    portfoliolink = jobApplicationDto.PortfolioLink,
-                    email = jobApplicationDto.Email,
-                    questionsandanswers = screeningQuestions
-                });
+            var emailContent = await TemplateRenderer.RenderAsync(isNative ? BmtAccountEmailTemplates.NativeApplication : BmtAccountEmailTemplates.ThirdPartyApplication, new
+            {
+                firstname = jobApplicationDto.FirstName,
+                lastname = jobApplicationDto.LastName,
+                phonenumber = jobApplicationDto.PhoneNumber,
+                postcode = jobApplicationDto.PostCode,
+                companyname = jobApplicationDto.CompanyName,
+                jobposition = jobApplicationDto.JobPosition,
+                cvfilename = jobApplicationDto.CvFileName,
+                coverletter = jobApplicationDto.CoverLetter,
+                portfoliolink = jobApplicationDto.PortfolioLink,
+                email = jobApplicationDto.Email,
+                questionsandanswers = screeningQuestions
+            });
 
             var mailMessage = new MailMessage
             {
@@ -112,7 +111,7 @@ namespace Collabed.JobPortal.Account.Emailing
                 IsBodyHtml = true,
                 Subject = EmailTemplates.JobApplicationSubject,
             };
-            mailMessage.To.Add(aplitrakEmailAddress);
+            mailMessage.To.Add(jobApplicationDto.CompanyEmail);
             mailMessage.ReplyToList.Add(new MailAddress(jobApplicationDto.Email, $"{jobApplicationDto.FirstName} {jobApplicationDto.LastName}"));
             if (!string.IsNullOrWhiteSpace(jobApplicationDto.CvBlobName))
             {

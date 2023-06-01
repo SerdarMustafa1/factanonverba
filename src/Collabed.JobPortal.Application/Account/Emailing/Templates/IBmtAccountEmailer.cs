@@ -8,7 +8,7 @@ namespace Collabed.JobPortal.Account.Emailing.Templates
     public interface IBmtAccountEmailer : IAccountEmailer
     {
         Task SendEmailVerificationRequestAsync(IdentityUser user, string callbackUrl);
-        Task SendApplicationEmailToThirdPartyAsync(ThirdPartyJobApplicationDto jobApplicationDto, string aplitrakEmailAddress);
+        Task SendApplicationEmailToCompanyAsync(ApplicationEmailDto jobApplicationDto, bool isNative);
         Task SendApplicationConfirmationAsync(ApplicationConfirmationDto application);
     }
 }

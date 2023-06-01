@@ -305,7 +305,7 @@ namespace JobPortal.Jobs
             var categorisedJobs = new List<CategorisedJobsDto>();
             foreach (var category in categories)
             {
-                var jobs = await _jobRepository.CountAsync(x => x.CategoryId == category.Id);
+                var jobs = await _jobRepository.CountAsync(x => x.CategoryId == category.Id && x.ApplicationDeadline > DateTime.UtcNow);
                 categorisedJobs.Add(new CategorisedJobsDto { Id = category.Id, JobsCount = jobs, Name = category.Name });
             }
 
@@ -441,25 +441,33 @@ namespace JobPortal.Jobs
             var screeningAnswers = application.ScreeningQuestions.Any() ? application.ScreeningQuestions.Select(x => (x.Id, x.Answer)) : default;
             job.AddApplicant(application.UserId, blobFileName, cvContentType, cvFileName, application.PortfolioLink, application.CoverLetter, screeningAnswers);
 
-            if ((job.JobOrigin == JobOrigin.Idibu && string.IsNullOrEmpty(job.ApplicationUrl)) || job.JobOrigin == JobOrigin.Broadbean)
-            {
-                await ProcessThirdPartyApplication(application, job, blobFileName);
-            }
-
             await _jobRepository.UpdateAsync(job);
 
-            var companyName = string.Empty;
+            await ProcessApplicationEmailsAsync(application, job, blobFileName);
+        }
 
-            if (job.OrganisationId.HasValue)
+        private async Task ProcessApplicationEmailsAsync(ApplicationDto application, Job job, string blobFileName)
+        {
+            var emailApplication = ObjectMapper.Map<ApplicationDto, ApplicationEmailDto>(application);
+            emailApplication.JobPosition = job.Title;
+            emailApplication.CvBlobName = blobFileName;
+
+            if (job.OrganisationId.HasValue && job.JobOrigin == JobOrigin.Native)
             {
                 var organisation = await _organisationRepository.FindAsync(job.OrganisationId.Value);
                 if (organisation == null)
                     throw new BusinessException(message: "Failed to find the organisation that posted a job");
-                companyName = organisation.Name;
+
+                emailApplication.CompanyName = organisation.Name;
+                emailApplication.CompanyEmail = organisation.EmailAddress;
+                await _bmtAccountEmailer.SendApplicationEmailToCompanyAsync(emailApplication, true);
             }
-            else
+
+            if ((job.JobOrigin == JobOrigin.Idibu && string.IsNullOrEmpty(job.ApplicationUrl)) || job.JobOrigin == JobOrigin.Broadbean)
             {
-                companyName = job.CompanyName;
+                emailApplication.CompanyName = job.CompanyName;
+                emailApplication.CompanyEmail = job.ApplicationEmail;
+                await _bmtAccountEmailer.SendApplicationEmailToCompanyAsync(emailApplication, false);
             }
 
             await _bmtAccountEmailer.SendApplicationConfirmationAsync(new ApplicationConfirmationDto
@@ -467,7 +475,7 @@ namespace JobPortal.Jobs
                 FirstName= application.FirstName,
                 LastName= application.LastName,
                 Email = application.Email,
-                CompanyName = companyName,
+                CompanyName = emailApplication.CompanyName,
                 JobReference = job.Reference,
                 JobTitle = job.Title
             });
@@ -563,15 +571,6 @@ namespace JobPortal.Jobs
             user.SetPhoneNumber(application.PhoneNumber, false);
 
             await _userRepository.UpdateAsync(user);
-        }
-
-        private async Task ProcessThirdPartyApplication(ApplicationDto application, Job job, string blobFileName)
-        {
-            var thirdPartyApplication = ObjectMapper.Map<ApplicationDto, ThirdPartyJobApplicationDto>(application);
-            thirdPartyApplication.JobPosition = job.Title;
-            thirdPartyApplication.CompanyName = job.CompanyName;
-            thirdPartyApplication.CvBlobName = blobFileName;
-            await _bmtAccountEmailer.SendApplicationEmailToThirdPartyAsync(thirdPartyApplication, job.ApplicationEmail);
         }
 
         private async Task<string> UpdateJobAsync(ExternalJobRequest externalJobRequest, string message, string jobReference)
