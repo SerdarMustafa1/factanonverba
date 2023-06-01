@@ -329,7 +329,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="input-group" style="margin-top:2%;">
-                                    <input class="form-control" type="number" placeholder="Minimum" asp-for="SalaryMinimum" name="SalaryMinimum"/>
+                                    <input class="form-control" type="number" placeholder="Minimum" asp-for="SalaryMinimum" name="SalaryMinimum" id="salaryMinId"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="border-bottom-left-radius: 0; border-top-left-radius: 0"><i class="bi bi-currency-pound" style="font-size:16px; font-weight:600;"></i></span>
                                     </div>
@@ -337,7 +337,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="input-group" style="margin-top:2%;">
-                                    <input class="form-control" type="number" placeholder="Maximum" asp-for="SalaryMaximum" />
+                                    <input class="form-control" type="number" placeholder="Maximum" asp-for="SalaryMaximum" id="salaryMaxId" />
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="border-bottom-left-radius: 0; border-top-left-radius: 0"><i class="bi bi-currency-pound" style="font-size:16px; font-weight:600;"></i></span>
                                     </div>
@@ -347,7 +347,7 @@
                         <hr class="horizontal-line" />
                         <div class="form-check">
                             <input class="form-check-input" asp-for="IsSalaryNegotiable" type="checkbox" id="isSalaryNegotiableCheckbox">
-                            <label class="form-check-label" for="isSalaryNegotiableCheckbox"> Salary to be confirmed </label>
+                            <label class="form-check-label" for="isSalaryNegotiableCheckbox"> Salary is negotiable </label>
                         </div>
                     </div>
                     <hr class="horizontal-line" />

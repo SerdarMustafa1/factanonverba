@@ -28,6 +28,20 @@
     quill.setContents(delta);
     assignQuillToInput();
 
+    const checkbox = document.getElementById('isSalaryNegotiableCheckbox')
+
+    checkbox.addEventListener('change', (event) => {
+        if (event.currentTarget.checked) {
+            $('#SalaryPeriodId').val('')
+            $('#salaryMinId').val('');
+            $('#salaryMinId').prop('disabled', true);
+            $('#salaryMaxId').val('');
+            $('#salaryMaxId').prop('disabled', true);
+        } else {
+            $('#salaryMinId').prop('disabled', false);
+            $('#salaryMaxId').prop('disabled', false);
+        }
+    })
 });
 let quill = undefined;
 

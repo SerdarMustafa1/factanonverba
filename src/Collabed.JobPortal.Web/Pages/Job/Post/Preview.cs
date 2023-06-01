@@ -240,8 +240,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                 PaymentOption = SalaryPeriodId != null ? (SalaryPeriod)SalaryPeriodId : null,
                 PositionsAvailable = PositionsAvailable,
                 SalaryCurrency = JobPortal.Job.CurrencyType.GBP,
-                SalaryMaximum = SalaryMaximum != null ? (float)SalaryMaximum : null,
-                SalaryMinimum = SalaryMinimum != null ? (float)SalaryMinimum : null,
                 SalaryOtherBenefits = OtherCompanyBenefits,
                 Skills = Skills,
                 StartDate = StartDate,
@@ -252,6 +250,11 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                 Title = JobTitle,
                 IsNetZeroCompliant = IsNetZeroCompliant
             };
+            if (!IsSalaryNegotiable.HasValue || !IsSalaryNegotiable.Value)
+            {
+                createdJob.SalaryMaximum = SalaryMaximum != null ? SalaryMaximum : null;
+                createdJob.SalaryMinimum = SalaryMinimum != null ? SalaryMinimum : null;
+            }
             // HACK: Implement Suporting Documents appropriatelly and add Screening questions 
             await _jobAppService.CreateAsync(createdJob);
             return RedirectToPage("/Index");
