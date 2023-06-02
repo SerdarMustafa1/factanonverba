@@ -508,13 +508,13 @@ namespace JobPortal.Jobs
                 switch (command)
                 {
                     case CommandType.add:
-                        message = await InsertNewJobAsync(externalJobRequest, jobOrigin, message, jobReference);
+                        message = await InsertNewJobAsync(externalJobRequest, jobOrigin, jobReference);
                         break;
                     case CommandType.update:
-                        message = await UpdateJobAsync(externalJobRequest, message, jobReference);
+                        message = await UpdateJobAsync(externalJobRequest, jobOrigin, jobReference);
                         break;
                     case CommandType.delete:
-                        await DeleteJobAsync(jobReference);
+                        await DeleteJobAsync(jobReference, jobOrigin);
                         message = $"Deleted a job with reference {jobReference}";
                         break;
                 }
@@ -545,12 +545,16 @@ namespace JobPortal.Jobs
             }
         }
 
-        private async Task DeleteJobAsync(string jobReference)
+        private async Task DeleteJobAsync(string jobReference, JobOrigin jobOrigin)
         {
             var job = await _jobRepository.GetByReferenceAsync(jobReference);
             if (job == null)
             {
                 throw new BusinessException(message: "The job has already been deleted.");
+            }
+            if (job.JobOrigin != jobOrigin)
+            {
+                throw new BusinessException(message: "Not authorized to delete that job.");
             }
             await _jobApplicantsRepository.DeleteAsync(x => x.JobId == job.Id);
             await _jobRepository.DeleteByReferenceAsync(jobReference);
@@ -573,12 +577,16 @@ namespace JobPortal.Jobs
             await _userRepository.UpdateAsync(user);
         }
 
-        private async Task<string> UpdateJobAsync(ExternalJobRequest externalJobRequest, string message, string jobReference)
+        private async Task<string> UpdateJobAsync(ExternalJobRequest externalJobRequest, JobOrigin jobOrigin, string jobReference)
         {
             var existingJob = await _jobRepository.GetByReferenceAsync(jobReference);
             if (existingJob == null)
             {
                 throw new BusinessException(message: $"The job with reference '{jobReference}' could not be found.");
+            }
+            if (existingJob.JobOrigin != jobOrigin)
+            {
+                throw new BusinessException(message: "Not authorized to update that job.");
             }
             ObjectMapper.Map<ExternalJobRequest, Job>(externalJobRequest, existingJob);
             _jobManager.ConvertSalaryRates(existingJob);
@@ -587,9 +595,7 @@ namespace JobPortal.Jobs
             await DeleteScreeningQuestionsAsync(existingJob.Id);
             existingJob.ScreeningQuestions = _jobManager.CreateScreeningQuestions(ConvertScreeningQuestions(externalJobRequest.ScreeningQuestions), existingJob.Id);
             await _jobRepository.UpdateAsync(existingJob);
-            message = $"Updated a job with reference {jobReference}";
-
-            return message;
+            return $"Updated a job with reference {jobReference}";
         }
 
         private async Task DeleteScreeningQuestionsAsync(Guid jobId)
@@ -599,7 +605,7 @@ namespace JobPortal.Jobs
                 await _screeningQuestionRepository.DeleteManyAsync(screeningQuestions);
         }
 
-        private async Task<string> InsertNewJobAsync(ExternalJobRequest externalJobRequest, JobOrigin jobOrigin, string message, string jobReference)
+        private async Task<string> InsertNewJobAsync(ExternalJobRequest externalJobRequest, JobOrigin jobOrigin, string jobReference)
         {
             await CheckIfJobReferenceExistsAsync(externalJobRequest.Reference);
             // TODO: Implement post MVP, once business requirements are specified
@@ -619,9 +625,7 @@ namespace JobPortal.Jobs
             }
             await _jobRepository.InsertAsync(newJob);
 
-            message = $"Posted a new job with reference {jobReference}";
-
-            return message;
+            return $"Posted a new job with reference {jobReference}";
         }
 
         private static IEnumerable<(string, bool?)> ConvertScreeningQuestions(IEnumerable<Collabed.JobPortal.Jobs.ExtScreeningQuestion> screeningQuestions)
@@ -695,8 +699,21 @@ namespace JobPortal.Jobs
         private void ValidateExternalRequestDataFormat(ExternalJobRequest jobRequest)
         {
             var validationErrors = new List<string>();
-            if (!Enum.TryParse(typeof(CommandType), jobRequest.Command, true, out _))
+            if (!Enum.TryParse(typeof(CommandType), jobRequest.Command, true, out var commantType))
                 validationErrors.Add("Invalid command value");
+            else
+            {
+                var command = Enum.Parse<CommandType>(jobRequest.Command, true);
+                if (command == CommandType.delete)
+                {
+                    if (string.IsNullOrEmpty(jobRequest.Reference))
+                    {
+                        validationErrors.Add("Job reference cannot be empty");
+                        throw new ArgumentException(string.Join(",", validationErrors));
+                    }
+                    return;
+                }
+            }
             if (!Enum.TryParse(typeof(ContractType), jobRequest.Type, true, out _))
                 validationErrors.Add("Invalid job_type value");
             var salaryPeriods = new string[] { "hour", "day", "week", "month", "annum" };
