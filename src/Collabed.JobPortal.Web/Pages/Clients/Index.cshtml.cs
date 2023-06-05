@@ -64,6 +64,8 @@ namespace Collabed.JobPortal.Web.Pages.Clients
                 //Members = x.Members != null && x.Members.Any() ? x.Members.Select(x => x.UserId).ToList() : new List<Guid>()
                 UserId = x.Members != null && x.Members.Any() ? x.Members.Select(x => x.UserId).FirstOrDefault() : default
             }).ToList();
+
+            TotalCount = (int)await _organisationRepository.GetCountAsync();
         }
 
         private bool GetPermissionStatus(ICollection<OrganisationMember> members)

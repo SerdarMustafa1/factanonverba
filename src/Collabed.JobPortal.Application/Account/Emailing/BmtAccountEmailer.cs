@@ -80,7 +80,15 @@ namespace Collabed.JobPortal.Account.Emailing
                 IsBodyHtml = true,
                 Subject = EmailTemplates.ApplicationConfirmationSubject + application.JobTitle,
             };
-            mailMessage.To.Add(application.Email);
+            // TODO: Remove post MVP
+            if (application.Email.EndsWith("test.com"))
+            {
+                mailMessage.To.Add("thomas.george@broadlight.io");
+            }
+            else
+            {
+                mailMessage.To.Add(application.Email);
+            }
 
             await EmailSender.SendAsync(mailMessage);
         }
@@ -111,7 +119,15 @@ namespace Collabed.JobPortal.Account.Emailing
                 IsBodyHtml = true,
                 Subject = EmailTemplates.JobApplicationSubject,
             };
-            mailMessage.To.Add(jobApplicationDto.CompanyEmail);
+            // TODO: Remove post MVP
+            if (jobApplicationDto.CompanyEmail.EndsWith("test.com"))
+            {
+                mailMessage.To.Add("thomas.george@broadlight.io");
+            }
+            else
+            {
+                mailMessage.To.Add(jobApplicationDto.CompanyEmail);
+            }
             mailMessage.ReplyToList.Add(new MailAddress(jobApplicationDto.Email, $"{jobApplicationDto.FirstName} {jobApplicationDto.LastName}"));
             if (!string.IsNullOrWhiteSpace(jobApplicationDto.CvBlobName))
             {

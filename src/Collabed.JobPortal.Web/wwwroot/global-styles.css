@@ -310,6 +310,14 @@ label.text-14 {
     border-radius: 4px;
 }
 
+.clientsPaginationContainer {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .ql-toolbar {
     border-color: #CED4DA;
     border-top-right-radius: 6px;
