@@ -92,7 +92,7 @@ public class JobPortalApplicationModule : AbpModule
                     azure.CreateContainerIfNotExists = true;
                 });
             });
-            options.Containers.Configure<CvContainer>(container =>
+            options.Containers.Configure<JobPortalContainer>(container =>
             {
                 container.UseAzure(azure =>
                 {

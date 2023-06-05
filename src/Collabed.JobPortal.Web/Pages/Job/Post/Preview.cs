@@ -256,8 +256,9 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
                 createdJob.SalaryMinimum = SalaryMinimum != null ? SalaryMinimum : null;
             }
             // HACK: Implement Suporting Documents appropriatelly and add Screening questions 
-            await _jobAppService.CreateAsync(createdJob);
-            return RedirectToPage("/Index");
+            var job = await _jobAppService.CreateAsync(createdJob);
+
+            return RedirectToPage($"/Job?Reference={job.Reference}");
         }
 
         private ICollection<int> GetRequiredDocuments()

@@ -7,9 +7,9 @@ namespace Collabed.JobPortal.Files
 {
     public class FileAppService : ApplicationService, IFileAppService
     {
-        private readonly IBlobContainer<CvContainer> _fileContainer;
+        private readonly IBlobContainer<JobPortalContainer> _fileContainer;
 
-        public FileAppService(IBlobContainer<CvContainer> fileContainer)
+        public FileAppService(IBlobContainer<JobPortalContainer> fileContainer)
         {
             _fileContainer = fileContainer;
         }

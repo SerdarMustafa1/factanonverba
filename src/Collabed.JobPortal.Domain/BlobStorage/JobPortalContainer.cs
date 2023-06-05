@@ -2,8 +2,8 @@
 
 namespace Collabed.JobPortal.BlobStorage
 {
-    [BlobContainerName("cv-container")]
-    public class CvContainer
+    [BlobContainerName("jobportalblobs")]
+    public class JobPortalContainer
     {
     }
 }
