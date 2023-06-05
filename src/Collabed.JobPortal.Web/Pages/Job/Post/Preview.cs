@@ -14,7 +14,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Post
 {
-    [Authorize(BmtPermissions.ManageJobs)]
+    [Authorize(BmtPermissions.PostJobs)]
     public class PreviewModel : AbpPageModel
     {
         private readonly IJobAppService _jobAppService;

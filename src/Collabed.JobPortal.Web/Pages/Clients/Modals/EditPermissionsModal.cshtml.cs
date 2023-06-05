@@ -41,7 +41,7 @@ namespace Collabed.JobPortal.Web.Pages.Clients.Modals
             //var user = await _userManager.GetByIdAsync(UserId);
             //var roles = user.Roles.Any(x => x.);
             //await _userManager.AddToRoleAsync(user, RoleNames.JobManager);
-            await _permissionManager.SetForUserAsync(UserId, BmtPermissions.PostJobPermission, JobPostingPermission);
+            await _permissionManager.SetForUserAsync(UserId, BmtPermissions.PostJobs, JobPostingPermission);
 
             return new ObjectResult(JobPostingPermission);
         }

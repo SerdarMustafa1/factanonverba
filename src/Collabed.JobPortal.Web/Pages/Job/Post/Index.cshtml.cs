@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Post
 {
-    [Authorize(BmtPermissions.ManageJobs)]
+    [Authorize(BmtPermissions.PostJobs)]
     public class JobAdInformationModel : PageModel
     {
         public IEnumerable<SelectListItem> JobCategories { get; set; }

@@ -75,7 +75,7 @@ namespace Collabed.JobPortal.Web.Pages.Clients
 
             var permissions = _permissionManager.GetAllForUserAsync(userId).Result;
 
-            if (permissions.Any(x => x.Name == BmtPermissions.PostJobPermission && x.IsGranted))
+            if (permissions.Any(x => x.Name == BmtPermissions.PostJobs && x.IsGranted))
             {
                 return true;
             }

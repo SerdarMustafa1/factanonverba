@@ -10,7 +10,7 @@ public class JobPortalPermissionDefinitionProvider : PermissionDefinitionProvide
     {
         var myGroup = context.AddGroup(BmtPermissions.GroupName);
         //Define your own permissions here. Example:
-        myGroup.AddPermission(BmtPermissions.PostJobPermission, L("Permission:PostAJob"));
+        myGroup.AddPermission(BmtPermissions.PostJobs, L("Permission:PostAJob"));
         myGroup.AddPermission(BmtPermissions.ManageJobs, L("Permission:ManageJobs"));
         myGroup.AddPermission(BmtPermissions.ApplyForJobs, L("Permission:ApplyForJobs"));
         myGroup.AddPermission(BmtPermissions.ViewApplicantDashboard, L("Permission:ViewApplicantDashboard"));

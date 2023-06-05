@@ -312,7 +312,7 @@ namespace JobPortal.Jobs
             return categorisedJobs;
         }
 
-        [Authorize(BmtPermissions.ManageJobs)]
+        [Authorize(BmtPermissions.PostJobs)]
         public async Task<JobDto> CreateAsync(CreateJobDto input)
         {
             var organisationId = ExtractOrganisationId();
