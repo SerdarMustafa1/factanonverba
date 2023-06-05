@@ -258,7 +258,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
             // HACK: Implement Suporting Documents appropriatelly and add Screening questions 
             var job = await _jobAppService.CreateAsync(createdJob);
 
-            return RedirectToPage($"/Job?Reference={job.Reference}");
+            return RedirectToPage($"../Index", new { job.Reference });
         }
 
         private ICollection<int> GetRequiredDocuments()
