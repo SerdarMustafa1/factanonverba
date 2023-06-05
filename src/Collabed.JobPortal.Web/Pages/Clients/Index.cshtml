@@ -31,6 +31,10 @@
             @foreach (var client in Model.Clients)
             {
                 <tr id="@client.CompanyId">
+                    @{
+                        var permissionId = "permission_"+client.CompanyId;
+                    }
+                    <input type="hidden" asp-for="@client.PermissionStatus" id="@permissionId" />
                     <td scope="Row">@client.CompanyName</td>
                     <td id="@client.UserId">
                         @if(client.PermissionStatus)
@@ -43,7 +47,7 @@
                         }
                         
                     </td>
-                    <td><a href="" onclick="onClientEdit('@client.UserId', '@client.PermissionStatus'); return false;">Edit</a></td>
+                    <td><a href="" onclick="onClientEdit('@client.UserId', '@client.PermissionStatus', '@permissionId'); return false;">Edit</a></td>
                     <td><a href="" onclick="onClientDelete('@client.UserId', '@client.CompanyId', '@client.CompanyName'); return false;">Delete</a></td>
                 </tr>
             }

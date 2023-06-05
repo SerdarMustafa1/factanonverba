@@ -16,19 +16,21 @@ function onClientDelete(userId, companyId, companyName) {
 
 }
 
-function onClientEdit(userId, jobPostingPermission) {
+function onClientEdit(userId, jobPostingPermission, permissionId) {
     var editClientModal = new abp.ModalManager('/Clients/Modals/EditPermissionsModal');
 
     editClientModal.onResult(function () {
         if ($('#JobPostingPermission').prop('checked')) {
             document.getElementById(userId).innerText = "Post a Job / ON";
+            $('#' + permissionId).val("True");
         } else {
             document.getElementById(userId).innerText = "Post a Job / OFF";
+            $('#' + permissionId).val("False");
         }
     });
     editClientModal.open({
         userId: userId,
-        jobPostingPermission: jobPostingPermission
+        jobPostingPermission: $('#' + permissionId).val()
     });
 
 }
