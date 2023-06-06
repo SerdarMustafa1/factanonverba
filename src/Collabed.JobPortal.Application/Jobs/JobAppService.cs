@@ -434,7 +434,9 @@ namespace JobPortal.Jobs
             {
                 blobFileName = userProfile.CvBlobName;
                 cvContentType = userProfile.CvContentType;
+                application.CvContentType = userProfile.CvContentType;
                 cvFileName = userProfile.CvFileName;
+                application.CvFileName = userProfile.CvFileName;
             }
 
             await UpdateUserProfile(userProfile, application, blobFileName);

@@ -94,7 +94,7 @@ namespace Collabed.JobPortal.Web.Pages.Account
 
             Debug.Assert(user != null, nameof(user) + " != null");
 
-            return Redirect(string.IsNullOrEmpty(ReturnUrl) ? "~/" : ReturnUrl);
+            return Redirect(string.IsNullOrEmpty(ReturnUrl) ? "~/JobDashboard" : ReturnUrl);
         }
 
         public override async Task<IActionResult> OnPostExternalLogin(string provider)
