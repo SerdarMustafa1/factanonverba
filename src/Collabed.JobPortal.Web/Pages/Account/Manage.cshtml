@@ -53,7 +53,14 @@
                     </abp-tab>
                 }
                 <abp-tab title="Change Password">
-                    <p class="text-36" style="font-weight: 600; margin: 3%">Change Password</p>
+                    @if (!Model.IsExternalLogin)
+                    {
+                        <p class="text-36" style="font-weight: 600; margin: 3%">Change Password</p>
+                    }
+                    else
+                    {
+                        <br>
+                    }
                     @await Component.InvokeAsync(typeof(AccountProfilePasswordManagementGroupViewComponent))
                 </abp-tab>
             </abp-tabs>

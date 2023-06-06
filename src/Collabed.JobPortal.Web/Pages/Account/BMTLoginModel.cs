@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -12,6 +13,7 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Validation;
 
 namespace Collabed.JobPortal.Web.Pages.Account
@@ -163,7 +165,7 @@ namespace Collabed.JobPortal.Web.Pages.Account
 
             //TODO: Handle other cases for result!
 
-            var email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email);
+            var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email);
             if (string.IsNullOrWhiteSpace(email))
             {
                 return RedirectToPage("./Register", new
@@ -197,6 +199,34 @@ namespace Collabed.JobPortal.Web.Pages.Account
             });
 
             return RedirectSafely(returnUrl, returnUrlHash);
+        }
+
+        protected override async Task<Volo.Abp.Identity.IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
+        {
+            await IdentityOptions.SetAsync();
+
+            var emailAddress = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+            var user = new Volo.Abp.Identity.IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
+
+            CheckIdentityErrors(await UserManager.CreateAsync(user));
+            CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
+            CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
+            CheckIdentityErrors(await UserManager.AddDefaultRolesAsync(user));
+
+            user.Name = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+            user.Surname = info.Principal.FindFirstValue(ClaimTypes.Surname);
+
+            var phoneNumber = info.Principal.FindFirstValue(AbpClaimTypes.PhoneNumber);
+            if (!phoneNumber.IsNullOrWhiteSpace())
+            {
+                var phoneNumberConfirmed = string.Equals(info.Principal.FindFirstValue(AbpClaimTypes.PhoneNumberVerified), "true", StringComparison.InvariantCultureIgnoreCase);
+                user.SetPhoneNumber(phoneNumber, phoneNumberConfirmed);
+            }
+
+            await UserManager.UpdateAsync(user);
+
+            return user;
         }
 
         protected override async Task ReplaceEmailToUsernameOfInputIfNeeds()

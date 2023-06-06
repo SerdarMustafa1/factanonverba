@@ -27,6 +27,7 @@ public class ManageModel : Volo.Abp.Account.Web.Pages.Account.AccountPageModel
     [HiddenInput]
     [BindProperty]
     public UserType UserType { get; set; }
+    public bool IsExternalLogin { get; set; }
 
     public ManageModel(IUserProfileAppService profileAppService, IBmtAccountAppService bmtAccountAppService, IOrganisationAppService organisationAppService)
     {
@@ -38,6 +39,8 @@ public class ManageModel : Volo.Abp.Account.Web.Pages.Account.AccountPageModel
     public async Task<UserType> GetUserType()
     {
         var user = await ProfileAppService.GetAsync();
+        IsExternalLogin = user.IsExternal;
+
         return user.UserType;
     }
 

@@ -26,7 +26,8 @@ public class AccountProfilePasswordManagementGroupViewComponent : AbpViewCompone
 
         var model = new ChangePasswordInfoModel
         {
-            HideOldPasswordInput = !user.HasPassword
+            HideOldPasswordInput = !user.HasPassword,
+            IsExternalLogin = user.IsExternal
         };
 
         return View("~/Pages/Account/Components/ProfileManagementGroup/Password/Default.cshtml", model);
