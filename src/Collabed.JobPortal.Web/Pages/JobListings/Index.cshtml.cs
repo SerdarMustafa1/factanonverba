@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.PermissionManagement;
 
 namespace Collabed.JobPortal.Web.Pages.JobListings
 {
@@ -16,16 +17,19 @@ namespace Collabed.JobPortal.Web.Pages.JobListings
     public class JobListingsModel : AbpPageModel
     {
         private readonly IJobAppService _jobAppService;
+        private readonly IPermissionManager _permissionManager;
         public int TotalCount { get; set; }
         [BindProperty(SupportsGet = true)]
         public int CurrentPage { get; set; } = 1;
         public int PageSize { get; set; } = 8;
         public int TotalPages => (int)Math.Ceiling(decimal.Divide(TotalCount, PageSize));
         public List<JobListing> JobListings { get; set; }
+        public bool CanPostNewJob { get; set; }
 
-        public JobListingsModel(IJobAppService jobAppService)
+        public JobListingsModel(IJobAppService jobAppService, IPermissionManager permissionManager)
         {
             _jobAppService = jobAppService;
+            _permissionManager = permissionManager;
         }
 
         public async Task OnGetAsync()
@@ -54,6 +58,13 @@ namespace Collabed.JobPortal.Web.Pages.JobListings
                 Title = x.Title
             }).ToList();
             TotalCount = (int)listings.TotalCount;
+
+            var permissions = await _permissionManager.GetAllForUserAsync((Guid)CurrentUser.Id);
+
+            if (permissions.Any(x => x.Name == BmtPermissions.PostJobs && x.IsGranted))
+            {
+                CanPostNewJob = true;
+            }
         }
 
         private Guid ExtractOrganisationId()

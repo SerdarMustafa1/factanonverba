@@ -115,7 +115,7 @@ public class BMTRegisterModel : AccountPageModel
 
             if (UserType == UserType.Organisation)
             {
-                ReturnUrl = "/job/post";
+                ReturnUrl = "/jobdashboard";
             }
 
             if (IsExternalLogin)

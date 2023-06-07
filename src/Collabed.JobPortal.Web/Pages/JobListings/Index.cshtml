@@ -17,9 +17,12 @@
         <div class="col-3" style="font-weight: 600; font-size: 36px;">
             <span>Job Listings</span>
         </div>
-        <div class="offset-7 col-2">
-            <a href="/Job/Post" class="btn btn-primary searchBtn" style="float:right;">New Listing</a>
-        </div>
+        @if (Model.CanPostNewJob)
+        {
+            <div class="offset-7 col-2">
+                <a href="/Job/Post" class="btn btn-primary searchBtn" style="float:right;">New Listing</a>
+            </div>
+        }
     </div>
     <br />
     <table class="table table-bordered">
