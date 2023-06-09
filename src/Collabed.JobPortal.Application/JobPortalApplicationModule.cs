@@ -72,7 +72,7 @@ public class JobPortalApplicationModule : AbpModule
 
     public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        await context.AddBackgroundWorkerAsync<AdzunaJobImportWorker>();
+        await context.AddBackgroundWorkerAsync<NightBackgroundWorker>();
     }
 
     private void ConfigureBlobStoringOptions(ServiceConfigurationContext context)

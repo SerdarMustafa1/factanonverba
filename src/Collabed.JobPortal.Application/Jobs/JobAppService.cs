@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
@@ -126,6 +127,12 @@ namespace JobPortal.Jobs
             {
                 await GetAdzunaJobsAsync(job, "", 5);
             }
+        }
+
+        [RemoteService(IsEnabled = false)]
+        public async Task ReviewJobsAsync()
+        {
+            await _jobRepository.UpdateJobsStatus();
         }
 
         #region Adzuna private methods
@@ -297,6 +304,65 @@ namespace JobPortal.Jobs
             }
 
             return new PagedResultDto<JobDto>(totalCount, ObjectMapper.Map<List<Job>, List<JobDto>>(jobs));
+        }
+
+        public async Task<PagedResultDto<JobSummaryDto>> GetAllListAsync(JobGetListInput input)
+        {
+            var jobs = new List<Job>();
+            int totalCount = 0;
+
+            jobs = await _jobRepository.GetAllJobsByOrganisationIdAsync(input.SearchCriteria, input.Status, input.Sorting, input.SkipCount, input.MaxResultCount, input.OrganisationId.Value);
+            totalCount = (await _jobRepository.GetQueryableAsync())
+                    .Where(x => x.OrganisationId == input.OrganisationId)
+                    .Where(x => string.IsNullOrWhiteSpace(input.SearchCriteria) || x.Title.Contains(input.SearchCriteria))
+                    .Where(x => !input.Status.HasValue || x.Status == input.Status.Value)
+                    .Count();
+            //if (string.IsNullOrWhiteSpace(input.SearchCriteria))
+            //    totalCount = await _jobRepository.CountAsync(x => x.OrganisationId == input.OrganisationId && x.Status == input.Status);
+            //else
+            //    totalCount = await _jobRepository.CountAsync(x => x.OrganisationId == input.OrganisationId && x.Status == input.Status && x.Title.Contains(input.SearchCriteria));
+
+            return new PagedResultDto<JobSummaryDto>(totalCount, ObjectMapper.Map<List<Job>, List<JobSummaryDto>>(jobs));
+        }
+
+        public async Task<StatusedJobsDto> GetStatusedJobsCount(JobGetListInput input)
+        {
+            var statusedJobsDto = new StatusedJobsDto();
+
+            var statuses = (await _jobRepository.GetQueryableAsync())
+                    .Where(x => x.OrganisationId == input.OrganisationId)
+                    .Where(x => string.IsNullOrWhiteSpace(input.SearchCriteria) || x.Title.Contains(input.SearchCriteria))
+                    .GroupBy(x => x.Status)
+                    .Select(group => new
+                    {
+                        Status = group.Key,
+                        Count = group.Count()
+                    }).ToList();
+
+            var allCount = 0;
+            foreach (var status in statuses)
+            {
+                switch (status.Status)
+                {
+                    case JobStatus.Live:
+                        statusedJobsDto.LiveCount = status.Count;
+                        break;
+                    case JobStatus.Closed:
+                        statusedJobsDto.ClosedCount = status.Count;
+                        break;
+                    case JobStatus.Deleted:
+                        break;
+                    case JobStatus.Hiring:
+                        statusedJobsDto.HiringCount = status.Count;
+                        break;
+                    default:
+                        break;
+                }
+                allCount += status.Count;
+            }
+            statusedJobsDto.AllJobsCount = allCount;
+
+            return statusedJobsDto;
         }
 
         public async Task<IEnumerable<CategorisedJobsDto>> GetCategorisedJobs()

@@ -136,6 +136,25 @@ li.nav-item {
     border: 1px solid #DEE2E6;
 }
 
+.edit-link {
+    color: var(--secondary800);
+    text-decoration: none;
+}
+
+.delete-link {
+    color: #F04438;
+    text-decoration: none;
+}
+
+.link-disabled {
+    color: #98A2B3;
+    pointer-events: none;
+}
+.link-disabled:hover {
+    color: #98A2B3;
+    pointer-events: none;
+}
+
 body {
     font-family: 'Montserrat';
     color: var(--neutral600);
@@ -261,8 +280,12 @@ label.text-14 {
     border-bottom-color: var(--neutral25);
 }
 
+.nav-link.internal.active {
+    background-color: var(--neutral25);
+}
+
 .spacer {
-    margin-bottom: 40px; 
+    margin-bottom: 40px;
     visibility: hidden;
 }
 
@@ -303,6 +326,10 @@ label.text-14 {
     --bs-bg-opacity: 1;
     color: var(--neutral-white);
     background-color: var(--theme-primary) !important;
+}
+
+.pagination {
+    --bs-pagination-active-bg: var(--theme-primary);
 }
 
 .job-ad-avatar {

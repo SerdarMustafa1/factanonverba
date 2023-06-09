@@ -2,6 +2,7 @@
 using Collabed.JobPortal.Account;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Web.Models;
+using Collabed.JobPortal.Web.Pages.JobListingsFull;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
@@ -25,6 +26,7 @@ public class JobPortalWebAutoMapperProfile : AbpIdentityWebAutoMapperProfile
         CreateMap<IdentityUser, ProfileDto>()
             .Ignore(x => x.UserType)
             .MapExtraProperties();
+        CreateMap<JobSummaryDto, Listing>();
     }
 
     protected override void CreateUserMappings()

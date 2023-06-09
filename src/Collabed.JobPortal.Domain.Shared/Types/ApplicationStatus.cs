@@ -3,7 +3,8 @@
     public enum ApplicationStatus
     {
         New,
-        NextStage,
+        Interview,
+        Review,
         Rejected,
         Hired
     }

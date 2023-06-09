@@ -3,10 +3,8 @@
     public enum JobStatus
     {
         Live,
-        Hiring,
-        InReview,
-        Expired,
         Closed,
-        Deleted
+        Deleted,
+        Hiring
     }
 }

@@ -1,0 +1,10 @@
+﻿li.nav-item.internal {
+    margin-inline: 10px;
+    width: 22%;
+}
+
+@media (max-width:1000px) {
+    li.nav-item.internal {
+        width: 20%;
+    }
+}

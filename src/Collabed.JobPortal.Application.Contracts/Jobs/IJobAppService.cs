@@ -24,5 +24,9 @@ namespace Collabed.JobPortal.Jobs
 		Task<IEnumerable<SupportingDocumentDto>> GetSupportingDocumentsByJobRefAsync(string jobReference);
 		Task ApplyForAJob(ApplicationDto application);
 		Task DeactivateJobAsync(string reference);
+		Task<PagedResultDto<JobSummaryDto>> GetAllListAsync(JobGetListInput input);
+		Task ReviewJobsAsync();
+		Task<StatusedJobsDto> GetStatusedJobsCount(JobGetListInput input);
+
 	}
 }

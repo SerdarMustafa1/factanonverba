@@ -9,6 +9,8 @@ using Collabed.JobPortal.PaymentRequests;
 using Collabed.JobPortal.Types;
 using Collabed.JobPortal.Users;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.AutoMapper;
 
 namespace Collabed.JobPortal;
@@ -111,6 +113,17 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             .ForMember(d => d.Text,
                     op => op.MapFrom(o => o.Name));
         CreateMap<UserProfile, UserProfileDto>();
+        CreateMap<Jobs.Job, JobSummaryDto>()
+            .ForMember(d => d.ApplicationsCount,
+                    op => op.MapFrom(o => MapApplications(o.Applicants, TabName.Applications)))
+            .ForMember(d => d.InProcessCount,
+                    op => op.MapFrom(o => MapApplications(o.Applicants, TabName.InProcess)))
+            .ForMember(d => d.HiredCount,
+                    op => op.MapFrom(o => MapApplications(o.Applicants, TabName.Hired)))
+            .ForMember(d => d.DaysLeft,
+                    op => op.MapFrom(o => MapDaysLeft(o.ApplicationDeadline, o.Status)))
+        .ForMember(d => d.Status,
+                    op => op.MapFrom(o => Enum.GetName(typeof(JobStatus), o.Status)));
     }
     public static ContractType? MapJobType(string jobType)
     {
@@ -161,9 +174,45 @@ public class JobPortalApplicationAutoMapperProfile : Profile
             _ => null,
         };
     }
+
     public static CurrencyType MapCurrency(string currency)
     {
         Enum.TryParse(currency, out CurrencyType currencyEnum);
         return currencyEnum;
+    }
+
+    public static int MapApplications(List<JobApplicant> applicants, TabName tabName)
+    {
+        if (!applicants.Any())
+            return 0;
+
+        return tabName switch
+        {
+            TabName.Applications => applicants.Count,
+            TabName.InProcess => applicants.Where(x => x.ApplicationStatus == ApplicationStatus.Interview || x.ApplicationStatus == ApplicationStatus.Review).Count(),
+            TabName.Hired => applicants.Where(x => x.ApplicationStatus == ApplicationStatus.Hired).Count(),
+            _ => applicants.Count,
+        };
+    }
+
+    public static string MapDaysLeft(DateTime deadline, JobStatus status)
+    {
+        if (status == JobStatus.Deleted)
+            return "-";
+
+        var daysLeft = (deadline - DateTime.Today).Days + 1;
+        if (daysLeft > 1)
+            return $"{daysLeft} days";
+        if (daysLeft == 1)
+            return $"{daysLeft} day";
+
+        return "-";
+    }
+
+    public enum TabName
+    {
+        Applications,
+        InProcess,
+        Hired
     }
 }

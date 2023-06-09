@@ -41,6 +41,30 @@ namespace Collabed.JobPortal.Jobs
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<List<Job>> GetAllJobsByOrganisationIdAsync(string search, JobStatus? status, string sorting, int skipCount, int maxResultCount, Guid organisationId, CancellationToken cancellationToken = default)
+        {
+            var query = await ApplyFilterAsync();
+
+            query = query
+                .Include(x => x.Applicants)
+                .Where(x => x.OrganisationId == organisationId);
+
+            if (status.HasValue)
+            {
+                query = query.Where(x => x.Status == status);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(x => x.Title.Contains(search));
+            }
+
+            return await query
+                .OrderBy(!string.IsNullOrWhiteSpace(sorting) ? sorting : nameof(Job.Title))
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public async Task<List<JobWithDetails>> GetListBySearchCriteriaAsync(string sorting, int skipCount, int maxResultCount, IEnumerable<int> categories,
             string keyword, bool locationsFound, (decimal? lat, decimal? lon) location, int? searchRadius, int? netZero, ContractType? contractType, EmploymentType? employmentType,
             JobLocation? workplace, int? salaryMinimum, int? salaryMaximum, CancellationToken cancellationToken = default)
@@ -364,6 +388,13 @@ namespace Collabed.JobPortal.Jobs
         {
             var query = await ApplyFilterAsync();
             return await query.AnyAsync(x => x.Reference == reference);
+        }
+
+        public async Task UpdateJobsStatus()
+        {
+            var dbContext = await GetDbContextAsync();
+
+            await dbContext.Database.ExecuteSqlRawAsync("EXECUTE UpdateJobStatus");
         }
 
         private async Task<IQueryable<Job>> ApplyFilterAsync()
