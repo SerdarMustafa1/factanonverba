@@ -1,5 +1,6 @@
 ﻿@page
 @using Collabed.JobPortal.Localization;
+@using Collabed.JobPortal.User;
 @using Collabed.JobPortal.Web.Pages.Account;
 @using Collabed.JobPortal.Web.Pages.Shared.Components.Input;
 @using Microsoft.AspNetCore.Mvc.Localization
@@ -11,73 +12,7 @@
 <abp-script src="/Pages/Account/PasswordVisibilityIcon.js" />
 <abp-style src="/input1.css"></abp-style>
 
-<div id="registerStepOne">
-    <div class="container align-items-center">
-
-        <div class="row" style="margin-top:10%;">
-            <div class="col" style="min-width:300px; margin-bottom:2%;">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <i class="bi bi-search" style="color: #2F70B6; font-size:40px;"></i>
-                        <p class="text-48">Looking for a job?</p>
-                        <p class="text-20">Job seeker</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="account-type-hints">
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Network with other AEC professionals</span>
-                            </div>
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Find a job in the AEC industry</span>
-                            </div>
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Keep up to date with the latest AEC industry news</span>
-                            </div>
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Take part in events and competitions</span>
-                            </div>
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Use our learning resources</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" type="button" style="width:100%; margin-top:40px;" onclick="selectUserType(0)">Get Started</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col" style="min-width:300px; margin-bottom:2%;">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <i class="bi bi-pencil-square" style="color:#2F70B6; font-size:40px;"></i>
-                        <p class="text-48">Posting a job?</p>
-                        <p class="text-20">Organisation</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="account-type-hints">
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Post jobs to our community of 16,000 users</span>
-                            </div>
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Access to a comprehensive applicant tracking system</span>
-                            </div>
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Integrations with HR software</span>
-                            </div>
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Video screening</span>
-                            </div>
-                            <div class="mt-2">
-                                <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Automated social media ads</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" type="button" style="width:100%; margin-top:40px;" onclick="selectUserType(1)">Get started</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="registerStepTwo" hidden>
+<div id="registerStepTwo">
     <div style=" width: 400px; margin: auto">
         <div style="text-align:center">
             <img src="~/images/logo/BMT_Primary Full_symbol.png" alt="BuildMyTalent" width="40" height="54" />
@@ -90,17 +25,23 @@
             <input type="text" id="userTypeHiddenInput" asp-for="@Model.UserType" hidden>
             @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.EmailAddress), HtmlTitle="EmailAddress", PropertyValue = Model.EmailAddress, OnKeyUp = "validateEmail(true); validateForm()", PrependIcon = "bi bi-envelope", Label = "Email address *"})
 
-            <div class="container" id="PersonalNameContainer">
-                <div class="row">
-                    <div class="col" style="padding-left: 0">
-                        @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.FirstName), HtmlTitle="FirstName", PropertyValue = Model.FirstName, OnKeyUp = "styleValidationOfRequiredField('FirstName', 'Please type your first name'); validateForm()", Label = "First name *"})
-                    </div>
-                    <div class="col" style="padding-right: 0">
-                        @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.LastName), HtmlTitle="LastName", PropertyValue = Model.LastName, OnKeyUp = "styleValidationOfRequiredField('LastName', 'Please type your last name'); validateForm()", Label = "Last name *"})
+            @if (Model.UserType == UserType.Candidate)
+            {
+                <div class="container" id="PersonalNameContainer">
+                    <div class="row">
+                        <div class="col" style="padding-left: 0">
+                            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.FirstName), HtmlTitle="FirstName", PropertyValue = Model.FirstName, OnKeyUp = "styleValidationOfRequiredField('FirstName', 'Please type your first name'); validateForm()", Label = "First name *"})
+                        </div>
+                        <div class="col" style="padding-right: 0">
+                            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.LastName), HtmlTitle="LastName", PropertyValue = Model.LastName, OnKeyUp = "styleValidationOfRequiredField('LastName', 'Please type your last name'); validateForm()", Label = "Last name *"})
+                        </div>
                     </div>
                 </div>
-            </div>
-            @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.OrganisationName), HtmlTitle="OrganisationName", PropertyValue = Model.OrganisationName, OnKeyUp = "styleValidationOfRequiredField('OrganisationName', 'Please type your organisation name'); validateForm()", Label = "Organisation name *"})
+            }
+            else
+            {
+                @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.OrganisationName), HtmlTitle="OrganisationName", PropertyValue = Model.OrganisationName, OnKeyUp = "styleValidationOfRequiredField('OrganisationName', 'Please type your organisation name'); validateForm()", Label = "Organisation name *"})
+            }
             @if (!Model.IsExternalLogin)
             {
                 @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "password", OnKeyUp="validatePassword(true); validateForm()", PropertyName = nameof(Model.Password), HtmlTitle=Model.Password,

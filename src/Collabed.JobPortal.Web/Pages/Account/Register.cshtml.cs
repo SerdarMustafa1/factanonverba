@@ -44,6 +44,9 @@ public class BMTRegisterModel : AccountPageModel
 
     public string ExternalLoginAuthSchema { get; set; }
 
+    [TempData]
+    public int? AccountType { get; set; }
+
     public BMTRegisterModel(IBmtAccountAppService accountAppService, IOrganisationAppService organisationAppService)
     {
         _accountAppService = accountAppService;
@@ -58,8 +61,14 @@ public class BMTRegisterModel : AccountPageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
+        if (!AccountType.HasValue)
+            return RedirectToPage("AccountType");
+
+        UserType = (UserType)AccountType.Value;
+
         await CheckSelfRegistrationAsync();
         await SetClaimCredentials();
+
         return Page();
     }
 
@@ -98,6 +107,7 @@ public class BMTRegisterModel : AccountPageModel
         EmailAddress = form["EmailAddress"];
         FirstName = form["FirstName"];
         LastName = form["LastName"];
+        UserType = (UserType)AccountType.Value;
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -114,6 +124,10 @@ public class BMTRegisterModel : AccountPageModel
             await CheckSelfRegistrationAsync();
 
             if (UserType == UserType.Organisation)
+            {
+                ReturnUrl = "/joblistings";
+            }
+            else
             {
                 ReturnUrl = "/jobdashboard";
             }

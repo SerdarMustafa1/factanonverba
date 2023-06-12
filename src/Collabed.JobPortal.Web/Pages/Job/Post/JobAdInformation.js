@@ -60,6 +60,8 @@ let onClickPublishButton = (event) => {
     assignQuillToInput();
     if (isFormValid()) {
         $('#jobPostForm').submit();
+    } else {
+        window.scrollTo(0, 0);
     }
 }
 
@@ -178,6 +180,14 @@ function nextPage(event) {
     const nextTabLinkEl = $('.nav-tabs .active').closest('li').next('li').find('a')[0];
     const nextTab = new bootstrap.Tab(nextTabLinkEl);
     nextTab.show();
+    window.scrollTo(0, 0);
+}
+
+function prevPage(event) {
+    event.preventDefault();
+    const prevTabLinkEl = $('.nav-tabs .active').closest('li').prev('li').find('a')[0];
+    const prevTab = new bootstrap.Tab(prevTabLinkEl);
+    prevTab.show();
     window.scrollTo(0, 0);
 }
 

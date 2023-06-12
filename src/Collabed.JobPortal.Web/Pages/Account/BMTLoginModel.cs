@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Collabed.JobPortal.Extensions;
+using Collabed.JobPortal.User;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -34,6 +36,9 @@ namespace Collabed.JobPortal.Web.Pages.Account
 
         [BindProperty]
         public bool RememberMe { get; set; } = true;
+
+        [TempData]
+        public int AccountType { get; set; }
 
         public BMTLoginModel(IAuthenticationSchemeProvider schemeProvider, IOptions<AbpAccountOptions> accountOptions, IOptions<IdentityOptions> identityOptions)
             : base(schemeProvider, accountOptions, identityOptions)
@@ -96,12 +101,34 @@ namespace Collabed.JobPortal.Web.Pages.Account
 
             Debug.Assert(user != null, nameof(user) + " != null");
 
-            return Redirect(string.IsNullOrEmpty(ReturnUrl) ? "~/JobDashboard" : ReturnUrl);
+            if (string.IsNullOrWhiteSpace(ReturnUrl))
+            {
+                var userType = (UserType)Enum.Parse(typeof(UserType), user.GetUserType(), true);
+                if (userType == UserType.Organisation)
+                {
+                    ReturnUrl = "~/joblistings";
+                }
+                else
+                {
+                    ReturnUrl = "~/jobdashboard";
+                }
+            }
+
+            return Redirect(ReturnUrl);
         }
 
         public override async Task<IActionResult> OnPostExternalLogin(string provider)
         {
-            var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash });
+            if (int.TryParse(Request.Form["AccountType"], out var accountType))
+            {
+                AccountType = accountType;
+                TempData["AccountType"] = AccountType;
+            }
+            else
+            {
+                return RedirectToPage("AccountType");
+            }
+            var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash, AccountType });
             var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             properties.Items["scheme"] = provider;
 

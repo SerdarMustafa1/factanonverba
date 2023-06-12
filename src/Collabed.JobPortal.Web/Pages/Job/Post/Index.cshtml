@@ -28,13 +28,7 @@
 
 <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
     <div class="col-sm">
-        <p class="heading-30">New Listing</p>
-    </div>
-    <div class="col-sm">
-        <p class="no-display-on-mobile" style="text-align:end;">
-            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="margin-right:0.5vw">Cancel</button>
-            <button class="btn btn-outline-primary" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
-        </p>
+        <p class="heading-30">Post a new job</p>
     </div>
 </div>
 
@@ -47,25 +41,25 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" id="tabLink2" href="#requirements" ">
+            <a class="nav-link" data-bs-toggle="tab" id="tabLink2" href="#requirements">
                 <i class="bi bi-2-circle-fill" id="icon2"></i>
                 <span class="no-display-on-mobile">Requirements</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" id="tabLink3" href="#compensation"">
+            <a class="nav-link" data-bs-toggle="tab" id="tabLink3" href="#compensation">
                 <i class="bi bi-3-circle-fill" id="icon3"></i>
                 <span class="no-display-on-mobile">Compensation</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" id="tabLink4" href="#preferences" >
+            <a class="nav-link" data-bs-toggle="tab" id="tabLink4" href="#preferences">
                 <i class="bi bi-4-circle-fill" id="icon4"></i>
                 <span class="no-display-on-mobile">Preferences</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" id="tabLink5" href="#screening" >
+            <a class="nav-link" data-bs-toggle="tab" id="tabLink5" href="#screening">
                 <i class="bi bi-5-circle-fill" id="icon5"></i>
                 <span class="no-display-on-mobile">Screening</span>
             </a>
@@ -141,14 +135,21 @@
                         </div>
                     </div>
                 </div>
-                <p class="no-display-on-mobile" style="text-align:end; margin-top:5%;">
-                    <button class="btn btn-outline-secondary" style="margin-right:0.5vw" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()">
-                        Cancel
-                    </button>
-                    <button class="btn btn-primary" onclick="nextPage(event)">
-                        Next 
-                    </button>
-                </p>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col-1">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-primary" onclick="nextPage(event)" style="min-width: 88px;">
+                                Next
+                            </button>
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="tab-pane" id="requirements">
@@ -277,14 +278,24 @@
                         </div>
                     </div>
                 </div>
-                <p class="no-display-on-mobile" style="text-align:end; margin-top:5%;">
-                    <button class="btn btn-outline-secondary" style="margin-right:0.5vw" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()">
-                        Cancel
-                    </button>
-                    <button class="btn btn-primary" onclick="nextPage(event)">
-                        Next
-                    </button>
-                </p>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                            <button class="btn btn-primary" onclick="prevPage(event)" style="min-width: 88px;">
+                                Back
+                            </button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-primary" onclick="nextPage(event)" style="min-width: 88px;">
+                                Next
+                            </button>
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="tab-pane" id="compensation">
@@ -373,16 +384,25 @@
                         </div>
                     </div>
                 </div>
-                <p class="no-display-on-mobile" style="text-align:end; margin-top:5%;">
-                    <button class="btn btn-outline-secondary" style="margin-right:0.5vw" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()">
-                    Cancel
-                </button>
-                <button class="btn btn-primary" onclick="nextPage(event)">
-                    Next
-                </button>
-            </p>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                            <button class="btn btn-primary" onclick="prevPage(event)" style="min-width: 88px;">
+                                Back
+                            </button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-primary" onclick="nextPage(event)" style="min-width: 88px;">
+                                Next
+                            </button>
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
             </div>
-
         </div>
         <div class="tab-pane" id="preferences">
             <div style="margin-inline:4%; margin-top: 3%; margin-bottom: 3%;">
@@ -420,17 +440,6 @@
                                 <input class="form-check-input" id="noneOption" type="checkbox">
                                 <label class="form-check-label" for="noneOption"> None</label>
                             </div>
-@*                            @foreach(var item in Model.AvailableSupportedDocuments)
-                            {
-                                if(Model.SelectedSupportedDocuments.FirstOrDefault(v => v.Equals(item.Value)) != null)
-                                {
-                                    item.Selected = true;
-                                }
-                                <div class="form-check">
-                                    <input class="form-check-input" name="SelectedSupportedDocuments" checked="@item.Selected" type="checkbox" value="@item.Value" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault"> @item.Text </label>
-                                </div>
-                            }*@
                         </div>
                     </div>
                 </div>
@@ -472,14 +481,24 @@
                         </div>
                     </div>
                 </div>
-                <p class="no-display-on-mobile" style="text-align:end; margin-top:5%;">
-                    <button class="btn btn-outline-secondary" style="margin-right:0.5vw" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()">
-                        Cancel
-                    </button>
-                    <button class="btn btn-primary" onclick="nextPage(event)">
-                        Next
-                    </button>
-                </p>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                            <button class="btn btn-primary" onclick="prevPage(event)" style="min-width: 88px;">
+                                Back
+                            </button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-primary" onclick="nextPage(event)" style="min-width: 88px;">
+                                Next
+                            </button>
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="tab-pane" id="screening">
@@ -560,31 +579,24 @@
                     </div>
                 </div>
 
-                <p class="no-display-on-mobile" style="text-align:end; margin-top:5%;">
-                    <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()">
-                        Cancel
-                    </button>
-                </p>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                            <button class="btn btn-primary" onclick="prevPage(event)" style="min-width: 88px;">
+                                Back
+                            </button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
-    <div class="row display-on-mobile" style="margin-top:5%;">
-        <div class="col">
-            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="width:100%;">
-                Cancel
-            </button>
-        </div>
-        <div class="col">
-            <button class="btn btn-primary" onclick="nextPage(event)" style="width:100%;">
-                Next
-            </button>
-        </div>
-    </div>
-    <div class="row display-on-mobile" style="margin-top:5%;">
-        <div class="col">
-            <button class="btn btn-outline-primary" id="publishButton2" onclick="onClickPublishButton(event)" style="width:100%">Preview</button>
-        </div>
-    </div>
 </div>
 
 <!-- Modal -->

@@ -20,7 +20,10 @@
                 @foreach (var provider in Model.ExternalProviders)
                 {
                     <form asp-page="./Login" asp-page-handler="ExternalLogin" method="post">
-                        <button type="submit" class="btn btn-primary" style="width:100%; background-color:#0A66C2 !important;" name="provider" value="@provider.AuthenticationScheme" title="@provider.DisplayName"><i class="bi bi-linkedin"></i>       Sign up with @provider.DisplayName</button>
+                        <input name="AccountType" asp-for="AccountType" type="text" hidden />
+                        <button type="submit" class="btn btn-primary" style="width:100%; background-color:#0A66C2 !important;" name="provider" value="@provider.AuthenticationScheme" title="@provider.DisplayName">
+                            <i class="bi bi-linkedin"></i>       Sign up with @provider.DisplayName
+                        </button>
                     </form>
                 }
             </div>
@@ -31,6 +34,8 @@
     <br />
     <form asp-page="./Register" method="post" id="localUserForm" onsubmit="checkIfEmailExists(event)">
         <input name="Source" value="SignUp" type="text" hidden />
+        <input name="AccountType" asp-for="AccountType" type="text" hidden />
+
         @await Component.InvokeAsync("Input", new InputViewModel(){ InputType = "text", PropertyName = nameof(Model.EmailAddress), HtmlTitle=Model.EmailAddress, OnKeyUp = "validateEmail()",
             PrependIcon = "bi bi-envelope", Label = "Email", Hint= "Please enter your email address"})
 

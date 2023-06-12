@@ -1,0 +1,74 @@
+﻿@page
+@model Collabed.JobPortal.Web.Pages.Account.AccountTypeModel
+@{
+}
+<div class="container align-items-center">
+    <div class="row" style="margin-top:10%;">
+        <div class="col" style="min-width:300px; margin-bottom:2%;">
+            <div class="card">
+                <div class="card-header text-center">
+                    <i class="bi bi-search" style="color: #2F70B6; font-size:40px;"></i>
+                    <p class="text-48">Looking for a job?</p>
+                    <p class="text-20">Job seeker</p>
+                </div>
+                <div class="card-body">
+                    <div class="account-type-hints">
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Find UK wide construction professionals roles</span>
+                        </div>
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Keep track of your applications</span>
+                        </div>
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Saved details to easily apply for jobs</span>
+                        </div>
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">A job board designed for job seekers</span>
+                        </div>
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Created by construction professionals</span>
+                        </div>
+                    </div>
+                    <form asp-page="./SignUp" method="post">
+                        <input name="Source" value="AccountType" type="text" hidden />
+                        <input name="AccountType" value="0" type="text" hidden />
+                        <button class="btn btn-primary" type="submit" style="width:100%; margin-top:40px;">Get Started</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col" style="min-width:300px; margin-bottom:2%;">
+            <div class="card">
+                <div class="card-header text-center">
+                    <i class="bi bi-pencil-square" style="color:#2F70B6; font-size:40px;"></i>
+                    <p class="text-48">Posting a job?</p>
+                    <p class="text-20">Organisation</p>
+                </div>
+                <div class="card-body">
+                    <div class="account-type-hints">
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Post jobs to our community of 20,000 users</span>
+                        </div>
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Access to a comprehensive Applicant Tracking System</span>
+                        </div>
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Integrations with recruitment technology</span>
+                        </div>
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Video screening capabilities</span>
+                        </div>
+                        <div class="mt-2">
+                            <i class="bi bi-check2-circle" style="color:#039855"></i> <span class="hint-16">Automated social media advertising campaigns</span>
+                        </div>
+                    </div>
+                    <form asp-page="./SignUp" method="post">
+                        <input name="Source" value="AccountType" type="text" hidden />
+                        <input name="AccountType" value="1" type="text" hidden />
+                        <button class="btn btn-primary" type="submit" style="width:100%; margin-top:40px;">Get Started</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

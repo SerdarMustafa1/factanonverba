@@ -1,7 +1,5 @@
-using Collabed.JobPortal.Email;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Volo.Abp.Account;
 using static Volo.Abp.Account.Web.Pages.Account.LoginModel;
 
 namespace Collabed.JobPortal.Web.Pages.Account
@@ -9,8 +7,9 @@ namespace Collabed.JobPortal.Web.Pages.Account
     public class SignUpModel : PageModel
     {
         [BindProperty(SupportsGet = true)]
-        
         public string EmailAddress { get; set; }
+        [TempData]
+        public int AccountType { get; set; }
         public ExternalProviderModel[] ExternalProviders { get; private protected set; }
 
         public SignUpModel()
@@ -22,7 +21,17 @@ namespace Collabed.JobPortal.Web.Pages.Account
 
         public IActionResult OnPost()
         {
-            return RedirectToPage("AccountType", new { id = "123" });
+            if (Request.Form["Source"].Equals("AccountType"))
+            {
+                if (int.TryParse(Request.Form["AccountType"], out var accountType))
+                {
+                    AccountType = accountType;
+                }
+
+                return Page();
+            }
+
+            return RedirectToPage("AccountType");
         }
     }
 }
