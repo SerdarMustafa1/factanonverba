@@ -1,5 +1,4 @@
 ﻿using Collabed.JobPortal.Localization;
-using Collabed.JobPortal.Permissions;
 using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 
@@ -13,11 +12,11 @@ public class JobPortalMenuContributor : IMenuContributor
         {
             await ConfigureMainMenuAsync(context);
         }
-        if (context.Menu.Name == StandardMenus.User)
-        {
-            context.Menu.AddItem(new ApplicationMenuItem("Account.Clients", displayName: "Clients", url: "~/clients", icon: "fa fa-users", order: 1001, requiredPermissionName: BmtPermissions.Admin));
-            context.Menu.AddItem(new ApplicationMenuItem("Account.JobListings", displayName: "Job Listings", url: "~/joblistings", icon: "fa fa-list-ul", order: 1002, requiredPermissionName: BmtPermissions.ManageJobs));
-        }
+        //if (context.Menu.Name == StandardMenus.User)
+        //{
+        //    context.Menu.AddItem(new ApplicationMenuItem("Account.Clients", displayName: "Clients", url: "~/clients", icon: "fa fa-users", order: 1001, requiredPermissionName: BmtPermissions.Admin));
+        //    context.Menu.AddItem(new ApplicationMenuItem("Account.JobListings", displayName: "Job Listings", url: "~/joblistings", icon: "fa fa-list-ul", order: 1002, requiredPermissionName: BmtPermissions.ManageJobs));
+        //}
     }
 
     private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
