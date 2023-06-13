@@ -1,4 +1,19 @@
 ﻿$(function () {
+    window.onload = function () {
+        window.addEventListener("beforeunload", function (e) {
+            if (formSubmitting) {
+                return undefined;
+            }
+
+            var confirmationMessage = 'By leaving this page, your changes will not be saved. '
+                + 'Are you sure you would like to cancel your progress?';
+
+            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        });
+    };
+
+
 
     if ($(window).width() < 900) {
         $('ul.nav').addClass('nav-justified');
@@ -43,6 +58,10 @@
         }
     })
 });
+let formSubmitting = false;
+let setFormSubmitting = function () {
+    formSubmitting = true;
+};
 let quill = undefined;
 
 let quillOnKeyUp = () => {
@@ -59,6 +78,7 @@ let onClickPublishButton = (event) => {
     event.preventDefault();
     assignQuillToInput();
     if (isFormValid()) {
+        setFormSubmitting();
         $('#jobPostForm').submit();
     } else {
         window.scrollTo(0, 0);
