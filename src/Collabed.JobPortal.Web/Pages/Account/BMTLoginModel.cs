@@ -124,10 +124,7 @@ namespace Collabed.JobPortal.Web.Pages.Account
                 AccountType = accountType;
                 TempData["AccountType"] = AccountType;
             }
-            else
-            {
-                return RedirectToPage("AccountType");
-            }
+
             var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash, AccountType });
             var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             properties.Items["scheme"] = provider;
