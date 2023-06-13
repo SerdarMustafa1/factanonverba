@@ -1,9 +1,13 @@
 ﻿@page
 @using Collabed.JobPortal.Localization;
+@using Collabed.JobPortal.User;
+@using Collabed.JobPortal.Users;
 @using Microsoft.AspNetCore.Mvc.Localization
 @model Collabed.JobPortal.Web.Pages.Account.CustomConfirmEmailModel
 
-
+@{
+    var redirectLink = Model.UserType == UserType.Organisation ? "../joblistings" : "../jobdashboard";
+}
 <div class="text-center" style="margin-top:7%;">
     <img src="~/images/customIcons/BMT_check-green-background.png" width="56px" height="56px" />
 </div>
@@ -21,7 +25,7 @@
     </div>
     <div>
         <p class="hint-16" style="margin-bottom: 0.5rem">You have successfully verified your account.</p>
-        <a type="button" href="../jobdashboard" class="btn btn-primary" style="margin-bottom:0.5rem;margin-top:0.5rem; width:100%;max-width:388px;">View job dashboard</a>
+        <a type="button" href="@redirectLink" class="btn btn-primary" style="margin-bottom:0.5rem;margin-top:0.5rem; width:100%;max-width:388px;">@(Model.UserType == UserType.Organisation ? "View job listings" : "View job dashboard")</a>
         <p class="hint-14">Need help? <a type="button" class="btn btn-link-secondary" href="#">Contact us</a></p>
     </div>
 </div>

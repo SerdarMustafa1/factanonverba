@@ -184,6 +184,25 @@ namespace Collabed.JobPortal.Web.Pages.Account
 
             if (result.Succeeded)
             {
+                var emailAddress = loginInfo.Principal.FindFirstValue(ClaimTypes.Email);
+                if (string.IsNullOrEmpty(emailAddress))
+                {
+                    return RedirectSafely(string.IsNullOrWhiteSpace(returnUrl) ? "/jobdashboard" : returnUrl, returnUrlHash);
+                }
+
+                var currentUser = await UserManager.FindByEmailAsync(emailAddress);
+                var userType = (UserType)Enum.Parse(typeof(UserType), currentUser.GetUserType(), true);
+                if (string.IsNullOrWhiteSpace(returnUrl))
+                {
+                    if (userType == UserType.Candidate)
+                    {
+                        returnUrl = "/jobdashboard";
+                    }
+                    else
+                    {
+                        returnUrl = "/joblistings";
+                    }
+                }
                 return RedirectSafely(returnUrl, returnUrlHash);
             }
 

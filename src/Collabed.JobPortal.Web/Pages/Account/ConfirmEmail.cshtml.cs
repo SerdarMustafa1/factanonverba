@@ -1,4 +1,6 @@
+using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Organisations;
+using Collabed.JobPortal.User;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,10 +11,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Volo.Abp;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
-using Volo.Abp.Users;
 
 namespace Collabed.JobPortal.Web.Pages.Account
 {
@@ -26,6 +25,7 @@ namespace Collabed.JobPortal.Web.Pages.Account
 
         [BindProperty(SupportsGet = true)]
         public string DisplayName { get; set; }
+        public UserType UserType { get; set; }
 
         public CustomConfirmEmailModel(IdentityUserManager userManager, IOrganisationRepository organisationRepository, SignInManager<Volo.Abp.Identity.IdentityUser> signInManager)
         {
@@ -44,6 +44,7 @@ namespace Collabed.JobPortal.Web.Pages.Account
             {
                 return NotFound($"Unable to load user with ID '{userId}'.");
             }
+            UserType = (UserType)Enum.Parse(typeof(UserType), user.GetUserType(), true);
             var organisationClaim = (await _userManager.GetClaimsAsync(user)).FirstOrDefault(claim => claim.Type.Equals(ClaimNames.OrganisationClaim));
 
             if (organisationClaim != null && !string.IsNullOrEmpty(organisationClaim.Value))
