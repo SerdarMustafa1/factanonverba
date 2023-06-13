@@ -31,6 +31,7 @@ public class JobPortalMenuContributor : IMenuContributor
         var hasPostJobPermissions = await context.IsGrantedAsync(BmtPermissions.PostJobs);
         if (hasManageJobPermissions)
         {
+            context.Menu.AddItem(new ApplicationMenuItem("JobsBoard", displayName: "Job Board", "~/jobDashboard"));
             context.Menu.AddItem(new ApplicationMenuItem("JobsBoard", displayName: "Job Listings", "~/joblistings"));
             if (hasPostJobPermissions)
             {
