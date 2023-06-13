@@ -38,7 +38,7 @@ namespace Collabed.JobPortal.Web.Pages.Account
         public bool RememberMe { get; set; } = true;
 
         [TempData]
-        public int AccountType { get; set; }
+        public int? AccountType { get; set; }
 
         public BMTLoginModel(IAuthenticationSchemeProvider schemeProvider, IOptions<AbpAccountOptions> accountOptions, IOptions<IdentityOptions> identityOptions)
             : base(schemeProvider, accountOptions, identityOptions)
@@ -211,7 +211,18 @@ namespace Collabed.JobPortal.Web.Pages.Account
             var email = loginInfo.Principal.FindFirstValue(AbpClaimTypes.Email);
             if (string.IsNullOrWhiteSpace(email))
             {
-                return RedirectToPage("./Register", new
+                var redirectPage = "";
+
+                if (AccountType.HasValue)
+                {
+                    redirectPage = "./Register";
+                }
+                else
+                {
+                    redirectPage = "./AccountType";
+                }
+
+                return RedirectToPage(redirectPage, new
                 {
                     IsExternalLogin = true,
                     ExternalLoginAuthSchema = loginInfo.LoginProvider,
