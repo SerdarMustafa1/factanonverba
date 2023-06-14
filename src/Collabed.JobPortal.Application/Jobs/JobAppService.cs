@@ -158,7 +158,7 @@ namespace JobPortal.Jobs
         private async Task<int?> FeedAdzunaJobsAsync(int page, string title, string category, int catId, List<Location> locations)
         {
             title = Uri.EscapeDataString(title);
-            var whatExclude = "software%20microsoft%20data%20migration%20systems%20solution%20integration%20security%20enterprise%20infrastructure%20service%20DBRE%20cloud%20information";
+            var whatExclude = "software%20microsoft%20data%20migration%20systems%20solution%20integration%20security%20enterprise%20infrastructure%20service%20DBRE%20cloud%20information%20furniture";
             var adzunaJobSearchUrl = new StringBuilder();
             adzunaJobSearchUrl.Append(@$"http://api.adzuna.com:80/v1/api/jobs/gb/search/{page}?");
             adzunaJobSearchUrl.Append("app_id=10dbdc09&app_key=5bc51c49c3c47b753ed62f8165a85d00");
