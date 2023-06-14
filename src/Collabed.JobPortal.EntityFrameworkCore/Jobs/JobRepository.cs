@@ -143,7 +143,10 @@ namespace Collabed.JobPortal.Jobs
             //}
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(x => x.job.Title.Contains(keyword) || x.job.Skills.Contains(keyword));
+                query = query.Where(x => x.job.Title.Contains(keyword)
+                || x.job.Skills.Contains(keyword)
+                || x.job.CompanyName.Contains(keyword)
+                || (x.org != null && x.org.Name.Contains(keyword)));
             }
 
             query = query.Where(x => x.job.Status == JobStatus.Live);
@@ -151,10 +154,10 @@ namespace Collabed.JobPortal.Jobs
 
             query = sorting switch
             {
-                "title" => query.OrderBy(x => x.job.Title),
-                "closingDate" => query.OrderBy(x => x.job.ApplicationDeadline),
-                "salary" => query.OrderByDescending(x => x.job.MaxSalaryConverted),
-                _ => query.OrderByDescending(x => x.job.CreationTime),
+                "title" => query.OrderBy(x => (int)x.job.JobOrigin).ThenBy(x => x.job.Title),
+                "closingDate" => query.OrderBy(x => (int)x.job.JobOrigin).ThenBy(x => x.job.ApplicationDeadline),
+                "salary" => query.OrderBy(x => (int)x.job.JobOrigin).ThenByDescending(x => x.job.MaxSalaryConverted),
+                _ => query.OrderBy(x => (int)x.job.JobOrigin).ThenByDescending(x => x.job.CreationTime),
             };
 
             return await query
@@ -205,7 +208,10 @@ namespace Collabed.JobPortal.Jobs
                         join loc in context.Set<Location>()
                            on job.OfficeLocationId equals loc.Id into grouping2
                         from loc in grouping2.DefaultIfEmpty()
-                        select new { job, loc };
+                        join org in context.Set<Organisations.Organisation>()
+                            on job.OrganisationId equals org.Id into grouping
+                        from org in grouping.DefaultIfEmpty()
+                        select new { job, loc, org };
 
             if (categories.Any())
             {
@@ -255,22 +261,14 @@ namespace Collabed.JobPortal.Jobs
             //}
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(x => x.job.Title.Contains(keyword));
+                query = query.Where(x => x.job.Title.Contains(keyword)
+                                    || x.job.Skills.Contains(keyword)
+                                    || x.job.CompanyName.Contains(keyword)
+                                    || (x.org != null && x.org.Name.Contains(keyword)));
             }
 
             query = query.Where(x => x.job.Status == JobStatus.Live);
             query = query.Where(x => x.job.ApplicationDeadline > DateTime.UtcNow);
-
-            if (!string.IsNullOrEmpty(sorting))
-            {
-                query = sorting switch
-                {
-                    "dateAdded" => query.OrderByDescending(x => x.job.CreationTime),
-                    "closingDate" => query.OrderBy(x => x.job.ApplicationDeadline),
-                    "salary" => query.OrderByDescending(x => x.job.MaxSalaryConverted),
-                    _ => query.OrderBy(x => x.job.Title),
-                };
-            }
 
             return await query.CountAsync(cancellationToken);
         }
