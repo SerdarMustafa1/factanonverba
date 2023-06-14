@@ -29,7 +29,8 @@ namespace Collabed.JobPortal.Web.Pages.JobListingsFull
         public string Tab { get; set; } = "all";
         public int PageSize { get; set; } = 10;
         public int TotalPages => (int)Math.Ceiling(decimal.Divide(TotalCount, PageSize));
-        public string SearchText { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; }
         public List<Listing> AllJobListings { get; set; } = new List<Listing>();
         //public List<Listing> LiveJobListings { get; set; } = new List<Listing>();
         //public List<Listing> HiringJobListings { get; set; } = new List<Listing>();
@@ -43,16 +44,27 @@ namespace Collabed.JobPortal.Web.Pages.JobListingsFull
 
         public async Task OnGetAsync()
         {
+            await SearchJobListingsAsync();
+        }
+
+        private async Task SearchJobListingsAsync()
+        {
             var organisationId = ExtractOrganisationId();
 
             var getJobsInput = new JobGetListInput
             {
                 OrganisationId = organisationId,
-                SearchCriteria = SearchText,
+                SearchCriteria = Search,
                 Status = GetStatus(Tab),
                 SkipCount = CurrentPage == 1 ? 0 : (CurrentPage-1) * PageSize,
                 MaxResultCount = PageSize
             };
+
+            if (!string.IsNullOrWhiteSpace(Search))
+            {
+                getJobsInput.SearchCriteria = Search;
+            }
+
             var jobListings = await _jobAppService.GetAllListAsync(getJobsInput);
 
             if (jobListings.Items.Any())
@@ -71,6 +83,11 @@ namespace Collabed.JobPortal.Web.Pages.JobListingsFull
             {
                 CanPostNewJob = true;
             }
+        }
+
+        public async Task OnPostAsync()
+        {
+            await SearchJobListingsAsync();
         }
 
         private static JobStatus? GetStatus(string tab)
