@@ -80,15 +80,7 @@ namespace Collabed.JobPortal.Account.Emailing
                 IsBodyHtml = true,
                 Subject = EmailTemplates.ApplicationConfirmationSubject + application.JobTitle,
             };
-            // TODO: Remove post MVP
-            if (application.Email.EndsWith("test.com"))
-            {
-                mailMessage.To.Add("thomas.george@broadlight.io");
-            }
-            else
-            {
-                mailMessage.To.Add(application.Email);
-            }
+            mailMessage.To.Add(application.Email);
 
             await EmailSender.SendAsync(mailMessage);
         }
@@ -119,15 +111,7 @@ namespace Collabed.JobPortal.Account.Emailing
                 IsBodyHtml = true,
                 Subject = EmailTemplates.JobApplicationSubject,
             };
-            // TODO: Remove post MVP
-            if (jobApplicationDto.CompanyEmail.EndsWith("test.com"))
-            {
-                mailMessage.To.Add("thomas.george@broadlight.io");
-            }
-            else
-            {
-                mailMessage.To.Add(jobApplicationDto.CompanyEmail);
-            }
+            mailMessage.To.Add(jobApplicationDto.CompanyEmail);
             mailMessage.ReplyToList.Add(new MailAddress(jobApplicationDto.Email, $"{jobApplicationDto.FirstName} {jobApplicationDto.LastName}"));
             if (!string.IsNullOrWhiteSpace(jobApplicationDto.CvBlobName))
             {
@@ -142,6 +126,52 @@ namespace Collabed.JobPortal.Account.Emailing
                 }
                 return;
             }
+
+            await EmailSender.SendAsync(mailMessage);
+        }
+
+        public async Task SendApplicationRejectionAsync(ApplicantDto rejection)
+        {
+            var emailContent = await TemplateRenderer.RenderAsync(
+                BmtAccountEmailTemplates.ApplicationRejection, new
+                {
+                    firstname = rejection.ApplicantFirstName,
+                    jobtitle = rejection.JobTitle,
+                    company = rejection.CompanyName
+                });
+
+            var mailMessage = new MailMessage
+            {
+                From= new MailAddress(EmailTemplates.InfoSender, EmailTemplates.BuildMyTalentTitle),
+                Body = emailContent,
+                IsBodyHtml = true,
+                Subject = EmailTemplates.ApplicationUpdateSubject + rejection.JobTitle,
+            };
+
+            mailMessage.To.Add(rejection.ApplicantEmail);
+
+            await EmailSender.SendAsync(mailMessage);
+        }
+
+        public async Task SendApplicationInterviewAsync(ApplicantDto rejection)
+        {
+            var emailContent = await TemplateRenderer.RenderAsync(
+                BmtAccountEmailTemplates.ApplicationInterview, new
+                {
+                    firstname = rejection.ApplicantFirstName,
+                    jobtitle = rejection.JobTitle,
+                    company = rejection.CompanyName
+                });
+
+            var mailMessage = new MailMessage
+            {
+                From= new MailAddress(EmailTemplates.InfoSender, EmailTemplates.BuildMyTalentTitle),
+                Body = emailContent,
+                IsBodyHtml = true,
+                Subject = EmailTemplates.ApplicationUpdateSubject + rejection.JobTitle,
+            };
+
+            mailMessage.To.Add(rejection.ApplicantEmail);
 
             await EmailSender.SendAsync(mailMessage);
         }

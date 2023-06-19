@@ -27,6 +27,6 @@ namespace Collabed.JobPortal.Jobs
 		Task<IEnumerable<ScreeningQuestion>> GetScreeningQuestionsByReferenceAsync(string reference);
 		Task<Job> GetJobForApplyByReferenceAsync(string reference);
 		Task<List<Job>> GetAllJobsByOrganisationIdAsync(string search, JobStatus? status, string sorting, int skipCount, int maxResultCount, Guid organisationId, CancellationToken cancellationToken = default);
-		Task UpdateJobsStatus();
+		Task UpdateExpiredJobsStatus();
 	}
 }

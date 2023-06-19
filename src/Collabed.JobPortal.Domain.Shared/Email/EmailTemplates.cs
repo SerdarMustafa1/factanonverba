@@ -18,6 +18,7 @@
         public static string ConfirmEmailSubject = "Confirm your email";
         public static string JobApplicationSubject = "Job application";
         public static string ApplicationConfirmationSubject = "Application confirmation: ";
+        public static string ApplicationUpdateSubject = "Application update: ";
 
         // Simple body templates
     }

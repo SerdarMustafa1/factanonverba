@@ -10,5 +10,7 @@ namespace Collabed.JobPortal.Account.Emailing.Templates
         Task SendEmailVerificationRequestAsync(IdentityUser user, string callbackUrl);
         Task SendApplicationEmailToCompanyAsync(ApplicationEmailDto jobApplicationDto, bool isNative);
         Task SendApplicationConfirmationAsync(ApplicationConfirmationDto application);
+        Task SendApplicationRejectionAsync(ApplicantDto applicant);
+        Task SendApplicationInterviewAsync(ApplicantDto applicant);
     }
 }

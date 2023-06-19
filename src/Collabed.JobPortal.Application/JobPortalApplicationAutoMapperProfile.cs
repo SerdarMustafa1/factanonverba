@@ -46,6 +46,15 @@ public class JobPortalApplicationAutoMapperProfile : Profile
                     op => op.MapFrom(o => o.ExperienceLevel.HasValue ? o.ExperienceLevel.Value.GetName() : null))
             .ForMember(d => d.OrganisationName,
                     op => op.MapFrom(o => !string.IsNullOrEmpty(o.OrganisationName) ? o.OrganisationName : o.CompanyName));
+        CreateMap<JobApplicant, JobApplicationDto>()
+            .ForMember(d => d.FirstName,
+                    op => op.Ignore())
+            .ForMember(d => d.LastName,
+                    op => op.Ignore())
+            .ForMember(d => d.Email,
+                    op => op.Ignore())
+            .ForMember(d => d.PhoneNumber,
+                    op => op.Ignore());
         CreateMap<JobDto, CreateUpdateJobDto>();
         CreateMap<Organisation, OrganisationDto>();
         CreateMap<PaymentRequest, PaymentRequestDto>();
@@ -197,7 +206,7 @@ public class JobPortalApplicationAutoMapperProfile : Profile
 
     public static string MapDaysLeft(DateTime deadline, JobStatus status)
     {
-        if (status == JobStatus.Deleted)
+        if (status == JobStatus.Deleted || status == JobStatus.Closed)
             return "-";
 
         var daysLeft = (deadline - DateTime.Today).Days + 1;

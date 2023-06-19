@@ -1,0 +1,87 @@
+﻿@using Collabed.JobPortal.Web.Models;
+@using Collabed.JobPortal.Types;
+@model ApplicationModel
+
+@{
+    var totalPagesAllApplications = Model.Applications.Count > 0 ? (int)Math.Ceiling(decimal.Divide(Model.Applications.Count, Model.PageSize)) : 0;
+}
+<div class="tab-pane active" id="allApplications">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 25%" scope="Column">Candidate</th>
+                    <th style="width: 25%" scope="Column">Applied</th>
+                    <th style="width: 25%" scope="Column">Status</th>
+                    <th style="width: 25%" scope="Column" colspan="2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var listing in Model.Applications)
+                {
+                    <tr id="@listing.JobApplicationId">
+                        <td scope="Row">@listing.CandidateName</td>
+                        <td>@listing.ApplicationDate.ToString("dd/MM/yyyy")</td>
+                        <td id="@("status"+listing.JobApplicationId)">@listing.GetTextStatus()</td>
+                        <td><a id="@("next"+@listing.JobApplicationId)" class="edit-link @(listing.ApplicationStatus == ApplicationStatus.Hired ? "link-disabled" : "")" href="#" onclick="onPromote('@listing.JobApplicationId')">Next stage</a></td>
+                        <td><a id="@("reject"+@listing.JobApplicationId)" class="delete-link @(listing.ApplicationStatus == ApplicationStatus.Rejected ? "link-disabled" : "")" href="#" onclick="onReject('@listing.JobApplicationId')">Reject</a></td>
+                    </tr>
+                }
+                @if (Model.Applications.Count == 0)
+                {
+                    <tr>
+                        <td scope="Row">No applications submitted.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clientsPaginationContainer">
+        <ul class="pagination">
+            @if (Model.CurrentPage > 1)
+            {
+                var link = $"?Reference={Model.Reference}&CurrentPage={Model.CurrentPage - 1}&Tab={Model.Tab}";
+                <li class="page-item">
+                    <a href=@link class="page-link">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+            }
+
+            @for (var i = 1; i <= totalPagesAllApplications; i++)
+            {
+                var shouldDisplayPage = i == 1 || i == totalPagesAllApplications ||
+                (i >= Model.CurrentPage - 2 && i <= Model.CurrentPage + 2);
+                var isEllipsisBefore = i == Model.CurrentPage - 3;
+                var isEllipsisAfter = i == Model.CurrentPage + 3;
+
+                if (shouldDisplayPage || isEllipsisBefore || isEllipsisAfter)
+                {
+                    var link = $"?Reference={Model.Reference}&CurrentPage={i}&Tab={Model.Tab}";
+
+                    if (isEllipsisBefore || isEllipsisAfter)
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                            <a href=@link class="page-link">@i</a>
+                        </li>
+                    }
+                }
+            }
+            @if (Model.CurrentPage < totalPagesAllApplications)
+            {
+                var link = $"?Reference={Model.Reference}&CurrentPage={Model.CurrentPage + 1}&Tab={Model.Tab}";
+                <li class="page-item">
+                    <a href=@link class="page-link">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

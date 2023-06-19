@@ -132,7 +132,7 @@ namespace JobPortal.Jobs
         [RemoteService(IsEnabled = false)]
         public async Task ReviewJobsAsync()
         {
-            await _jobRepository.UpdateJobsStatus();
+            await _jobRepository.UpdateExpiredJobsStatus();
         }
 
         #region Adzuna private methods
@@ -288,6 +288,29 @@ namespace JobPortal.Jobs
             return ObjectMapper.Map<JobWithDetails, JobDto>(job);
         }
 
+        public async Task<JobDto> GetByReferenceWithApplicationsAsync(string reference)
+        {
+            var job = await _jobRepository.GetWithDetailsByReferenceAsync(reference);
+            var jobDto = ObjectMapper.Map<JobWithDetails, JobDto>(job);
+            foreach (var applicant in jobDto.Applicants)
+            {
+                var user = await _userRepository.FindAsync(applicant.UserId);
+                if (user != null)
+                {
+                    applicant.FirstName = user.Name;
+                    applicant.LastName = user.Surname;
+                    applicant.Email = user.Email;
+                    applicant.PhoneNumber = user.PhoneNumber;
+                }
+                else
+                {
+                    applicant.FirstName = "Account deleted";
+                }
+            }
+
+            return jobDto;
+        }
+
         public async Task<PagedResultDto<JobDto>> GetListAsync(JobGetListInput input)
         {
             var jobs = new List<Job>();
@@ -397,6 +420,44 @@ namespace JobPortal.Jobs
 
             var newJob = await _jobRepository.InsertAsync(job);
             return ObjectMapper.Map<Job, JobDto>(newJob);
+        }
+
+        public async Task NotifyApplicantsAsync(string reference)
+        {
+            var updatedApplications = new List<Guid>();
+            if (string.IsNullOrEmpty(reference))
+            {
+                return;
+            }
+
+            var job = await GetByReferenceWithApplicationsAsync(reference);
+            var applications = job.Applicants.Where(x => !x.NotificationSent).ToList();
+            foreach (var application in applications.Where(x => x.ApplicationStatus == ApplicationStatus.Rejected))
+            {
+                await _bmtAccountEmailer.SendApplicationRejectionAsync(new ApplicantDto
+                {
+                    ApplicantFirstName = application.FirstName,
+                    CompanyName = job.OrganisationName,
+                    JobTitle = job.Title,
+                    ApplicantEmail = application.Email
+                });
+                updatedApplications.Add(application.JobApplicantId);
+            }
+            foreach (var application in applications.Where(x => x.ApplicationStatus == ApplicationStatus.Interview))
+            {
+                await _bmtAccountEmailer.SendApplicationInterviewAsync(new ApplicantDto
+                {
+                    ApplicantFirstName = application.FirstName,
+                    CompanyName = job.OrganisationName,
+                    JobTitle = job.Title,
+                    ApplicantEmail = application.Email
+                });
+                updatedApplications.Add(application.JobApplicantId);
+            }
+
+            var updatedApplicants = await _jobApplicantsRepository.GetListAsync(x => updatedApplications.Contains(x.JobApplicantId));
+            updatedApplicants.ForEach(x => x.NotificationSent = true);
+            await _jobApplicantsRepository.UpdateManyAsync(updatedApplicants);
         }
 
         private Guid ExtractOrganisationId()
@@ -560,6 +621,160 @@ namespace JobPortal.Jobs
         {
             var screeningQuestions = await _jobRepository.GetScreeningQuestionsByReferenceAsync(jobReference);
             return ObjectMapper.Map<IEnumerable<ScreeningQuestion>, IEnumerable<ScreeningQuestionDto>>(screeningQuestions);
+        }
+
+        public async Task ProgressJobApplicationAsync(string applicationId, bool nextStage)
+        {
+            if (string.IsNullOrWhiteSpace(applicationId))
+            {
+                return;
+            }
+
+            await UpdateApplicationStatusAsync(applicationId, nextStage);
+        }
+
+        public async Task<bool?> HireApplicantAsync(string applicationId, string jobReference)
+        {
+            if (string.IsNullOrWhiteSpace(applicationId) || string.IsNullOrWhiteSpace(jobReference))
+            {
+                return null;
+            }
+
+            await UpdateApplicationStatusAsync(applicationId, true);
+
+            var jobDto = await GetByReferenceWithApplicationsAsync(jobReference);
+            var hiredCount = jobDto.Applicants.Where(x => x.ApplicationStatus == ApplicationStatus.Hired).Count();
+
+            if (jobDto.PositionsAvailable.HasValue && hiredCount >= jobDto.PositionsAvailable)
+            {
+                await UpdateJobStatusAsync(jobReference, JobStatus.Closed);
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<object> ToggleJobStatusAsync(bool acceptingApplications, string jobReference)
+        {
+            if (string.IsNullOrWhiteSpace(jobReference))
+            {
+                return null;
+            }
+
+            var job = await _jobRepository.GetByReferenceAsync(jobReference);
+            if (job?.Status == JobStatus.Deleted)
+            {
+                return null;
+            }
+
+            SwitchJobStatusAsync(acceptingApplications, job);
+
+            await _jobRepository.UpdateAsync(job);
+
+            var hiredCount = job.Applicants.Where(x => x.ApplicationStatus == ApplicationStatus.Hired).Count();
+            var actualPositionsAvailable = job.PositionsAvailable.Value - hiredCount;
+
+            var result = new { applicationDeadline = job.ApplicationDeadline.ToString("dd/MM/yyyy"), actualPositionsAvailable = actualPositionsAvailable };
+            return result;
+        }
+
+        private static void SwitchJobStatusAsync(bool acceptingApplications, Job job)
+        {
+            if (!acceptingApplications)
+            {
+                job.ApplicationDeadline = DateTime.UtcNow.AddDays(-1);
+                job.Status = JobStatus.Closed;
+            }
+            else
+            {
+                var hiredCount = job.Applicants.Where(x => x.ApplicationStatus == ApplicationStatus.Hired).Count();
+                if (hiredCount >= job.PositionsAvailable)
+                {
+                    job.PositionsAvailable = hiredCount +1;
+                }
+                if ((job.ApplicationDeadline - DateTime.Today).TotalDays < 0)
+                {
+                    job.ApplicationDeadline = DateTime.Today.AddDays(30);
+                }
+
+                if (job.Applicants.Where(x => x.ApplicationStatus != ApplicationStatus.New).Count() > 0)
+                {
+                    job.Status = JobStatus.Hiring;
+                }
+                else
+                {
+                    job.Status = JobStatus.Live;
+                }
+            }
+        }
+
+        private async Task UpdateJobStatusAsync(string jobReference, JobStatus status)
+        {
+            var job = await _jobRepository.GetByReferenceAsync(jobReference);
+            if (job == null || job.Status == status)
+            {
+                return;
+            }
+
+            job.Status = status;
+            await _jobRepository.UpdateAsync(job);
+        }
+
+        private async Task UpdateJobStatusAsync(Guid jobId, JobStatus status)
+        {
+            var job = await _jobRepository.FindAsync(jobId);
+            if (job == null || job.Status == status)
+            {
+                return;
+            }
+
+            job.Status = status;
+            await _jobRepository.UpdateAsync(job);
+        }
+
+        private async Task UpdateApplicationStatusAsync(string applicationId, bool nextStage)
+        {
+            if (!Guid.TryParse(applicationId, out var jobApplicationid))
+            {
+                return;
+            }
+
+            var application = await _jobApplicantsRepository.FindAsync(x => x.JobApplicantId == jobApplicationid);
+
+            var newStatus = GetNewStatus(application.ApplicationStatus, nextStage);
+            if (newStatus == null)
+            {
+                return;
+            }
+
+            application.ApplicationStatus = newStatus.Value;
+            application.NotificationSent = false;
+
+            if (newStatus.Value == ApplicationStatus.Interview)
+            {
+                await UpdateJobStatusAsync(application.JobId, JobStatus.Hiring);
+            }
+
+
+            await _jobApplicantsRepository.UpdateAsync(application, autoSave: true);
+        }
+
+        private ApplicationStatus? GetNewStatus(ApplicationStatus applicationStatus, bool nextStage)
+        {
+            if (nextStage)
+            {
+                return applicationStatus switch
+                {
+                    ApplicationStatus.New => ApplicationStatus.Interview,
+                    ApplicationStatus.Interview => ApplicationStatus.Review,
+                    ApplicationStatus.Review => ApplicationStatus.Final,
+                    ApplicationStatus.Final => ApplicationStatus.Hired,
+                    ApplicationStatus.Rejected => ApplicationStatus.Interview,
+                    _ => null,
+                };
+            }
+
+            return ApplicationStatus.Rejected;
         }
 
         [AllowAnonymous]

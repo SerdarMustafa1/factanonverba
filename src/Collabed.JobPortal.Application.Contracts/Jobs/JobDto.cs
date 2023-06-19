@@ -1,5 +1,6 @@
 ﻿using Collabed.JobPortal.Types;
 using System;
+using System.Collections.Generic;
 
 namespace Collabed.JobPortal.Jobs
 {
@@ -19,15 +20,10 @@ namespace Collabed.JobPortal.Jobs
         public float? SalaryMaximum { get; set; }
         public string SalaryBenefits { get; set; }
         public DateTime ApplicationDeadline { get; set; }
-        //public ContractType? Type { get; set; }
         public string ContractType { get; set; }
-        //public EmploymentType? EmploymentType { get; set; }
         public string EmploymentType { get; set; }
-        //public SalaryPeriod? SalaryPeriod { get; set; }
         public string SalaryPeriod { get; set; }
-        //public JobLocation? JobLocation { get; set; }
         public string JobLocation { get; set; }
-        //public ExperienceLevel? ExperienceLevel { get; set; }
         public string ExperienceLevel { get; set; }
         public bool? IsNetZeroCompliant { get; set; }
         public bool? IsSalaryNegotiable { get; set; }
@@ -36,10 +32,11 @@ namespace Collabed.JobPortal.Jobs
         public string SupplementalPay { get; set; }
         public JobOrigin JobOrigin { get; set; }
         public JobStatus Status { get; set; }
-        //public Guid? OrganisationId { get; set; }
         public string OrganisationName { get; set; }
         public DateTime PublishedDate { get; set; }
-
         public string ApplicationUrl { get; set; }
+        public bool? HiringMultipleCandidates { get; set; }
+        public int? PositionsAvailable { get; set; }
+        public List<JobApplicationDto> Applicants { get; set; }
     }
 }

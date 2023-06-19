@@ -2,6 +2,7 @@ using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Permissions;
 using Collabed.JobPortal.Types;
 using Collabed.JobPortal.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using Volo.Abp.PermissionManagement;
 
 namespace Collabed.JobPortal.Web.Pages.JobListingsFull
 {
+    [Authorize(BmtPermissions.ManageJobs)]
     public class ListingsModel : AbpPageModel
     {
         private readonly IJobAppService _jobAppService;

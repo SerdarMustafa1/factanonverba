@@ -44,6 +44,20 @@ namespace Collabed.JobPortal.Account.Emailing.Templates
                     localizationResource: typeof(AccountResource)
                 ).WithVirtualFilePath("/Account/Emailing/Templates/NativeApplication.tpl", true)
             );
+            context.Add(
+                new TemplateDefinition(
+                    BmtAccountEmailTemplates.ApplicationRejection,
+                    layout: StandardEmailTemplates.Layout,
+                    localizationResource: typeof(AccountResource)
+                ).WithVirtualFilePath("/Account/Emailing/Templates/ApplicationRejection.tpl", true)
+            );
+            context.Add(
+                new TemplateDefinition(
+                    BmtAccountEmailTemplates.ApplicationInterview,
+                    layout: StandardEmailTemplates.Layout,
+                    localizationResource: typeof(AccountResource)
+                ).WithVirtualFilePath("/Account/Emailing/Templates/ApplicationInterview.tpl", true)
+            );
         }
     }
 }

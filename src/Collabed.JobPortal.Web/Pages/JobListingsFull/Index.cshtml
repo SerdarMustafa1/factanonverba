@@ -106,13 +106,13 @@
                                 @foreach (var listing in Model.AllJobListings)
                                 {
                                     <tr id="@listing.Reference">
-                                        <td scope="Row">@listing.Title</td>
+                                        <td scope="Row"><a style="text-decoration: none; color: #1D2939;" class="" href="~/applications?reference=@listing.Reference">@listing.Title</a></td>
                                         <td>@listing.DisplayCount(listing.ApplicationsCount)</td>
                                         <td>@listing.DisplayCount(listing.InProcessCount)</td>
                                         <td>@listing.DisplayCount(listing.HiredCount)</td>
                                         <td id="@("days"+@listing.Reference)">@listing.DaysLeft</td>
                                         <td id="@("status"+@listing.Reference)">@listing.Status</td>
-                                        <td><a id="@("edit"+@listing.Reference)" class="edit-link @(listing.Status == JobStatus.Deleted ? "link-disabled" : "")" href="../jobEdit?reference=@listing.Reference">Edit</a></td>
+                                        <td><a id="@("edit"+@listing.Reference)" class="edit-link link-disabled">Edit</a></td>
                                         <td><a id="@("delete"+@listing.Reference)" class="delete-link @(listing.Status == JobStatus.Deleted ? "link-disabled" : "")" href="#" onclick="onJobDelete('@listing.Reference', '@listing.Status')">Delete</a></td>
                                     </tr>
                                 }
@@ -174,95 +174,6 @@
                         </ul>
                     </div>
                 </div>
-@*                <div class="tab-pane" id="live">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%" scope="Column">Listing Title</th>
-                                    <th style="width: 12.5%" scope="Column">Applications</th>
-                                    <th style="width: 12.5%" scope="Column">In Process</th>
-                                    <th style="width: 12.5%" scope="Column">Hired</th>
-                                    <th style="width: 12.5%" scope="Column">Days Left</th>
-                                    <th style="width: 12.5%" scope="Column">Status</th>
-                                    <th style="width: 12.5%" scope="Column" colspan="2">Manage</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var listing in Model.AllJobListings.Where(x => x.Status == JobStatus.Live))
-                                {
-                                    <tr id="@listing.Reference">
-                                        <td scope="Row">@listing.Title</td>
-                                        <td>@listing.ApplicationsCount</td>
-                                        <td>@listing.InProcessCount</td>
-                                        <td>@listing.HiredCount</td>
-                                        <td>@listing.DaysLeft</td>
-                                        <td>@listing.Status</td>
-                                        <td><a href="../jobEdit?reference=@listing.Reference">Edit</a></td>
-                                        <td><a href="#" onclick="onJobDelete('@listing.Reference')">Delete</a></td>
-                                    </tr>
-                                }
-                                @if (Model.LiveCount == 0)
-                                {
-                                    <tr>
-                                        <td scope="Row">No jobs listed</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="clientsPaginationContainer">
-                        <ul class="pagination">
-                            @if (Model.Page > 1)
-                            {
-                                var link = $"?Page={Model.Page - 1}&Tab=live";
-                                <li class="page-item">
-                                    <a href=@link class="page-link">
-                                        <i class="bi bi-chevron-left"></i>
-                                    </a>
-                                </li>
-                            }
-                            @for (var i = 1; i <= totalPagesLiveJobs; i++)
-                            {
-                                var shouldDisplayPage = i == 1 || i == totalPagesLiveJobs ||
-                                (i >= Model.Page - 2 && i <= Model.Page + 2);
-                                var isEllipsisBefore = i == Model.Page - 3;
-                                var isEllipsisAfter = i == Model.Page + 3;
-
-                                if (shouldDisplayPage || isEllipsisBefore || isEllipsisAfter)
-                                {
-                                    var link = $"?Page={i}&Tab=live";
-
-                                    if (isEllipsisBefore || isEllipsisAfter)
-                                    {
-                                        <li class="page-item disabled">
-                                            <span class="page-link">...</span>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li class="page-item @(i == Model.Page ? "active" : "")">
-                                            <a href=@link class="page-link">@i</a>
-                                        </li>
-                                    }
-                                }
-                            }
-                            @if (Model.Page < totalPagesLiveJobs)
-                            {
-                                var link = $"?Page={Model.Page + 1}&Tab=live";
-                                <li class="page-item">
-                                    <a href=@link class="page-link">
-                                        <i class="bi bi-chevron-right"></i>
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-                <div class="tab-pane" id="hiring">
-                </div>
-                <div class="tab-pane" id="closed">
-                </div>*@
             </div>
         </div>
     </abp-card-body>

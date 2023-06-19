@@ -149,7 +149,7 @@ namespace Collabed.JobPortal.Jobs
                 || (x.org != null && x.org.Name.Contains(keyword)));
             }
 
-            query = query.Where(x => x.job.Status == JobStatus.Live);
+            query = query.Where(x => x.job.Status != JobStatus.Closed && x.job.Status != JobStatus.Deleted);
             query = query.Where(x => x.job.ApplicationDeadline > DateTime.UtcNow);
 
             query = sorting switch
@@ -267,7 +267,7 @@ namespace Collabed.JobPortal.Jobs
                                     || (x.org != null && x.org.Name.Contains(keyword)));
             }
 
-            query = query.Where(x => x.job.Status == JobStatus.Live);
+            query = query.Where(x => x.job.Status != JobStatus.Closed && x.job.Status != JobStatus.Deleted);
             query = query.Where(x => x.job.ApplicationDeadline > DateTime.UtcNow);
 
             return await query.CountAsync(cancellationToken);
@@ -316,6 +316,7 @@ namespace Collabed.JobPortal.Jobs
             var query = await ApplyFilterAsync();
 
             var result = await query
+                .Include(x => x.Applicants)
                 .Select(x => new JobWithDetails
                 {
                     Reference = x.Reference,
@@ -346,7 +347,9 @@ namespace Collabed.JobPortal.Jobs
                     OfficeLocationId = x.OfficeLocationId,
                     ApplicationUrl = x.ApplicationUrl,
                     IsSalaryEstimated = x.IsSalaryEstimated,
-                    IsSalaryNegotiable = x.IsSalaryNegotiable
+                    IsSalaryNegotiable = x.IsSalaryNegotiable,
+                    Applicants = x.Applicants,
+                    PositionsAvailable = x.PositionsAvailable
                 })
                 .FirstOrDefaultAsync(x => x.Reference == reference);
 
@@ -388,7 +391,7 @@ namespace Collabed.JobPortal.Jobs
             return await query.AnyAsync(x => x.Reference == reference);
         }
 
-        public async Task UpdateJobsStatus()
+        public async Task UpdateExpiredJobsStatus()
         {
             var dbContext = await GetDbContextAsync();
 

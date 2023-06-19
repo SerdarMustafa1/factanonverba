@@ -5,6 +5,7 @@
         New,
         Interview,
         Review,
+        Final,
         Rejected,
         Hired
     }

@@ -1,6 +1,7 @@
 ﻿using Collabed.JobPortal.Job;
 using Collabed.JobPortal.Types;
 using System;
+using System.Collections.Generic;
 using Volo.Abp.Auditing;
 
 namespace Collabed.JobPortal.Jobs
@@ -56,5 +57,6 @@ namespace Collabed.JobPortal.Jobs
         public string ContactUrl { get; set; }
         public string CompanyName { get; set; }
         public DateTime CreationTime { get; set; }
+        public List<JobApplicant> Applicants { get; set; }
     }
 }

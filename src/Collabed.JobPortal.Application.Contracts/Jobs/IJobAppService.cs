@@ -27,6 +27,10 @@ namespace Collabed.JobPortal.Jobs
 		Task<PagedResultDto<JobSummaryDto>> GetAllListAsync(JobGetListInput input);
 		Task ReviewJobsAsync();
 		Task<StatusedJobsDto> GetStatusedJobsCount(JobGetListInput input);
-
+		Task<JobDto> GetByReferenceWithApplicationsAsync(string reference);
+		Task ProgressJobApplicationAsync(string applicationId, bool nextStage);
+		Task<bool?> HireApplicantAsync(string applicationId, string jobReference);
+		Task NotifyApplicantsAsync(string reference);
+		Task<object> ToggleJobStatusAsync(bool acceptingApplications, string jobReference);
 	}
 }

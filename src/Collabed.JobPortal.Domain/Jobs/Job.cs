@@ -32,7 +32,7 @@ namespace Collabed.JobPortal.Jobs
         public bool? IsSalaryNegotiable { get; set; }
         public string SalaryBenefits { get; set; }
         public bool? HiringMultipleCandidates { get; set; }
-        public int? PositionsAvailable { get; set; }
+        public int? PositionsAvailable { get; set; } = 1;
         public DateTime ApplicationDeadline { get; set; }
         public CurrencyType? SalaryCurrency { get; set; }
         public ContractType? Type { get; set; }

@@ -4,6 +4,7 @@ using Collabed.JobPortal.Localization;
 using Collabed.JobPortal.Settings;
 using Collabed.JobPortal.Web.Menus;
 using Collabed.JobPortal.Web.Pages.Account;
+using Collabed.JobPortal.Web.Pages.Applications;
 using Collabed.JobPortal.Web.Pages.JobListingsFull;
 using Collabed.JobPortal.Web.Pages.Shared.Components.Footer;
 using Collabed.JobPortal.Web.Pages.Shared.Components.GoogleAnalytics;
@@ -248,7 +249,18 @@ public class JobPortalWebModule : AbpModule
                     {
                         configuration.AddFiles("/Pages/JobListingsFull/job-listings.css");
                     });
-
+            options.ScriptBundles
+                .Configure(typeof(ApplicationsModel).FullName,
+                    configuration =>
+                    {
+                        configuration.AddFiles("/Pages/Applications/applications.js");
+                    });
+            options.StyleBundles
+                .Configure(typeof(ApplicationsModel).FullName,
+                    configuration =>
+                    {
+                        configuration.AddFiles("/Pages/Applications/applications.css");
+                    });
         });
     }
 
