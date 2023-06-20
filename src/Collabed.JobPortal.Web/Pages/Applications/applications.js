@@ -67,3 +67,8 @@ function onToggleChange(event, jobRef) {
             document.getElementById('positionsAvailableId').innerText = result.actualPositionsAvailable;
         });
 }
+
+function updateApplicantRating(applicantReference) {
+    let rating = document.getElementById('rating' + applicantReference).value;
+    jobPortal.jobs.job.updateApplicantRating(rating, applicantReference)
+}

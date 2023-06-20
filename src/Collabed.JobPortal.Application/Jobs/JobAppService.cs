@@ -623,6 +623,7 @@ namespace JobPortal.Jobs
             return ObjectMapper.Map<IEnumerable<ScreeningQuestion>, IEnumerable<ScreeningQuestionDto>>(screeningQuestions);
         }
 
+        [Authorize(BmtPermissions.ManageJobs)]
         public async Task ProgressJobApplicationAsync(string applicationId, bool nextStage)
         {
             if (string.IsNullOrWhiteSpace(applicationId))
@@ -633,6 +634,7 @@ namespace JobPortal.Jobs
             await UpdateApplicationStatusAsync(applicationId, nextStage);
         }
 
+        [Authorize(BmtPermissions.ManageJobs)]
         public async Task<bool?> HireApplicantAsync(string applicationId, string jobReference)
         {
             if (string.IsNullOrWhiteSpace(applicationId) || string.IsNullOrWhiteSpace(jobReference))
@@ -654,6 +656,7 @@ namespace JobPortal.Jobs
             return true;
         }
 
+        [Authorize(BmtPermissions.ManageJobs)]
         public async Task<object> ToggleJobStatusAsync(bool acceptingApplications, string jobReference)
         {
             if (string.IsNullOrWhiteSpace(jobReference))
@@ -676,6 +679,95 @@ namespace JobPortal.Jobs
 
             var result = new { applicationDeadline = job.ApplicationDeadline.ToString("dd/MM/yyyy"), actualPositionsAvailable = actualPositionsAvailable };
             return result;
+        }
+
+        [Authorize(BmtPermissions.ManageJobs)]
+        public async Task<ApplicationSummaryDto> GetApplicationByReferenceAsync(string reference)
+        {
+            var applicantionDto = new ApplicationSummaryDto();
+
+            var jobApplicant = await _jobApplicantsRepository.FindAsync(x => x.Reference == reference);
+            applicantionDto.ApplicationId = jobApplicant.JobApplicantId;
+            applicantionDto.CvFileName = jobApplicant.CvFileName;
+            applicantionDto.CvBlobFileName = jobApplicant.CvBlobName;
+            applicantionDto.CvContentType= jobApplicant.CvContentType;
+            applicantionDto.CoverLetter = jobApplicant.CoverLetter;
+            applicantionDto.PortfolioLink = jobApplicant.Portfolio;
+            applicantionDto.InterviewDate = jobApplicant.InterviewDate;
+            applicantionDto.UserId = jobApplicant.UserId;
+            applicantionDto.ApplicationDate = jobApplicant.ApplicationDate;
+            applicantionDto.Rating = jobApplicant.Rating;
+            applicantionDto.Status = jobApplicant.ApplicationStatus;
+
+            var job = await _jobRepository.GetAsync(jobApplicant.JobId);
+            applicantionDto.JobReference = job.Reference;
+            applicantionDto.JobTitle = job.Title;
+
+            var user = await _userRepository.FindAsync(jobApplicant.UserId);
+            if (user != null)
+            {
+                applicantionDto.FirstName = user.Name;
+                applicantionDto.LastName = user.Surname;
+                applicantionDto.PhoneNumber = user.PhoneNumber;
+                applicantionDto.Email = user.Email;
+            }
+            var applicantProfile = await _profileRepository.FindAsync(x => x.UserId == jobApplicant.UserId);
+            if (applicantProfile != null)
+            {
+                applicantionDto.PostCode = applicantProfile.PostCode;
+            }
+
+            return applicantionDto;
+        }
+
+        [Authorize(BmtPermissions.ManageJobs)]
+        public async Task UpdateApplicantRatingAsync(string rating, string appReference)
+        {
+            if (string.IsNullOrWhiteSpace(appReference))
+            {
+                return;
+            }
+
+            var applicant = await _jobApplicantsRepository.FindAsync(x => x.Reference == appReference);
+            if (applicant == null)
+            {
+                return;
+            }
+
+            if (!int.TryParse(rating, out var ratingConverted))
+            {
+                applicant.Rating = null;
+            }
+            else
+            {
+                applicant.Rating = ratingConverted;
+            }
+
+            await _jobApplicantsRepository.UpdateAsync(applicant);
+        }
+
+        [Authorize(BmtPermissions.ManageJobs)]
+        public async Task SetInterviewDateAsync(string interviewDate, string appReference)
+        {
+            if (string.IsNullOrWhiteSpace(appReference) || string.IsNullOrWhiteSpace(interviewDate))
+            {
+                return;
+            }
+
+            if (!DateTime.TryParseExact(interviewDate, new string[] { "dd/MM/yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out var interviewDateConverted))
+            {
+                return;
+            }
+
+            var applicant = await _jobApplicantsRepository.FindAsync(x => x.Reference == appReference);
+            if (applicant == null)
+            {
+                return;
+            }
+
+            applicant.InterviewDate = interviewDateConverted;
+
+            await _jobApplicantsRepository.UpdateAsync(applicant);
         }
 
         private static void SwitchJobStatusAsync(bool acceptingApplications, Job job)

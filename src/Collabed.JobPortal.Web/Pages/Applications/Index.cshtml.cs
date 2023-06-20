@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Volo.Abp.PermissionManagement;
 
 namespace Collabed.JobPortal.Web.Pages.Applications
 {
@@ -17,7 +16,7 @@ namespace Collabed.JobPortal.Web.Pages.Applications
     public class ApplicationsModel : AbpPageModel
     {
         private readonly IJobAppService _jobAppService;
-        private readonly IPermissionManager _permissionManager;
+
         public int AllApplicationsCount { get; set; }
         public int InterviewCount { get; set; }
         public int ReviewCount { get; set; }
@@ -101,25 +100,29 @@ namespace Collabed.JobPortal.Web.Pages.Applications
             {
                 return applications.Where(x => x.ApplicationStatus == stage).Select(z => new Models.Application
                 {
+                    Reference = z.Reference,
                     JobApplicationId = z.JobApplicantId,
                     ApplicationDate = z.ApplicationDate,
                     InterviewDate = z.InterviewDate,
                     CandidateEmail = z.Email,
                     CandidatePhoneNumber = z.PhoneNumber,
                     CandidateName = $"{z.FirstName} {z.LastName}",
-                    ApplicationStatus = z.ApplicationStatus
+                    ApplicationStatus = z.ApplicationStatus,
+                    Rating = z.Rating ?? default,
                 }).ToList();
             }
 
             return applications.Select(z => new Models.Application
             {
+                Reference = z.Reference,
                 JobApplicationId = z.JobApplicantId,
                 ApplicationDate = z.ApplicationDate,
                 InterviewDate = z.InterviewDate,
                 CandidateEmail = z.Email,
                 CandidatePhoneNumber = z.PhoneNumber,
                 CandidateName = $"{z.FirstName} {z.LastName}",
-                ApplicationStatus = z.ApplicationStatus
+                ApplicationStatus = z.ApplicationStatus,
+                Rating = z.Rating ?? default,
             }).ToList();
         }
     }

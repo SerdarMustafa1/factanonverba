@@ -10,18 +10,24 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th style="width: 25%" scope="Column">Candidate</th>
-                    <th style="width: 25%" scope="Column">Status</th>
-                    <th style="width: 25%" scope="Column" colspan="2">Actions</th>
-                    <th style="width: 25%" scope="Column" colspan="2">Notify Results</th>
+                    <th style="width: 20%" scope="Column">Candidate</th>
+                    <th style="width: 20%" scope="Column">Status</th>
+                    <th style="width: 20%" scope="Column">Rating</th>
+                    <th style="width: 20%" scope="Column" colspan="2">Actions</th>
+                    <th style="width: 20%" scope="Column" colspan="2">Notify Results</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var application in Model.Applications)
                 {
                     <tr id="@application.JobApplicationId">
-                        <td scope="Row">@application.CandidateName</td>
+                        <td scope="Row"><a class="edit-link" href="~/applicant?reference=@application.Reference">@application.CandidateName</a></td>
                         <td id="@("status"+application.JobApplicationId)">@(application.ApplicationStatus == ApplicationStatus.Hired ? "Hired" : " - ")</td>
+                        <td>
+                            <div class="form-group" style="width: 50%;">
+                                @Html.DropDownListFor(c => application.Rating, Model.Ratings, " - ", new { id = $"rating{application.Reference}", @class = "form-select", data_live_search = "true", onchange = $"updateApplicantRating('{application.Reference}')" })
+                            </div>
+                        </td>
                         <td><a id="@("hire"+application.JobApplicationId)" class="edit-link hire-link" href="#" onclick="onHire('@application.JobApplicationId', '@Model.Reference')">Hire</a></td>
                         <td><a id="@("reject"+application.JobApplicationId)" class="delete-link" href="#" onclick="onReject('@application.JobApplicationId')">Reject</a></td>
                         <td><a class="edit-link @(string.IsNullOrWhiteSpace(application.CandidatePhoneNumber) ? "link-disabled" : "") @(Model.CanHireApplicants ? "" : "link-disabled")" href="@(string.IsNullOrWhiteSpace(application.CandidatePhoneNumber) ? "" : $"tel:{application.CandidatePhoneNumber}")" onclick="onHire('@application.JobApplicationId')">Call</a></td>

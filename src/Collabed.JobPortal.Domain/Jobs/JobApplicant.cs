@@ -1,4 +1,5 @@
-﻿using Collabed.JobPortal.Types;
+﻿using Collabed.JobPortal.Extensions;
+using Collabed.JobPortal.Types;
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
@@ -10,6 +11,7 @@ namespace Collabed.JobPortal.Jobs
         public Guid JobApplicantId { get; private set; }
         public Guid UserId { get; private set; }
         public Guid JobId { get; private set; }
+        public string Reference { get; private set; }
         public string CvBlobName { get; set; }
         public string CvFileName { get; set; }
         public string CvContentType { get; set; }
@@ -20,12 +22,14 @@ namespace Collabed.JobPortal.Jobs
         public DateTime? InterviewDate { get; set; }
         public bool StatusChangePublished { get; set; }
         public bool NotificationSent { get; set; }
+        public int? Rating { get; set; }
         public IEnumerable<ApplicantScreeningAnswer> ApplicantScreeningAnswers { get; private set; }
 
         /* This constructor is for deserialization / ORM purpose */
         private JobApplicant()
         {
             JobApplicantId = Guid.NewGuid();
+            Reference = RandomNameGenerator.GenerateRandomName(10);
         }
 
         internal JobApplicant(Guid userId, Guid jobId)
@@ -35,6 +39,7 @@ namespace Collabed.JobPortal.Jobs
             JobId = jobId;
             ApplicationStatus = ApplicationStatus.New;
             ApplicationDate = DateTime.Now;
+            Reference = RandomNameGenerator.GenerateRandomName(10);
         }
 
         public override object[] GetKeys()

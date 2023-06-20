@@ -1,0 +1,119 @@
+﻿@page
+@using Collabed.JobPortal.Types;
+@model Collabed.JobPortal.Web.Pages.Applicant.ApplicantModel
+@{
+}
+@section styles {
+    <abp-style src="/Pages/Applicant/applicant.css" />
+}
+@section scripts {
+    <abp-script src="/Pages/Applicant/applicant.js" />
+}
+<abp-card>
+    <abp-card-body style="margin-inline: 2%">
+        <div style="margin-block: 1%">
+            <div class="row">
+                <a class="back-link" style="padding-inline: 2%; margin-bottom: 1%;" href="~/applications?Reference=@Model.JobReference">Back to All Applications</a>
+            </div>
+            <div class="row" style="margin-block:1%;">
+                <div class="col-sm-5 col-md-4 col-xl-2" style="font-weight: 600; font-size: 18px;">
+                    <span>@Model.Applicant.FullName</span>
+                </div>
+                <div class="col-sm-3 rating-label" style="font-weight: 600; font-size: 18px;">
+                    Rating
+                </div>
+            </div>
+            <div class="row" style="font-size: 14px">
+                <div class="col-sm-5 col-md-4 col-xl-2">
+                    <span>Applied for </span>
+                    <a class="back-link" href="~/job?reference=@Model.JobReference" target="_blank">@Model.Applicant.JobTitle</a>
+                </div>
+                <div class="offset-xl-5 offset-md-0 offset-sm-0 col-xl-5 col-md-8 col-sm-7">
+                    <div class="row" style="align-items: end; justify-content: end;">
+                        <div class="form-group side-buttons" style="padding-right: 0;">
+                            @Html.DropDownListFor(c => c.Applicant.Rating, Model.Ratings, " - ", new { @class = "form-select", data_live_search = "true", onchange = $"updateApplicantRating('{Model.Reference}')" })
+                        </div>
+                        <button id="rejectBtn" class="btn btn-outline-primary side-buttons" onclick="onReject('@Model.Applicant.ApplicationId')" @(Model.Applicant.Status == ApplicationStatus.Rejected ? "disabled" : "")>Reject</button>
+                        @if (Model.Applicant.Status == ApplicationStatus.Final || Model.Applicant.Status == ApplicationStatus.Hired)
+                        {
+                            <button id="hireBtn" class="btn btn-primary side-buttons" onclick="onHire('@Model.Applicant.ApplicationId','@Model.JobReference')" @(Model.Applicant.Status == ApplicationStatus.Hired ? "disabled" : "")>Hire</button>
+                        }
+                        else
+                        {
+                            <button id="promoteBtn" class="btn btn-primary side-buttons" onclick="onPromote('@Model.Applicant.ApplicationId')">Next Stage</button>
+                        }
+                    </div>
+                </div>
+            </div>
+            @if (Model.Applicant.Status == ApplicationStatus.Interview)
+            {
+                <div class="row mb-2" style="font-size: 14px; font-weight: 600; margin-top: 3%;">
+                    Interview Date
+                </div>
+                <div class="row" >
+                    <input class="form-control" asp-for="Applicant.InterviewDate" type="date" placeholder="Select date" onchange="setInterviewDate('@Model.Reference')" />
+                </div>
+                <div class="row">
+                    <p class="ps-0 mt-2">
+                        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                        Please notify externally the candidate to arrange and notify when and where the interview is taking place.
+                    </p>
+                </div>                
+            }
+        </div>
+        <div style="width: 100%; height: 15px; border-bottom: 1px solid #c5c6c8; text-align: center; margin-block: 3%">
+        </div>
+        <div class="row" style="font-weight: 600; font-size: 16px; margin-block: 1%;">
+            <div class="input-group pe-0" ">
+                Candidate Details
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group mb-3 pe-0" ">
+                <span class="input-group-text" id="name-id">Name</span>
+                <input readonly type="text" class="form-control" value="@Model.Applicant.FullName" aria-describedby="name-id">
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group mb-3 pe-0" ">
+                <span class="input-group-text" id="email-id">E-mail</span>
+                <input readonly type="text" class="form-control" value="@Model.Applicant.Email" aria-describedby="email-id">
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group mb-3 pe-0" ">
+                <span class="input-group-text" id="phone-id">Phone</span>
+                <input readonly type="text" class="form-control" value="@Model.Applicant.Phone" aria-describedby="phone-id">
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group mb-3 pe-0"">
+                <span class="input-group-text" id="applied-id">Applied</span>
+                <input readonly type="text" class="form-control" value="@Model.Applicant.ApplicationDate.ToString("dd/MM/yyyy")" aria-describedby="applied-id">
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 2%">
+            <div class="input-group mb-3 pe-0"">
+                <span class="input-group-text" id="postcode-id">Post Code</span>
+                <input readonly type="text" class="form-control" value="@Model.Applicant.PostCode" aria-describedby="postcode-id">
+            </div>
+        </div>
+        <div style="width: 100%; height: 15px; border-bottom: 1px solid #c5c6c8; text-align: center; margin-bottom: 3%">
+        </div>
+        <div class="row" style="font-weight: 600; font-size: 16px; margin-top: 1%; margin-bottom: 2%">
+            Application Supportive Documents
+        </div>
+        <div class="row app-details">
+            <span style="padding-left: 0;">CV<a style="margin-left: 2%" class="back-link" href="@Url.Page("Index", "DownloadCv", new {fileName = Model.Applicant.Cv, blobName = Model.Applicant.CvBlobName, contentType = Model.Applicant.CvContentType})">@Model.Applicant.Cv</a></span>
+        </div>
+        <div class="row app-details">
+            <span style="padding-left: 0;">Online Portfolio<a style="margin-left: 2%" class="back-link" href="@Model.Applicant.Portfolio" target="_blank">@Model.Applicant.Portfolio</a></span>
+        </div>
+        <div class="row app-details" style="margin-bottom: 1%">
+            Cover Letter
+        </div>
+        <div class="row">
+            @Model.Applicant.CoverLetter
+        </div>
+    </abp-card-body>
+</abp-card>

@@ -1,0 +1,39 @@
+﻿.form-control[readonly] {
+    background-color: #ffffff;
+}
+
+.app-details {
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 1%;
+    margin-bottom: 2%
+}
+
+.side-buttons {
+    width: 28%;
+    margin-left: 2%;
+}
+
+@media screen and (min-width: 1200px) {
+    .rating-label {
+        margin-left: 46.7%;
+    }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+    .rating-label {
+        margin-left: 8%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .rating-label {
+        margin-left: 8%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .rating-label {
+        margin-left: 7%;
+    }
+}

@@ -5,6 +5,7 @@ namespace Collabed.JobPortal.Jobs
 {
     public class JobApplicationDto
     {
+        public string Reference { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
@@ -22,5 +23,6 @@ namespace Collabed.JobPortal.Jobs
         public DateTime? InterviewDate { get; set; }
         public bool StatusChangePublished { get; set; }
         public bool NotificationSent { get; set; }
+        public int? Rating { get; set; }
     }
 }

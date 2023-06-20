@@ -32,5 +32,9 @@ namespace Collabed.JobPortal.Jobs
 		Task<bool?> HireApplicantAsync(string applicationId, string jobReference);
 		Task NotifyApplicantsAsync(string reference);
 		Task<object> ToggleJobStatusAsync(bool acceptingApplications, string jobReference);
+		Task<ApplicationSummaryDto> GetApplicationByReferenceAsync(string reference);
+		Task UpdateApplicantRatingAsync(string rating, string appReference);
+
+		Task SetInterviewDateAsync(string interviewDate, string appReference);
 	}
 }
