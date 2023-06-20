@@ -220,11 +220,6 @@ label.text-14 {
     color: #FAFAFA !important;
 }
 
-.btn-primary:disabled {
-    background-color: var(--neutral300) !important;
-    border-color: var(--neutral300) !important;
-}
-
 .btn-primary:active {
     background-color: var(--primary800) !important;
     border-color: var(--primary800) !important;
