@@ -76,7 +76,7 @@
                 Best wishes
                 </p>
                 <p class="hint-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 200; color: #475467; margin: 0 0 1rem;" align="left">
-                model.company
+                {{model.company}}
                 </p>
               </div>
             </div>
