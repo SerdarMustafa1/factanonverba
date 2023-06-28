@@ -1,5 +1,6 @@
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Permissions;
+using Collabed.JobPortal.Types;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,19 +15,30 @@ using Volo.Abp.PermissionManagement;
 namespace Collabed.JobPortal.Web.Pages.JobListings
 {
     [Authorize(BmtPermissions.ManageJobs)]
-    public class JobListingsModel : AbpPageModel
+    public class ListingsModel : AbpPageModel
     {
         private readonly IJobAppService _jobAppService;
         private readonly IPermissionManager _permissionManager;
+        public bool CanPostNewJob { get; set; } = true;
+        public int AllJobsCount { get; set; }
+        public int LiveCount { get; set; }
+        public int HiringCount { get; set; }
+        public int ClosedCount { get; set; }
         public int TotalCount { get; set; }
         [BindProperty(SupportsGet = true)]
         public int CurrentPage { get; set; } = 1;
+        [BindProperty(SupportsGet = true)]
+        public string Tab { get; set; } = "all";
         public int PageSize { get; set; } = 10;
         public int TotalPages => (int)Math.Ceiling(decimal.Divide(TotalCount, PageSize));
-        public List<JobListing> JobListings { get; set; }
-        public bool CanPostNewJob { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; }
+        public List<Listing> AllJobListings { get; set; } = new List<Listing>();
+        //public List<Listing> LiveJobListings { get; set; } = new List<Listing>();
+        //public List<Listing> HiringJobListings { get; set; } = new List<Listing>();
+        //public List<Listing> ClosedJobListings { get; set; } = new List<Listing>();
 
-        public JobListingsModel(IJobAppService jobAppService, IPermissionManager permissionManager)
+        public ListingsModel(IJobAppService jobAppService, IPermissionManager permissionManager)
         {
             _jobAppService = jobAppService;
             _permissionManager = permissionManager;
@@ -34,37 +46,62 @@ namespace Collabed.JobPortal.Web.Pages.JobListings
 
         public async Task OnGetAsync()
         {
-            await GetJobListingsAsync(CurrentPage);
+            await SearchJobListingsAsync();
         }
 
-        public void OnPostSubmit()
-        {
-        }
-
-        private async Task GetJobListingsAsync(int page)
+        private async Task SearchJobListingsAsync()
         {
             var organisationId = ExtractOrganisationId();
 
-            var listings = await _jobAppService.GetListAsync(new JobGetListInput
+            var getJobsInput = new JobGetListInput
             {
                 OrganisationId = organisationId,
-                MaxResultCount =  PageSize,
-                SkipCount = (page - 1)* PageSize
-            });
+                SearchCriteria = Search,
+                Status = GetStatus(Tab),
+                SkipCount = CurrentPage == 1 ? 0 : (CurrentPage-1) * PageSize,
+                MaxResultCount = PageSize
+            };
 
-            JobListings = listings.Items.Select(x => new JobListing
+            if (!string.IsNullOrWhiteSpace(Search))
             {
-                Reference = x.Reference,
-                Title = x.Title
-            }).ToList();
-            TotalCount = (int)listings.TotalCount;
+                getJobsInput.SearchCriteria = Search;
+            }
+
+            var jobListings = await _jobAppService.GetAllListAsync(getJobsInput);
+
+            if (jobListings.Items.Any())
+            {
+                AllJobListings = jobListings.Items.Select(ObjectMapper.Map<JobSummaryDto, Listing>).ToList();
+            }
+
+            var jobsByStatus = await _jobAppService.GetStatusedJobsCount(getJobsInput);
+            AllJobsCount = jobsByStatus.AllJobsCount;
+            LiveCount = jobsByStatus.LiveCount;
+            HiringCount = jobsByStatus.HiringCount;
+            ClosedCount = jobsByStatus.ClosedCount;
 
             var permissions = await _permissionManager.GetAllForUserAsync((Guid)CurrentUser.Id);
-
             if (permissions.Any(x => x.Name == BmtPermissions.PostJobs && x.IsGranted))
             {
                 CanPostNewJob = true;
             }
+        }
+
+        public async Task OnPostAsync()
+        {
+            await SearchJobListingsAsync();
+        }
+
+        private static JobStatus? GetStatus(string tab)
+        {
+            return tab switch
+            {
+                "all" => null,
+                "live" => JobStatus.Live,
+                "hiring" => JobStatus.Hiring,
+                "closed" => JobStatus.Closed,
+                _ => null,
+            };
         }
 
         private Guid ExtractOrganisationId()
@@ -79,9 +116,22 @@ namespace Collabed.JobPortal.Web.Pages.JobListings
         }
     }
 
-    public class JobListing
+    public class Listing
     {
         public string Reference { get; set; }
         public string Title { get; set; }
+        public int ApplicationsCount { get; set; }
+        public int InProcessCount { get; set; }
+        public int HiredCount { get; set; }
+        public string DaysLeft { get; set; }
+        public JobStatus Status { get; set; }
+
+        public string DisplayCount(int count)
+        {
+            if (count == default)
+                return "-";
+
+            return count.ToString();
+        }
     }
 }

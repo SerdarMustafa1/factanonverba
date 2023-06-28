@@ -1,0 +1,100 @@
+﻿@page
+@using Collabed.Application.Helpers;
+@model Collabed.JobPortal.Web.Pages.JobListingsOld.JobListingsModel
+@{
+}
+@section styles {
+
+}
+
+@section scripts {
+    <abp-script src="/Pages/JobListingsOld/joblistings.js" />
+}
+
+<input type="hidden" asp-for="@Model.CurrentPage" id="currentPageHiddenInput" />
+<div>
+    <div class="row">
+        <div class="col-3" style="font-weight: 600; font-size: 36px;">
+            <span>Job Listings</span>
+        </div>
+        @if (Model.CanPostNewJob)
+        {
+            <div class="offset-7 col-2">
+                <a href="/Job/Post" class="btn btn-primary searchBtn" style="float:right;">Post a new job</a>
+            </div>
+        }
+    </div>
+    <br />
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th style="width: 17%" scope="Column">Reference</th>
+                <th style="width: 70%" scope="Column">Job Listing</th>
+                <th style="width: 13%" scope="Column" colspan="2">Manage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var listing in Model.JobListings)
+            {
+                <tr id="@listing.Reference">
+                    <td scope="Row">@listing.Reference</td>
+                    <td>@listing.Title</td>
+                    <td><a href="../job?reference=@listing.Reference">View</a></td>
+                    <td><a href="#" onclick="onJobDelete('@listing.Reference')">Delete</a></td>
+                </tr>            
+            }
+        </tbody>
+    </table>
+    <div class="clientsPaginationContainer">
+        <ul class="pagination">
+            @if (Model.CurrentPage > 1)
+            {
+                var link = $"?CurrentPage={Model.CurrentPage - 1}";
+                <li class="page-item">
+                    <a href=@link class="page-link">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+            }
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                var shouldDisplayPage = i == 1 || i == Model.TotalPages ||
+                (i >= Model.CurrentPage - 2 && i <= Model.CurrentPage + 2);
+                var isEllipsisBefore = i == Model.CurrentPage - 3;
+                var isEllipsisAfter = i == Model.CurrentPage + 3;
+
+                if (shouldDisplayPage || isEllipsisBefore || isEllipsisAfter)
+                {
+                    var link = $"?CurrentPage={i}";
+
+                    if (isEllipsisBefore || isEllipsisAfter)
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                            <a href=@link class="page-link">@i</a>
+                        </li>
+                    }
+                }
+            }
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                var link = $"?CurrentPage={Model.CurrentPage + 1}";
+                <li class="page-item">
+                    <a href=@link class="page-link">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <br />
+    <div class="row">
+        <span style="font-weight: 600; font-size:18px">Tracking Applications</span>
+        <p style="margin-top:10px">We are currently in the process of developing a complete applicant tracking system (ATS). In the meantime, please check your email regularly to review and sort through the incoming job applications.</p>
+    </div>
+</div>

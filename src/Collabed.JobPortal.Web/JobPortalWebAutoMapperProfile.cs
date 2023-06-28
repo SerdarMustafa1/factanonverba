@@ -3,7 +3,7 @@ using Collabed.JobPortal.Account;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Web.Models;
 using Collabed.JobPortal.Web.Pages.Applications;
-using Collabed.JobPortal.Web.Pages.JobListingsFull;
+using Collabed.JobPortal.Web.Pages.JobListings;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace Collabed.JobPortal.Web.Pages.JobListingsFull
+namespace Collabed.JobPortal.Web.Pages.JobListingsOld
 {
     [IgnoreAntiforgeryToken]
     public class DeleteJobListingModal : AbpPageModel

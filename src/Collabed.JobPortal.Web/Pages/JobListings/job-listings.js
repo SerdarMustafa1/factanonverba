@@ -7,7 +7,7 @@ function onJobDelete(jobRef, status) {
         return;
     }
 
-    var deleteJobModal = new abp.ModalManager('/JobListingsFull/DeleteJobListingModal');
+    var deleteJobModal = new abp.ModalManager('/JobListings/DeleteJobListingModal');
 
     deleteJobModal.onResult(function () {
         jobPortal.jobs.job.deactivateJob(jobRef);
