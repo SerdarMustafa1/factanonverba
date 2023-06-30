@@ -82,7 +82,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public bool? LocalLanguageRequired { get; set; }
 
         [BindProperty]
-        public int? LanguageId { get; set; } = 1;
+        public int? LanguageId { get; set; }
 
         [BindProperty]
         public bool? OfferingVisaSponsorship { get; set; }
