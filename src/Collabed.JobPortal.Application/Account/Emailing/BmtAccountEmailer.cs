@@ -65,7 +65,7 @@ namespace Collabed.JobPortal.Account.Emailing
             var emailContent = await TemplateRenderer.RenderAsync(
                 BmtAccountEmailTemplates.ApplicationConfirmation, new
                 {
-                    link = url + "/JobDashboard/Search",
+                    link = url + "/JobDashboard",
                     firstname = application.FirstName,
                     lastname = application.LastName,
                     reference = application.JobReference,
@@ -137,7 +137,7 @@ namespace Collabed.JobPortal.Account.Emailing
             var emailContent = await TemplateRenderer.RenderAsync(
                 BmtAccountEmailTemplates.ApplicationRejection, new
                 {
-                    link = url + "/JobDashboard/Search",
+                    link = url + "/JobDashboard",
                     firstname = rejection.ApplicantFirstName,
                     jobtitle = rejection.JobTitle,
                     company = rejection.CompanyName
