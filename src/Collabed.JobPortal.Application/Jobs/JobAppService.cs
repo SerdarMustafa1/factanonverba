@@ -375,7 +375,7 @@ namespace JobPortal.Jobs
                         break;
                     case JobStatus.Deleted:
                         break;
-                    case JobStatus.Hiring:
+                    case JobStatus.Interviewing:
                         statusedJobsDto.HiringCount = status.Count;
                         break;
                     default:
@@ -791,7 +791,7 @@ namespace JobPortal.Jobs
 
                 if (job.Applicants.Where(x => x.ApplicationStatus != ApplicationStatus.New).Count() > 0)
                 {
-                    job.Status = JobStatus.Hiring;
+                    job.Status = JobStatus.Interviewing;
                 }
                 else
                 {
@@ -844,7 +844,7 @@ namespace JobPortal.Jobs
 
             if (newStatus.Value == ApplicationStatus.Interview)
             {
-                await UpdateJobStatusAsync(application.JobId, JobStatus.Hiring);
+                await UpdateJobStatusAsync(application.JobId, JobStatus.Interviewing);
             }
 
 

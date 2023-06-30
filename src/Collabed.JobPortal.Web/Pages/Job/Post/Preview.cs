@@ -143,6 +143,11 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
 
         public string GetLocalLanguageName()
         {
+            if (!LanguageId.HasValue)
+            {
+                return string.Empty;
+            }
+
             var res = _dropDownAppService.GetLanguageNameById(LanguageId.Value).Result;
             if (res != null)
             {

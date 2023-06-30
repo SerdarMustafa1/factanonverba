@@ -98,7 +98,7 @@ namespace Collabed.JobPortal.Web.Pages.JobListings
             {
                 "all" => null,
                 "live" => JobStatus.Live,
-                "hiring" => JobStatus.Hiring,
+                "hiring" => JobStatus.Interviewing,
                 "closed" => JobStatus.Closed,
                 _ => null,
             };

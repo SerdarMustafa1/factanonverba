@@ -5,6 +5,6 @@
         Live,
         Closed,
         Deleted,
-        Hiring
+        Interviewing
     }
 }
