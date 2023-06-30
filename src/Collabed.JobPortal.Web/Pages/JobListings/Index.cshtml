@@ -46,8 +46,7 @@
                             <input class="form-control" asp-for="Search" placeholder="Search..." />
                             <div class="input-group-append">
                                 <button class="btn btn-primary" style="border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important" type="submit">
-                                    @*<span class="input-group-text"><i class="bi bi-search"></i></span>*@
-                                    <i class="bi bi-search"></i>
+                                <i class="bi bi-search"></i>
                             </button>
                             </div>
                     </div>
@@ -77,7 +76,7 @@
                 <li class="nav-item internal">
                     <a class="nav-link internal @(Model.Tab == "hiring" ? "active" : "")" style="font-weight: 600;" id="tabLink3" href="@("?Tab=hiring" +searchText)">
                         <i class="bi bi-person-plus-fill"></i>
-                        <span class="no-display-on-mobile">@("Hiring ("+Model.HiringCount+")")</span>
+                        <span class="no-display-on-mobile">@("Interviewing ("+Model.HiringCount+")")</span>
                     </a>
                 </li>
                 <li class="nav-item internal">
@@ -106,7 +105,14 @@
                                 @foreach (var listing in Model.AllJobListings)
                                 {
                                     <tr id="@listing.Reference">
-                                        <td scope="Row"><a style="text-decoration: none; color: #1D2939;" class="" href="~/applications?reference=@listing.Reference">@listing.Title</a></td>
+                                        @if (listing.Status == JobStatus.Deleted)
+                                        {
+                                            <td scope="Row">@listing.Title</td>
+                                        }
+                                        else
+                                        {
+                                            <td scope="Row"><a id="@("title"+@listing.Reference)" style="text-decoration:underline" class="edit-link" href="~/applications?reference=@listing.Reference">@listing.Title</a></td>
+                                        }
                                         <td>@listing.DisplayCount(listing.ApplicationsCount)</td>
                                         <td>@listing.DisplayCount(listing.InProcessCount)</td>
                                         <td>@listing.DisplayCount(listing.HiredCount)</td>

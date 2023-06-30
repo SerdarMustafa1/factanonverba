@@ -87,12 +87,13 @@
                 <div class="row">
                     <div class="col-sm">
                         <p class="text-16-bold">Sub-description*</p>
-                        <p class="text-14">Please provide a short sub-description<br/>including key high level information.</p>
+                        <p class="text-14">Please provide a short sub-description<br />including key high level information. <br />This is shown on summary job listing only.</p>
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
                             <textarea class="form-control" asp-for="SubDescription" maxlength="190" id="subDescriptionInput" ></textarea>
-                            <span id="subDescriptionErrorMessage" asp-validation-for="SubDescription" class="error-message-span"></span>
+                            <span classs="row" id="subDescCharacters" style="opacity: 0.6; margin-left: 0; display: none">190 characters left</span>
+                            <span id="subDescriptionErrorMessage" asp-validation-for="SubDescription" class="error-message-span row" style="margin-left: 0"></span>
                         </div>
                     </div>
                 </div>
@@ -100,7 +101,7 @@
                 <div class="row">
                     <div class="col-sm">
                         <p class="text-16-bold">Description*</p>
-                        <p class="text-14">Please provide a detailed job description<br/>including job responsibilities, required work<br />experience, necessary skills, and educational<br />requirements.</p>
+                        <p class="text-14">Please provide a detailed job description<br />including job responsibilities, required work<br />experience, necessary skills, and educational<br />requirements.</p>
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group" id="quill-editor-form-group">
@@ -113,7 +114,7 @@
                 <div class="row" style="margin-bottom:2%;">
                     <div class="col-sm">
                         <p class="text-16-bold">Category*</p>
-                        <p class="text-14">Please select the most relevant category for<br />your job listing. This will help job seekers<br />discover your job listing.</p>
+                        <p class="text-14">Please select the most relevant category for<br />your job listing. This will help job seekers<br />discover your job listing.<br />Help job seekers find your job.</p>
                         <p class="text-14">Can't find the right category? <a class="link-14" href="mailto:support@buildmytalent.com?subject=Category Support Request #0001&body=Hi BuildMyTalent team%0D%0A%0D%0AI'd like some help understanding how to categorise my job listing.%0D%0A%0D%0ACan you tell us a little more about the problem?">Contact us.</a></p>
                     </div>
                     <div class="col-sm-8">
@@ -127,8 +128,8 @@
                 <hr class="horizontal-line" />
                 <div class="row margin-on-mobile" >
                     <div class="col-sm">
-                        <p class="text-16-bold">Skills</p>
-                        <p class="text-14">Type 1-5 skills that are relevant to the job.<br />These can be technologies or experience<br />skills. This will help job seekers discover your<br />job listing</p>
+                        <p class="text-16-bold">Skills section</p>
+                        <p class="text-14">Type 1-5 skills that are relevant to the job.<br />These can be technologies or experience<br />skills. This will help job seekers discover your<br />job listing.<br />Help job seekers find your job.</p>
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
@@ -208,6 +209,7 @@
                 <div class="row">
                     <div class="col-sm">
                         <p class="text-16-bold">Start date (Optional)</p>
+                        <p class="text-14">Date of when the applicant will start working.</p>
                         <br />
                     </div>
                     <div class="col-sm-8">
@@ -261,10 +263,7 @@
                     <div class="col-sm">
                         <p class="text-16-bold">Is the job NetZero compliant?</p>
                         <p class="text-14">Showcase your organisation's commitment to sustainability and attract 
-                            highly motivated candidates who share your values. By highlighting the job's 
-                            direct impact on reducing carbon emissions, you demonstrate your 
-                            environmental responsibility and offer an attractive opportunity to 
-                            candidates who are passionate about sustainability.</p>
+                            highly motivated candidates who share your values.</p>
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
@@ -309,25 +308,25 @@
                                 <i class="bi bi-exclamation-triangle-fill" style="color:#F79009"></i>
                             </div>
                             <div class="col-11">
-                                <p class="text-14" style="margin-bottom: 5px;">
-                                    Not including a salary range in a job posting may reduce the number of candidates and job ad performance.
-                                    <br />
-                                    <br />
+                                <p class="text-14">
                                     Why share the salary?
-                                    <ul style=" color: #667085; font-weight: 400; font-size: 14px; line-height: 20px; list-style-type: none; padding-left: 0;">
-                                        <li>
-                                            <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
-                                            Twice as many clicks
-                                        </li>
-                                        <li>
-                                            <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
-                                            Increased applications
-                                        </li>
-                                        <li>
-                                            <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
-                                            Priority for candidates
-                                        </li>
-                                    </ul>
+                                </p>
+                                <ul style="color: #667085; font-weight: 400; font-size: 14px; line-height: 20px; list-style-type: none; padding-left: 0;">
+                                    <li>
+                                        <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
+                                        Twice as many clicks
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
+                                        Increased applications
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
+                                        Top priority for applicants
+                                    </li>
+                                </ul>
+                                <p class="text-14">
+                                    Not including a salary range in a job posting may reduce the number of candidates and job ad performance.
                                 </p>
                             </div>
                         </div>
@@ -359,7 +358,7 @@
                         <hr class="horizontal-line" />
                         <div class="form-check">
                             <input class="form-check-input" asp-for="IsSalaryNegotiable" type="checkbox" id="isSalaryNegotiableCheckbox">
-                            <label class="form-check-label" for="isSalaryNegotiableCheckbox"> Salary is negotiable </label>
+                            <label class="form-check-label" for="isSalaryNegotiableCheckbox"> I do not want to provide a salary range </label>
                         </div>
                     </div>
                     <hr class="horizontal-line" />
@@ -369,7 +368,7 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="form-group">
-                                <textarea class="form-control" id="supplementalPayInput" asp-for="SupplementalPay" ></textarea>
+                                <textarea class="form-control" id="supplementalPayInput" asp-for="SupplementalPay" placeholder="Bonus, Commission, Overtime, Car allowance, etc."></textarea>
                             </div>
                         </div>
                     </div>
@@ -380,7 +379,7 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="form-group">
-                                <textarea class="form-control" id="otherBenefitsInput" asp-for="OtherCompanyBenefits" ></textarea>
+                                <textarea class="form-control" id="otherBenefitsInput" asp-for="OtherCompanyBenefits" placeholder="Holidays, Training, Pension, Flexible working, Relocation cost covered, etc."></textarea>
                             </div>
                         </div>
                     </div>
@@ -416,7 +415,7 @@
                             </div>
                             <div class="col-11">
                                 <p class="text-14">
-                                    Please select the required supporting documents. Keep in mind that these will be mandatory for applicant.
+                                    Please select the required supporting documents. Keep in mind that these will be mandatory for applicants.
                                 </p>
                             </div>
                         </div>
@@ -426,18 +425,19 @@
                     <div class="col-sm-8"> 
                         <div class="form-group">
                             <div class="form-check">
-                                <input class="form-check-input" asp-for="IsCvRequired" type="checkbox" id="isCvRequiredCheckbox">
+                                <input class="form-check-input" asp-for="IsCvRequired" type="checkbox" id="isCvRequiredCheckbox" onchange="validatePreferencesTab()">
                                 <label class="form-check-label" for="isCvRequiredCheckbox"> CV </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" asp-for="IsCoverLetterRequired" type="checkbox" id="isCoverLetterRequiredCheckbox">
+                                <input class="form-check-input" asp-for="IsCoverLetterRequired" type="checkbox" id="isCoverLetterRequiredCheckbox" onchange="validatePreferencesTab()">
                                 <label class="form-check-label" for="isCoverLetterRequiredCheckbox"> Cover Letter </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" asp-for="IsOnlinePortfolioRequired" id="isOnlinePortfolioRequired">
+                                <input class="form-check-input" asp-for="IsOnlinePortfolioRequired" id="isOnlinePortfolioRequired" onchange="validatePreferencesTab()">
                                 <label class="form-check-label" for="isOnlinePortfolioRequired"> Online Portfolio </label>
                             </div>
                         </div>
+                        <span style="display: none" id="supportingDocumentsError" class="text-danger field-validation-valid">Please select one or more supporting documents</span>
                     </div>
                 </div>
                 <hr class="horizontal-line" />
@@ -450,7 +450,7 @@
                         <div class="row">
                             <div class="col">
                                 <label asp-for="PositionsAvailable">Positions Available</label>
-                                <input type="number" class="form-control" asp-for="PositionsAvailable" min="1" placeholder="Type" aria-label="available positions" />
+                                <input type="number" class="form-control" asp-for="PositionsAvailable" min="1" aria-label="available positions" />
                                 <span asp-validation-for="PositionsAvailable"></span>
                             </div>
                         </div>
@@ -460,7 +460,6 @@
                 <div class="row">
                     <div class="col-sm">
                         <p class="text-16-bold">Application deadline</p>
-                        <br />
                         <div class="row">
                             <div class="col-1">
                                 <i class="bi bi-exclamation-triangle-fill" style="color:#F79009"></i>
@@ -502,7 +501,11 @@
             <div style="margin-inline:4%; margin-top: 3%; margin-bottom: 3%;">
                 <div class="row">
                     <p class="text-16-bold">Screening questions</p>
-                    <p class="text-14">These questions could be related to a candidate's experience, qualifications, or other specific job-related requirements. This will help ensure that only the most qualified and suitable candidates are presented for further consideration. Although these are optional fields, if used they will become required fields for candidates.</p>
+                    <p class="text-14">We ask applicants about right to work in the UK, either through a British passport or valid visa. 
+                        In this section you can ask further questions for applicants to answer, these can be related to candidate's experience, location, 
+                        qualifications or other specific job-related requirements. This will help ensure that only the most qualified and suitable 
+                        candidates are presented for further consideration. Although these are optional fields, if used they will become required 
+                        fields for candidates.</p>
                 </div>
                 <div class="row" style="margin-top:5%;">
                     <div class="col-2">

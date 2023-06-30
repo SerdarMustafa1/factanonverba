@@ -28,7 +28,7 @@
                                 @Html.DropDownListFor(c => application.Rating, Model.Ratings, " - ", new { id = $"rating{application.Reference}", @class = "form-select", data_live_search = "true", onchange = $"updateApplicantRating('{application.Reference}')" })
                             </div>
                         </td>
-                        <td id="@("status"+application.JobApplicationId)"> - </td>
+                        <td id="@("status"+application.JobApplicationId)"> @application.GetTextStatus() </td>
                         <td><a id="@("next"+application.JobApplicationId)" class="edit-link" href="#" onclick="onPromote('@application.JobApplicationId')">Next stage</a></td>
                         <td><a id="@("reject"+application.JobApplicationId)" class="delete-link" href="#" onclick="onReject('@application.JobApplicationId')">Reject</a></td>
                     </tr>
@@ -36,7 +36,7 @@
                 @if (Model.Applications.Count == 0)
                 {
                     <tr>
-                        <td scope="Row">No applications submitted.</td>
+                        <td scope="Row" colspan="2" style="border-bottom-width: 0">No applications submitted.</td>
                     </tr>
                 }
             </tbody>

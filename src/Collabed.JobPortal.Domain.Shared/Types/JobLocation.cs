@@ -5,7 +5,7 @@ namespace Collabed.JobPortal.Types
 {
     public enum JobLocation
     {
-        [Display(Name = "In-office")]
+        [Display(Name = "Office/Site Based")]
         InOffice,
         Hybrid,
         Remote,

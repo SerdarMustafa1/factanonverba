@@ -38,13 +38,10 @@ namespace Collabed.JobPortal.Web.Models
 
         public string GetTextStatus()
         {
-            if (ApplicationStatus == ApplicationStatus.Rejected)
-                return "Rejected";
+            if (ApplicationStatus == ApplicationStatus.New)
+                return " - ";
 
-            if (ApplicationStatus == ApplicationStatus.Hired)
-                return "Hired";
-
-            return " - ";
+            return ApplicationStatus.ToString();
         }
     }
 }

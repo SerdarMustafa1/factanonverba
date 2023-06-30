@@ -48,6 +48,7 @@
     checkbox.addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
             $('#SalaryPeriodId').val('')
+            $('#SalaryPeriodId').prop('disabled', true);
             $('#salaryMinId').val('');
             $('#salaryMinId').prop('disabled', true);
             $('#salaryMaxId').val('');
@@ -55,8 +56,21 @@
         } else {
             $('#salaryMinId').prop('disabled', false);
             $('#salaryMaxId').prop('disabled', false);
+            $('#SalaryPeriodId').prop('disabled', false);
         }
-    })
+    });
+
+    $("#subDescriptionInput").keyup(function () {
+        let length = 190 - $(this).val().length;
+        if (length == 190) {
+            $("#subDescCharacters").hide();
+        } else {
+            $("#subDescCharacters").show()
+            $("#subDescCharacters").text(length + " characters left");
+            $('#subDescriptionInput').removeClass('input-validation-error');
+            $('#subDescriptionErrorMessage').text('');
+        }
+    });
 });
 let formSubmitting = false;
 let setFormSubmitting = function () {
@@ -93,17 +107,19 @@ let isFormValid = () => {
     let employmentTypeValid = ($('#EmploymentTypeId').val()).length > 0;
     let contractTypeValid = ($('#ContractTypeId').val()).length > 0;
     let jobLocationTypeValid = ($('#JobLocationTypeId').val()).length > 0;
+    let supportingDocsValid = $('#isCvRequiredCheckbox').is(':checked') || $('#isCoverLetterRequiredCheckbox').is(':checked') || $('#isOnlinePortfolioRequired').is(':checked');
     //let startDateValid = !isNaN(Date.parse($('#StartDate_input').val()));
 
     if (jobTitleValid && jobSubDescValid && jobDescValid &&
         jobCatValid && employmentTypeValid && contractTypeValid &&
-        jobLocationTypeValid) {
+        jobLocationTypeValid && supportingDocsValid) {
         // form is valid
         return true;
     }
     else {
         validateInformationTab();
         validateRequirementsTab();
+        validatePreferencesTab();
         // form is invalid
         return false;
     }
@@ -184,6 +200,7 @@ function nextPage(event) {
     let activeTab = $('.nav-tabs .active').html();
     let isInformation = activeTab.includes('Information');
     let isRequirements = activeTab.includes('Requirements');
+    let isPreferences = activeTab.includes('Preferences');
 
     if (isInformation) {
         let isValid = validateInformationTab();
@@ -195,6 +212,11 @@ function nextPage(event) {
         if (!isValid) return;
         markTabAsValid('2');
         // validate EmploymentType, ContractType, JobLocation, and StartDate fields
+    }
+    if (isPreferences) {
+        let isValid = validatePreferencesTab();
+        if (!isValid) return;
+        markTabAsValid('4');
     }
 
     const nextTabLinkEl = $('.nav-tabs .active').closest('li').next('li').find('a')[0];
@@ -313,6 +335,24 @@ function validateRequirementsTab() {
     }
     else {
         markTabAsInvalid('2');
+        return false;
+    }
+}
+
+function validatePreferencesTab() {
+    let supportingDocsValid = $('#isCvRequiredCheckbox').is(':checked') || $('#isCoverLetterRequiredCheckbox').is(':checked') || $('#isOnlinePortfolioRequired').is(':checked');
+
+    if (supportingDocsValid) {
+        $('#supportingDocumentsError').hide();
+    } else {
+        $('#supportingDocumentsError').show();
+    }
+
+    if (supportingDocsValid) {
+        markTabAsValid('4');
+        return true;
+    } else {
+        markTabAsInvalid('4');
         return false;
     }
 }

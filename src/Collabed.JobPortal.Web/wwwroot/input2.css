@@ -21,7 +21,12 @@
 input.form-control {
     background-color: var(--neutral-white) !important;
 }
-
+input.form-control:disabled {
+    background-color: #e9ecef !important;
+}
+.form-select:disabled {
+    background-color: #e9ecef !important;
+}
 textarea.form-control {
     background-color: var(--neutral-white) !important;
 }

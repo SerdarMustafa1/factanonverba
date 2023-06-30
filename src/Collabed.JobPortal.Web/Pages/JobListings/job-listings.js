@@ -17,6 +17,9 @@ function onJobDelete(jobRef, status) {
         document.getElementById('delete' + jobRef).removeAttribute("href");
         document.getElementById('edit' + jobRef).classList.add('link-disabled');
         document.getElementById('edit' + jobRef).removeAttribute("href");
+        document.getElementById('title' + jobRef).removeAttribute("href");
+        document.getElementById('title' + jobRef).style.textDecoration = "none";
+        document.getElementById('title' + jobRef).style.color = "#212529";
     });
     deleteJobModal.open({
         reference: jobRef

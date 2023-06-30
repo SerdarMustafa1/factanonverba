@@ -78,6 +78,16 @@
                 <p class="hint-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 200; color: #475467; margin: 0 0 1rem;" align="left">
                 {{model.company}}
                 </p>
+                <br />
+                <table class="btn btn-secondary confirmEmail" role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-radius: 6px; border-collapse: separate !important;">
+                    <tbody>
+                      <tr>
+                        <td style="line-height: 24px; font-size: 16px; border-radius: 6px; margin: 0;" align="center" bgcolor="#718096">
+                          <a href="{{model.link}}" type="button" style="color: #ffffff; font-size: 16px; font-family: Helvetica, Arial, sans-serif; text-decoration: none; border-radius: 6px; line-height: 20px; display: block; font-weight: normal; white-space: nowrap; background-color: #718096; padding: 8px 12px; border: 1px solid #718096;">Browse more jobs</a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
               </div>
             </div>
           </td>

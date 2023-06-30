@@ -7,10 +7,24 @@ function onPromote(applicationId) {
         return;
     }
 
-    jobPortal.jobs.job.progressJobApplication(applicationId, true);
+    jobPortal.jobs.job.progressJobApplication(applicationId, true).then(function () {
+        moveToNextTab()
+    });
     document.getElementById('status' + applicationId).innerText = 'Next stage';
     document.getElementById('next' + applicationId).classList.add('link-disabled');
     document.getElementById('next' + applicationId).removeAttribute('href');
+}
+
+function moveToNextTab() {
+    if (document.getElementById('tabLink1').classList.contains('active')) {
+        document.getElementById('tabLink2').click();
+    }
+    if (document.getElementById('tabLink2').classList.contains('active')) {
+        document.getElementById('tabLink3').click();
+    }
+    if (document.getElementById('tabLink3').classList.contains('active')) {
+        document.getElementById('tabLink4').click();
+    }
 }
 
 function onReject(applicationId) {

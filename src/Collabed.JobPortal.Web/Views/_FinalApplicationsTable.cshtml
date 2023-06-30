@@ -22,7 +22,7 @@
                 {
                     <tr id="@application.JobApplicationId">
                         <td scope="Row"><a class="edit-link" href="~/applicant?reference=@application.Reference">@application.CandidateName</a></td>
-                        <td id="@("status"+application.JobApplicationId)">@(application.ApplicationStatus == ApplicationStatus.Hired ? "Hired" : " - ")</td>
+                        <td id="@("status"+application.JobApplicationId)">@application.GetTextStatus()</td>
                         <td>
                             <div class="form-group" style="width: 50%;">
                                 @Html.DropDownListFor(c => application.Rating, Model.Ratings, " - ", new { id = $"rating{application.Reference}", @class = "form-select", data_live_search = "true", onchange = $"updateApplicantRating('{application.Reference}')" })
@@ -37,7 +37,7 @@
                 @if (Model.Applications.Count == 0)
                 {
                     <tr>
-                        <td scope="Row">No applications submitted.</td>
+                        <td scope="Row" colspan="2" style="border-bottom-width: 0">No applications submitted.</td>
                     </tr>
                 }
             </tbody>

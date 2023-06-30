@@ -18,7 +18,7 @@
             </div>
             <div class="row" style="margin-top:1%;margin-bottom: 1%;">
                 <div style="font-weight: 600; font-size: 18px;">
-                    <span>@Model.JobDetails.Title</span>
+                    <span>@Model.JobDetails.Title (@Model.Reference)</span>
                 </div>
             </div>
             <div class="row">
@@ -31,7 +31,7 @@
                             </div>
                         }
                         <div class="col-2 col-md-3 col-sm-3">@Model.JobDetails.EmploymentType</div>
-                        <div class="col-2 col-md-3 col-sm-3">@Model.JobDetails.JobLocation</div>
+                        <div class="col-4">@Model.JobDetails.JobLocation</div>
                         @if (Model.JobDetails.HiringMultipleCandidates.HasValue && Model.JobDetails.HiringMultipleCandidates.Value)
                         {
                             <div class="col-2">Hiring Multiple</div>

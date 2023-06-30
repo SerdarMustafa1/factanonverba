@@ -31,3 +31,12 @@ function applyForInternal(reference) {
             return console.log(error);
         });
 }
+
+function applyForExternal(jobUrl) {
+    if (!abp.currentUser.id) {
+        location.href = "/Account/Login?returnUrl=" + jobUrl;
+        return;
+    }
+
+    window.location.href = jobUrl;
+}

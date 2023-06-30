@@ -132,9 +132,12 @@ namespace Collabed.JobPortal.Account.Emailing
 
         public async Task SendApplicationRejectionAsync(ApplicantDto rejection)
         {
+            var url = await AppUrlProvider.GetUrlAsync("MVC");
+
             var emailContent = await TemplateRenderer.RenderAsync(
                 BmtAccountEmailTemplates.ApplicationRejection, new
                 {
+                    link = url + "/JobDashboard/Search",
                     firstname = rejection.ApplicantFirstName,
                     jobtitle = rejection.JobTitle,
                     company = rejection.CompanyName

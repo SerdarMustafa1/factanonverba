@@ -92,16 +92,16 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public int? CandidateExperienceLevel { get; set; }
 
         [BindProperty]
-        public bool? LocalLanguageRequired { get; set; }
+        public bool? LocalLanguageRequired { get; set; } = false;
 
         [BindProperty]
-        public int? LanguageId { get; set; } = 1;
+        public int? LanguageId { get; set; }
 
         [BindProperty]
         public bool? OfferingVisaSponsorship { get; set; }
 
         [BindProperty]
-        public bool? IsNetZeroCompliant { get; set; }
+        public bool? IsNetZeroCompliant { get; set; } = false;
 
         [BindProperty]
         public int? SalaryPeriodId { get; set; }
@@ -116,7 +116,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
         public bool IsSalaryNegotiable { get; set; } = false;
 
         [BindProperty]
-        public int? PositionsAvailable { get; set; }
+        public int? PositionsAvailable { get; set; } = 1;
 
         [BindProperty]
         public DateTime? ApplicationDeadline { get; set; }

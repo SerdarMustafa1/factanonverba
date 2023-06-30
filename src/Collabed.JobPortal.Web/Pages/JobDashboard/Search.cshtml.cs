@@ -149,16 +149,12 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         {
             return new List<SelectListItem>()
             {
-                new SelectListItem("£10,000 - £15,000", "10,15"),
-                new SelectListItem("£15,000 - £20,000", "15,20"),
-                new SelectListItem("£20,000 - £25,000", "20,25"),
-                new SelectListItem("£25,000 - £30,000", "25,30"),
-                new SelectListItem("£30,000 - £35,000", "30,35"),
-                new SelectListItem("£35,000 - £40,000", "35,40"),
-                new SelectListItem("£45,000 - £50,000", "45,50"),
-                new SelectListItem("£55,000 - £60,000", "55,60"),
-                new SelectListItem("£60,000 - £65,000", "60,65"),
-                new SelectListItem("£65,000 - £70,000", "65,70"),
+                new SelectListItem("£10,000 - £20,000", "10,20"),
+                new SelectListItem("£20,000 - £30,000", "20,30"),
+                new SelectListItem("£30,000 - £40,000", "30,40"),
+                new SelectListItem("£40,000 - £50,000", "40,50"),
+                new SelectListItem("£50,000 - £60,000", "50,60"),
+                new SelectListItem("£60,000 - £70,000", "60,70"),
                 new SelectListItem("£70,000 - £80,000", "70,80"),
                 new SelectListItem("£80,000 - £90,000", "80,90"),
                 new SelectListItem("£90,000 - £100,000", "90,100"),
