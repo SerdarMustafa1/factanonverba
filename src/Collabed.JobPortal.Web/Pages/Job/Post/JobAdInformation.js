@@ -43,9 +43,9 @@
     quill.setContents(delta);
     assignQuillToInput();
 
-    const checkbox = document.getElementById('isSalaryNegotiableCheckbox')
+    const salaryCheckbox = document.getElementById('isSalaryNegotiableCheckbox');
 
-    checkbox.addEventListener('change', (event) => {
+    salaryCheckbox.addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
             $('#SalaryPeriodId').val('')
             $('#SalaryPeriodId').prop('disabled', true);
@@ -57,6 +57,20 @@
             $('#salaryMinId').prop('disabled', false);
             $('#salaryMaxId').prop('disabled', false);
             $('#SalaryPeriodId').prop('disabled', false);
+        }
+    });
+
+    const languageCheckboxYes = document.getElementById('languageRequiredYes');
+    const languageCheckboxNo = document.getElementById('languageRequiredNo');
+
+    languageCheckboxYes.addEventListener('change', (event) => {
+        if (event.currentTarget.checked) {
+            $('#LanguageId').prop('disabled', false);
+        }
+    });
+    languageCheckboxNo.addEventListener('change', (event) => {
+        if (event.currentTarget.checked) {
+            $('#LanguageId').prop('disabled', true);
         }
     });
 

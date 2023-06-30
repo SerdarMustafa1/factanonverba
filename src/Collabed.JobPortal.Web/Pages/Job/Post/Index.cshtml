@@ -129,7 +129,7 @@
                 <div class="row margin-on-mobile" >
                     <div class="col-sm">
                         <p class="text-16-bold">Skills section</p>
-                        <p class="text-14">Type 1-5 skills that are relevant to the job.<br />These can be technologies or experience<br />skills. This will help job seekers discover your<br />job listing.<br />Help job seekers find your job.</p>
+                        <p class="text-14">Type 1-5 skills that are relevant to the job.<br />These can be technologies or experience<br />skills. This will help job seekers discover your<br />job listing.</p>
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
@@ -232,17 +232,17 @@
                 <hr class="horizontal-line" />
                 <div class="row">
                     <div class="col-sm">
-                        <p class="text-16-bold">Is the local language is required to perform the job?</p>
+                        <p class="text-16-bold">Is there an additional language required for this role?</p>
                         <br />
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="LocalLanguageRequired" asp-for="LocalLanguageRequired" value="true">
+                                <input id="languageRequiredYes" class="form-check-input" type="radio" name="LocalLanguageRequired" asp-for="LocalLanguageRequired" value="true">
                                 <label class="form-check-label" for="localLanguageRequiredRadio">Yes</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="LocalLanguageRequired" asp-for="LocalLanguageRequired" value="false">
+                                <input id="languageRequiredNo" class="form-check-input" type="radio" name="LocalLanguageRequired" asp-for="LocalLanguageRequired" value="false">
                                 <label class="form-check-label" for="localLanguageNotRequiredRadio">No</label>
                             </div>
                         </div>
@@ -253,8 +253,8 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <label for="LanguageId">Local Language</label>
-                            @Html.DropDownListFor(c => c.LanguageId, Model.Languages, "Please select", new { @class = "form-select", data_live_search = "true" })
+                            <label for="LanguageId">Additional Language</label>
+                            @Html.DropDownListFor(c => c.LanguageId, Model.Languages, "Please select", new { @class = "form-select", data_live_search = "true", disabled = "true" })
                         </div>
                     </div>
                 </div>
