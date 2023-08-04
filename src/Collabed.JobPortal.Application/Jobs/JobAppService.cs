@@ -176,8 +176,30 @@ namespace JobPortal.Jobs
               .Accept
               .Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var response = await httpClient.GetAsync(adzunaJobSearchUrl.ToString());
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
             var resultUtf8 = await response.Content.ReadAsStreamAsync();
-            var jobsResponse = JsonSerializer.Deserialize<AdzunaJobResponse>(resultUtf8);
+
+            AdzunaJobResponse jobsResponse;
+            try
+            {
+                jobsResponse = JsonSerializer.Deserialize<AdzunaJobResponse>(resultUtf8);
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error deserializing Adzuna jobs response for {Title} - {Page} - {Category}", title, page, category);
+                return null;
+            }
+
+            if (jobsResponse == null)
+            {
+                return null;
+            }
+
 
             using (var uow = _unitOfWorkManager.Begin(
                 isTransactional: true))

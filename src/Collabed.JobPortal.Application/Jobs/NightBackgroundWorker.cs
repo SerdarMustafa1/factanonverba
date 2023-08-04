@@ -12,19 +12,20 @@ namespace Collabed.JobPortal.Jobs
         public NightBackgroundWorker(AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory) : base(timer, serviceScopeFactory)
         {
-            Timer.Period = 3540000; //59 minutes
+            // Timer.Period = 3540000; //59 minutes
+            Timer.Period = 600000; //10 minutes
         }
 
         protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
-            var start = new TimeSpan(3, 0, 0); //3.01 o'clock
-            var end = new TimeSpan(4, 0, 0); //4.01 o'clock
-            var now = DateTime.Now.TimeOfDay;
-
-            if ((now < start) || (now > end))
-            {
-                return;
-            }
+            // var start = new TimeSpan(3, 0, 0); //3.01 o'clock
+            // var end = new TimeSpan(4, 0, 0); //4.01 o'clock
+            // var now = DateTime.Now.TimeOfDay;
+            //
+            // if ((now < start) || (now > end))
+            // {
+            //     return;
+            // }
 
             Logger.LogInformation("Started night worker job");
             var jobAppService = workerContext

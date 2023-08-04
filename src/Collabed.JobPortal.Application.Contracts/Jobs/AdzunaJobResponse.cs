@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Collabed.JobPortal.Converters;
 
 namespace Collabed.JobPortal.Jobs
 {
@@ -14,6 +15,7 @@ namespace Collabed.JobPortal.Jobs
     public class AdzunaJobResult
     {
         [JsonPropertyName("id")]
+        [JsonConverter(typeof(NumberToStringConverter))]
         public string Reference { get; set; }
         [JsonPropertyName("location")]
         public ExtJobLocation JobLocation { get; set; }
