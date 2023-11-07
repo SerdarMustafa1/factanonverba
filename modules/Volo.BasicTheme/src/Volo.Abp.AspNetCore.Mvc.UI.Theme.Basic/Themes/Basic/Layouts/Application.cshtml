@@ -50,6 +50,10 @@
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
 </head>
 <body class="body-container @rtl d-flex flex-column min-vh-100">
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TWPSG8VK"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
