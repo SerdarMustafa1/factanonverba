@@ -14,6 +14,8 @@
 }
 @{
     var categories ="";
+    var publishedDate = Model.Job.PublishedDate;
+    var isNew = (DateTime.Now - publishedDate).TotalDays < 2;
     foreach (var item in Model.Category)
     {
         categories = $"{categories}Category={item}&";
@@ -31,9 +33,12 @@
         <div class="card" style="padding: 0 !important;">
             <div class="card-header" style="background-color:#F2F4F7; border-bottom: 1px solid rgba(0, 0, 0, 0.175);">
                 <div class="row" style="margin-bottom:8px;">
-                    <div class="col-9">
-                        <span class="badge rounded-pill bg-primary">New</span>
-                    </div>
+                    @if (isNew)
+                    {
+                        <div class="col-9">
+                            <span class="badge rounded-pill bg-primary">New</span>
+                        </div>
+                    }
                     <div class="col-3" style="position: relative;">
                         @*<span style="position:absolute; right:0; margin-right:4px;">
                         <button class="btn btn-outline-primary" onclick="saveButtonOnClick(event)" style="margin-right:4px;">Save for later</button>
