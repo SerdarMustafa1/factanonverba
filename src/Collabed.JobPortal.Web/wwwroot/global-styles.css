@@ -478,3 +478,13 @@ label.text-14 {
 .table > :not(:first-child) {
     border-top: 2px solid black;
 }
+
+.inactive-bi::before {
+    font-weight: 200 !important;
+    color: grey;
+}
+
+.active-bi::before {
+    font-weight: bold !important;
+    color: black;
+}

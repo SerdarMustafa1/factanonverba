@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Collabed.JobPortal.Attributes;
+using JetBrains.Annotations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Collabed.JobPortal.Web.Pages.Applications
@@ -25,6 +27,8 @@ namespace Collabed.JobPortal.Web.Pages.Applications
         public int CurrentPage { get; set; } = 1;
         [BindProperty(SupportsGet = true)]
         public string Tab { get; set; } = "all";
+        [BindProperty(SupportsGet = true)] 
+        [CanBeNull] public string SortBy { get; set; }
         [BindProperty(SupportsGet = true)]
         public string Reference { get; set; }
         public ApplicationModel ApplicationModel { get; set; } = new ApplicationModel();
@@ -44,6 +48,7 @@ namespace Collabed.JobPortal.Web.Pages.Applications
             JobDetails = ObjectMapper.Map<JobDto, JobSummary>(jobDto);
             ApplicationModel.CurrentPage = CurrentPage;
             ApplicationModel.Tab = Tab;
+            ApplicationModel.SortBy = SortBy;
             ApplicationModel.Reference = Reference;
 
             var applications = jobDto.Applicants;
@@ -77,28 +82,45 @@ namespace Collabed.JobPortal.Web.Pages.Applications
             switch (Tab)
             {
                 case "interview":
-                    ApplicationModel.Applications = GetApplicationAtStage(applications, ApplicationStatus.Interview);
+                    ApplicationModel.Applications = GetApplicationAtStage(applications, ApplicationStatus.Interview, GetOrderBy(SortBy));
                     break;
                 case "review":
-                    ApplicationModel.Applications = GetApplicationAtStage(applications, ApplicationStatus.Review);
+                    ApplicationModel.Applications = GetApplicationAtStage(applications, ApplicationStatus.Review, GetOrderBy(SortBy));
                     break;
                 case "final":
-                    ApplicationModel.Applications = GetApplicationAtStage(applications, ApplicationStatus.Final);
+                    ApplicationModel.Applications = GetApplicationAtStage(applications, ApplicationStatus.Final, GetOrderBy(SortBy));
                     break;
                 case "all":
                 default:
-                    ApplicationModel.Applications = GetApplicationAtStage(applications);
+                    ApplicationModel.Applications = GetApplicationAtStage(applications, null, GetOrderBy(SortBy));
                     break;
             }
 
             return Page();
         }
 
-        private List<Models.Application> GetApplicationAtStage(List<JobApplicationDto> applications, ApplicationStatus? stage = null)
+        private List<Models.Application> GetApplicationAtStage(List<JobApplicationDto> applications, ApplicationStatus? stage = null, (string, string)? order = null)
         {
+            List<Models.Application> results;
             if (stage != null)
             {
-                return applications.Where(x => x.ApplicationStatus == stage).Select(z => new Models.Application
+                results = applications.Where(x => x.ApplicationStatus == stage).Select(z => new Models.Application
+                {
+                    Reference = z.Reference,
+                    JobApplicationId = z.JobApplicantId,
+                    ApplicationDate = z.ApplicationDate,
+                    InterviewDate = z.InterviewDate,
+                    CandidateEmail = z.Email,
+                    CandidatePhoneNumber = z.PhoneNumber,
+                    CandidateName = $"{z.FirstName} {z.LastName}",
+                    ApplicationStatus = z.ApplicationStatus,
+                    Rating = z.Rating ?? default,
+                }).ToList();
+            }
+            else
+            {
+
+                results = applications.Select(z => new Models.Application
                 {
                     Reference = z.Reference,
                     JobApplicationId = z.JobApplicantId,
@@ -112,18 +134,62 @@ namespace Collabed.JobPortal.Web.Pages.Applications
                 }).ToList();
             }
 
-            return applications.Select(z => new Models.Application
+            if (order == null)
             {
-                Reference = z.Reference,
-                JobApplicationId = z.JobApplicantId,
-                ApplicationDate = z.ApplicationDate,
-                InterviewDate = z.InterviewDate,
-                CandidateEmail = z.Email,
-                CandidatePhoneNumber = z.PhoneNumber,
-                CandidateName = $"{z.FirstName} {z.LastName}",
-                ApplicationStatus = z.ApplicationStatus,
-                Rating = z.Rating ?? default,
-            }).ToList();
+                return results;
+            }
+
+            return order.Value.Item2 switch
+            {
+                "asc" => order.Value.Item1 switch
+                {
+                    "Candidate" => results.OrderBy(application => application.CandidateName).ToList(),
+                    "Applied" => results.OrderBy(application => application.ApplicationDate).ToList(),
+                    "Rating" => results.OrderBy(application => application.Rating).ToList(),
+                    "Status" => results.OrderBy(application => OrderHelper.GetOrder(application.ApplicationStatus)).ToList(),
+                    _ => results
+                },
+                "desc" => order.Value.Item1 switch
+                {
+                    "Candidate" => results.OrderByDescending(application => application.CandidateName).ToList(),
+                    "Applied" => results.OrderByDescending(application => application.ApplicationDate).ToList(),
+                    "Rating" => results.OrderByDescending(application => application.Rating).ToList(),
+                    "Status" => results.OrderByDescending(application => OrderHelper.GetOrder(application.ApplicationStatus)).ToList(),
+                    _ => results
+                },
+                _ => results
+            };
+        }
+    
+    
+        [CanBeNull]
+        private (string, string)? GetOrderBy(string orderBy)
+        {
+            switch (orderBy)
+            {
+                case "CandidateAsc":
+                case "CandidateDesc":
+                    return ("Candidate", orderBy.EndsWith("Asc") ? "asc" : "desc");
+                case "AppliedAsc":
+                case "AppliedDesc":
+                    return ("Applied", orderBy.EndsWith("Asc") ? "asc" : "desc");
+                case "RatingAsc":
+                case "RatingDesc":
+                    return ("Rating", orderBy.EndsWith("Asc") ? "asc" : "desc");
+                case "StatusAsc":
+                case "StatusDesc":
+                    return ("Status", orderBy.EndsWith("Asc") ? "asc" : "desc");
+            }
+
+            return null;
+        }
+    }
+
+    partial class StatusComparer : Comparer<ApplicationStatus>
+    {
+        public override int Compare(ApplicationStatus x, ApplicationStatus y)
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Collabed.JobPortal.Web.Models
 {
@@ -10,6 +11,7 @@ namespace Collabed.JobPortal.Web.Models
         public int TotalCount { get; set; }
         public int CurrentPage { get; set; }
         public string Tab { get; set; }
+        [CanBeNull] public string SortBy { get; set; }
         public int PageSize { get; set; } = 10;
         public int TotalPages => (int)Math.Ceiling(decimal.Divide(TotalCount, PageSize));
         public string Reference { get; set; }
