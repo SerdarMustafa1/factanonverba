@@ -35,7 +35,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         {
             ValidateModel();
 
-            await _jobAppService.UpdateAsync(Id, EditingJob);
+            // await _jobAppService.UpdateAsync(Id, EditingJob);
             return NoContent();
         }
     }

@@ -495,17 +495,23 @@ namespace JobPortal.Jobs
         }
 
         [Authorize(BmtPermissions.ManageJobs)]
-        public async Task UpdateAsync(Guid id, CreateUpdateJobDto input)
+        public async Task<JobDto> UpdateAsync(string reference, CreateUpdateJobDto input)
         {
-            var job = await _jobRepository.GetAsync(id);
+            var job = await _jobRepository.GetByReferenceAsync(reference);
 
-            var updatedJob = await _jobManager.UpdateAsync(CurrentUser.Id.Value,
-                job,
-                input.Title,
-                input.Description
+            job = await _jobManager.UpdateAsync(job,
+                input
             );
-
-            await _jobRepository.UpdateAsync(updatedJob);
+            IEnumerable<ScreeningQuestion> screeningQuestions = null;
+            if (input.ScreeningQuestions != null && input.ScreeningQuestions.Any())
+            {
+                screeningQuestions = _jobManager.CreateScreeningQuestions(input.ScreeningQuestions, job.Id);
+            }
+            job.ScreeningQuestions = screeningQuestions ?? null;
+            _jobManager.ConvertSalaryRates(job);
+            
+            var updated = await _jobRepository.UpdateAsync(job, true);
+            return ObjectMapper.Map<Job, JobDto>(updated);
         }
 
         [Authorize(BmtPermissions.ManageJobs)]

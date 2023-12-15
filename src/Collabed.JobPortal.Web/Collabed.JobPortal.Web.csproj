@@ -27,6 +27,15 @@
     <None Remove="Logs\**" />
     <None Remove="Pages\Shared\JQueryRichTextEditor\**" />
     <None Remove="wwwroot\libs\bootstrap-icons\icons\**" />
+    <None Update="Pages\Job\Edit\JobAdInformation.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\Job\Edit\JobAdPreview.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\Job\Edit\JobAdPreview.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -94,6 +103,11 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Job\Apply\ExternalApplicationModal.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Pages\Job\Edit\Index.cshtml" />
+    <AdditionalFiles Include="Pages\Job\Edit\Preview.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -26,10 +26,29 @@ namespace Collabed.JobPortal.Jobs
             return new Job(GuidGenerator.Create(), reference);
         }
 
-        public async Task<Job> UpdateAsync(Guid userId, Job job, string title, string description)
+        public async Task<Job> UpdateAsync(Job job, CreateUpdateJobDto input)
         {
-            job.Title = title;
-            job.Description = description;
+            job.Title = input.Title;
+            job.Description = input.Description;
+            job.SubDescription = input.SubDescription;
+            job.Skills = input.Skills;
+            job.OfficeLocationId = input.OfficeLocationId;
+            job.StartDate = input.StartDate;
+            job.IsLocalLanguageRequired = input.IsLocalLanguageRequired;
+            job.LocalLanguageId = input.LocalLanguageId;
+            job.OfferVisaSponsorship = input.OfferVisaSponsorship;
+            job.SalaryFrom= input.SalaryMinimum;
+            job.SalaryTo = input.SalaryMaximum;
+            job.IsSalaryNegotiable = input.IsSalaryNegotiable;
+            job.SalaryBenefits = input.SalaryOtherBenefits;
+            job.PositionsAvailable = input.PositionsAvailable;
+            job.SalaryCurrency = input.SalaryCurrency;
+            job.Type = input.ContractType;
+            job.EmploymentType = input.EmploymentType;
+            job.SalaryPeriod = input.PaymentOption;
+            job.JobLocation = input.JobLocation;
+            job.ExperienceLevel = input.ExperienceLevel;
+            job.SupplementalPay = input.SupplementalPay;
 
             return job;
         }

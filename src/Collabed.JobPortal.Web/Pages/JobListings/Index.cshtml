@@ -118,7 +118,7 @@
                                         <td>@listing.DisplayCount(listing.HiredCount)</td>
                                         <td id="@("days"+@listing.Reference)">@listing.DaysLeft</td>
                                         <td id="@("status"+@listing.Reference)">@listing.Status</td>
-                                        <td><a id="@("edit"+@listing.Reference)" class="edit-link link-disabled">Edit</a></td>
+                                        <td><a id="@("edit"+@listing.Reference)" class="edit-link" href="~/Job/Edit?Reference=@listing.Reference">Edit</a></td>
                                         <td><a id="@("delete"+@listing.Reference)" class="delete-link @(listing.Status == JobStatus.Deleted ? "link-disabled" : "")" href="#" onclick="onJobDelete('@listing.Reference', '@listing.Status')">Delete</a></td>
                                     </tr>
                                 }

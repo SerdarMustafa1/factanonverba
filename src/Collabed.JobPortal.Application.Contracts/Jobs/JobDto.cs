@@ -15,6 +15,7 @@ namespace Collabed.JobPortal.Jobs
         public DateTime? StartDate { get; set; }
         public string StartDateText { get; set; }
         public string LocalLanguage { get; set; }
+        public bool? IsLocalLanguageRequired { get; set; }
         public bool? OfferVisaSponsorship { get; set; }
         public float? SalaryMinimum { get; set; }
         public float? SalaryMaximum { get; set; }

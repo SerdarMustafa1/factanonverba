@@ -1,0 +1,12 @@
+﻿
+@media screen and (min-width: 350px) and (max-width: 500px) {
+    .full-width-on-mobile {
+        width: 325px;
+    }
+}
+
+@media screen and (max-width: 349px) {
+    .full-width-on-mobile {
+        width: 250px;
+    }
+}

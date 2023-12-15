@@ -185,14 +185,6 @@ namespace Collabed.JobPortal.Web.Pages.Applications
         }
     }
 
-    partial class StatusComparer : Comparer<ApplicationStatus>
-    {
-        public override int Compare(ApplicationStatus x, ApplicationStatus y)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public class JobSummary
     {
         public string Title { get; set; }

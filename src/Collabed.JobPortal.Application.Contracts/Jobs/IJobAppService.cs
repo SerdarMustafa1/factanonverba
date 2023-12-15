@@ -12,7 +12,7 @@ namespace Collabed.JobPortal.Jobs
 		Task<JobDto> GetAsync(Guid id);
 		Task<PagedResultDto<JobDto>> GetListAsync(JobGetListInput input);
 		Task<JobDto> CreateAsync(CreateJobDto input);
-		Task UpdateAsync(Guid id, CreateUpdateJobDto input);
+		Task<JobDto> UpdateAsync(string reference, CreateUpdateJobDto input);
 		Task DeleteAsync(Guid id);
 		Task<JobResponseDto> HandleExternalJobFeedAsync(ExternalJobRequest externalJobRequest);
 		Task<JobDto> GetByReferenceAsync(string reference);

@@ -344,6 +344,7 @@ namespace Collabed.JobPortal.Jobs
                     IsNetZeroCompliant = x.IsNetZeroCompliant,
                     OrganisationId = x.OrganisationId,
                     LocalLanguageId = x.LocalLanguageId,
+                    IsLocalLanguageRequired = x.IsLocalLanguageRequired,
                     OfficeLocationId = x.OfficeLocationId,
                     ApplicationUrl = x.ApplicationUrl,
                     IsSalaryEstimated = x.IsSalaryEstimated,

@@ -1,0 +1,631 @@
+﻿@page
+@using Collabed.JobPortal.Web.Pages.Shared.Components.JobPostNavigation;
+@model Collabed.JobPortal.Web.Pages.Job.Edit.JobAdInformationModel
+
+<style>
+    body {
+        background-color: var(--neutral100);
+    }
+
+    .navbar {
+        background-color: var(--neutral-white);
+    }
+</style>
+
+@section styles {
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+}
+@section scripts {
+    <script >
+        var max_date = "@Model.MaxDateTime";
+    </script>
+    <abp-script src="/Pages/Job/Edit/JobAdInformation.js" />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+}
+
+<abp-style src="/input2.css"></abp-style>
+<abp-style src="/job-ad-information.css"></abp-style>
+
+
+<div class="row" style="margin-top:4%;padding-inline: 0.5%;">
+    <div class="col-sm">
+        <p class="heading-30">Editing job - @Model.JobTitle</p>
+        <div class="row">
+            <div class="col-md-9">
+                <p >You can navigate through the different sections by clicking on the headers</p>
+            </div>
+            <div class="col-md-3">
+                <p style="text-align:end;">
+                    <a href="#" onclick="window.history.go(-1); return false;" class="btn btn-outline-secondary" style="margin-right:4px;">Cancel changes</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container network_wrapper col-sm p-2 ">
+    <ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs" style="width:100%;">
+        <li class="nav-item">
+            <a aria-current="true" class="nav-link active" id="tabLink1" data-bs-toggle="tab" href="#information" >
+                <i class="bi bi-1-circle-fill" id="icon1" ></i>
+                <span class="no-display-on-mobile">Information</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" id="tabLink2" href="#requirements">
+                <i class="bi bi-2-circle-fill" id="icon2"></i>
+                <span class="no-display-on-mobile">Requirements</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" id="tabLink3" href="#compensation">
+                <i class="bi bi-3-circle-fill" id="icon3"></i>
+                <span class="no-display-on-mobile">Compensation</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" id="tabLink4" href="#preferences">
+                <i class="bi bi-4-circle-fill" id="icon4"></i>
+                <span class="no-display-on-mobile">Preferences</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" id="tabLink5" href="#screening">
+                <i class="bi bi-5-circle-fill" id="icon5"></i>
+                <span class="no-display-on-mobile">Screening</span>
+            </a>
+        </li>
+    </ul>
+    <form class="card-body tab-content" method="post" id="jobPostForm" asp-page="Preview" novalidate >
+        <input type="hidden" asp-for="JobDescription" id="jobDescriptionHiddenInput" />
+        <input type="hidden" asp-for="Reference" id="jobReferenceHiddenInput" />
+        <input type="hidden" name="Source" value="JobAdInformation" />
+        <div class="tab-pane active" id="information">
+            <div style="margin-inline: 4%; margin-top: 3%; margin-bottom: 3%;">
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Job title*</p>
+                        <br />
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <input type="text" class="form-control" asp-for="JobTitle" maxlength="63" placeholder="Job role you are hiring for" aria-label="Job title" id="jobTitleInput" />
+                            <span id="jobTitleErrorMessage" asp-validation-for="JobTitle" class="error-message-span"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Sub-description*</p>
+                        <p class="text-14">Please provide a short sub-description<br />including key high level information. <br />This is shown on summary job listing only.</p>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <textarea class="form-control" asp-for="SubDescription" maxlength="190" id="subDescriptionInput" ></textarea>
+                            <span classs="row" id="subDescCharacters" style="opacity: 0.6; margin-left: 0; display: none">190 characters left</span>
+                            <span id="subDescriptionErrorMessage" asp-validation-for="SubDescription" class="error-message-span row" style="margin-left: 0"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Description*</p>
+                        <p class="text-14">Please provide a detailed job description<br />including job responsibilities, required work<br />experience, necessary skills, and educational<br />requirements.</p>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group" id="quill-editor-form-group">
+                            <div id="quill-editor" onkeyup="quillOnKeyUp()" style="font-family: 'Montserrat';"></div>
+                        </div>
+                        <span id="descriptionErrorMessage" asp-validation-for="JobDescription" class="error-message-span"></span>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row" style="margin-bottom:2%;">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Category*</p>
+                        <p class="text-14">Please select the most relevant category for<br />your job listing. This will help job seekers<br />discover your job listing.<br />Help job seekers find your job.</p>
+                        <p class="text-14">Can't find the right category? <a class="link-14" href="mailto:support@buildmytalent.com?subject=Category Support Request #0001&body=Hi BuildMyTalent team%0D%0A%0D%0AI'd like some help understanding how to categorise my job listing.%0D%0A%0D%0ACan you tell us a little more about the problem?">Contact us.</a></p>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="JobCategoryId">Category</label>
+                            @Html.DropDownListFor(c => c.JobCategoryId, Model.JobCategories, "Please select", new { @class = "form-select", data_live_search = "true" , disabled = true })
+                            <span id="jobCategoryErrorMessage" asp-validation-for="JobCategoryId" class="error-message-span"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row margin-on-mobile" >
+                    <div class="col-sm">
+                        <p class="text-16-bold">Skills section</p>
+                        <p class="text-14">Type 1-5 skills that are relevant to the job.<br />These can be technologies or experience<br />skills. This will help job seekers discover your<br />job listing.</p>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <textarea class="form-control" maxlength="250" asp-for="Skills" id="skillsInput"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col-1">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-primary" onclick="nextPage(event)" style="min-width: 88px;">
+                                Next
+                            </button>
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="requirements">
+            <div style="margin-inline: 4%; margin-top: 3%; margin-bottom: 3%;">
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Employment type*</p>
+                        <br />
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            @Html.DropDownListFor(x => x.EmploymentTypeId, Model.EmploymentTypes, "Please select", new { @class="form-select", data_live_search = "true"})
+                            <span id="EmploymentTypeErrorMessage" asp-validation-for="EmploymentTypeId" class="error-message-span"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Contract type*</p>
+                        <br />
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            @Html.DropDownListFor(x => x.ContractTypeId, Model.ContractTypes, "Please select", new { @class="form-select", data_live_search = "true"})
+                            <span id="ContractTypeIdErrorMessage" asp-validation-for="ContractTypeId" class="error-message-span"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Job Location*</p>
+                        <br />
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            @Html.DropDownListFor(x => x.JobLocationTypeId, Model.JobLocations, "Please select", new { @class="form-select", data_live_search = "true"})
+                            <span id="JobLocationTypeErrorMessage" asp-validation-for="JobLocationTypeId" class="error-message-span"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom:2%;">
+                    <div class="col-sm">
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="OfficeLocationId">Office Location</label>
+                            @Html.DropDownListFor(c => c.JobLocationId, Model.OfficeLocations, "Please select", new { @class = "form-select", data_live_search = "true" })
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Start date (Optional)</p>
+                        <p class="text-14">Date of when the applicant will start working.</p>
+                        <br />
+                    </div>
+                    <div class="col-sm-8">
+                        <input class="form-control" id="StartDate_input" asp-for="StartDate"  type="text" placeholder="Select date" />
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row" style="margin-bottom:2%;">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Candidate experience level</p>
+                        <br />
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="ExperienceLevelId">Candidate experience level</label>
+                            @Html.DropDownListFor(e => e.ExperienceLevelId, Model.ExperienceLevels, "Please select", new{ @class = "form-select", data_live_search = "true" }) 
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Is there an additional language required for this role?</p>
+                        <br />
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline">
+                                <input id="languageRequiredYes" class="form-check-input" type="radio" name="LocalLanguageRequired" asp-for="LocalLanguageRequired" value="true">
+                                <label class="form-check-label" for="localLanguageRequiredRadio">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input id="languageRequiredNo" class="form-check-input" type="radio" name="LocalLanguageRequired" asp-for="LocalLanguageRequired" value="false">
+                                <label class="form-check-label" for="localLanguageNotRequiredRadio">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom:2%;">
+                    <div class="col-sm">
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="LanguageId">Additional Language</label>
+                            @Html.DropDownListFor(c => c.LanguageId, Model.Languages, "Please select", new { @class = "form-select", data_live_search = "true", disabled = "true" })
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Is the job NetZero compliant?</p>
+                        <p class="text-14">Showcase your organisation's commitment to sustainability and attract 
+                            highly motivated candidates who share your values.</p>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" asp-for="IsNetZeroCompliant" id="netZeroCompliantRadio" value="true" disabled="disabled">
+                                <label class="form-check-label" for="localLanguageRequiredRadio">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" asp-for="IsNetZeroCompliant" id="netZeroCompliantRadio" value="false">
+                                <label class="form-check-label" for="localLanguageNotRequiredRadio">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                            <button class="btn btn-primary" onclick="prevPage(event)" style="min-width: 88px;">
+                                Back
+                            </button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-primary" onclick="nextPage(event)" style="min-width: 88px;">
+                                Next
+                            </button>
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="compensation">
+            <div style="margin-inline:4%; margin-top: 3%; margin-bottom: 3%;">
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Salary</p>
+                        <div class="row">
+                            <div class="col-1">
+                                <i class="bi bi-exclamation-triangle-fill" style="color:#F79009"></i>
+                            </div>
+                            <div class="col-11">
+                                <p class="text-14">
+                                    Why share the salary?
+                                </p>
+                                <ul style="color: #667085; font-weight: 400; font-size: 14px; line-height: 20px; list-style-type: none; padding-left: 0;">
+                                    <li>
+                                        <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
+                                        Twice as many clicks
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
+                                        Increased applications
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-check-lg" style="-webkit-text-stroke: 1px;"></i>
+                                        Top priority for applicants
+                                    </li>
+                                </ul>
+                                <p class="text-14">
+                                    Not including a salary range in a job posting may reduce the number of candidates and job ad performance.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="SalaryPeriodId">How would you like to pay?</label>
+                            @Html.DropDownListFor(c => c.SalaryPeriodId, Model.SalaryPeriods, "Please select", new { @class = "form-select", data_live_search = "true" })
+                        </div>
+                        <label for="SalaryMinimum" class="form-label" style="margin-top:1%;">Amount you want to pay</label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="input-group" style="margin-top:2%;">
+                                    <input class="form-control" type="number" placeholder="Minimum" asp-for="SalaryMinimum" name="SalaryMinimum" id="salaryMinId"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" style="border-bottom-left-radius: 0; border-top-left-radius: 0"><i class="bi bi-currency-pound" style="font-size:16px; font-weight:600;"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="input-group" style="margin-top:2%;">
+                                    <input class="form-control" type="number" placeholder="Maximum" asp-for="SalaryMaximum" id="salaryMaxId" />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" style="border-bottom-left-radius: 0; border-top-left-radius: 0"><i class="bi bi-currency-pound" style="font-size:16px; font-weight:600;"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="horizontal-line" />
+                        <div class="form-check">
+                            <input class="form-check-input" asp-for="IsSalaryNegotiable" type="checkbox" id="isSalaryNegotiableCheckbox">
+                            <label class="form-check-label" for="isSalaryNegotiableCheckbox"> I do not want to provide a salary range </label>
+                        </div>
+                    </div>
+                    <hr class="horizontal-line" />
+                    <div class="row">
+                        <div class="col-sm">
+                            <p class="text-16-bold">Do you offer any supplemental pay?</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <textarea class="form-control" id="supplementalPayInput" asp-for="SupplementalPay" placeholder="Bonus, Commission, Overtime, Car allowance, etc."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="horizontal-line" />
+                    <div class="row" style="margin-bottom:5%;">
+                        <div class="col-sm">
+                            <p class="text-16-bold">Other company benefits</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <textarea class="form-control" id="otherBenefitsInput" asp-for="OtherCompanyBenefits" placeholder="Holidays, Training, Pension, Flexible working, Relocation cost covered, etc."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                            <button class="btn btn-primary" onclick="prevPage(event)" style="min-width: 88px;">
+                                Back
+                            </button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-primary" onclick="nextPage(event)" style="min-width: 88px;">
+                                Next
+                            </button>
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="preferences">
+            <div style="margin-inline:4%; margin-top: 3%; margin-bottom: 3%;">
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Supporting documents*</p>
+                        <div class="row">
+                            <div class="col-1">
+                                <i class="bi bi-exclamation-triangle-fill" style="color:#F79009"></i>
+                            </div>
+                            <div class="col-11">
+                                <p class="text-14">
+                                    Please select the required supporting documents. Keep in mind that these will be mandatory for applicants.
+                                </p>
+                            </div>
+                        </div>
+                        <span></span>
+                        <br />
+                    </div>
+                    <div class="col-sm-8"> 
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="IsCvRequired" type="checkbox" id="isCvRequiredCheckbox" onchange="validatePreferencesTab()" disabled="disabled">
+                                <label class="form-check-label" for="isCvRequiredCheckbox"> CV </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="IsCoverLetterRequired" type="checkbox" id="isCoverLetterRequiredCheckbox" onchange="validatePreferencesTab()" disabled="disabled">
+                                <label class="form-check-label" for="isCoverLetterRequiredCheckbox"> Cover Letter </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="IsOnlinePortfolioRequired" id="isOnlinePortfolioRequired" onchange="validatePreferencesTab()" disabled="disabled">
+                                <label class="form-check-label" for="isOnlinePortfolioRequired"> Online Portfolio </label>
+                            </div>
+                        </div>
+                        <span style="display: none" id="supportingDocumentsError" class="text-danger field-validation-valid">Please select one or more supporting documents</span>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Hiring multiple candidates?</p>
+                        <br />
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="row">
+                            <div class="col">
+                                <label asp-for="PositionsAvailable">Positions Available</label>
+                                <input type="number" class="form-control" asp-for="PositionsAvailable" min="1" aria-label="available positions" />
+                                <span asp-validation-for="PositionsAvailable"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal-line" />
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="text-16-bold">Application deadline</p>
+                        <div class="row">
+                            <div class="col-1">
+                                <i class="bi bi-exclamation-triangle-fill" style="color:#F79009"></i>
+                            </div>
+                            <div class="col-11">
+                                <p class="text-14">
+                                    If no deadline is selected, the job post<br />will automatically set to expire in 30<br />days once published.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <input class="form-control" id="ApplicationDeadline_input" asp-for="ApplicationDeadline" placeholder="Select date" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                            <button class="btn btn-primary" onclick="prevPage(event)" style="min-width: 88px;">
+                                Back
+                            </button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-primary" onclick="nextPage(event)" style="min-width: 88px;">
+                                Next
+                            </button>
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="screening">
+            <div style="margin-inline:4%; margin-top: 3%; margin-bottom: 3%;">
+                <div class="row">
+                    <p class="text-16-bold">Screening questions</p>
+                    <p class="text-14">We ask applicants about right to work in the UK, either through a British passport or valid visa. 
+                        In this section you can ask further questions for applicants to answer, these can be related to candidate's experience, location, 
+                        qualifications or other specific job-related requirements. This will help ensure that only the most qualified and suitable 
+                        candidates are presented for further consideration. Although these are optional fields, if used they will become required 
+                        fields for candidates.</p>
+                </div>
+                <div class="row" style="margin-top:5%;">
+                    <div class="col-2">
+                        <p class="text-16-bold">Question</p>
+                    </div>
+                    <div class="col-10">
+                        <input class="form-control" asp-for="ScreeningQuestion1" maxlength="100" placeholder="Optional" type="text" />
+                        <label for="ScreeningQuestion1" class="hint-14">Yes/No answers only</label>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:3%;"> 
+                    <div class="col-2">
+                        
+                    </div>
+                    <div class="col-10">
+                        <label for="DesiredAnswer1" class="hint-14-bold">Desired response</label>
+                        <select asp-for="DesiredAnswer1" class="form-select">
+                            <option value="" disabled selected hidden>Please select</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <label for="DesiredAnswer1" class="hint-14">Our system carefully sorts applicants based on your criteria.</label>
+                    </div>
+                </div>
+                <hr />
+                <div class="row" style="margin-top:5%;">
+                    <div class="col-2">
+                        <p class="text-16-bold">Question</p>
+                    </div>
+                    <div class="col-10">
+                        <input class="form-control" asp-for="ScreeningQuestion2" maxlength="100" placeholder="Optional" type="text" />
+                        <label for="ScreeningQuestion2" class="hint-14">Yes/No answers only</label>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:3%;"> 
+                    <div class="col-2">
+                        
+                    </div>
+                    <div class="col-10">
+                        <label for="DesiredAnswer2" class="hint-14-bold">Desired response</label>
+                        <select asp-for="DesiredAnswer2" class="form-select">
+                            <option value="" disabled selected hidden>Please select</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <label for="DesiredAnswer1" class="hint-14">Our system carefully sorts applicants based on your criteria.</label>
+                    </div>
+                </div>
+                <hr />
+                <div class="row" style="margin-top:5%;">
+                    <div class="col-2">
+                        <p class="text-16-bold">Question</p>
+                    </div>
+                    <div class="col-10">
+                        <input class="form-control" asp-for="ScreeningQuestion3" maxlength="100" placeholder="Optional" type="text" />
+                        <label for="ScreeningQuestion3" class="hint-14">Yes/No answers only</label>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:3%;"> 
+                    <div class="col-2">
+                        
+                    </div>
+                    <div class="col-10">
+                        <label for="DesiredAnswer3" class="hint-14-bold">Desired response</label>
+                        <select asp-for="DesiredAnswer3" class="form-select">
+                            <option value="" disabled selected hidden>Please select</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <label for="DesiredAnswer3" class="hint-14">Our system carefully sorts applicants based on your criteria.</label>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:5%;">
+                    <div class="col">
+                        <p style="text-align:left;">
+                            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#areYouSureModal" onclick="event.preventDefault()" style="min-width: 88px;">Cancel</button>
+                            <button class="btn btn-primary" onclick="prevPage(event)" style="min-width: 88px;">
+                                Back
+                            </button>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p style="text-align:end;">
+                            <button class="btn btn-outline-primary" style="min-width: 88px;" id="publishButton" onclick="onClickPublishButton(event)">Preview</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="areYouSureModal" tabindex="-1" aria-labelledby="areYouSureModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="font-size:20px; weight:500; line-height:500;">Unsaved Changes</p>
+            </div>
+            <div class="modal-body">
+                By leaving this page, your changes will not be saved.<br />Are you sure you would like to cancel your progress?
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-danger" href="/Account/Manage">Discard</a>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
