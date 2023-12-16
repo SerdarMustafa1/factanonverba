@@ -16,15 +16,19 @@
     <None Remove="Account\Emailing\Templates\BmtPasswordResetLink.tpl" />
     <None Remove="Account\Emailing\Templates\ConfirmEmail.tpl" />
     <None Remove="Account\Emailing\Templates\NativeApplication.tpl" />
+    <None Remove="Account\Emailing\Templates\NativeApplicationNoCompanyName.tpl" />
     <None Remove="Account\Emailing\Templates\ThirdPartyApplication.tpl" />
+    <None Remove="Account\Emailing\Templates\ThirdPartyApplicationNoCompanyName.tpl" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Account\Emailing\Templates\ApplicationInterview.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\ApplicationRejection.tpl" />
+    <EmbeddedResource Include="Account\Emailing\Templates\NativeApplicationNoCompanyName.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\NativeApplication.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\ApplicationConfirmation.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\BmtPasswordResetLink.tpl" />
+    <EmbeddedResource Include="Account\Emailing\Templates\ThirdPartyApplicationNoCompanyName.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\ThirdPartyApplication.tpl" />
     <EmbeddedResource Include="Account\Emailing\Templates\ConfirmEmail.tpl" />
   </ItemGroup>

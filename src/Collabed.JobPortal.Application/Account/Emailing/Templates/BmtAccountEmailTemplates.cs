@@ -4,7 +4,9 @@
     {
         public const string EmailVerification = "EmailVerification";
         public const string ThirdPartyApplication = "ThirdPartyApplication";
+        public const string ThirdPartyApplicationNoCompanyName = "ThirdPartyApplicationNoCompanyName";
         public const string NativeApplication = "NativeApplication";
+        public const string NativeApplicationNoCompanyName = "NativeApplicationNoCompanyName";
         public const string ApplicationConfirmation = "ApplicationConfirmation";
         public const string ApplicationRejection = "ApplicationRejection";
         public const string ApplicationInterview = "ApplicationInterview";

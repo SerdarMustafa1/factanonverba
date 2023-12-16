@@ -1,5 +1,5 @@
 ﻿<p> 
-Thank you for considering {{model.firstname}} {{model.lastname}} for the position at {{model.companyname}}. Please find below the details of their application.
+You have a new application from BuildMyTalent, please find details of this application below.
 <br>
 Job Position: {{model.jobposition}}
 <br>

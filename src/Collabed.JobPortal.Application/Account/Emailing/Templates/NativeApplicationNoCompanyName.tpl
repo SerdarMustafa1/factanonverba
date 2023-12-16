@@ -60,7 +60,7 @@
                 </tbody>
               </table>
               <p class="text-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 300; color: #475467; margin: 0 0 1rem;" align="left">
-              Thank you for considering {{model.firstname}} {{model.lastname}} for the position at {{model.companyname}}. Please find below the details of their application.
+                You have a new application from BuildMyTalent, please find details of this application below.
               </p>
               <div style="margin-top: 2rem;">
                 <p class="hint-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 200; color: #475467; margin: 1rem 0;" align="left">Job Position: {{model.jobposition}}</p>

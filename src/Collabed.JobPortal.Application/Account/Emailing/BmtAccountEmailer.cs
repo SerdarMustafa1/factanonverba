@@ -88,8 +88,18 @@ namespace Collabed.JobPortal.Account.Emailing
         public async Task SendApplicationEmailToCompanyAsync(ApplicationEmailDto jobApplicationDto, bool isNative)
         {
             var screeningQuestions = ConvertScreeningQuestions(jobApplicationDto.ScreeningQuestions);
+            var emailTemplate = "";
 
-            var emailContent = await TemplateRenderer.RenderAsync(isNative ? BmtAccountEmailTemplates.NativeApplication : BmtAccountEmailTemplates.ThirdPartyApplication, new
+            if(isNative)
+            {
+                emailTemplate = string.IsNullOrEmpty(jobApplicationDto.CompanyName) ? BmtAccountEmailTemplates.NativeApplicationNoCompanyName : BmtAccountEmailTemplates.NativeApplication;
+            }
+            else
+            {
+                emailTemplate = string.IsNullOrEmpty(jobApplicationDto.CompanyName) ? BmtAccountEmailTemplates.ThirdPartyApplicationNoCompanyName : BmtAccountEmailTemplates.ThirdPartyApplication;
+            }
+
+            var emailContent = await TemplateRenderer.RenderAsync(emailTemplate, new
             {
                 firstname = jobApplicationDto.FirstName,
                 lastname = jobApplicationDto.LastName,
@@ -97,6 +107,7 @@ namespace Collabed.JobPortal.Account.Emailing
                 postcode = jobApplicationDto.PostCode,
                 companyname = jobApplicationDto.CompanyName,
                 jobposition = jobApplicationDto.JobPosition,
+                jobreference = jobApplicationDto.JobReference,
                 cvfilename = jobApplicationDto.CvFileName,
                 coverletter = jobApplicationDto.CoverLetter,
                 portfoliolink = jobApplicationDto.PortfolioLink,
