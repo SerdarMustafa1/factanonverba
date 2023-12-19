@@ -12,7 +12,6 @@ namespace Collabed.JobPortal.Jobs
         public string Description { get; set; }
         public string SubDescription { get; set; }
         public string Skills { get; set; }
-        public int CategoryId { get; set; }
         public int? OfficeLocationId { get; set; }
         public DateTime? StartDate { get; set; }
         public bool? IsLocalLanguageRequired { get; set; }

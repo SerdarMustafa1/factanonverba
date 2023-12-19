@@ -36,8 +36,6 @@
 
     let today = new Date();
     today = today.toISOString().split('T')[0];
-    console.log(max_date);
-    console.log(today);
     flatpickr("#StartDate_input", { minDate: today });
     flatpickr("#ApplicationDeadline_input", { minDate: today, maxDate: max_date});
 

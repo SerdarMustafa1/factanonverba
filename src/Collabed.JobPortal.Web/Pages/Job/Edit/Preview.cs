@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Collabed.JobPortal.Migrations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Edit
@@ -235,7 +234,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Edit
             var updateJob = new CreateUpdateJobDto()
             {
                 ApplicationDeadline = ApplicationDeadline,
-                CategoryId = JobCategoryId,
                 ContractType = (ContractType)ContractTypeId,
                 Description = JobDescription,
                 EmploymentType = (EmploymentType)EmploymentTypeId,

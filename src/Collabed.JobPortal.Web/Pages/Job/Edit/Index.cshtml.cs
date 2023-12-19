@@ -199,7 +199,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Edit
                     case 2:
                         ScreeningQuestion2 = screeningQuestionDto.Text;
                         DesiredAnswer2 = !screeningQuestionDto.AutoRejectAnswer;
-                        break;
+                        break; 
                     case 3:
                         ScreeningQuestion3 = screeningQuestionDto.Text;
                         DesiredAnswer3 = !screeningQuestionDto.AutoRejectAnswer;
@@ -216,27 +216,36 @@ namespace Collabed.JobPortal.Web.Pages.Job.Edit
         {
             if (!Request.Form["Source"].IsNullOrEmpty() & Request.Form["Source"].ToString() == "Preview")
             {
-                JobCategories =
-                    (await _dropDownService.GetCategoriesAsync()).Select(x =>
-                        new SelectListItem(x.Name, x.Id.ToString()));
-                OfficeLocations =
-                    (await _dropDownService.GetLocationsAsync()).Select(
-                        x => new SelectListItem(x.Name, x.Id.ToString()));
+                if (string.IsNullOrWhiteSpace(Reference))
+                {
+                    return NotFound();
+                }
+
+                var job = await _jobAppService.GetByReferenceAsync(Reference);
+                if (job == null)
+                {
+                    return NotFound();
+                }
+
+                MaxDateTime = job.PublishedDate.AddDays(30).ToString("yyyy-MM-dd");
                 Languages = (await _dropDownService.GetLanguagesAsync()).Select(x =>
                     new SelectListItem(x.Name, x.Id.ToString()));
+                JobCategories =
+                    (await _dropDownService.GetCategoriesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                OfficeLocations =
+                    (await _dropDownService.GetLocationsAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
                 ExperienceLevels = _dropDownService.GetExperienceLevel()
                     .Select(x => new SelectListItem(x.Name, x.Id.ToString()));
                 EmploymentTypes = _dropDownService.GetEmploymentTypes()
                     .Select(x => new SelectListItem(x.Name, x.Id.ToString()));
                 ContractTypes = _dropDownService.GetContractTypes()
                     .Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-                JobLocations = _dropDownService.GetJobLocations()
-                    .Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-                SalaryPeriods = _dropDownService.GetSalaryPeriod()
-                    .Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+                SalaryPeriods = _dropDownService.GetSalaryPeriod().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             }
 
             return Page();
         }
     }
+    
 }

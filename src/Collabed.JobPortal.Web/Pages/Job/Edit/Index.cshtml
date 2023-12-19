@@ -31,7 +31,7 @@
 
 <div class="row" style="margin-top:4%;padding-inline: 0.5%;">
     <div class="col-sm">
-        <p class="heading-30">Editing job - @Model.JobTitle</p>
+        <p class="heading-30">Editing job - @Model.JobTitle - @Model.Reference</p>
         <div class="row">
             <div class="col-md-9">
                 <p >You can navigate through the different sections by clicking on the headers</p>
@@ -134,6 +134,7 @@
                         <div class="form-group">
                             <label for="JobCategoryId">Category</label>
                             @Html.DropDownListFor(c => c.JobCategoryId, Model.JobCategories, "Please select", new { @class = "form-select", data_live_search = "true" , disabled = true })
+                            @Html.HiddenFor(c => c.JobCategoryId)
                             <span id="jobCategoryErrorMessage" asp-validation-for="JobCategoryId" class="error-message-span"></span>
                         </div>
                     </div>
@@ -439,14 +440,17 @@
                         <div class="form-group">
                             <div class="form-check">
                                 <input class="form-check-input" asp-for="IsCvRequired" type="checkbox" id="isCvRequiredCheckbox" onchange="validatePreferencesTab()" disabled="disabled">
+                                @Html.HiddenFor(c=> c.IsCvRequired)
                                 <label class="form-check-label" for="isCvRequiredCheckbox"> CV </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" asp-for="IsCoverLetterRequired" type="checkbox" id="isCoverLetterRequiredCheckbox" onchange="validatePreferencesTab()" disabled="disabled">
+                                @Html.HiddenFor(c=> c.IsCoverLetterRequired)
                                 <label class="form-check-label" for="isCoverLetterRequiredCheckbox"> Cover Letter </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" asp-for="IsOnlinePortfolioRequired" id="isOnlinePortfolioRequired" onchange="validatePreferencesTab()" disabled="disabled">
+                                @Html.HiddenFor(c=> c.IsOnlinePortfolioRequired)
                                 <label class="form-check-label" for="isOnlinePortfolioRequired"> Online Portfolio </label>
                             </div>
                         </div>
