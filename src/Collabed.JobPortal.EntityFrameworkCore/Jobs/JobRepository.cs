@@ -146,6 +146,7 @@ namespace Collabed.JobPortal.Jobs
                 query = query.Where(x => x.job.Title.Contains(keyword)
                 || x.job.Skills.Contains(keyword)
                 || x.job.CompanyName.Contains(keyword)
+                || x.job.Description.Contains(keyword)
                 || (x.org != null && x.org.Name.Contains(keyword)));
             }
 
@@ -264,6 +265,7 @@ namespace Collabed.JobPortal.Jobs
                 query = query.Where(x => x.job.Title.Contains(keyword)
                                     || x.job.Skills.Contains(keyword)
                                     || x.job.CompanyName.Contains(keyword)
+                                    || x.job.Description.Contains(keyword)
                                     || (x.org != null && x.org.Name.Contains(keyword)));
             }
 

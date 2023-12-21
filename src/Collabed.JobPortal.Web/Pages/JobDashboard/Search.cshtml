@@ -55,7 +55,7 @@
         </div>
     </div>
     <div class="full-filters-width">
-        <div class="row">
+        <div class="row d-flex justify-content-center">
             <div class="col-2" style="margin-left: 2%;">
                 <div class="input-group">
                     @Html.DropDownListFor(c => c.ContractType, Model.ContractTypes, "Contract type", new { @class = "form-select" })
@@ -71,11 +71,11 @@
                     @Html.DropDownListFor(c => c.SalaryRange, Model.SalaryRanges, "Salary range", new { @class = "form-select" })
                 </div>
             </div>
-            <div class="col-2">
+            @*<div class="col-2">
                 <div class="input-group">
                     @Html.DropDownListFor(c => c.JobLocation, Model.JobLocations, "Workplace", new { @class = "form-select" })
                 </div>
-            </div>
+            </div>*@
             <div class="col-2">
                 <div class="input-group">
                     @Html.DropDownListFor(c => c.NetZero, Model.NetZeros, "Specialism", new { @class = "form-select" })
@@ -115,6 +115,7 @@
                 else
                     link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
             }
+            <a href="@link" style="text-decoration: none; color: inherit;">
             <div class="row" style="margin-top:2%;padding-inline: 0.5%;">
                 <div class="card" style="padding: 0 !important;">
                     @if (isNew)
@@ -166,6 +167,7 @@
                     </div>
                 </div>
             </div>
+            </a>
         }
     </div>
     <div class="paginationContainer">
