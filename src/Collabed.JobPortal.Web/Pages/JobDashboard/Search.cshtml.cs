@@ -22,6 +22,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
         [BindProperty(SupportsGet = true)]
         public List<string> Category { get; set; }
 
+        [BindProperty]
         public List<int> CategoriesSelected { get; set; } = new List<int>();
 
         [BindProperty(SupportsGet = true)]
@@ -110,7 +111,11 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
             SalaryRanges = GetSalaryRanges();
             Categories = (await _dropDownService.GetCategoriesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
 
-            CategoriesSelected = ConvertStringParameters(Category);
+            if (Request.QueryString.HasValue)
+            {
+                var categSelected = Request.Query["CategoriesSelected"].ToString().Split(',').ToList();
+                CategoriesSelected = ConvertStringParameters(categSelected);
+            }
 
             var searchInput = new SearchCriteriaInput()
             {

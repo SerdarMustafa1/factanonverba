@@ -12,15 +12,28 @@
 @section scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.2/js/bootstrap-multiselect.min.js"></script>
     <abp-script src="/Pages/JobDashboard/Search.js" />
+
+    <script>
+        $(function () {
+            $('#multiselectWrapperId select').change(function () {
+                // Get the selected values
+                var selectedValues = $(this).val();
+
+                // Update the hidden field with the selected values
+                $('#categoriesSelectedHiddenInput').val(selectedValues);
+            });
+        });
+    </script>
 }
 
 <input type="hidden" asp-for=@Model.DistanceRange />
 <form method="get" asp-page="Search">
     <input type="hidden" asp-for="@Model.CurrentPage" id="currentPageHiddenInput" />
     <div class="row" style="height: 10%;">
+        <input type="hidden" asp-for="@Model.CategoriesSelected" id="categoriesSelectedHiddenInput" />
         <div class="col-2" id="multiselectWrapperId" style="width: 16%">
             <div class="input-group">
-                @Html.ListBoxFor(c => c.CategoriesSelected, Model.Categories, new { @class = "form-select" } )
+                @Html.ListBoxFor(c => c.CategoriesSelected, Model.Categories, new { @class = "form-select", multiple = "multiple" } )
             </div>
         </div>
 
