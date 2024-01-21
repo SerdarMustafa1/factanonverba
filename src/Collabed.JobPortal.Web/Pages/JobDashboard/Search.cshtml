@@ -126,7 +126,10 @@
                         link += $"Category={item}&";
                     }
                 else
-                    link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
+                {
+                    var value = System.Web.HttpUtility.UrlEncode(keyValuePair.Value[0]);
+                    link += $"{keyValuePair.Key}={value}&";
+                }
             }
             <a href="@link" style="text-decoration: none; color: inherit;">
             <div class="row" style="margin-top:2%;padding-inline: 0.5%;">
@@ -192,7 +195,9 @@
                 {
                     if (keyValuePair.Key.Equals(nameof(Model.CurrentPage))) continue;
 
-                    link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
+                    var value = System.Web.HttpUtility.UrlEncode(keyValuePair.Value[0]);
+
+                    link += $"{keyValuePair.Key}={value}&";
                 }
                 link += $"CurrentPage={Model.CurrentPage - 1}";
                 <li class="page-item">
@@ -214,8 +219,8 @@
                     foreach (var keyValuePair in Request.Query)
                     {
                         if (keyValuePair.Key.Equals(nameof(Model.CurrentPage))) continue;
-
-                        link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
+                        var value = System.Web.HttpUtility.UrlEncode(keyValuePair.Value[0]);
+                        link += $"{keyValuePair.Key}={value}&";
                     }
                     link += $"CurrentPage={i}";
 
@@ -239,8 +244,8 @@
                 foreach (var keyValuePair in Request.Query)
                 {
                     if (keyValuePair.Key.Equals(nameof(Model.CurrentPage))) continue;
-
-                    link += $"{keyValuePair.Key}={keyValuePair.Value[0]}&";
+                    var value = System.Web.HttpUtility.UrlEncode(keyValuePair.Value[0]);
+                    link += $"{keyValuePair.Key}={value}&";
                 }
                 link += $"CurrentPage={Model.CurrentPage + 1}";
                 <li class="page-item">
