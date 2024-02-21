@@ -106,7 +106,7 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
             NetZeros = new List<SelectListItem>
             {
                 new SelectListItem("NetZero","1"),
-                new SelectListItem("Unknown","2") // Value 2 will search for null entries
+                new SelectListItem("No specialisim","2") // Value 2 will search for null entries
             };
             SalaryRanges = GetSalaryRanges();
             Categories = (await _dropDownService.GetCategoriesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));

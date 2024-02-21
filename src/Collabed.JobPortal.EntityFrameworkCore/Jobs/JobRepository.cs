@@ -186,7 +186,7 @@ namespace Collabed.JobPortal.Jobs
                     SalaryPeriod = x.job.SalaryPeriod,
                     JobLocation = x.job.JobLocation,
                     ExperienceLevel = x.job.ExperienceLevel,
-                    CompanyName = x.job.CompanyName,
+                    CompanyName = String.IsNullOrEmpty(x.job.CompanyName) ? x.org.Name : x.job.CompanyName,
                     IsSalaryEstimated = x.job.IsSalaryEstimated,
                     IsNetZeroCompliant = x.job.IsNetZeroCompliant,
                     OrganisationId = x.job.OrganisationId,
