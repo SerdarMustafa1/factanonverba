@@ -103,11 +103,15 @@ namespace Collabed.JobPortal.Web.Pages.JobDashboard
             EmploymentTypes = _dropDownService.GetEmploymentTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString())).Concat(new List<SelectListItem> { new SelectListItem("Unknown", "4") });
             ContractTypes = _dropDownService.GetContractTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString())).Concat(new List<SelectListItem> { new SelectListItem("Unknown", "5") });
             JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-            NetZeros = new List<SelectListItem>
-            {
-                new SelectListItem("NetZero","1"),
-                new SelectListItem("No specialisim","2") // Value 2 will search for null entries
-            };
+            NetZeros = Enum.GetValues(typeof(NetZeroType))
+                    .Cast<NetZeroType>()
+                    .OrderByDescending(type => (int)type)
+                    .Select(type => new SelectListItem
+                    {
+                        Value = ((int)type).ToString(),
+                        Text = Enum.Parse<NetZeroType>(type.ToString()).GetDisplayName()
+                    })
+                    .ToList();
             SalaryRanges = GetSalaryRanges();
             Categories = (await _dropDownService.GetCategoriesAsync()).Select(x => new SelectListItem(x.Name, x.Id.ToString()));
 
