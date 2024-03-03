@@ -24,80 +24,22 @@
         <p style="font-weight: 400; font-size: 18px; line-height: 28px; color: #101828;">The job board designed for and by construction-industry professionals.</p>
     </div>
     <div class="tiles-wrapper">
-                <div class="category-tile">
-                    <a href="../JobDashboard/Search?category=@Model.Categories[0].Id" class="tile-link">
-                        <div class="category-tile-content">
-                            <p class="category-tile-header">
-                                @Model.Categories[0].Name
-                            </p>
-                            <p class="category-tile-jobs-count">
-                                @Model.Categories[0].JobsCount jobs available
-                            </p>
-                        </div>
-                    </a>
-               </div>
-        <div class="category-tile">
-                    <a href="../JobDashboard/Search?category=@Model.Categories[1].Id" class="tile-link">
-                        <div class="category-tile-content">
-                            <p class="category-tile-header">
-                                @Model.Categories[1].Name
-                            </p>
-                            <p class="category-tile-jobs-count">
-                                @Model.Categories[1].JobsCount jobs available
-                            </p>
-                        </div>
-                    </a>
-        </div>
-        <div class="category-tile">
-            <a href="../JobDashboard/Search?category=@Model.Categories[2].Id" class="tile-link">
-                <div class="category-tile-content">
-                    <p class="category-tile-header">
-                        @Model.Categories[2].Name
-                    </p>
-                    <p class="category-tile-jobs-count">
-                        @Model.Categories[2].JobsCount jobs available
-                    </p>
-                </div>
-            </a>
-        </div>
-        <div class="category-tile">
-            <a href="../JobDashboard/Search?category=@Model.Categories[3].Id" class="tile-link">
-                <div class="category-tile-content">
-                    <p class="category-tile-header">
-                        @Model.Categories[3].Name
-                    </p>
-                    <p class="category-tile-jobs-count">
-                        @Model.Categories[3].JobsCount jobs available
-                    </p>
-                </div>
-            </a>
-        </div>
+        @foreach (var category in Model.Categories)
+        {
+            <div class="category-tile">
+                <a href="../JobDashboard/Search?categoriesSelected=@category.Id" class="tile-link">
+                    <div class="category-tile-content">
+                        <p class="category-tile-header">
+                            @category.Name
+                        </p>
+                        <p class="category-tile-jobs-count">
+                            @category.JobsCount jobs available
+                        </p>
+                    </div>
+                </a>
+            </div>
+        }
 
-        <div class="category-tile">
-            <a href="../JobDashboard/Search?category=@Model.Categories[4].Id" class="tile-link">
-                <div class="category-tile-content">
-                    <p class="category-tile-header">
-                        @Model.Categories[4].Name
-                    </p>
-                    <p class="category-tile-jobs-count">
-                        @Model.Categories[4].JobsCount jobs available
-                    </p>
-                </div>
-            </a>
-        </div>
-
-        <div class="category-tile">
-            <a href="../JobDashboard/Search?category=@Model.Categories[5].Id" class="tile-link">
-                <div class="category-tile-content">
-                    <p class="category-tile-header">
-                        @Model.Categories[5].Name
-                    </p>
-                    <p class="category-tile-jobs-count">
-                        @Model.Categories[5].JobsCount jobs available
-                    </p>
-                </div>
-            </a>
-        </div>
     </div>
 </div>
 <p style="text-align:center;margin-top: 40px;"><a class="btn btn-primary" href="../JobDashboard/Search">View all jobs</a></p>

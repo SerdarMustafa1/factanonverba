@@ -158,6 +158,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Post
             ContractTypes = _dropDownService.GetContractTypes().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             JobLocations = _dropDownService.GetJobLocations().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
             SalaryPeriods = _dropDownService.GetSalaryPeriod().Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+            IsCvRequired = true;
         }
 
         public async Task<IActionResult> OnPostAsync()
