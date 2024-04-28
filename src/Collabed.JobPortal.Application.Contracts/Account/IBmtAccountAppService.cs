@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.Account;
+using Volo.Abp.Identity;
 
 namespace Collabed.JobPortal.Users
 {
@@ -19,5 +20,8 @@ namespace Collabed.JobPortal.Users
         Task UpdateUserProfileAsync(UpdateUserProfileDto updateProfileDto);
         Task DeleteUserAsync(Guid userId);
         Task<UserType> GetUserTypeByIdAsync(Guid userId);
+        Task<RegisterUserDto> RegisterLocalUserAsync(UserType userType, RegisterUserDto registerDto);
+        Task<IdentityUserDto> GetRegisteredUserByEmailAsync(string emailAddress);
+        Task SendEmailVerificationInJobApplicationRequestAsync(SendEmailVerificationDto input, string password);
     }
 }

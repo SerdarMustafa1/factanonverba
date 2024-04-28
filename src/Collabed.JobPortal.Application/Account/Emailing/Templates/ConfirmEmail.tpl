@@ -59,6 +59,7 @@
               <p class="text-16-strong" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 800; color: #475467; margin: 0 0 0.25rem;" align="left">Confirm your email to get started</p>
               <p class="text-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 300; color: #475467; margin: 1rem 0;" align="left">Hello,</p>
               <p class="text-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 300; color: #475467; margin: 0 0 1rem;" align="left">Welcome to <span class="text-16-strong" style="font-size: 16px; font-weight: 800; color: #475467;">BuildMyTalent!</span></p>
+              {{model.password}}
               <p class="text-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 300; color: #475467; margin: 0 0 1rem;" align="left">You're one step away from completing your <span class="text-16-strong" style="font-size: 16px; font-weight: 800; color: #475467;">BuildMyTalent</span> account.</p>
               <p class="text-16" style="line-height: 24px; font-size: 16px; width: 100%; font-weight: 300; color: #475467; margin: 0 0 1rem;" align="left">To confirm your email, simply click in the button below.</p>
               <table class="btn btn-secondary confirmEmail" role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-radius: 6px; border-collapse: separate !important;">

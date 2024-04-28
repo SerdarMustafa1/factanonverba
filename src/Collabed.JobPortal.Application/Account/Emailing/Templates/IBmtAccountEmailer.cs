@@ -12,5 +12,6 @@ namespace Collabed.JobPortal.Account.Emailing.Templates
         Task SendApplicationConfirmationAsync(ApplicationConfirmationDto application);
         Task SendApplicationRejectionAsync(ApplicantDto applicant);
         Task SendApplicationInterviewAsync(ApplicantDto applicant);
+        Task SendEmailVerificationInJobApplicationRequestAsync(IdentityUser user, string link, string password);
     }
 }

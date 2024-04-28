@@ -22,7 +22,7 @@ namespace Collabed.JobPortal.Jobs
 		Task FeedAllAdzunaJobsAsync();
 		Task<IEnumerable<ScreeningQuestionDto>> ScreeningQuestionsByJobRefAsync(string jobReference);
 		Task<IEnumerable<SupportingDocumentDto>> GetSupportingDocumentsByJobRefAsync(string jobReference);
-		Task ApplyForAJob(ApplicationDto application);
+		Task ApplyForAJob(ApplicationDto application, string psw);
 		Task DeactivateJobAsync(string reference);
 		Task<PagedResultDto<JobSummaryDto>> GetAllListAsync(JobGetListInput input);
 		Task ReviewJobsAsync();

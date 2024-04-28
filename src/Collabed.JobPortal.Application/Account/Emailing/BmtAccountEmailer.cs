@@ -44,7 +44,7 @@ namespace Collabed.JobPortal.Account.Emailing
         public async Task SendEmailVerificationRequestAsync(IdentityUser user, string link)
         {
             var emailContent = await TemplateRenderer.RenderAsync(
-                BmtAccountEmailTemplates.EmailVerification, new { link = link });
+                BmtAccountEmailTemplates.EmailVerification, new { link = link, includePassword = false });
 
             var mailMessage = new MailMessage
             {
@@ -58,20 +58,51 @@ namespace Collabed.JobPortal.Account.Emailing
             await EmailSender.SendAsync(mailMessage);
         }
 
+        public async Task SendEmailVerificationInJobApplicationRequestAsync(IdentityUser user, string link, string password)
+        {
+            var showPsw = false;
+            string pswDetailsText = "";
+
+            if (!string.IsNullOrEmpty(password))
+            {
+                showPsw = true;
+                pswDetailsText = $@"
+            <p class=""text-16"" style=""line-height: 24px; font-size: 16px; width: 100%; font-weight: 300; color: #475467; margin: 0 0 1rem;"">
+                This is your temporary password - {password}
+                Sign in and create a permanent password to save your details, manage your personal information and apply for further roles easily without having to re-enter your details.
+            </p>
+            ";
+
+            }
+
+            var emailContent = await TemplateRenderer.RenderAsync(
+                BmtAccountEmailTemplates.EmailVerification, new { link = link, password = pswDetailsText });
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(EmailTemplates.WelcomeSender, EmailTemplates.WelcomeTitle),
+                Body = emailContent,
+                IsBodyHtml = true,
+                Subject = EmailTemplates.ConfirmEmailSubject,
+            };
+            mailMessage.To.Add(user.Email);
+
+            await EmailSender.SendAsync(mailMessage);
+        }
+
         public async Task SendApplicationConfirmationAsync(ApplicationConfirmationDto application)
         {
             var url = await AppUrlProvider.GetUrlAsync("MVC");
-
             var emailContent = await TemplateRenderer.RenderAsync(
-                BmtAccountEmailTemplates.ApplicationConfirmation, new
-                {
-                    link = url + "/JobDashboard",
-                    firstname = application.FirstName,
-                    lastname = application.LastName,
-                    reference = application.JobReference,
-                    title = application.JobTitle,
-                    company = application.CompanyName
-                });
+                    BmtAccountEmailTemplates.ApplicationConfirmation, new
+                    {
+                        link = url + "/JobDashboard",
+                        firstname = application.FirstName,
+                        lastname = application.LastName,
+                        reference = application.JobReference,
+                        title = application.JobTitle,
+                        company = application.CompanyName
+                    });
 
             var mailMessage = new MailMessage
             {

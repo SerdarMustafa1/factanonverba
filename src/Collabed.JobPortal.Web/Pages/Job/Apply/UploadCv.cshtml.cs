@@ -1,4 +1,5 @@
-﻿using Collabed.JobPortal.Extensions;
+﻿using Collabed.JobPortal.Account;
+using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Volo.Abp.Identity;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Apply
 {
@@ -22,7 +24,9 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         public string StoredCvContentType { get; set; }
         public string StoredCvFileName { get; set; }
 
-        public UploadCvModel(IJobAppService jobAppService, IBmtAccountAppService accountAppService, IWebHostEnvironment env) :
+        public UploadCvModel(IJobAppService jobAppService,
+            IBmtAccountAppService accountAppService,
+            IWebHostEnvironment env) :
             base(jobAppService, accountAppService)
         {
             _jobAppService = jobAppService;
@@ -36,19 +40,24 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             JobDto = await _jobAppService.GetByReferenceAsync(TempData.Peek(nameof(JobReference))?.ToString());
             await AssignProgressBar();
             var accountProfile = await _accountAppService.GetLoggedUserProfileAsync();
-            if (!string.IsNullOrWhiteSpace(accountProfile.CvFileName) &&
-                !string.IsNullOrWhiteSpace(accountProfile.CvContentType))
+            if (accountProfile != null)
             {
-                TempData["CvFileName"] = accountProfile.CvFileName;
-                TempData["CvContentType"] = accountProfile.CvContentType;
-                StoredCvFileName = accountProfile.CvFileName;
-                StoredCvContentType = accountProfile.CvContentType;
+                if (!string.IsNullOrWhiteSpace(accountProfile.CvFileName) &&
+                !string.IsNullOrWhiteSpace(accountProfile.CvContentType))
+                {
+                    TempData["CvFileName"] = accountProfile.CvFileName;
+                    TempData["CvContentType"] = accountProfile.CvContentType;
+                    StoredCvFileName = accountProfile.CvFileName;
+                    StoredCvContentType = accountProfile.CvContentType;
+                }
+                TempData["UserId"] = accountProfile.UserId;
             }
-            TempData["UserId"] = accountProfile.UserId;
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var userId = new Guid();
+
             StoredCvFileName = TempData.Peek("CvFileName")?.ToString();
             StoredCvContentType = TempData.Peek("CvContentType")?.ToString();
             // Check if both StoredCvFileName and StoredCvContentType are empty and Upload is not provided
@@ -59,7 +68,22 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
                 return Page();
             }
 
-            var userId = Guid.Parse(TempData.Peek("UserId")?.ToString());
+            if (TempData.Peek("UserId") == null)
+            {
+                var user = await CreateUser();
+
+                if (user != null)
+                {
+                    userId = (Guid)user.Id;
+                    TempData["UserId"] = userId;
+                    TempData["Password"] = user.Password; //TODO: CHANGE LATER
+                }
+            }
+            else
+            {
+                userId = Guid.Parse(TempData.Peek("UserId")?.ToString());
+            }
+
             var cvFileName = TempData.Peek("CvFileName")?.ToString();
             var cvContentType = TempData.Peek("CvContentType")?.ToString();
             var uploadingNewCv = string.IsNullOrWhiteSpace(cvFileName) && string.IsNullOrWhiteSpace(cvContentType) && Upload != null ||
@@ -80,6 +104,40 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         {
             float stepsRequired = (await _jobAppService.GetApplicationStepsByJobReferenceAsync(TempData.Peek("JobReference").ToString())).Value;
             ProgressBarValue = (float.Parse(TempData.Peek(nameof(CurrentStep)).ToString()) / stepsRequired) * 100;
+        }
+
+        private async Task<RegisterUserDto> CreateUser()
+        {
+            var resgisterUser = new RegisterUserDto()
+            {
+                Email = TempData.Peek("EmailAddress").ToString(),
+                Name = TempData.Peek("FirstName").ToString(),
+                Surname = TempData.Peek("LastName").ToString(),
+                UserName = TempData.Peek("EmailAddress").ToString()
+            };
+
+            var userDto = new IdentityUserDto();
+            var registerUserDto = new RegisterUserDto();
+
+            userDto = await _accountAppService.GetRegisteredUserByEmailAsync(resgisterUser.Email);
+
+            if (userDto == null)
+            {
+                registerUserDto = await _accountAppService.RegisterLocalUserAsync(JobPortal.User.UserType.Candidate, resgisterUser);
+            }
+            else
+            {
+                registerUserDto.Email = userDto.Email;
+                registerUserDto.Surname = userDto.Surname;
+                registerUserDto.UserId = userDto.Id;
+                registerUserDto.Id = userDto.Id;
+                registerUserDto.UserName = userDto.UserName;
+                registerUserDto.PhoneNumber = userDto.PhoneNumber;
+                registerUserDto.Name = userDto.Name;
+            }
+
+
+            return registerUserDto;
         }
     }
 }

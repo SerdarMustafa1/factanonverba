@@ -1,21 +1,24 @@
 ﻿using Collabed.JobPortal.Account.Emailing.Templates;
 using Collabed.JobPortal.BlobStorage;
 using Collabed.JobPortal.Extensions;
-using Collabed.JobPortal.Permissions;
+using Collabed.JobPortal.Helper;
+using Collabed.JobPortal.Roles;
 using Collabed.JobPortal.User;
 using Collabed.JobPortal.Users;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
+using static Volo.Abp.UI.Navigation.DefaultMenuNames.Application;
 
 namespace Collabed.JobPortal.Account
 {
@@ -69,35 +72,33 @@ namespace Collabed.JobPortal.Account
             await _identityUserManager.DeleteAsync(user);
         }
 
-        [Authorize(BmtPermissions.ApplyForJobs)]
         public async Task<UserProfileDto> GetLoggedUserProfileAsync()
         {
-            if (CurrentUser == null)
-            {
-                throw new UserFriendlyException("User must be logged in");
-            }
+            var userProfileDto = new UserProfileDto();
 
-            var userProfileDto = new UserProfileDto
+            if (CurrentUser.Id != null)
             {
-                FirstName = CurrentUser.Name,
-                LastName = CurrentUser.SurName,
-                Email = CurrentUser.Email,
-                PhoneNumber = CurrentUser.PhoneNumber,
-                UserId = CurrentUser.Id.Value,
-            };
+                userProfileDto.FirstName = CurrentUser.Name;
+                userProfileDto.LastName = CurrentUser.SurName;
+                userProfileDto.Email = CurrentUser.Email;
+                userProfileDto.PhoneNumber = CurrentUser.PhoneNumber;
+                userProfileDto.UserId = CurrentUser.Id.Value;
 
-            var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == CurrentUser.Id);
-            if (userProfile == null)
-            {
+                var userProfile = await _userProfileRepository.FindAsync(x => x.UserId == CurrentUser.Id);
+                if (userProfile == null)
+                {
+                    return userProfileDto;
+                }
+
+                userProfileDto.CvBlobName = userProfile.CvBlobName;
+                userProfileDto.CvFileName = userProfile.CvFileName;
+                userProfileDto.CvContentType = userProfile.CvContentType;
+                userProfileDto.PostCode = userProfile.PostCode;
+                
                 return userProfileDto;
             }
 
-            userProfileDto.CvBlobName = userProfile.CvBlobName;
-            userProfileDto.CvFileName= userProfile.CvFileName;
-            userProfileDto.CvContentType = userProfile.CvContentType;
-            userProfileDto.PostCode = userProfile.PostCode;
-
-            return userProfileDto;
+            return null;
         }
 
         public async Task UpdateUserProfileAsync(UpdateUserProfileDto updateProfileDto)
@@ -157,7 +158,7 @@ namespace Collabed.JobPortal.Account
             }
         }
 
-        public override async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
+        public override async Task<IdentityUserDto> RegisterAsync(Volo.Abp.Account.RegisterDto input)
         {
             var userDto = await base.RegisterAsync(input);
 
@@ -168,6 +169,30 @@ namespace Collabed.JobPortal.Account
         {
             var user = await GetUserByEmailAsync(input.Email);
             await _accountEmailer.SendEmailVerificationRequestAsync(user, input.CallbackUrl);
+        }
+
+        public async Task SendEmailVerificationInJobApplicationRequestAsync(SendEmailVerificationDto input,string password)
+        {
+            var user = await GetUserByEmailAsync(input.Email);
+            await _accountEmailer.SendEmailVerificationInJobApplicationRequestAsync(user, input.CallbackUrl, password);
+        }
+
+        public async Task<IdentityUserDto> GetRegisteredUserByEmailAsync(string emailAddress)
+        {
+            var user = await UserManager.FindByEmailAsync(emailAddress);
+
+            if (user == null)
+                return null;
+
+            var userDto = new IdentityUserDto()
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname
+            };
+            return userDto;
         }
 
         public async Task<bool> CheckIfEmailExistsAsync(string emailAddress)
@@ -200,6 +225,75 @@ namespace Collabed.JobPortal.Account
             using MemoryStream ms = new();
             input.CopyTo(ms);
             return ms.ToArray();
+        }
+
+        public async Task<RegisterUserDto> RegisterLocalUserAsync(UserType userType, RegisterUserDto registerDto)
+        {
+            var password = PasswordHelper.GenerateRandomPassword();
+            var voloRegisterDto = new Volo.Abp.Account.RegisterDto()
+            {
+                AppName = "MVC",
+                EmailAddress = registerDto.Email,
+                Password = password,
+                UserName = registerDto.UserName
+            };
+
+            var userDto = await RegisterAsync(voloRegisterDto);
+            var user = await UserManager.GetByIdAsync(userDto.Id);
+            user.Name = registerDto.Name;
+            user.Surname = registerDto.Surname;
+            await UserManager.UpdateAsync(user);
+
+
+            await AssignDefaultRoles(userType, user);
+
+            // Send user an email to confirm email address
+            await SendEmailToAskForEmailConfirmationAsync(user, password);
+
+            registerDto.Email = userDto.Email;
+            registerDto.Surname = userDto.Surname;
+            registerDto.UserId = userDto.Id;
+            registerDto.Id = userDto.Id;
+            registerDto.UserName = userDto.UserName;
+            registerDto.PhoneNumber = userDto.PhoneNumber;
+            registerDto.Name = userDto.Name;
+            registerDto.Password = password;
+
+            return registerDto;
+        }
+        private async Task SendEmailToAskForEmailConfirmationAsync(IdentityUser user, string password)
+        {
+            var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            //TODO TEST
+            //var callbackUrl = _urlHelper.Page("/Account/ConfirmEmail", pageHandler: null, values: new { userId = user.Id, code = code }, protocol: "Scheme");
+
+            var baseUrl = "https://buildmytalent.com/"; // TODO-TO BE CHANGED
+            var confirmationPath = "/Account/ConfirmEmail";
+            var callbackUrl = GetConfirmationUrl(baseUrl, confirmationPath, user.Id, code);
+
+            if (string.IsNullOrEmpty(password))
+                await SendEmailVerificationRequestAsync(new JobPortal.Account.SendEmailVerificationDto { Email = user.Email, CallbackUrl = callbackUrl });
+            else
+                await SendEmailVerificationInJobApplicationRequestAsync(new JobPortal.Account.SendEmailVerificationDto { Email = user.Email, CallbackUrl = callbackUrl}, password);
+        }
+
+        private string GetConfirmationUrl(string baseUrl, string confirmationPath, Guid userId, string code)
+        {
+            return $"{baseUrl}{confirmationPath}?userId={userId}&code={code}";
+        }
+
+
+        private async Task AssignDefaultRoles(UserType userType, IdentityUser user)
+        {
+            if (userType == UserType.Organisation)
+            {
+                await UserManager.AddToRoleAsync(user, RoleNames.OrganisationOwnerRole);
+            }
+            if (userType == UserType.Candidate)
+            {
+                await UserManager.AddToRoleAsync(user, RoleNames.BmtApplicant);
+            }
         }
     }
 }

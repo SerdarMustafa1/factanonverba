@@ -1,11 +1,10 @@
 ﻿using Collabed.Application.Helpers;
 using Collabed.JobPortal.Applications;
 using Collabed.JobPortal.Jobs;
-using Collabed.JobPortal.Permissions;
 using Collabed.JobPortal.Users;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -13,7 +12,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Collabed.JobPortal.Web.Pages.Job.Apply
 {
-    [Authorize(BmtPermissions.ApplyForJobs)]
     public class ApplyForAJobModelBase : AbpPageModel
     {
         private readonly IJobAppService _jobAppService;
@@ -153,11 +151,12 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
                 default:
                     break;
             }
+
             var answers = ExtractScreeningAnswers();
             var application = new ApplicationDto()
             {
                 CoverLetter = TempData.Peek("CoverLetter")?.ToString(),
-                UserId = CurrentUser.Id.Value,
+                UserId = CurrentUser.Id != null ? CurrentUser.Id.Value : Guid.Parse(TempData.Peek("UserId").ToString()),
                 Email = TempData.Peek(nameof(EmailAddress))?.ToString(),
                 FirstName = TempData.Peek(nameof(FirstName))?.ToString(),
                 LastName = TempData.Peek(nameof(LastName))?.ToString(),
@@ -168,9 +167,10 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
                 CvFileName = TempData.Peek(nameof(ApplicationDto.CvFileName))?.ToString(),
                 PortfolioLink = TempData.Peek(nameof(ApplicationDto.PortfolioLink))?.ToString(),
                 IsNewCvAttached = false,
-                ScreeningQuestions = answers,
+                ScreeningQuestions = answers
             };
-            await _jobAppService.ApplyForAJob(application);
+            await _jobAppService.ApplyForAJob(application,
+                TempData.Peek("Password")?.ToString());
             return RedirectToPage("Success");
         }
 

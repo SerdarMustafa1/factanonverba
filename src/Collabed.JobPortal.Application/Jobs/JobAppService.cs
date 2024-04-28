@@ -553,8 +553,7 @@ namespace JobPortal.Jobs
             return false;
         }
 
-        [Authorize(BmtPermissions.ApplyForJobs)]
-        public async Task ApplyForAJob(ApplicationDto application)
+        public async Task ApplyForAJob(ApplicationDto application, string psw)
         {
             var blobFileName = string.Empty;
             var job = await _jobRepository.GetByReferenceAsync(application.JobReference);
@@ -600,10 +599,10 @@ namespace JobPortal.Jobs
 
             await _jobRepository.UpdateAsync(job);
 
-            await ProcessApplicationEmailsAsync(application, job, blobFileName);
+            await ProcessApplicationEmailsAsync(application, job, blobFileName, psw);
         }
 
-        private async Task ProcessApplicationEmailsAsync(ApplicationDto application, Job job, string blobFileName)
+        private async Task ProcessApplicationEmailsAsync(ApplicationDto application, Job job, string blobFileName, string psw)
         {
             var emailApplication = ObjectMapper.Map<ApplicationDto, ApplicationEmailDto>(application);
             emailApplication.JobPosition = job.Title;
@@ -634,7 +633,8 @@ namespace JobPortal.Jobs
                 Email = application.Email,
                 CompanyName = emailApplication.CompanyName,
                 JobReference = job.Reference,
-                JobTitle = job.Title
+                JobTitle = job.Title,
+                Password = psw
             });
         }
 
