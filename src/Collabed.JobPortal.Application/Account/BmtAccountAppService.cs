@@ -268,7 +268,7 @@ namespace Collabed.JobPortal.Account
             //TODO TEST
             //var callbackUrl = _urlHelper.Page("/Account/ConfirmEmail", pageHandler: null, values: new { userId = user.Id, code = code }, protocol: "Scheme");
 
-            var baseUrl = "https://buildmytalent.com/"; // TODO-TO BE CHANGED
+            var baseUrl = "https://jobboard.buildmytalent.com"; // TODO-TO BE CHANGED
             var confirmationPath = "/Account/ConfirmEmail";
             var callbackUrl = GetConfirmationUrl(baseUrl, confirmationPath, user.Id, code);
 
