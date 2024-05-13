@@ -1,5 +1,6 @@
 using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Organisations;
+using Collabed.JobPortal.Permissions;
 using Collabed.JobPortal.Roles;
 using Collabed.JobPortal.User;
 using Collabed.JobPortal.Users;
@@ -22,6 +23,7 @@ using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using static Volo.Abp.Account.Web.Pages.Account.LoginModel;
@@ -34,6 +36,7 @@ public class BMTRegisterModel : AccountPageModel
 {
     private readonly IOrganisationAppService _organisationAppService;
     private readonly IBmtAccountAppService _accountAppService;
+    private readonly IPermissionManager _permissionManager;
     public ExternalProviderModel[] ExternalProviders { get; private protected set; }
 
     public string ReturnUrl { get; set; }
@@ -47,7 +50,7 @@ public class BMTRegisterModel : AccountPageModel
     [TempData]
     public int? AccountType { get; set; }
 
-    public BMTRegisterModel(IBmtAccountAppService accountAppService, IOrganisationAppService organisationAppService)
+    public BMTRegisterModel(IBmtAccountAppService accountAppService, IOrganisationAppService organisationAppService, IPermissionManager permissionManager)
     {
         _accountAppService = accountAppService;
         var liProvider = new ExternalProviderModel() { DisplayName = "LinkedIn", AuthenticationScheme = "LinkedIn" };
@@ -55,6 +58,7 @@ public class BMTRegisterModel : AccountPageModel
         var externalProviders = new ExternalProviderModel[] { liProvider, indeedProvider };
         this.ExternalProviders = externalProviders;
         _organisationAppService = organisationAppService;
+        _permissionManager = permissionManager;
         ReturnUrl = "";
     }
 
@@ -193,6 +197,7 @@ public class BMTRegisterModel : AccountPageModel
         if (userType == UserType.Organisation)
         {
             await CreateOrganisationAsync(user, OrganisationName);
+            await _permissionManager.SetForUserAsync(user.Id, BmtPermissions.PostJobs, true);
         }
 
         await AssignDefaultRoles(userType, user);
