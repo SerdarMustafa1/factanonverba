@@ -6,6 +6,7 @@
 @{
     var previousPage = TempData.Peek("BackToJobOfferParams")?.ToString();
     var fileInputLabel = string.IsNullOrWhiteSpace(Model.StoredCvFileName) ? "Attach your CV" : "Attach a different CV";
+    var buttonTitle = Model.CurrentStep >= Model.StepsRequired ? "Submit" : "Countinue";
 }
 <div class="row no-display-on-mobile">
     <div class="col-4"></div>
@@ -126,6 +127,10 @@
 </div>
 <div class="progress">
     <div class="progress-bar" role="progressbar" style="width: @Model.ProgressBarValue%;background-color: #2F70B6;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+    @if (Model.ProgressBarValue < 100)
+    {
+        <span class="progress-text" style="display: inline-block; margin-left: 10px;">@Model.ProgressBarValue%</span>
+    }
 </div>
 <form method="post" enctype="multipart/form-data">
     <div style="max-width:400px;margin-inline:auto;">
@@ -147,7 +152,7 @@
         </div>
         <div style="display: block; text-align: center">
             <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="window.history.go(-1); return false;">Back</button>
-            <button class="btn btn-primary submit-btn" type="submit">Continue</button>
+            <button class="btn btn-primary submit-btn" type="submit">@buttonTitle</button>
         </div>
     </div>
 </form>

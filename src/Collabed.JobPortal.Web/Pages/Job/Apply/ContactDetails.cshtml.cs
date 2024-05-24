@@ -38,6 +38,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
                     PostCode = userProfile.PostCode;
             }
             TempData[nameof(CurrentStep)] = 1;
+            CurrentStep = 1;
             TempData[nameof(ScreeningQuestionsExists)] = (await _jobAppService.ScreeningQuestionsByJobRefAsync(JobReference)).Any();
             TempData["Title"] = JobDto.Title;
             TempData["SalaryRange"] = GetSalaryRange();
@@ -48,8 +49,8 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             TempData[nameof(JobDto.OfficeLocation)] = JobDto.OfficeLocation;
             TempData[nameof(JobDto.JobLocation)] = JobDto.JobLocation;
             TempData[nameof(JobDto.PublishedDate)] = JobDto.PublishedDate;
-            float stepsRequired = (await _jobAppService.GetApplicationStepsByJobReferenceAsync(TempData.Peek("JobReference").ToString())).Value;
-            ProgressBarValue = (float.Parse(TempData.Peek(nameof(CurrentStep)).ToString()) / stepsRequired) * 100;
+            await GetStepsRequired();
+            ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
 
             await AssignRequiredDocumentsToTempData();
             AssignUrlParamsToTempData();

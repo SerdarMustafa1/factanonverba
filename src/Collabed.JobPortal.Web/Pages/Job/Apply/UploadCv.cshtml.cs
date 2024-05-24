@@ -38,7 +38,9 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             TempData[nameof(CurrentStep)] = 4;
             ReadTempData();
             JobDto = await _jobAppService.GetByReferenceAsync(TempData.Peek(nameof(JobReference))?.ToString());
-            await AssignProgressBar();
+            await GetStepsRequired();
+            ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
+
             var accountProfile = await _accountAppService.GetLoggedUserProfileAsync();
             if (accountProfile != null)
             {
@@ -64,7 +66,8 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             if (string.IsNullOrWhiteSpace(StoredCvFileName) && string.IsNullOrWhiteSpace(StoredCvContentType) && Upload == null)
             {
                 ModelState.AddModelError(nameof(Upload), "Please select a resume");
-                await AssignProgressBar();
+                await GetStepsRequired();
+                ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
                 return Page();
             }
 
@@ -99,11 +102,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
                 await _accountAppService.UploadCvToUserProfile(userId, memoryStream, cvFileName, cvContentType);
             }
             return await NextPage();
-        }
-        private async Task AssignProgressBar()
-        {
-            float stepsRequired = (await _jobAppService.GetApplicationStepsByJobReferenceAsync(TempData.Peek("JobReference").ToString())).Value;
-            ProgressBarValue = (float.Parse(TempData.Peek(nameof(CurrentStep)).ToString()) / stepsRequired) * 100;
         }
 
         private async Task<RegisterUserDto> CreateUser()

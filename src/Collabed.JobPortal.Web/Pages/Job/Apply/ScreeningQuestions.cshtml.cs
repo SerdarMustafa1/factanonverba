@@ -32,8 +32,8 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         {
             TempData[nameof(CurrentStep)] = 3;
             ReadTempData();
-            float stepsRequired = (await _jobAppService.GetApplicationStepsByJobReferenceAsync(TempData.Peek("JobReference").ToString())).Value;
-            ProgressBarValue = (float.Parse(TempData.Peek(nameof(CurrentStep)).ToString()) / stepsRequired) * 100;
+            await GetStepsRequired();
+            ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
             await AssignQuestions();
         }
 
@@ -52,11 +52,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             }
 
             return RedirectToPage("WrongScreeningAnswer");
-        }
-
-        public int GetStepsRequired()
-        {
-            return _jobAppService.GetApplicationStepsByJobReferenceAsync(TempData.Peek("JobReference").ToString()).Result.Value;
         }
 
         private void StoreAnswers()

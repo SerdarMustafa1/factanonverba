@@ -211,5 +211,17 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         {
             return SalaryRangeHelper.GetSalaryRange(JobDto.SalaryMinimum, JobDto.SalaryMaximum, JobDto.IsSalaryEstimated);
         }
+
+        public async Task GetStepsRequired()
+        {
+            StepsRequired = (await _jobAppService.GetApplicationStepsByJobReferenceAsync(TempData.Peek(nameof(JobReference))?.ToString())).Value;
+        }
+
+        public int CalculateProgressBar(double totalSteps, double currentStep)
+        {
+            var progressBarValue = Math.Round(currentStep / totalSteps * 100, 0);
+
+            return (int)progressBarValue;
+        }
     }
 }

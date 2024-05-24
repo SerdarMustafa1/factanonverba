@@ -1,9 +1,6 @@
-using Collabed.JobPortal.Applications;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Users;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -27,8 +24,8 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         {
             TempData[nameof(CurrentStep)] = 6;
             ReadTempData();
-            float stepsRequired = (await _jobAppService.GetApplicationStepsByJobReferenceAsync(TempData.Peek("JobReference").ToString())).Value;
-            ProgressBarValue = (float.Parse(TempData.Peek(nameof(CurrentStep)).ToString()) / stepsRequired) * 100;
+            await GetStepsRequired();
+            ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
             var jobTitle = TempData.Peek("Title");
             CoverLetter = $"I have just viewed your job vacancy for {jobTitle} on BuildMyTalent and would like to be considered for this position. \r\n\r\nPlease find a copy of my CV attached.\r\n";
         }

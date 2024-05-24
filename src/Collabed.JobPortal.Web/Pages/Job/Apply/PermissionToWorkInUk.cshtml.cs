@@ -24,8 +24,8 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         {
             TempData[nameof(CurrentStep)] = 2;
             ReadTempData();
-            float stepsRequired = (await _jobAppService.GetApplicationStepsByJobReferenceAsync(TempData.Peek("JobReference").ToString())).Value;
-            ProgressBarValue = (float.Parse(TempData.Peek(nameof(CurrentStep)).ToString()) / stepsRequired) * 100;
+            await GetStepsRequired();
+            ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
         }
 
         public async Task<IActionResult> OnPostAsync()
