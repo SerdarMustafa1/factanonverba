@@ -6,7 +6,7 @@
 @{
     var previousPage = TempData.Peek("BackToJobOfferParams")?.ToString();
     var fileInputLabel = string.IsNullOrWhiteSpace(Model.StoredCvFileName) ? "Attach your CV" : "Attach a different CV";
-    var buttonTitle = Model.CurrentStep >= Model.StepsRequired ? "Submit" : "Countinue";
+    var isLoggedIn = TempData.Peek("UserId") != null ? true : false;
 }
 <div class="row no-display-on-mobile">
     <div class="col-4"></div>
@@ -121,10 +121,14 @@
     </div>
 </div>
 <hr class="divider" />
-<div class="alert alert-warning alert-dismissible fade show bmt-warning-alert" role="alert">
-    <i class="bi bi-exclamation-triangle-fill" style="margin-right:1%;"></i>Your profile will also be updated with this contact information.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+@if (isLoggedIn)
+{
+    <div class="alert alert-warning alert-dismissible fade show bmt-warning-alert" role="alert">
+        <i class="bi bi-exclamation-triangle-fill" style="margin-right:1%;"></i>Your profile will also be updated with this contact information.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
 <div class="progress">
     <div class="progress-bar" role="progressbar" style="width: @Model.ProgressBarValue%;background-color: #2F70B6;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
     @if (Model.ProgressBarValue < 100)
@@ -151,8 +155,53 @@
             <input class="form-control" type="file" asp-for="Upload">
         </div>
         <div style="display: block; text-align: center">
-            <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="window.history.go(-1); return false;">Back</button>
-            <button class="btn btn-primary submit-btn" type="submit">@buttonTitle</button>
+            <input asp-for="UpdatedStepValue" class="form-control" type="hidden" id="updatedStepValue" name="UpdatedStepValue">
+            <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="goBack()">Back</button>
+            <button class="btn btn-primary submit-btn" type="button" onclick="submitForm()"></button>
         </div>
     </div>
 </form>
+
+
+<script type="text/javascript">
+    var localStorageValue = parseInt(localStorage.getItem("updatedStepValue"));
+
+    var buttonElement = document.querySelector(".submit-btn"); // Selects the button using class selector
+
+    if (localStorageValue === @Model.StepsRequired) {
+        buttonElement.textContent = "Submit";
+    } else {
+        buttonElement.textContent = "Continue";
+    }
+
+    function goBack() {
+        var step = parseInt(@Model.UpdatedStepValue);
+        var previousStep = step - 1;
+        console.log('permissionBack', step);
+        document.getElementById("updatedStepValue").value = previousStep;
+        localStorage.setItem("updatedStepValue", previousStep);
+        localStorage.setItem("isBackBtnClicked", true);
+
+        // Existing logic to navigate back
+        window.history.go(-1);
+        return false;
+    }
+
+
+    function submitForm() {
+        var step = 0;
+        var test = @Model.UpdatedStepValue;
+        localStorage.setItem("isBackBtnClicked", false);
+        if (test == null) {
+            step = parseInt(localStorage.getItem("updatedStepValue"));
+        }
+        else {
+            step = parseInt(@Model.UpdatedStepValue);
+        }
+
+        var nextStep = step + 1;
+        document.getElementById("updatedStepValue").value = nextStep;
+        localStorage.setItem("updatedStepValue", nextStep);
+        document.querySelector("form").submit(); // Submit the form programmatically
+    }
+</script>

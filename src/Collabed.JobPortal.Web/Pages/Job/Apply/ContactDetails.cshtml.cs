@@ -1,5 +1,8 @@
 ﻿using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Users;
+using Collabed.JobPortal.Web.Helper;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -50,7 +53,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             TempData[nameof(JobDto.JobLocation)] = JobDto.JobLocation;
             TempData[nameof(JobDto.PublishedDate)] = JobDto.PublishedDate;
             await GetStepsRequired();
-            ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
+            ProgressBarValue = CustomHelper.CalculateProgressBar(StepsRequired, CurrentStep);
 
             await AssignRequiredDocumentsToTempData();
             AssignUrlParamsToTempData();
@@ -65,9 +68,11 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
                 TempData[nameof(LastName)] = LastName;
                 TempData[nameof(PhoneNumber)] = PhoneNumber;
                 TempData[nameof(PostCode)] = PostCode;
+                TempData[nameof(UpdatedStepValue)] = UpdatedStepValue;
                 return await NextPage();
             }
 
+            UpdatedStepValue = "1";
             return Page();
         }
 

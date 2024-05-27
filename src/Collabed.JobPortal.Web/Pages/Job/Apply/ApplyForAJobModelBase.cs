@@ -76,6 +76,8 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         public bool IsPortfolioRequired { get; set; }
         public IEnumerable<SupportingDocumentDto> RequiredDocuments { get; set; }
         public JobDto JobDto { get; set; }
+        [BindProperty]
+        public string UpdatedStepValue { get;set; }
 
         public ApplyForAJobModelBase(IJobAppService jobAppService, IBmtAccountAppService accountAppService)
         {
@@ -215,13 +217,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         public async Task GetStepsRequired()
         {
             StepsRequired = (await _jobAppService.GetApplicationStepsByJobReferenceAsync(TempData.Peek(nameof(JobReference))?.ToString())).Value;
-        }
-
-        public int CalculateProgressBar(double totalSteps, double currentStep)
-        {
-            var progressBarValue = Math.Round(currentStep / totalSteps * 100, 0);
-
-            return (int)progressBarValue;
         }
     }
 }

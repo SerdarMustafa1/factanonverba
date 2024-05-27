@@ -2,13 +2,14 @@
 @model Collabed.JobPortal.Web.Pages.Job.Apply.ContactDetailsModel
 
 @section styles{
-        <abp-style src="/apply-pages.css"></abp-style>
+    <abp-style src="/apply-pages.css"></abp-style>
 }
 
 @{
     var previousPage = $"../../Job?Reference={Model.JobDto.Reference}";
     TempData["BackToJobOfferParams"] = previousPage;
-    var buttonTitle = Model.CurrentStep >= Model.StepsRequired ? "Submit" : "Countinue";
+    var buttonTitle = Model.CurrentStep >= Model.StepsRequired ? "Submit" : "Continue";
+    var isLoggedIn = TempData.Peek("UserId") != null ? true : false;
 }
 <div class="row no-display-on-mobile">
     <div class="col-4"></div>
@@ -123,10 +124,14 @@
     </div>
 </div>
 <hr class="divider" />
-<div class="alert alert-warning alert-dismissible fade show bmt-warning-alert" role="alert" >
-    <i class="bi bi-exclamation-triangle-fill" style="margin-right:1%;"></i>Your profile will also be updated with this contact information.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+@if (isLoggedIn)
+{
+    <div class="alert alert-warning alert-dismissible fade show bmt-warning-alert" role="alert">
+        <i class="bi bi-exclamation-triangle-fill" style="margin-right:1%;"></i>Your profile will also be updated with this contact information.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
 <div class="progress">
     <div class="progress-bar" role="progressbar" style="width: @Model.ProgressBarValue%;background-color: #2F70B6;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
     <span class="progress-text">@Model.ProgressBarValue%</span>
@@ -161,7 +166,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="phone">+44</span>
                     </div>
-                <input asp-for="PhoneNumber" required class="form-control" />
+                    <input asp-for="PhoneNumber" required class="form-control" />
                 </div>
                 <span class="hint">Please enter a UK mobile number</span><br />
                 <span asp-validation-for="PhoneNumber"></span>
@@ -171,12 +176,29 @@
             <div class="col-12">
                 <label asp-for="PostCode" class="form-label">Postcode</label>
 
-                    <input asp-for="PostCode" class="form-control" style="text-transform:uppercase" aria-describedby="phone" />
+                <input asp-for="PostCode" class="form-control" style="text-transform:uppercase" aria-describedby="phone" />
                 <span class="hint">Please enter your postcode</span><br />
             </div>
         </div>
     </div>
     <div style="text-align:center; margin-top:2%;">
-        <button class="btn btn-primary submit-btn" type="submit">@buttonTitle</button>
+        <input asp-for="UpdatedStepValue" class="form-control" type="hidden" id="updatedStepValue" name="UpdatedStepValue">
+        <button class="btn btn-primary submit-btn" type="button" onclick="submitForm()">@buttonTitle</button>
     </div>
 </form>
+
+<script type="text/javascript">
+    //TODO - MOVE SCRIPTS IN ANOTHER FILE
+function submitForm() {
+    var step = parseInt(@Model.CurrentStep);
+    var nextStep = step + 1;
+   document.getElementById("updatedStepValue").value = step+1;
+   localStorage.setItem("updatedStepValue", nextStep);
+  document.querySelector("form").submit(); // Submit the form programmatically
+}
+
+window.onpopstate = function() {
+    document.getElementById("updatedStepValue").value = 1;
+    localStorage.setItem("updatedStepValue", 1);
+}
+</script>

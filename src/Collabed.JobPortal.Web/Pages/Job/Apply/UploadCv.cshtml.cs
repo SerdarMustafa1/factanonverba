@@ -2,6 +2,7 @@
 using Collabed.JobPortal.Extensions;
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Users;
+using Collabed.JobPortal.Web.Helper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,9 +38,11 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         {
             TempData[nameof(CurrentStep)] = 4;
             ReadTempData();
+            UpdatedStepValue = (string)TempData.Peek(nameof(UpdatedStepValue));
             JobDto = await _jobAppService.GetByReferenceAsync(TempData.Peek(nameof(JobReference))?.ToString());
             await GetStepsRequired();
-            ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
+
+            ProgressBarValue = CustomHelper.CalculateProgressBar(StepsRequired, CurrentStep);
 
             var accountProfile = await _accountAppService.GetLoggedUserProfileAsync();
             if (accountProfile != null)
@@ -62,12 +65,13 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
 
             StoredCvFileName = TempData.Peek("CvFileName")?.ToString();
             StoredCvContentType = TempData.Peek("CvContentType")?.ToString();
+            TempData[nameof(UpdatedStepValue)] = UpdatedStepValue;
             // Check if both StoredCvFileName and StoredCvContentType are empty and Upload is not provided
             if (string.IsNullOrWhiteSpace(StoredCvFileName) && string.IsNullOrWhiteSpace(StoredCvContentType) && Upload == null)
             {
                 ModelState.AddModelError(nameof(Upload), "Please select a resume");
                 await GetStepsRequired();
-                ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
+                ProgressBarValue = CustomHelper.CalculateProgressBar(StepsRequired, double.Parse(UpdatedStepValue));
                 return Page();
             }
 

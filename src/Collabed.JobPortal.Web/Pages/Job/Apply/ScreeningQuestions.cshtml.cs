@@ -1,5 +1,6 @@
 using Collabed.JobPortal.Jobs;
 using Collabed.JobPortal.Users;
+using Collabed.JobPortal.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Linq;
@@ -31,9 +32,10 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         public async Task OnGetAsync()
         {
             TempData[nameof(CurrentStep)] = 3;
+            UpdatedStepValue = (string)TempData.Peek(nameof(UpdatedStepValue));
             ReadTempData();
             await GetStepsRequired();
-            ProgressBarValue = CalculateProgressBar(StepsRequired, CurrentStep);
+            ProgressBarValue = CustomHelper.CalculateProgressBar(StepsRequired, double.Parse(UpdatedStepValue));
             await AssignQuestions();
         }
 
@@ -48,6 +50,7 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
             if (ValidateAnsers())
             {
                 StoreAnswers();
+                TempData[nameof(UpdatedStepValue)] = UpdatedStepValue;
                 return await NextPage();
             }
 

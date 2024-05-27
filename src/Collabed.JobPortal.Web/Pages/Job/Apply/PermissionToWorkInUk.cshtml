@@ -5,7 +5,6 @@
 }
 @{
     var previousPage = TempData.Peek("BackToJobOfferParams")?.ToString();
-    var buttonTitle = Model.CurrentStep >= Model.StepsRequired ? "Submit" : "Countinue";
 }
 <div class="row no-display-on-mobile">
     <div class="col-4"></div>
@@ -147,8 +146,57 @@
         </div>
         <hr /><br />
         <div style="display: block; text-align: center">
-            <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="window.history.go(-1); return false;">Back</button>
-            <button class="btn btn-primary submit-btn" type="submit">@buttonTitle</button>
+            <input asp-for="UpdatedStepValue" type="hidden" id="updatedStepValue" name="UpdatedStepValue" >
+            <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="goBack()">Back</button>
+            <button class="btn btn-primary submit-btn" type="button" onclick="submitForm()"></button>
         </div>
     </div>
 </form>
+
+<script type="text/javascript">
+     var localStorageValue = parseInt(localStorage.getItem("updatedStepValue"));
+
+    var buttonElement = document.querySelector(".submit-btn"); // Selects the button using class selector
+
+    if (localStorageValue === @Model.StepsRequired) {
+        buttonElement.textContent = "Submit";
+    } else {
+        buttonElement.textContent = "Continue";
+    }
+
+    function goBack() {
+        var step = parseInt(@Model.UpdatedStepValue);
+        var previousStep = step - 1;
+        console.log('permissionBack', step);
+        document.getElementById("updatedStepValue").value = previousStep;
+        localStorage.setItem("updatedStepValue", previousStep);
+
+        // Existing logic to navigate back
+        window.history.go(-1);
+        return false;
+    }
+
+    function submitForm() {
+        var step = 0;
+        var isBackBtnClicked = localStorage.getItem("isBackBtnClicked");
+        if(@Model.UpdatedStepValue == null)
+        {
+            step = parseInt(localStorage.getItem("updatedStepValue"));
+        }
+        else{
+            if(isBackBtnClicked){
+                step = parseInt(localStorage.getItem("updatedStepValue"));
+            }
+            else
+            {
+                step = parseInt(@Model.UpdatedStepValue);
+            }
+        }
+
+        var nextStep = step + 1;
+       document.getElementById("updatedStepValue").value = nextStep;
+       localStorage.setItem("updatedStepValue", nextStep);
+       localStorage.setItem("isBackBtnClicked", false);
+       document.querySelector("form").submit(); // Submit the form programmatically
+    }
+</script>
