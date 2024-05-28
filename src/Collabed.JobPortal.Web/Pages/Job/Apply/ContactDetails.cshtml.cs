@@ -22,10 +22,35 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
 
         public async Task OnGetAsync([FromQuery] string jobReference)
         {
+            await LoadTempData(jobReference);
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (ModelState.IsValid)
+            {
+                TempData[nameof(EmailAddress)] = EmailAddress;
+                TempData[nameof(FirstName)] = FirstName;
+                TempData[nameof(LastName)] = LastName;
+                TempData[nameof(PhoneNumber)] = PhoneNumber;
+                TempData[nameof(PostCode)] = PostCode;
+                TempData[nameof(UpdatedStepValue)] = UpdatedStepValue;
+                return await NextPage();
+            }
+
+            UpdatedStepValue = "1";
+            await LoadTempData(TempData.Peek("JobReference")?.ToString());
+            return Page();
+        }
+
+        private async Task LoadTempData(string jobReference)
+        {
             TempData.Clear();
             JobReference = jobReference;
             TempData[nameof(JobReference)] = JobReference;
             JobDto = await _jobAppService.GetByReferenceAsync(JobReference);
+            var previousPage = $"../../Job?Reference={JobDto?.Reference}";
+            TempData["BackToJobOfferParams"] = previousPage;
             var userProfile = await _accountAppService.GetLoggedUserProfileAsync();
             if (userProfile != null)
             {
@@ -57,23 +82,6 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
 
             await AssignRequiredDocumentsToTempData();
             AssignUrlParamsToTempData();
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (ModelState.IsValid)
-            {
-                TempData[nameof(EmailAddress)] = EmailAddress;
-                TempData[nameof(FirstName)] = FirstName;
-                TempData[nameof(LastName)] = LastName;
-                TempData[nameof(PhoneNumber)] = PhoneNumber;
-                TempData[nameof(PostCode)] = PostCode;
-                TempData[nameof(UpdatedStepValue)] = UpdatedStepValue;
-                return await NextPage();
-            }
-
-            UpdatedStepValue = "1";
-            return Page();
         }
 
         private async Task AssignRequiredDocumentsToTempData()

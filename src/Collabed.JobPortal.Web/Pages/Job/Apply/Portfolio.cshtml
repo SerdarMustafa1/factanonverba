@@ -145,11 +145,12 @@
                 <span class="input-group-text" id="protocol">https://</span>
             </div>
             <input type="text" class="form-control" asp-for="PortfolioLink" aria-label="Portfolio Url" aria-describedby="protocol" />
+            <span asp-validation-for="PortfolioLink"></span>
         </div>
         <div style="display: block; text-align: center">
             <input asp-for="UpdatedStepValue" class="form-control" type="hidden" id="updatedStepValue" name="UpdatedStepValue">
             <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="goBack()">Back</button>
-            <button class="btn btn-primary submit-btn" type="button" onclick="submitForm()"></button>
+            <button class="btn btn-primary submit-btn" type="submit" onclick="submitForm()"></button>
         </div>
     </form>
 </div>
@@ -181,6 +182,9 @@
 
 
     function submitForm() {
+        if (!validatePortfolioLink()) {
+            return; // Prevent form submission
+        }
         var step = 0;
         var test = @Model.UpdatedStepValue;
         localStorage.setItem("isBackBtnClicked", false);
@@ -195,5 +199,16 @@
         document.getElementById("updatedStepValue").value = nextStep;
         localStorage.setItem("updatedStepValue", nextStep);
         document.querySelector("form").submit(); // Submit the form programmatically
+    }
+
+    function validatePortfolioLink() {
+        var portfolioLinkInput = document.getElementById("PortfolioLink");
+        var portfolioLink = portfolioLinkInput.value;
+
+        if (portfolioLink.trim() === "") {
+            return false; // Prevent form submission
+        }
+
+        return true; // Allow form submission
     }
 </script>

@@ -133,10 +133,11 @@
         <hr class="divider" />
         <p class="hint-16">Set yourself apart. Candidates that include a tailored covering letter are more likely to be successful.</p>
         <textarea class="form-control" asp-for="CoverLetter" style="min-height:190px; margin-bottom:20%;"></textarea>
+        <span asp-validation-for="CoverLetter"></span>
         <div style="display: block; text-align: center">
             <input asp-for="UpdatedStepValue" class="form-control" type="hidden" id="updatedStepValue" name="UpdatedStepValue">
             <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="goBack()">Back</button>
-            <button class="btn btn-primary submit-btn" type="button" onclick="submitForm()"></button>
+            <button class="btn btn-primary submit-btn" type="submit" onclick="submitForm()"></button>
         </div>
     </form>
 </div>
@@ -169,6 +170,11 @@
 
 
     function submitForm() {
+        var form = document.querySelector("form");
+
+        if (!form.checkValidity()) {
+            return; // Prevent form submission
+        }
         var step = 0;
         var test = @Model.UpdatedStepValue;
         localStorage.setItem("isBackBtnClicked", false);

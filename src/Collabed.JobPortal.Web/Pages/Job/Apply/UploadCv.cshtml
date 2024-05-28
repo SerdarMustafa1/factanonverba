@@ -157,7 +157,7 @@
         <div style="display: block; text-align: center">
             <input asp-for="UpdatedStepValue" class="form-control" type="hidden" id="updatedStepValue" name="UpdatedStepValue">
             <button class="btn btn-outline-secondary" style="margin-right: 10px;" type="button" onclick="goBack()">Back</button>
-            <button class="btn btn-primary submit-btn" type="button" onclick="submitForm()"></button>
+            <button class="btn btn-primary submit-btn" type="submit" onclick="submitForm()"></button>
         </div>
     </div>
 </form>
@@ -189,6 +189,10 @@
 
 
     function submitForm() {
+        if (!validateCVUpload()) {
+            return; // Prevent form submission
+        }
+
         var step = 0;
         var test = @Model.UpdatedStepValue;
         localStorage.setItem("isBackBtnClicked", false);
@@ -203,5 +207,17 @@
         document.getElementById("updatedStepValue").value = nextStep;
         localStorage.setItem("updatedStepValue", nextStep);
         document.querySelector("form").submit(); // Submit the form programmatically
+    }
+
+    function validateCVUpload() {
+      var cvInput = document.getElementById("Upload");
+        var hasExisting = "@((!string.IsNullOrWhiteSpace(Model.StoredCvFileName)).ToString())";
+
+      if(hasExisting === "True")
+        return true;
+
+      if (hasExisting === "False" && cvInput.files.length === 0) {
+        return false; // Prevent form submission
+      }
     }
 </script>

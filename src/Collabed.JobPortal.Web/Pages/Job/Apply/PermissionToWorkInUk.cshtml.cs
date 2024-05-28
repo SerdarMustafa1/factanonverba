@@ -25,13 +25,18 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
         {
             TempData[nameof(CurrentStep)] = 2;
             UpdatedStepValue = (string)TempData.Peek(nameof(UpdatedStepValue));
-            ReadTempData();
-            await GetStepsRequired();
-            ProgressBarValue = CustomHelper.CalculateProgressBar(StepsRequired, double.Parse(UpdatedStepValue));
+            await LoadPage();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!HasRightToWork.HasValue)
+            {
+                UpdatedStepValue = "2";
+                await LoadPage();
+                return Page();
+            }
+
             if (HasRightToWork.HasValue && HasRightToWork.Value == true)
             {
                 TempData[nameof(UpdatedStepValue)] = UpdatedStepValue;
@@ -40,6 +45,13 @@ namespace Collabed.JobPortal.Web.Pages.Job.Apply
 
             UpdatedStepValue = (string)TempData.Peek(nameof(UpdatedStepValue));
             return RedirectToPage("NoPermission");
+        }
+
+        private async Task LoadPage()
+        {
+            ReadTempData();
+            await GetStepsRequired();
+            ProgressBarValue = CustomHelper.CalculateProgressBar(StepsRequired, double.Parse(UpdatedStepValue));
         }
     }
 }

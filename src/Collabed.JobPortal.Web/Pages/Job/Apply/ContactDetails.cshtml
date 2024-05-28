@@ -6,8 +6,7 @@
 }
 
 @{
-    var previousPage = $"../../Job?Reference={Model.JobDto.Reference}";
-    TempData["BackToJobOfferParams"] = previousPage;
+    var previousPage = TempData.Peek("BackToJobOfferParams")?.ToString();
     var buttonTitle = Model.CurrentStep >= Model.StepsRequired ? "Submit" : "Continue";
     var isLoggedIn = TempData.Peek("UserId") != null ? true : false;
 }
@@ -183,13 +182,20 @@
     </div>
     <div style="text-align:center; margin-top:2%;">
         <input asp-for="UpdatedStepValue" class="form-control" type="hidden" id="updatedStepValue" name="UpdatedStepValue">
-        <button class="btn btn-primary submit-btn" type="button" onclick="submitForm()">@buttonTitle</button>
+        <button class="btn btn-primary submit-btn" type="submit" onclick="submitForm()">@buttonTitle</button>
     </div>
 </form>
 
 <script type="text/javascript">
     //TODO - MOVE SCRIPTS IN ANOTHER FILE
 function submitForm() {
+    var form = document.querySelector("form");
+
+  // Check if the form is valid using the built-in checkValidity() method
+  if (!form.checkValidity()) {
+     // Add a class for styling (optional)
+    return; // Prevent form submission
+  }
     var step = parseInt(@Model.CurrentStep);
     var nextStep = step + 1;
    document.getElementById("updatedStepValue").value = step+1;
